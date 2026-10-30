@@ -48,3 +48,4 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 - `render_html.cjs`: ~8 s výpočtu na 1 s videa 1080×1920 při 30 fps a 3 podsnímcích (15s video ≈ 2 min). Při 60 fps nebo `--sub 6` počítat 2× déle.
 - prompt-motion.com: data jsou ve stránce (Next.js RSC payload), stahuje se bez přihlášení. robots.txt: `use=reference`, `ai-train=no`, `/api/` zakázáno.
   Odkazy na zdroj: holý profil x.com/p4nthera_ je autor webu, ne tvůrce videa.
+- Google Fonts v rendereru fungují (ověřeno: Anton, Inter 800 s plnou českou diakritikou). Kontrola: `document.fonts.check('800 96px Inter', 'ď')`.
