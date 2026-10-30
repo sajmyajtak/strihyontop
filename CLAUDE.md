@@ -19,9 +19,15 @@ všechno zapisuju a **každé další video stavím na všem, co jsem se naučil
 ## Režie: každá tvorba videa jede takhle
 Hlavní chat je **režisér** (hlavní agent). Jen on smí spouštět ostatní agenty, protože pomocní agenti další agenty spouštět nemůžou.
 Režisér rozhoduje, rozděluje práci, opravuje drobnosti sám, všechno dokumentuje a uživateli posílá jen výsledek a report.
-Podřízení agenti (`.claude/agents/`): **analytik** (předlohy, výběr promptu), **animator** (motion grafika, HTML → MP4),
-**strihac** (záběry, titulky, zvuk, export), **kritik** (nezávislá kontrola). Když typ agenta není v této session načtený,
-spustit `general-purpose` s instrukcí „přečti `.claude/agents/<role>.md` a jednej podle něj“.
+Podřízení agenti (`.claude/agents/`): **analytik** (předlohy, výběr promptu), **kreativni-reditel** (koncepty, hodnocení „wow“),
+**animator** (motion grafika, HTML → MP4), **zvukar** (hudba, zvukové efekty, mix), **strihac** (záběry, titulky, skládání, export),
+**kritik** (nezávislá technická kontrola). Když typ agenta není v této session načtený, spustit `general-purpose` s instrukcí
+„přečti `.claude/agents/<role>.md` a jednej podle něj“.
+
+**Pokyn uživatele (2026-10-30): na každý úkol vlastní agent a ostatní agenti se ptají hlavně hlavního agenta.**
+Tvorba videa běží jako **Workflow** (orchestrace více agentů). Každý agent vrací vedle výsledku i `OTÁZKY PRO REŽISÉRA`.
+Režisér je zodpoví sám, nebo, když jde o věc uživatele, se zeptá uživatele. Agenti se uživatele nikdy neptají přímo.
+**Laťka: „aby si řekl wow“.** Kreativní ředitel hodnotí koncept i hotové video 1–10. Pod 8 se video vylepšuje (v rámci max. 3 kol).
 
 1. **Příjem**: založit `projekty/0xx-nazev/zadani.md` ze šablony. Pravidla uživatele **doslova**, mají nejvyšší prioritu.
    Materiály: podsložka projektu na Drive v „Střižna – materiály pro portfolio / 01 Projekty“ (postup v `znalosti/znacka.md`) →
