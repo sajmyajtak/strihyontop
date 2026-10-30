@@ -95,10 +95,14 @@ const seek = (t) => {
 };
 
 // Scénu stavět a měřit až po načtení fontů. Renderer na window.seek čeká, takže se definuje až potom.
-document.fonts.ready.then(() => {
-  window.seek = seek;
-  seek(0);
-});
+// document.fonts.ready nečeká na fonty, které ještě nepoužil žádný prvek (C016): každý řez se proto vynutí přes fonts.load.
+const FONTY = [];   // např. ['200 150px "Big Shoulders Display"', '900 150px "Big Shoulders Display"']
+Promise.all(FONTY.map((f) => document.fonts.load(f)))
+  .then(() => document.fonts.ready)
+  .then(() => {
+    window.seek = seek;
+    seek(0);
+  });
 </script>
 </body>
 </html>

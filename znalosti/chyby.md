@@ -13,6 +13,19 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C017: Pohodová hudba v1 měla propad v horních středech, kontrola pásem ho neodhalila (2026-10-30, V001, našel animátor a pak režisér)
+- Příznak: animátor našel propad 16 dB mezi oktávami 0,5–1 kHz a 1–2 kHz a hi-hat kolem −80 dB. Po jeho opravě režisér nezávisle naměřil
+  ještě ~13 dB mezi 1 kHz a 2 kHz.
+- Příčina: `kontrola_pasem` měří jen široká pásma (středy 250–2000 Hz). Propad uvnitř pásma se schová.
+- Oprava: animátor přidal jas Rhodes, hlasitější hi-hat a tleskání a `vysky_db`. Zbytek vyhladí zvukař ve fázi 2.
+- Prevence: `kontrola_pasem` doplnit o **spektrum po oktávách** a varování při skoku sousedních oktáv (250 Hz–8 kHz) nad ~8–10 dB (úkol pro zvukaře).
+
+### C016: Fonty z Google Fonts nebyly stažené při měření (2026-10-30, V001, našel animátor)
+- Příznak: canvas změřil všechny kandidátní fonty stejně.
+- Příčina: prohlížeč stahuje font, až když ho použije prvek ve stránce. `document.fonts.ready` na nepoužité fonty nečeká.
+- Oprava: fonty nejdřív vynutit, pak měřit.
+- Prevence: `nastroje/vzory/scena.html` má seznam `FONTY` a před `seek(0)` volá `document.fonts.load()` pro každý řez (ověřeno testem).
+
 ### C015: setup.sh neinstaloval nástroje přidané později (2026-10-30, nástroj, našel režisér na začátku nové session)
 - Příznak: v novém kontejneru chyběly `gdown` a `scipy` (stahování z Drive, generátor hudby).
 - Příčina: knihovny jsem nainstaloval ručně, ale nepřidal do `nastroje/setup.sh`.
