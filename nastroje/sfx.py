@@ -3,14 +3,16 @@
 Použití:
   python3 -I nastroje/sfx.py --udalosti udalosti.json --delka 25 --out sfx.wav
         [--hudba hudba.wav --mix zvuk.wav --bez-hudby zvuk_bez_hudby.wav] [--ticho 18.75-19.375]
-udalosti.json: [{"cas": 0.625, "typ": "glp", "uroven": -26, "pan": 0.0, "popis": "…"}, …]
-  cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka RMS 2 ms), ne začátek zvuku
-  uroven  = špička zvuku v dBFS (před mixem), pan −1 … 1, volitelně "ton" (násobek výšky) a "seed"
+udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…"}, …]
+  cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
+  lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
+  pan −1 … 1, volitelně "ton" (násobek výšky) a "seed" (stejný seed = stejný zvuk)
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
 import argparse
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -92,10 +94,10 @@ def glp(rng, v=1.0):
     f = 180 * v + 340 * v * (1 - np.exp(-t / 0.035))
     b = np.sin(2 * np.pi * np.cumsum(f) / SR) * obalka(n, 0.03, 0.035)
     b += 0.35 * np.sin(2 * np.pi * np.cumsum(2 * f) / SR) * obalka(n, 0.03, 0.02)   # 2. harmonická: slyšet i z telefonu
-    c = np.zeros(n)
+    c = cvak(rng, 1.1, suchy=True) * 0.7
     k = int(0.03 * SR)
-    c[k:] = cvak(rng, 1.1, suchy=True)[: n - k] * 0.7
-    return b + c
+    b[k:k + len(c)] += c
+    return b
 
 
 def klouznuti(rng, v=1.0, delka=0.22):
@@ -231,3 +233,166 @@ ZVUKY = {
     "tsk": tsk, "nuz": nuz, "krupnuti": krupnuti, "trhnuti": trhnuti, "pop": pop_papir, "zip": zip_, "sss": sss,
     "sk": sk, "dopad": dopad,
 }
+
+
+# ---------- měření ----------
+def k_vazeni(x):
+    """K-vážení podle ITU-R BS.1770 (48 kHz): stejné ucho jako LUFS."""
+    x = signal.lfilter([1.53512485958697, -2.69169618940638, 1.19839281085285], [1, -1.69065929318241, 0.73248077421585], x, axis=-1)
+    return signal.lfilter([1, -2, 1], [1, -1.99004745483398, 0.99007225036621], x, axis=-1)
+
+
+def hlasitost(xk, t, okno=0.4):
+    """Okamžitá hlasitost (LUFS) K-váženého sterea v okně `okno` s se středem v čase t."""
+    a, b = max(0, int((t - okno / 2) * SR)), int((t + okno / 2) * SR)
+    ms = np.sum(np.mean(xk[:, a:b] ** 2, axis=1))
+    return -0.691 + 10 * np.log10(ms + 1e-12)
+
+
+def obalka_vrcholu(x):
+    """Obálka pro hledání vrcholu: |analytický signál| vyhlazený 2 ms (u tónu nekolísá s periodou jako špička vzorku)."""
+    if x.ndim > 1:
+        x = x.sum(axis=0)
+    e = np.abs(signal.hilbert(x))
+    m = int(0.002 * SR)
+    return np.convolve(e, np.ones(m) / m, mode="same")
+
+
+def vrchol(x, od=0, do=None):
+    """Index změřeného vrcholu v úseku od–do (vzorky)."""
+    e = obalka_vrcholu(x[..., od:do])
+    return od + int(np.argmax(e))
+
+
+# ---------- skládání stopy ----------
+# Hlasitost efektu se cílí v okně 100 ms (ucho sčítá krátké zvuky zhruba tak dlouho). V okně 400 ms (EBU momentary)
+# by se 5ms cvaknutí „rozředilo“ a pro stejný údaj by muselo mít špičku nad hudbou. Kontrola se hlásí v obou oknech.
+OKNO_CIL = 0.1
+MAX_SPICKA = -6.0                                                       # dBFS: žádný efekt nesmí mít špičku nad touto mezí
+
+
+def stopa(udalosti, delka, hk=None):
+    """Vyrobí stereo stopu SFX a seznam samostatně umístěných zvuků (mono, pro kontrolu vrcholů).
+    Každý zvuk se posune tak, aby jeho změřený vrchol padl na `cas`. Hlasitost: `lu` = o kolik LU je efekt tišší než hudba
+    v okně 400 ms (potřebuje K-váženou hudbu `hk`), jinak `uroven` = špička v dBFS."""
+    n = int(round(delka * SR))
+    out = np.zeros((2, n))
+    samotne = []
+    for u in udalosti:
+        rng = np.random.default_rng(u.get("seed", int(u["cas"] * 1000)))
+        x = horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60)
+        x = x / (np.max(np.abs(x)) + 1e-12)
+        i = int(round(u["cas"] * SR)) - vrchol(x)
+        if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
+            x, i = x[-i:], 0
+        k = min(len(x), n - i)
+        uhel = (u.get("pan", 0.0) + 1) * np.pi / 4
+        st = np.zeros((2, n))
+        st[:, i:i + k] = np.stack([x[:k] * np.cos(uhel), x[:k] * np.sin(uhel)]) * np.sqrt(2)
+        if "lu" in u and hk is not None:
+            zisk = 10 ** ((hlasitost(hk, u["cas"], OKNO_CIL) + u["lu"] - hlasitost(k_vazeni(st), u["cas"], OKNO_CIL)) / 20)
+            zisk = min(zisk, 10 ** (MAX_SPICKA / 20) / np.max(np.abs(st)))
+            u["uroven"] = round(20 * np.log10(zisk * np.max(np.abs(x))), 1)
+        else:
+            zisk = 10 ** (u["uroven"] / 20)
+        out += st * zisk
+        mono = np.zeros(n)
+        mono[i:i + k] = x[:k] * zisk
+        samotne.append(mono)
+        u["vrchol_samotny"] = round(vrchol(mono, i, i + k) / SR, 4)
+    return out, samotne
+
+
+def zapis_wav(cesta, x):
+    """Stereo float → WAV 48 kHz 24 bit (přes ffmpeg, ať se nic neořízne na 16 bitech)."""
+    tmp = Path(str(cesta) + ".f32.wav")
+    wavfile.write(tmp, SR, x.T.astype(np.float32))
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp), "-c:a", "pcm_s24le", str(cesta)], check=True)
+    tmp.unlink()
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--udalosti", required=True)
+    ap.add_argument("--delka", type=float, required=True)
+    ap.add_argument("--out", required=True)
+    ap.add_argument("--hudba")
+    ap.add_argument("--mix")
+    ap.add_argument("--bez-hudby")
+    ap.add_argument("--ticho", action="append", default=[], help="úsek od-do (s), kde nesmí znít žádný efekt")
+    a = ap.parse_args()
+    udalosti = sorted(json.loads(Path(a.udalosti).read_text()), key=lambda u: u["cas"])
+    n = int(round(a.delka * SR))
+    hudba = hk = None
+    if a.hudba:
+        sr, h = wavfile.read(a.hudba)
+        h = h.T.astype(float) / (32768.0 if h.dtype == np.int16 else 1.0)
+        assert sr == SR and h.shape[0] == 2, f"{a.hudba}: čekám 48 kHz stereo"
+        hudba = np.zeros((2, n))
+        hudba[:, :min(h.shape[1], n)] = h[:, :n]
+        hk = k_vazeni(hudba)
+    sfx, samotne = stopa(udalosti, a.delka, hk)
+    zapis_wav(a.out, sfx)
+    sk_ = k_vazeni(sfx)
+
+    # Vrchol v hotové stopě (všechny efekty dohromady) má smysl jen tam, kde zvuk v okně ±30 ms převládá.
+    # Kde ho překryje delší soused (pesto po „pumf“, popy po křupnutí), platí vrchol samotného zvuku a `prekryto`.
+    problemy = []
+    ob_stopy = obalka_vrcholu(sfx)
+    for u, mono in zip(udalosti, samotne):
+        c = int(round(u["cas"] * SR))
+        sousede = [abs(v["cas"] - u["cas"]) for v in udalosti if abs(v["cas"] - u["cas"]) > 1e-6]
+        polo = int(min([0.03] + [d / 2 for d in sousede]) * SR)
+        od, do = c - polo, c + polo
+        ob = obalka_vrcholu(mono[od:do])
+        u["prekryto"] = bool(ob.max() < 0.5 * ob_stopy[od:do].max())
+        u["vrchol_ve_stope"] = round((od + int(np.argmax(ob_stopy[od:do]))) / SR, 4)
+        u["odchylka_ms"] = round((u["vrchol_samotny"] - u["cas"]) * 1000, 2)
+        u["odchylka_ve_stope_ms"] = round((u["vrchol_ve_stope"] - u["cas"]) * 1000, 2)
+        u["lufs_400ms"] = round(hlasitost(sk_, u["cas"]), 1)
+        if hk is not None:
+            u["hudba_lufs_400ms"] = round(hlasitost(hk, u["cas"]), 1)
+            u["efekt_proti_hudbe_lu"] = round(u["lufs_400ms"] - u["hudba_lufs_400ms"], 1)
+            u["efekt_proti_hudbe_100ms_lu"] = round(hlasitost(sk_, u["cas"], 0.1) - hlasitost(hk, u["cas"], 0.1), 1)
+            if max(u["efekt_proti_hudbe_lu"], u["efekt_proti_hudbe_100ms_lu"]) > 0:
+                problemy.append(f"{u['cas']} {u['typ']}: efekty jsou v tu chvíli hlasitější než hudba (I3: pod hudbou tiše)")
+        if abs(u["odchylka_ms"]) > 5:
+            problemy.append(f"{u['cas']} {u['typ']}: vrchol o {u['odchylka_ms']} ms mimo událost (tolerance ±5 ms)")
+    for t in a.ticho:
+        t0, t1 = map(float, t.split("-"))
+        uroven = 20 * np.log10(np.max(np.abs(sfx[:, int(t0 * SR):int(t1 * SR)])) + 1e-12)
+        print(f"ticho {t0}–{t1} s: špička SFX {uroven:.1f} dBFS")
+        if uroven > -70:
+            problemy.append(f"v tichu {t0}–{t1} s zní efekt ({uroven:.1f} dBFS)")
+
+    souhrn = dict(delka=a.delka, pocet=len(udalosti),
+                  max_odchylka_ms=max(abs(u["odchylka_ms"]) for u in udalosti),
+                  max_odchylka_ve_stope_ms=max(abs(u["odchylka_ve_stope_ms"]) for u in udalosti if not u["prekryto"]),
+                  prekryte=[u["cas"] for u in udalosti if u["prekryto"]],
+                  spicka_sfx_dbfs=round(20 * np.log10(np.max(np.abs(sfx)) + 1e-12), 1), problemy=problemy)
+    if hudba is not None:
+        souhrn["nejhlasitejsi_efekt_proti_hudbe_lu"] = max(u["efekt_proti_hudbe_lu"] for u in udalosti)
+        souhrn["nejhlasitejsi_efekt_proti_hudbe_100ms_lu"] = max(u["efekt_proti_hudbe_100ms_lu"] for u in udalosti)
+        mix = hudba + sfx
+        spicka = np.max(np.abs(mix))
+        souhrn["spicka_mixu_dbfs"] = round(20 * np.log10(spicka + 1e-12), 1)
+        if spicka > 0.99:                                                # nesmí se ořezat, hlasitost dorovná master_zvuk.sh
+            mix *= 0.99 / spicka
+        if a.mix:
+            zapis_wav(a.mix, mix)
+        if a.bez_hudby:
+            zapis_wav(a.bez_hudby, sfx)
+    for u in udalosti:
+        u.pop("_vrchol_zvuku_ms", None)
+    Path(a.out).with_suffix(".json").write_text(json.dumps(dict(souhrn=souhrn, udalosti=udalosti), ensure_ascii=False, indent=1))
+    for u in udalosti:
+        print(f"{u['cas']:8.4f} {u['typ']:15s} vrchol {u['vrchol_samotny']:.4f} ({u['odchylka_ms']:+.1f} ms, ve stopě {u['odchylka_ve_stope_ms']:+.1f})"
+              f"{' překryto' if u['prekryto'] else ''}  {u['uroven']:6} dBFS  proti hudbě {u.get('efekt_proti_hudbe_100ms_lu', '')} LU"
+              f" (100 ms) / {u.get('efekt_proti_hudbe_lu', '')} LU (400 ms)")
+    print(json.dumps(souhrn, ensure_ascii=False))
+    for p in problemy:
+        print("VAROVÁNÍ:", p)
+
+
+if __name__ == "__main__":
+    main()
