@@ -1,0 +1,13 @@
+# Videa, zvuk a pracovní soubory se necommitují (velikost). Hotová videa se doručují přes chat / Google Drive.
+media/
+exporty/
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.m4a
+*.mp3
+*.wav
+*.aac
+__pycache__/
+node_modules/
