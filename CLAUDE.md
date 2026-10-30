@@ -85,6 +85,7 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 - `nastroje/kontrola.sh VIDEO SLOZKA`: technická kontrola pro kritika (parametry, LUFS/TP, zamrzlé a prázdné úseky, skoky a probliknutí + pásy snímků, arch s časy)
 - `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC (při přetečení ubere hlasitost v toleranci, pak jemný limiter)
 - `nastroje/prompt_motion.py`: katalog prompt-motion.com
+- `nastroje/hlidac.py RUN_DIR`: hlídač běžícího workflow (spouštět přes Monitor): START / HOTOVO / TICHO > 15 min / LIMIT VÝSTUPU u každého agenta
 - ffmpeg: střih, barvy, titulky
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
 - `nastroje/hudba.py --nalada vazna|drza|luxusni --delka N --out x.wav [--bpm --drop --konec]`: vlastní hudba do pozadí (syntéza, bez licencí),
