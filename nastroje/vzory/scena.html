@@ -1,31 +1,42 @@
 <!doctype html>
 <!-- Výchozí kostra scény pro render_html.cjs. Všechno se počítá z času t ve window.seek(t),
-     žádné CSS animace ani časovače, takže každý snímek jde vyrenderovat přesně a opakovaně.
+     žádné CSS animace, přechody, časovače ani stav mezi snímky, takže každý snímek jde vyrenderovat přesně a opakovaně.
      ?mrizka v URL zobrazí bezpečné zóny 9:16 (pravidlo A5). -->
 <html lang="cs">
 <head>
 <meta charset="utf-8">
 <style>
   html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0b0b0c; }
+  #svet { position: absolute; inset: 0; transform-origin: 50% 50%; }
   #scena { position: relative; width: 100%; height: 100%; font-family: system-ui, sans-serif; color: #fff; }
-  .prvek { position: absolute; will-change: transform, opacity, filter; }
+  /* Žádné will-change: prvek by se rasterizoval v původní velikosti a při zoomu kamery by text byl rozmazaný. */
+  .prvek { position: absolute; }
   #mrizka { position: absolute; inset: 0; pointer-events: none; display: none;
     box-shadow: inset 0 250px 0 rgba(255,0,0,.25), inset 0 -400px 0 rgba(255,0,0,.25), inset -120px 0 0 rgba(255,0,0,.25); }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><filter id="smer"><feGaussianBlur id="smerBlur" stdDeviation="0 0"/></filter></svg>
 <div id="scena">
-  <div class="prvek" id="titulek" style="left:0;right:0;top:45%;text-align:center;font-size:120px;font-weight:800">TITULEK</div>
+  <div id="svet">
+    <div class="prvek" id="titulek" style="left:0;right:0;top:45%;text-align:center;font-size:120px;font-weight:800">TITULEK</div>
+  </div>
   <div id="mrizka"></div>
 </div>
 <script>
-// Easing (pravidla F1–F4): co přichází ease-out, co odchází ease-in, UI pružina s malým překmitem, nic lineárně.
+// ---------- Čas ----------
+// Všechny časy událostí na jednom místě (v sekundách nebo v dobách: doba = 60 / BPM).
+const BPM = 120, DOBA = 60 / BPM;
+const CASY = { prijezd: 0.2, odjezd: 2.4 };
+const TEXTY = { titulek: 'TITULEK' };
+
+// ---------- Easing (pravidla F1–F7): příchod ease-out, odchod ease-in, UI pružina s malým překmitem, nic lineárně ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const usek = (t, od, do_) => clamp((t - od) / (do_ - od));          // 0→1 mezi časy od a do_
-const easeOut = (x) => 1 - Math.pow(2, -10 * x);                      // exponenciální příjezd
-const easeIn = (x) => (x === 0 ? 0 : Math.pow(2, 10 * x - 10));      // exponenciální odjezd
+const easeOut = (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x));       // exponenciální příjezd
+const easeIn = (x) => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10));       // exponenciální odjezd
 const easeInOut = (x) => (x < 0.5 ? easeIn(2 * x) / 2 : (1 + easeOut(2 * x - 1)) / 2);
-const pruzina = (x, prekmit = 0.08) => {                              // tlumená pružina s daným překmitem (0.08 = 8 %)
+const pruzina = (x, prekmit = 0.03) => {                              // UI: tlumená pružina, překmit 2–5 % (F4)
   if (x <= 0) return 0;
   if (x >= 1) return 1;
   const L = Math.log(prekmit);
@@ -33,21 +44,61 @@ const pruzina = (x, prekmit = 0.08) => {                              // tlumen�
   const w = 5 / z, wd = w * Math.sqrt(1 - z * z);                     // do x = 1 dozní na < 1 %
   return 1 - Math.exp(-z * w * x) * (Math.cos(wd * x) + (z * w / wd) * Math.sin(wd * x));
 };
+const usazeni = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 - (1 + 7 * x) * Math.exp(-7 * x));  // kriticky tlumené, bez překmitu: plochy, kamera, text
 const mix = (a, b, x) => a + (b - a) * x;
+
+// Klíčové snímky: kf(t, [[0, 0], [1.2, 100, easeOut], [2, 40, usazeni]]) → hodnota v čase t.
+const kf = (t, klice) => {
+  if (t <= klice[0][0]) return klice[0][1];
+  for (let i = 1; i < klice.length; i++) {
+    const [t1, v1, ease = easeInOut] = klice[i], [t0, v0] = klice[i - 1];
+    if (t <= t1) return mix(v0, v1, ease(usek(t, t0, t1)));
+  }
+  return klice[klice.length - 1][1];
+};
+
+// Náhoda jen se seedem (mulberry32), aby byl každý render stejný.
+const nahoda = (seed) => () => {
+  seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+  let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+  r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+  return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+};
+
+// Kamera: jeden svět, jedna transformace, zoom v logaritmické škále (F7). Volat jednou za snímek.
+const kamera = (x, y, logZoom) => {
+  $('svet').style.transform = `scale(${Math.exp(logZoom)}) translate(${-x}px, ${-y}px)`;
+};
+
+// Směrové rozmazání podle rychlosti (D5): vx, vy v px/s, prvek dostane filter:url(#smer).
+// Jeden společný filtr, takže v jednom okamžiku jen pro jeden rychlý prvek (jinak přidat další <filter>).
+const rozmazani = (el, vx, vy, sila = 0.012) => {
+  const sx = Math.abs(vx) * sila, sy = Math.abs(vy) * sila;
+  $('smerBlur').setAttribute('stdDeviation', `${sx.toFixed(2)} ${sy.toFixed(2)}`);
+  el.style.filter = sx + sy > 0.3 ? 'url(#smer)' : 'none';
+};
 
 const $ = (id) => document.getElementById(id);
 if (location.search.includes('mrizka')) $('mrizka').style.display = 'block';
 
-window.seek = (t) => {
-  // Příklad: titulek přijede zespodu (ease-out) mezi 0,2 a 0,8 s a odjede nahoru (ease-in) mezi 2,4 a 2,9 s.
-  const prijezd = easeOut(usek(t, 0.2, 0.8));
-  const odjezd = easeIn(usek(t, 2.4, 2.9));
-  const y = mix(200, 0, prijezd) + mix(0, -300, odjezd);
+// ---------- Scéna ----------
+const poloha = (t) => kf(t, [[CASY.prijezd, 200], [CASY.prijezd + 0.6, 0, easeOut], [CASY.odjezd, 0], [CASY.odjezd + 0.5, -300, easeIn]]);
+
+const seek = (t) => {
   const el = $('titulek');
+  el.textContent = TEXTY.titulek;
+  const y = poloha(t);
   el.style.transform = `translateY(${y}px)`;
-  el.style.opacity = prijezd * (1 - odjezd);
+  el.style.opacity = easeOut(usek(t, CASY.prijezd, CASY.prijezd + 0.6)) * (1 - easeIn(usek(t, CASY.odjezd, CASY.odjezd + 0.5)));
+  rozmazani(el, 0, (poloha(t + 1 / 120) - poloha(t - 1 / 120)) * 60);   // rychlost z rozdílu polohy
+  kamera(0, 0, Math.log(mix(1, 1.04, usek(t, 0, 3))));                 // pomalé dotlačení 1,00 → 1,04
 };
-window.seek(0);
+
+// Scénu stavět a měřit až po načtení fontů. Renderer na window.seek čeká, takže se definuje až potom.
+document.fonts.ready.then(() => {
+  window.seek = seek;
+  seek(0);
+});
 </script>
 </body>
 </html>

@@ -3,10 +3,13 @@
 //
 // Použití:
 //   node nastroje/render_html.cjs --html scena.html --out video.mp4 --dur 15 [--w 1080 --h 1920 --fps 30]
-//        [--sub 3]            podsnímky na snímek, zprůměrované = rozmazání pohybem (1 = vypnuto)
+//        [--sub 4]            podsnímky na snímek, zprůměrované = rozmazání pohybem (1 = vypnuto, rychlé přechody 8)
+//        [--zaverka 0.5]      jakou část snímku podsnímky pokryjí (0.5 = filmová závěrka 180°), vystředěno na čas snímku
 //        [--audio hudba.wav]  přimíchat zvuk
 //        [--audio-z-kodu]     zvuk ze stránky: await window.renderAudio() vrací WAV v base64
 //        [--nahled 0.5]       místo videa jen kontrolní snímky každých 0,5 s + arch nahled.jpg
+//        [--nahled doby --bpm 120 [--offset 0]]   kontrolní snímek na každou dobu hudby
+//        [--nahled casy --casy 0,1.6,2.5]         kontrolní snímky v daných časech
 const { chromium } = require('playwright');
 const { spawn, execFileSync } = require('child_process');
 const fs = require('fs');
@@ -23,7 +26,8 @@ const html = path.resolve(opt('html'));
 const out = path.resolve(opt('out', 'video.mp4'));
 const W = +opt('w', 1080), H = +opt('h', 1920), FPS = +opt('fps', 30);
 const DUR = +opt('dur');
-const SUB = Math.max(1, +opt('sub', 3));
+const SUB = Math.max(1, +opt('sub', 4));
+const ZAVERKA = Math.min(1, Math.max(0, +opt('zaverka', 0.5)));
 const NAHLED = opt('nahled');
 if (!fs.existsSync(html) || !(DUR > 0)) {
   console.error('Chybí --html (existující soubor) nebo --dur > 0');
@@ -42,13 +46,19 @@ if (!fs.existsSync(html) || !(DUR > 0)) {
   const seek = (t) => page.evaluate((t) => window.seek(t), t);
 
   if (NAHLED) {
-    const krok = +NAHLED;
+    let casy = [];
+    if (NAHLED === 'casy') casy = opt('casy', '0').split(',').map(Number);
+    else if (NAHLED === 'doby') {
+      const doba = 60 / +opt('bpm', 120);
+      for (let t = +opt('offset', 0); t <= DUR + 1e-9; t += doba) casy.push(t);
+    } else for (let t = 0; t <= DUR + 1e-9; t += +NAHLED) casy.push(t);
     const dir = out.replace(/\.[^.]+$/, '') + '_nahled';
+    fs.rmSync(dir, { recursive: true, force: true });
     fs.mkdirSync(dir, { recursive: true });
-    let n = 0;
-    for (let t = 0; t <= DUR + 1e-9; t += krok, n++) {
+    const n = casy.length;
+    for (const [i, t] of casy.entries()) {
       await seek(t);
-      await page.screenshot({ path: path.join(dir, `${String(n).padStart(3, '0')}_${t.toFixed(2)}s.png`) });
+      await page.screenshot({ path: path.join(dir, `${String(i).padStart(3, '0')}_${t.toFixed(2)}s.png`) });
     }
     const cols = Math.min(n, W > H ? 4 : 8);
     execFileSync('ffmpeg', ['-v', 'error', '-y', '-pattern_type', 'glob', '-i', path.join(dir, '*.png'),
@@ -73,7 +83,8 @@ if (!fs.existsSync(html) || !(DUR > 0)) {
     const celkem = Math.round(DUR * FPS);
     for (let f = 0; f < celkem; f++) {
       for (let s = 0; s < SUB; s++) {
-        await seek((f + (s + 1) / SUB - 1 / SUB) / FPS);
+        // Podsnímky rozložené symetricky kolem času snímku přes ZAVERKA jeho délky.
+        await seek(Math.max(0, (f + ((s + 0.5) / SUB - 0.5) * ZAVERKA) / FPS));
         const png = await page.screenshot({ type: 'png' });
         if (!enc.stdin.write(png)) await new Promise((r) => enc.stdin.once('drain', r));
       }

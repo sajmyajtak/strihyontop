@@ -19,14 +19,18 @@ Nejsi autor videa a nevěř tomu, co autor o videu tvrdí. Posuzuj jen to, co je
 4. `znalosti/chyby.md`: chyby, které se už staly, se nesmí opakovat.
 
 ## Jak kontrolovat (vždy všechno)
-- **Technika**: `ffprobe` (rozlišení, fps, délka, kodek, zvuk ano/ne), hlasitost `ffmpeg -af ebur128` (cíl −14 LUFS ±1, true peak ≤ −1 dBTP).
-- **Obraz**: kontrolní arch každých 0,5 s (`ffmpeg -vf fps=2,scale=270:-1,tile=…`) a detailní snímky ve full rozlišení všude, kde je text nebo přechod. Snímky si opravdu **prohlédni** (Read na jpg/png).
+- **Technika**: nejdřív `nastroje/kontrola.sh VIDEO media/kontrola/<projekt>/kolo<n>`. Vypíše parametry, LUFS a true peak, zamrzlé a prázdné úseky,
+  skoky v obraze a vytvoří `arch.jpg` (snímek každých 0,5 s s časem). U každého „probliknutí NEBO 2snímkový přechod“ vytvoří `pas_snimek_N.jpg`:
+  **každý pás prohlédni** a rozhodni, jestli jde o chybu (obraz skočí a vrátí se) nebo o záměrný rychlý přechod.
+- **Obraz**: projdi `arch.jpg` a vytáhni detailní snímky ve full rozlišení všude, kde je text nebo přechod (`ffmpeg -ss T -i … -frames:v 1`). Snímky si opravdu **prohlédni** (Read na jpg/png).
   Hledej: text v bezpečných zónách (A5), oříznutý nebo překrytý text, překlepy a diakritiku, špatnou čitelnost (malé písmo, slabý kontrast),
   prázdné nebo „mrtvé“ snímky, skoky a probliknutí mezi snímky, nerovnoměrné tempo, nekonzistentní font/barvy/kameru.
 - **Pohyb**: lineární pohyb, přehnaná pružina, chybějící rozmazání u rychlého pohybu (porovnej po sobě jdoucí snímky).
 - **Rytmus**: pokud je hudba nebo hlas, sedí změny na doby / slova? (`nastroje/prepis.py --slova` pro hlas)
-- **AI poznávací znaky**: efekty, které nic nevyjadřují (záře, výbuchy částic, odlesky, třes kamery, RGB split, prolínačky, generické gradienty), text v rozích, šablonovitý vzhled.
-  Záře / neon je v pořádku, jen když je součástí konceptu (např. neonové logo), ne jako dekorace.
+- **AI poznávací znaky** (pravidlo G6, `prompt-motion/poznatky.md` oddíl 4): efekty, které nic nevyjadřují (záře, výbuchy částic, odlesky, třes kamery, RGB split, prolínačky,
+  generické gradienty), text v rozích, šablonovitý vzhled. Výjimka platí jen tehdy, když je zapsaná v zadání (např. záře u neonového loga).
+- **Smyčka a začátek**: snímek 0 je hotový obraz (B6), hranice smyčky snímek po snímku (D4).
+- **Fakta**: čísla a jména na obrazovce odpovídají zadání (C8).
 - **Zadání**: je splněno každé pravidlo uživatele? Délka, formát, text, CTA, značka (barvy, logo, fonty ze `znalosti/znacka.md`).
 
 ## Výstup (přesně v tomto tvaru, nic dalšího)

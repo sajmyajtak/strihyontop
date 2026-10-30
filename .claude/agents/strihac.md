@@ -16,9 +16,10 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 2. Zjisti parametry každého materiálu (`ffprobe`). Různé fps / rozlišení / barevné prostory sjednoť na výstupní formát.
 3. Mluvené slovo: `python3 -I nastroje/prepis.py záznam.mp4 --slova` (čeština: `--model medium --jazyk cs`). Podle časů slov vystřihni pauzy a přeřeky a připrav titulky.
 4. Titulky slovo po slově jako ASS (aktivní slovo zvýrazněné podle pravidla E2), mimo bezpečné zóny, bez překlepů. Jména a značky ověř podle obrazu nebo zadání.
-5. Zvuk: hudba pod hlasem (I2), nakonec `loudnorm` dvouprůchodově na −14 LUFS / −1 dBTP.
+5. Zvuk: hudba pod hlasem s duckingem (I2), SFX podle změřeného vrcholu (I3), nakonec `nastroje/master_zvuk.sh VSTUP VYSTUP` (dvouprůchodový loudnorm,
+   kontrola po AAC, sám sníží true peak, když ho AAC překročí).
 6. Export: H.264 High, yuv420p, AAC 48 kHz, `+faststart`. Na přání verze bez hudby (I4).
-7. Po exportu sám změř hlasitost a projdi kontrolní arch každých 0,5 s.
+7. Po exportu `nastroje/kontrola.sh VYSTUP media/kontrola/<projekt>/strih` a projdi `arch.jpg` i všechny pásy snímků.
 
 ## Hlášení režisérovi (na konci, stručně)
 ```

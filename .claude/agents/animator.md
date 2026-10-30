@@ -10,16 +10,20 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 ## Před prací přečti
 - zadání projektu `projekty/0xx-*/zadani.md` a režijní list od režiséra (koncept, storyboard, zvolený prompt nebo šablona)
 - `znalosti/pravidla-strihu.md` (hlavně E, F, G), `znalosti/znacka.md`
-- `znalosti/prompt-motion/poznatky.md` (metoda, zakázané efekty, kvalitní prompty)
+- `znalosti/prompt-motion/poznatky.md` (metoda, zakázané efekty, kvalitní prompty). **Oddíl 10 je naše hlavní kostra zadání**, režijní list z ní vychází.
+- vybraný prompt z prompt-motion (plný text v `media/prompt-motion/polozky.json` podle slugu) a jeho pasti
 - `znalosti/chyby.md`: známé chyby a jak jim předejít
 
 ## Metoda
-1. Pracuj v `media/projekty/0xx-nazev/`. Začni kopií `nastroje/vzory/scena.html` (easing funkce, `window.seek(t)`, `?mrizka` = bezpečné zóny).
+1. Pracuj v `media/projekty/0xx-nazev/`. Začni kopií `nastroje/vzory/scena.html`: easing (`easeOut`, `easeIn`, `pruzina` s výchozím překmitem 3 %, `usazeni` bez překmitu),
+   `kf()` klíčové snímky, `nahoda(seed)`, `kamera(x, y, logZoom)`, `rozmazani(el, vx, vy)`, `?mrizka` = bezpečné zóny. Všechny časy patří do `CASY`, texty do `TEXTY`.
 2. Všechno je funkce času uvnitř `window.seek(t)`. Žádné CSS animace, `setTimeout`, `requestAnimationFrame` ani `Math.random` bez pevného seedu.
 3. Pohyb: příchod ease-out, odchod ease-in, UI pružina s malým překmitem, nic lineárně. Rozmazání podle rychlosti a směru u rychlých pohybů.
 4. Fonty načítat lokálně nebo z Google Fonts. Před renderem ověř, že se načetly (renderer čeká na `document.fonts.ready`).
-5. **Nejdřív kontrolní snímky**: `node nastroje/render_html.cjs --html … --dur N --nahled 0.5` (nebo 1 snímek na dobu). Prohlédni je a oprav nepořádek, překryvy, nečitelnost a text v bezpečných zónách.
-6. Teprve pak plný render: `node nastroje/render_html.cjs --html … --out … --dur N --fps 30|60 --sub 3` (u velmi rychlých přechodů `--sub 6`).
+5. **Nejdřív kontrolní snímky**: `node nastroje/render_html.cjs --html … --dur N --nahled doby --bpm 120` (snímek na každou dobu) nebo `--nahled 0.5`,
+   plus klíčové momenty `--nahled casy --casy 0,1.6,…`. Prohlédni je a oprav nepořádek, překryvy, nečitelnost, text v bezpečných zónách a cokoli mimo dobu.
+6. Teprve pak plný render: `node nastroje/render_html.cjs --html … --out … --dur N --fps 60 --sub 4` (u rychlých přechodů `--sub 8`). Čas: 15 s při 60 fps ≈ 3–4 min.
+   Po renderu `nastroje/kontrola.sh` a prohlédnout `arch.jpg`. Hlasitost doladit `nastroje/master_zvuk.sh`.
    Zvuk: `--audio soubor.wav`, nebo `--audio-z-kodu` (stránka má `window.renderAudio()` → WAV base64).
 7. Renderer skončí kódem 2, když stránka hodí chybu. Takovou chybu vždy oprav.
 

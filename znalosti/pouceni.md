@@ -15,6 +15,16 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### 2026-10-30: Nastudován celý prompt-motion.com (první běh systému agentů)
+- Analytik přečetl všech 236 položek, 2 šablony a 5 článků → `prompt-motion/poznatky.md` (metoda, anatomie promptu, AI znaky, doporučené prompty podle typu, naše kostra zadání).
+- **Spotřeba: analytik 302 588 tokenů, 30 akcí nástrojů, 15,6 min.** Hlavní chat neměřeno.
+- Režisér výstup zkontroloval: čísla ověřena proti datům a blogu (17 023 lajků, 16 položek 9:16, existence doporučených položek).
+  Přijato 14 úprav a 8 nových pravidel (`[PM]`). Výjimka u D2/G2: předloha od uživatele smí zákaz přebít.
+- Analytik našel 3 chyby v nástrojích (C004–C006). Režisér je opravil a při testech oprav našel další 4 (C007–C010).
+  **Smyčka „tvůrce → nezávislá kontrola → oprava → zápis prevence“ funguje i na nástrojích.**
+- Hlavní poučení z katalogu: krátký prompt je loterie (stejný prompt: 0 až 17 023 lajků). Kvalitu dělá jeden koncept, seznam zákazů,
+  mřížka dob, metoda renderu a kontrola snímků. Formát 9:16 je v katalogu vzácný (7 %), skoro vždy se musí přeskládat (A7).
+
 ### 2026-10-30: prompt-motion.com jako hlavní zdroj promptů, systém agentů, kontrola kvality
 - Uživatel určil **prompt-motion.com** jako hlavní zdroj promptů. Prompty vybírám já, nebo je pošle uživatel.
 - Zavedena **režie**: hlavní chat = režisér, podřízení agenti analytik / animator / strihac / kritik (`.claude/agents/`).

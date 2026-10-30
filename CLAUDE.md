@@ -44,8 +44,11 @@ VÝSLEDEK: soubor / odkaz, délka, formát, 1–2 věty co video je
 PRŮBĚH: počet kol kontroly, verdikt kritika
 CHYBY VYŘEŠENÉ AUTOMATICKY: počet + 1 řádek ke každé závažné
 CHYBY, KTERÉ POTŘEBUJU OD TEBE: (jen blokující) co, proč, co navrhuju
-SPOTŘEBA TOKENŮ: tabulka agent → tokeny (z výsledků Agent nástroje) + součet; hlavní chat: viz poznámka v pouceni.md
+SPOTŘEBA TOKENŮ: tabulka agent → tokeny, akce nástrojů, čas + součet
 ```
+**Tokeny**: každý pomocný agent po skončení pošle notifikaci s `<usage><subagent_tokens>…</subagent_tokens><tool_uses>…</tool_uses><duration_ms>…</duration_ms></usage>`.
+Režisér hodnoty hned zapíše do tabulky „Spotřeba tokenů“ v `zadani.md` projektu. Vlastní spotřebu hlavního chatu režisér zevnitř změřit nemůže,
+proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 
 ## Po zpětné vazbě
 1. Zpětnou vazbu doslova do `zadani.md` projektu.
@@ -66,8 +69,11 @@ SPOTŘEBA TOKENŮ: tabulka agent → tokeny (z výsledků Agent nástroje) + sou
 ## Nástroje
 - `nastroje/analyzuj.sh`: rozbor reference
 - `nastroje/prepis.py`: přepis řeči (`--slova` = časy slov pro titulky, `--model medium --jazyk cs` pro češtinu)
-- `nastroje/render_html.cjs`: HTML scéna s `window.seek(t)` → MP4 snímek po snímku s rozmazáním pohybem; `--nahled 0.5` = jen kontrolní snímky. ~8 s výpočtu na 1 s videa 1080×1920 (3 podsnímky).
-- `nastroje/vzory/scena.html`: kostra scény (easing podle pravidel F, pružina s nastavitelným překmitem, `?mrizka` = bezpečné zóny)
+- `nastroje/render_html.cjs`: HTML scéna s `window.seek(t)` → MP4 snímek po snímku. Podsnímky vystředěné, závěrka 180° (`--sub 4`, rychlé přechody 8).
+  `--nahled 0.5 | doby --bpm 120 | casy --casy 0,1.5` = jen kontrolní snímky. 1080×1920 při 60 fps a 4 podsnímcích ≈ 16 s výpočtu na 1 s videa.
+- `nastroje/vzory/scena.html`: kostra scény (easing podle pravidel F, pružina 3 % + kriticky tlumená, `kf()`, `nahoda(seed)`, `kamera()`, `rozmazani()`, `?mrizka` = bezpečné zóny)
+- `nastroje/kontrola.sh VIDEO SLOZKA`: technická kontrola pro kritika (parametry, LUFS/TP, zamrzlé a prázdné úseky, skoky a probliknutí + pásy snímků, arch s časy)
+- `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC
 - `nastroje/prompt_motion.py`: katalog prompt-motion.com
 - ffmpeg: střih, barvy, titulky, hlasitost (`loudnorm` na −14 LUFS)
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
