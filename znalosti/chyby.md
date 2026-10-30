@@ -13,6 +13,12 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C015: setup.sh neinstaloval nástroje přidané později (2026-10-30, nástroj, našel režisér na začátku nové session)
+- Příznak: v novém kontejneru chyběly `gdown` a `scipy` (stahování z Drive, generátor hudby).
+- Příčina: knihovny jsem nainstaloval ručně, ale nepřidal do `nastroje/setup.sh`.
+- Oprava: setup instaluje `yt-dlp faster-whisper gdown scipy pillow-heif`.
+- Prevence: **každá nová závislost hned do `setup.sh`**, jinak ji příští session nemá.
+
 ### C014: Drobné chyby při psaní hudba.py (2026-10-30, nástroj, našel režisér testem)
 - Příznak: (1) `butter()` nepřijal jednoprvkové pole jako mezní frekvenci, (2) náhodné „lidské“ posunutí noty před čas 0 rozbilo vkládání do mixu,
   (3) při úpravách zůstal v kódu nesmyslný řádek.

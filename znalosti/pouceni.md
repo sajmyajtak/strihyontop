@@ -15,6 +15,12 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### 2026-10-30: Nová složka na Google Drive jen pro materiály
+- Uživatel: **„vytvoříme úplně novou složku, kde si budeš brát materiál“** pro nová videa, staré složky nepoužívat. Soustředit se jen na tvorbu videí pro portfolio.
+- Založeno: „Střižna – materiály pro portfolio“ (01 Projekty / 02 Logo a značka / 03 Hotová videa + návod). Uživatel musí nastavit sdílení odkazem (Čtenář).
+- Ověřeno: stažení celé složky (6 videí, 126 MB, 21 s), příprava materiálů včetně HEIC. Nástroj `materialy.py`.
+- Pozor na bezpečnost: starší složka byla sdílená „kdokoli s odkazem = Editor“. Pro materiály stačí Čtenář.
+
 ### 2026-10-30: Nastavení od uživatele, vlastní hudba v1, Google Drive
 - Uživatel: videa **anglicky**, **zatím bez voiceoveru** (později ElevenLabs), **hudbu vytvářet** podle tónu (vážný / drzý / luxusní),
   barvy a CTA podle zadání, materiály na **Google Drive**, **Higgsfield nepoužívat**. Zapsáno do `znacka.md`, pravidla I6–I8.

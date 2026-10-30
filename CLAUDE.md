@@ -24,6 +24,8 @@ Podřízení agenti (`.claude/agents/`): **analytik** (předlohy, výběr prompt
 spustit `general-purpose` s instrukcí „přečti `.claude/agents/<role>.md` a jednej podle něj“.
 
 1. **Příjem**: založit `projekty/0xx-nazev/zadani.md` ze šablony. Pravidla uživatele **doslova**, mají nejvyšší prioritu.
+   Materiály: podsložka projektu na Drive v „Střižna – materiály pro portfolio / 01 Projekty“ (postup v `znalosti/znacka.md`) →
+   `nastroje/drive.sh` → `nastroje/materialy.py` → prohlédnout `_prehled.jpg` a varování (HDR, různé fps, otočení).
    Když chybí něco, bez čeho video nejde (materiál, text, logo), zeptat se hned a jednou souhrnně. Ostatní rozhodnout sám a zapsat proč.
 2. **Režijní list** (do `zadani.md`): koncept jednou větou, prompt nebo šablona z prompt-motion (vyberu sám, nebo ten od uživatele),
    použitá pravidla, storyboard po dobách nebo větách, akceptační kritéria pro kritika.
@@ -79,5 +81,6 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
 - `nastroje/hudba.py --nalada vazna|drza|luxusni --delka N --out x.wav [--bpm --drop --konec]`: vlastní hudba do pozadí (syntéza, bez licencí),
   + `x.json` s dobami, takty, dropem a koncem pro synchronizaci animace. Sám kontroluje pásma (telefon pod ~100 Hz nehraje).
-- `nastroje/drive.sh ID_NEBO_ODKAZ`: stažení materiálu z Google Drive do `media/materialy/` (konektor jen k hledání a malým souborům).
+- `nastroje/drive.sh ID_NEBO_ODKAZ [cíl]`: stažení souboru nebo celé složky z Google Drive (konektor jen k hledání a malým souborům).
+- `nastroje/materialy.py SLOZKA`: příprava materiálů (HEIC → JPG, otočení podle EXIF, HDR / proměnlivé fps / otočení videa), katalog + `_prehled.jpg`.
 - **Higgsfield NEPOUŽÍVAT** (rozhodnutí uživatele 2026-10-30). Hlas a případně hudba později přes ElevenLabs (`ELEVENLABS_API_KEY`).

@@ -17,11 +17,19 @@ Výchozí hodnoty pro každé video. Konkrétní zadání je vždy přebíjí.
 | Zakázané nástroje | **Higgsfield nepoužívat** (rozhodnutí uživatele 2026-10-30) |
 
 ## Materiály na Google Drive
-- Konektor Google Drive najde soubory a složky (`search_files`, `parentId = 'ID_SLOZKY'`). Stahovat přes něj jen malé soubory (logo, texty):
-  vrací je jako base64 do konverzace.
-- Videa a velké soubory: `nastroje/drive.sh ID_NEBO_ODKAZ [cíl]` → `media/materialy/`. Funguje pro soubory sdílené „kdokoli s odkazem“.
-  Když nástroj ohlásí HTML místo dat, požádat uživatele o sdílení odkazem.
+**Jediný zdroj materiálů pro nová videa je složka „Střižna – materiály pro portfolio“** (kořen Disku, založena 2026-10-30).
+Staré složky (Zlatnictví, Mossaic aj.) **nepoužívat**, rozhodnutí uživatele.
 
-| datum | soubor | kde je uložen | poznámka |
-|---|---|---|---|
-| 2026-10-30 | složky „Mossaic“, „Zlatnictví“ (videa 13–35 MB, 9:16, 25 fps) | Google Drive uživatele | jen zjištěno při testu přístupu, zatím bez zadání |
+```
+Střižna – materiály pro portfolio/
+  01 Projekty – každé video vlastní složka/   ← materiály k videu (uživatel v zadání řekne název podsložky)
+  02 Logo a značka/                           ← logo, fonty, barvy
+  03 Hotová videa/                            ← sem si uživatel ukládá výsledky (já doručuji do chatu)
+  JAK SEM NAHRÁVAT                            ← návod pro uživatele
+```
+- **ID složek nepatří do gitu** (repozitář je veřejný a složka je sdílená odkazem). Najít konektorem podle názvu:
+  `search_files: title = 'Střižna – materiály pro portfolio' and mimeType = 'application/vnd.google-apps.folder'`, pak `parentId = '<ID>'`.
+- Stažení celé podsložky projektu: `nastroje/drive.sh "https://drive.google.com/drive/folders/<ID>" media/materialy/<projekt>`
+  (gdown, max. 50 souborů na složku), pak `python3 -I nastroje/materialy.py media/materialy/<projekt>` → katalog, varování, `_prehled.jpg`.
+- Konektor na stahování nepoužívat (base64 do konverzace). Sdílení musí být „Kdokoli s odkazem: Čtenář“. Nastavuje uživatel,
+  konektor umí sdílet jen s konkrétními e-maily. Když stažení vrátí HTML místo dat, sdílení chybí.
