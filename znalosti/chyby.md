@@ -13,6 +13,17 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C018: Agenti workflow „stalled“ 16–23 min, narazili na limit délky výstupu (2026-10-30, V001 porota konceptů, našel režisér)
+- Příznak: návrhy B a C bez zápisu 16+ minut. Uživatel to viděl v přehledu workflow jako „stalled“.
+- Příčina: agenti zdědili **maximální úroveň přemýšlení** a celý návrh (storyboard na 10 taktů) psali **jednou obří odpovědí**.
+  Po 23 min přišlo „Output token limit hit… Break remaining work into smaller pieces“. Nevisel žádný příkaz, generování běží na serveru
+  a deník se zapíše až po dokončení odpovědi.
+- Oprava: návrhy jsem nechal doběhnout (práce se neztratila), porotě a syntéze jsem upravil skript na `effort: 'high'` + psaní po částech
+  a obnovil ho z deníku (hotové kroky z mezipaměti).
+- Prevence: ve workflow tvůrčí a hodnotící agenti **`effort: 'high'`** (max jen pro výjimečně těžké úlohy) a v každém promptu s velkým výstupem
+  **„piš po částech: kostra + malé Edit“**. Diagnostika: poslední záznam v `subagents/workflows/<run>/agent-*.jsonl`,
+  ticho > 15 min bez běžícího procesu = dlouhé generování / limit výstupu.
+
 ### C017: Pohodová hudba v1 měla propad v horních středech, kontrola pásem ho neodhalila (2026-10-30, V001, našel animátor a pak režisér)
 - Příznak: animátor našel propad 16 dB mezi oktávami 0,5–1 kHz a 1–2 kHz a hi-hat kolem −80 dB. Po jeho opravě režisér nezávisle naměřil
   ještě ~13 dB mezi 1 kHz a 2 kHz.

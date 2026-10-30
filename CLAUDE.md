@@ -28,6 +28,8 @@ Podřízení agenti (`.claude/agents/`): **analytik** (předlohy, výběr prompt
 Tvorba videa běží jako **Workflow** (orchestrace více agentů). Každý agent vrací vedle výsledku i `OTÁZKY PRO REŽISÉRA`.
 Režisér je zodpoví sám, nebo, když jde o věc uživatele, se zeptá uživatele. Agenti se uživatele nikdy neptají přímo.
 **Laťka: „aby si řekl wow“.** Kreativní ředitel hodnotí koncept i hotové video 1–10. Pod 8 se video vylepšuje (v rámci max. 3 kol).
+**Workflow agenti** (C018): `effort: 'high'` (ne max), velké výstupy (storyboard, scéna) psát **po částech** (kostra + malé Edit), jinak hrozí
+limit délky výstupu a desítky minut ticha. Ticho > 15 min → zkontrolovat poslední záznam agenta v `subagents/workflows/<run>/`.
 
 1. **Příjem**: založit `projekty/0xx-nazev/zadani.md` ze šablony. Pravidla uživatele **doslova**, mají nejvyšší prioritu.
    Materiály: podsložka projektu na Drive v „Střižna – materiály pro portfolio / 01 Projekty“ (postup v `znalosti/znacka.md`) →
