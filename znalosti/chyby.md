@@ -13,6 +13,16 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C020: Výrobu přerušil 5hodinový limit účtu (2026-10-30, V001 výroba, workflow vrátil chybu)
+- Příznak: zvukař i animátor po ~7 min skončili s „You've hit your 5-hour limit · resets 11:40pm (UTC)“. Workflow vrátil „animátor nedodal render“.
+  Hlídač ukazoval jen TICHO, protože skutečnou příčinu hlásí až výsledek workflow (pole failures).
+- Příčina: limit využití účtu za 5 h. Předchozí fáze (fáze 1 ~0,4 mil., porota ~0,5 mil. + zaseknutý agent ~0,7 mil. tokenů) ho vyčerpaly.
+- Oprava: po resetu (23:40 UTC) ověřen rozpracovaný stav (hudba.py se přeloží, ostatní nálady bit po bitu stejné jako HEAD, scéna
+  má 10 rozpracovaných souborů), do skriptu doplněna informace „navazuješ na přerušený pokus“ a workflow obnoven.
+- Prevence: dlouhé workflow neplánovat těsně po velké spotřebě. Při „hit your limit“ počkat na reset a obnovit (resumeFromRunId).
+  Rozpracované soubory před obnovou vždy zkontrolovat (překlad, hashe, git diff). **Úspora tokenů = víc práce do limitu**: effort high,
+  psaní po částech a hlídač (C018) nejsou jen rychlost, ale i rozpočet.
+
 ### C019: Hlídač hlásil falešný „limit výstupu“ hned na startu agentů (2026-10-30, nastroje/hlidac.py, našel režisér ověřením)
 - Příznak: ve 22:33 hlášení LIMIT VÝSTUPU ×1 u zvukaře i animátora, oba přitom teprve začínali.
 - Příčina: hlídač hledal větu „Output token limit hit“ kdekoli v transkriptu. Agenti si na startu přečetli `znalosti/chyby.md`,

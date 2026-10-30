@@ -276,6 +276,7 @@ pak drop 7,19–8,2, pak zbytek. Bez schválení 8,4 nevzniká žádný pohyb.
 | animator: fáze 1 (značka, hudba, koncept) | 403 696 | 114 | 40,7 min |
 | workflow koncept (obnovený běh: návrhy B + C, 3 porotci, syntéza) | 486 830 | 81 | 20,6 min |
 | zastavený agent C v prvním běhu (3× limit výstupu, nic nezapsal, C018) | ~694 000 (z transkriptu: výstup 386 590 + vstup 307 903) | – | 70 min, ztráta |
+| workflow výroba, 1. pokus (zvukař + animátor, přerušeno limitem účtu po ~7 min, C020) | 234 247 | 52 | 7,6 min |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
