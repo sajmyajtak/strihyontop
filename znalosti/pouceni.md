@@ -15,6 +15,16 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### 2026-10-30: V001 porota konceptů (první workflow s více agenty)
+- Uživatel: **na každý úkol vlastní agent, ostatní agenti se ptají hlavního, video má být „wow“**. Zavedeny role zvukař a kreativní ředitel,
+  koncept přes porotu: 3 návrhy (A animátor, B a C kreativní ředitelé z jiných úhlů) → 3 porotci s různými pohledy naslepo → syntéza.
+- Výsledek: B „Logo byla celou dobu bageta“ 7,05 · A „Ubrus“ 6,98 · C „Groove“ 6,38. Těsný výsledek: porotce za značku chtěl A,
+  porotci za nápad a řemeslo B. Syntéza vzala B a převzala nejlepší z A a C (sdílená slova, klidná kamera na dropu, servírování na marimbu).
+  Postřeh: **nejsilnější nápady stojí na geometrii samotného loga** (jako šipka ve FedEx), nejde je přenést na jinou značku.
+- Výkon: na 4 CPU pouští workflow **najednou jen 2 agenty** (strop = CPU − 2). Plánovat s tím paralelní fáze.
+- Chyba C018: agenti s maximální úrovní přemýšlení a jedním obřím výstupem narazili na limit výstupu (C 3×, ~694 tis. tokenů bez výsledku).
+  Po restartu s `effort: 'high'` a psaním po částech byl C hotový za 8 min a porota za 4 min. Hlídač `nastroje/hlidac.py` to teď pozná sám.
+
 ### 2026-10-30: Nová složka na Google Drive jen pro materiály
 - Uživatel: **„vytvoříme úplně novou složku, kde si budeš brát materiál“** pro nová videa, staré složky nepoužívat. Soustředit se jen na tvorbu videí pro portfolio.
 - Založeno: „Střižna – materiály pro portfolio“ (01 Projekty / 02 Logo a značka / 03 Hotová videa + návod). Uživatel musí nastavit sdílení odkazem (Čtenář).
