@@ -25,6 +25,8 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 6. Teprve pak plný render: `node nastroje/render_html.cjs --html … --out … --dur N --fps 60 --sub 4` (u rychlých přechodů `--sub 8`). Čas: 15 s při 60 fps ≈ 3–4 min.
    Po renderu `nastroje/kontrola.sh` a prohlédnout `arch.jpg`. Hlasitost doladit `nastroje/master_zvuk.sh`.
    Zvuk: `--audio soubor.wav`, nebo `--audio-z-kodu` (stránka má `window.renderAudio()` → WAV base64).
+   Hudba: `python3 -I nastroje/hudba.py --nalada … --delka N --out media/projekty/…/hudba.wav --drop … --konec …`. Časy z `hudba.json`
+   (doby, takty, drop, konec) načti do `CASY`, aby se obraz hýbal přesně s hudbou (C7, I6). Texty na obrazovce anglicky (I8).
 7. Renderer skončí kódem 2, když stránka hodí chybu. Takovou chybu vždy oprav.
 
 ## Hlášení režisérovi (na konci, stručně)

@@ -110,7 +110,12 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **I3** SFX na každou **událost** v obraze (klik, dopad, pop, otevření, logo), ne na každý pohyb. Umístit tak, aby **změřený vrchol** zvuku padl na událost.
   Pod hudbou tiše, jinak ticho. U prémiových značek jemné kliky a měkký dopad na logo, žádné hlasité whooshe všude. `[PM]`
 - **I4** Trendy zvuky z IG/TikTok knihovny se přidávají až v aplikaci při publikaci → dodat i verzi **bez hudby**. `[obecné]`
-- **I5** Hudba a SFX jen s **licencí pro komerční použití**, zdroje zapsat do zadání. Když bezpečná hudba není, dodat video bez hudby + seznam míst pro údery. `[PM]`
+- **I5** Hudba a SFX jen s **licencí pro komerční použití**, zdroje zapsat do zadání. Hudba z `nastroje/hudba.py` je naše vlastní (syntéza v kódu). `[PM]`
+- **I6** Ke každému videu **vlastní hudba podle tónu** (vážný / drzý / luxusní …), nálada a BPM do režijního listu. Animace se řídí `hudba.json`
+  (doby, takty, drop, konec): drop = nejsilnější vizuální moment, konec = end card. `[uživatel 2026-10-30]`
+- **I7** Mix hudby musí znít i z **telefonu**: sub (20–60 Hz) max ~30 % energie, středy (250 Hz–2 kHz) ≥ 30 %, basa s vyššími harmonickými.
+  `hudba.py` to hlídá a varuje. `[R5, C012]`
+- **I8** Zatím **bez voiceoveru**. Hlas později přes ElevenLabs. Jazyk videí je **angličtina**. `[uživatel 2026-10-30]`
 
 ## J. CTA, popisek, publikace
 - **J1** CTA s **klíčovým slovem**: „Comment PROMPT“, „comment KATANA“, „DM me UGOKI“ (automatická DM). `[R1, R2, R4]`

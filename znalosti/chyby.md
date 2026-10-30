@@ -13,6 +13,32 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C014: Drobné chyby při psaní hudba.py (2026-10-30, nástroj, našel režisér testem)
+- Příznak: (1) `butter()` nepřijal jednoprvkové pole jako mezní frekvenci, (2) náhodné „lidské“ posunutí noty před čas 0 rozbilo vkládání do mixu,
+  (3) při úpravách zůstal v kódu nesmyslný řádek.
+- Oprava: skalár pro lowpass/highpass, oříznutí signálu před 0, řádek přepsán na pomocnou funkci `swing()`.
+- Prevence: nový nástroj vždy hned spustit ve všech režimech (všechny nálady), ne jen přeložit.
+
+### C013: drive.sh nenašel právě stažený soubor (2026-10-30, nástroj, našel režisér testem)
+- Příznak: stažení proběhlo, ověření nic nevypsalo.
+- Příčina: gdown zachová původní datum souboru z Drive, hledání „novějších souborů“ ho minulo.
+- Oprava: porovnání obsahu složky před a po stažení.
+- Prevence: nové soubory poznávat podle seznamu, ne podle data změny.
+
+### C012: Hudba měla 2–3× víc hlubokých basů než profesionální mix (2026-10-30, hudba.py v1, našel režisér měřením pásem)
+- Příznak: sub 42–58 % energie (reference R5: 20 %), u drzé nálady jen 4 % středů. Z telefonu by hudba zněla skoro prázdně.
+- Příčina: basa o oktávu níž (F1 44 Hz), dlouhý dojezd kopáku, taiko a úderu, melodické nástroje potichu. Poslech nemám, kontrola chyběla.
+- Oprava: basové tóny v rozsahu 55–104 Hz s vyššími harmonickými, kratší a tišší bicí a úder, víc středů, highpass 38 Hz.
+  Výsledek: sub 11–18 %, středy 31–64 %.
+- Prevence: `hudba.py` po každém renderu měří pásma a varuje (pravidlo I7). **Hudbu posoudí uživatel poslechem**: zpětná vazba → pravidla.
+
+### C011: Mastering nezkonvergoval na true peak ≤ −1 dBTP (2026-10-30, master_zvuk.sh, našel režisér na ukázce hudby)
+- Příznak: po 3 pokusech −0,7 dBTP. Limiter s rychlým uvolněním (60 ms) výsledek zhoršil až na +0,6 dBTP.
+- Příčina: lineární loudnorm nic neomezuje a snížení jeho cíle TP na výsledek nemá vliv. Rychlý limiter zkresluje basy a AAC pak přidá další špičky.
+- Oprava: při přetečení nejdřív ubrat hlasitost o přesah (v toleranci −14 ±1), teprve potom jemný limiter (192 kHz, attack 5 ms, release 300 ms).
+  Ověřeno na 3 různých vstupech: −14,0 až −14,3 LUFS, −1,0 až −1,4 dBTP.
+- Prevence: zvukové nástroje testovat na více typech vstupu (tichý, hlasitý, profesionální mix).
+
 ### C010: `ffmpeg` ve smyčce `while read` sní zbytek vstupu (2026-10-30, nástroj kontrola.sh, našel režisér testem)
 - Příznak: ze 2 podezřelých míst vznikl jen 1 pás snímků.
 - Příčina: ffmpeg čte stdin a spotřeboval zbývající řádky smyčky.

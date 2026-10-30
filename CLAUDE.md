@@ -36,7 +36,7 @@ spustit `general-purpose` s instrukcí „přečti `.claude/agents/<role>.md` a 
 7. **Doručení**: video uživateli (SendUserFile, velké přes Google Drive) + **report** (níže) + prosba o zpětnou vazbu. Commit + push.
 
 **Eskalace k uživateli jen když**: chybí materiál nebo informace, kterou nejde rozumně odhadnout; zablokovaný nástroj nebo oprávnění;
-kritik neschválil ani po 3 kolech; něco stojí peníze nebo kredity (Higgsfield); právní riziko (cizí značka, licence hudby).
+kritik neschválil ani po 3 kolech; něco stojí peníze nebo kredity; právní riziko (cizí značka, licence hudby).
 
 ### Report uživateli (vždy v tomto tvaru, česky, stručně)
 ```
@@ -73,8 +73,11 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
   `--nahled 0.5 | doby --bpm 120 | casy --casy 0,1.5` = jen kontrolní snímky. 1080×1920 při 60 fps a 4 podsnímcích ≈ 16 s výpočtu na 1 s videa.
 - `nastroje/vzory/scena.html`: kostra scény (easing podle pravidel F, pružina 3 % + kriticky tlumená, `kf()`, `nahoda(seed)`, `kamera()`, `rozmazani()`, `?mrizka` = bezpečné zóny)
 - `nastroje/kontrola.sh VIDEO SLOZKA`: technická kontrola pro kritika (parametry, LUFS/TP, zamrzlé a prázdné úseky, skoky a probliknutí + pásy snímků, arch s časy)
-- `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC
+- `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC (při přetečení ubere hlasitost v toleranci, pak jemný limiter)
 - `nastroje/prompt_motion.py`: katalog prompt-motion.com
-- ffmpeg: střih, barvy, titulky, hlasitost (`loudnorm` na −14 LUFS)
+- ffmpeg: střih, barvy, titulky
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
-- Higgsfield MCP (AI generování obrazu a videa) stojí kredity. Používat **jen po odsouhlasení** uživatelem.
+- `nastroje/hudba.py --nalada vazna|drza|luxusni --delka N --out x.wav [--bpm --drop --konec]`: vlastní hudba do pozadí (syntéza, bez licencí),
+  + `x.json` s dobami, takty, dropem a koncem pro synchronizaci animace. Sám kontroluje pásma (telefon pod ~100 Hz nehraje).
+- `nastroje/drive.sh ID_NEBO_ODKAZ`: stažení materiálu z Google Drive do `media/materialy/` (konektor jen k hledání a malým souborům).
+- **Higgsfield NEPOUŽÍVAT** (rozhodnutí uživatele 2026-10-30). Hlas a případně hudba později přes ElevenLabs (`ELEVENLABS_API_KEY`).

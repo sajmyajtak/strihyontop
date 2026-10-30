@@ -15,6 +15,16 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### 2026-10-30: Nastavení od uživatele, vlastní hudba v1, Google Drive
+- Uživatel: videa **anglicky**, **zatím bez voiceoveru** (později ElevenLabs), **hudbu vytvářet** podle tónu (vážný / drzý / luxusní),
+  barvy a CTA podle zadání, materiály na **Google Drive**, **Higgsfield nepoužívat**. Zapsáno do `znacka.md`, pravidla I6–I8.
+- Higgsfield stejně nemá hudební model pro naše použití (jen pro hry, Suno v katalogu není). Ověřeno bez útraty kreditů.
+- Postaven `nastroje/hudba.py` (syntéza: kopák, snare, clap, hi-hat, shaker, taiko, sub/pluck basa, smyčcové ostinato, pad, Rhodes FM,
+  klavír, drnkání Karplus-Strong, riser, úder, dozvuk konvolucí, sidechain). 20 s se vyrenderuje za 3–5 s.
+- **Poslouchat neumím.** Kvalitu hlídám měřením (pásma, hlasitost, spektrogram) a o „znění“ rozhoduje uživatel poslechem ukázky
+  `ukazka-hudby-v1.mp4`. Jeho zpětná vazba = první pravidla pro hudbu.
+- Google Drive: konektor funguje (účet s materiály), videa se stahují přímo (`drive.sh`), soubory jsou sdílené odkazem.
+
 ### 2026-10-30: Nastudován celý prompt-motion.com (první běh systému agentů)
 - Analytik přečetl všech 236 položek, 2 šablony a 5 článků → `prompt-motion/poznatky.md` (metoda, anatomie promptu, AI znaky, doporučené prompty podle typu, naše kostra zadání).
 - **Spotřeba: analytik 302 588 tokenů, 30 akcí nástrojů, 15,6 min.** Hlavní chat neměřeno.

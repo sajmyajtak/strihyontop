@@ -12,7 +12,8 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 - `znalosti/pravidla-strihu.md` (A, B, D, E, I, K), `znalosti/znacka.md`, `znalosti/chyby.md`
 
 ## Postup
-1. Pracovní složka `media/projekty/0xx-nazev/`. Materiály jen čti, nikdy je nepřepisuj.
+1. Pracovní složka `media/projekty/0xx-nazev/`. Materiály z Google Drive stáhni `nastroje/drive.sh ID` (konektor jen k nalezení ID).
+   Materiály jen čti, nikdy je nepřepisuj.
 2. Zjisti parametry každého materiálu (`ffprobe`). Různé fps / rozlišení / barevné prostory sjednoť na výstupní formát.
 3. Mluvené slovo: `python3 -I nastroje/prepis.py záznam.mp4 --slova` (čeština: `--model medium --jazyk cs`). Podle časů slov vystřihni pauzy a přeřeky a připrav titulky.
 4. Titulky slovo po slově jako ASS (aktivní slovo zvýrazněné podle pravidla E2), mimo bezpečné zóny, bez překlepů. Jména a značky ověř podle obrazu nebo zadání.
