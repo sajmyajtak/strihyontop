@@ -24,8 +24,19 @@ def posledni_zaznam(agent_id):
     f = run / f"agent-{agent_id}.jsonl"
     if not f.exists():
         return None, 0
-    radky = f.read_text(errors="ignore").splitlines()
-    pocet_limitu = sum("Output token limit hit" in r for r in radky)
+    pocet_limitu = 0
+    for r in f.read_text(errors="ignore").splitlines():
+        if "Output token limit hit" not in r:
+            continue
+        # Skutečný limit je systémová zpráva typu user s textem jako celým obsahem. Stejná věta v přečteném
+        # souboru (např. chyby.md v tool_result) se nepočítá (C019).
+        try:
+            d = json.loads(r)
+        except json.JSONDecodeError:
+            continue
+        obsah = (d.get("message") or {}).get("content")
+        if d.get("type") == "user" and isinstance(obsah, str) and obsah.startswith("Output token limit hit"):
+            pocet_limitu += 1
     return f.stat().st_mtime, pocet_limitu
 
 

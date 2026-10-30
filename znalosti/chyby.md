@@ -13,6 +13,14 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C019: Hlídač hlásil falešný „limit výstupu“ hned na startu agentů (2026-10-30, nastroje/hlidac.py, našel režisér ověřením)
+- Příznak: ve 22:33 hlášení LIMIT VÝSTUPU ×1 u zvukaře i animátora, oba přitom teprve začínali.
+- Příčina: hlídač hledal větu „Output token limit hit“ kdekoli v transkriptu. Agenti si na startu přečetli `znalosti/chyby.md`,
+  kde ta věta je v popisu C018.
+- Oprava: počítá se jen systémová zpráva typu user, jejímž celým obsahem je ta věta. Ověřeno: starý agent C = 3, noví agenti = 0.
+- Prevence: **každé automatické hlášení nejdřív ověřit, než se podle něj jedná** (restart agenta by stál čas i tokeny).
+  Detektory testovat i na případu, kdy hledaný text jen citujeme.
+
 ### C018: Agenti workflow „stalled“ 16–23 min, narazili na limit délky výstupu (2026-10-30, V001 porota konceptů, našel režisér)
 - Příznak: návrhy B a C bez zápisu 16+ minut. Uživatel to viděl v přehledu workflow jako „stalled“.
 - Příčina: agenti zdědili **maximální úroveň přemýšlení** a celý návrh (storyboard na 10 taktů) psali **jednou obří odpovědí**.
