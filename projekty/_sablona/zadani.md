@@ -6,6 +6,7 @@
 | Platforma / formát | (IG Reels 1080×1920 …) |
 | Délka | |
 | Termín | |
+| Stav | příjem / výroba / kontrola / doručeno / uzavřeno |
 
 ## Zadání (doslova od uživatele)
 > …
@@ -14,7 +15,7 @@
 Pravidla od uživatele (mají přednost před vším ostatním):
 1. …
 
-Vybraná obecná pravidla z `znalosti/pravidla-strihu.md`, která se tu uplatní: (např. B1, D2, F1–F4)
+Obecná pravidla z `znalosti/pravidla-strihu.md`, která se tu uplatní: (např. B1, D2, F1–F4)
 
 ## Reference
 | ID | odkaz | co z ní převzít |
@@ -24,16 +25,32 @@ Vybraná obecná pravidla z `znalosti/pravidla-strihu.md`, která se tu uplatní
 | soubor | kde je | použití |
 |---|---|---|
 
-## Plán (časová osa)
-| čas | obraz | text / titulky | zvuk |
+## Režijní list (vyplní režisér před delegací)
+- **Koncept jednou větou**:
+- **Prompt / šablona z prompt-motion**: odkaz + co upravujeme (vybral: režisér / uživatel)
+- **Vzhled**: písmo, paleta (max 3 barvy + černá/bílá), jazyk kamery
+- **Rytmus**: BPM / řízeno hlasem, délka
+- **Akceptační kritéria pro kritika**: (měřitelná: formát, délka, LUFS, text, pravidla uživatele)
+
+## Storyboard / časová osa
+| čas / doba | obraz | text / titulky | zvuk |
 |---|---|---|---|
+
+## Průběh výroby
+| kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
+|---|---|---|---|---|
+
+## Chyby během výroby
+Odkazy na záznamy v `znalosti/chyby.md` (C0xx) + které vyžadovaly uživatele.
+
+## Spotřeba tokenů
+| agent / úkol | tokeny | poznámka |
+|---|---|---|
+| **celkem (pomocní agenti)** | | |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
-
-## Kontrola (K z pravidel)
-- [ ] …
 
 ## Zpětná vazba (doslova)
 > …
