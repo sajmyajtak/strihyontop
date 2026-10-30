@@ -40,8 +40,12 @@ while True:
                 continue
             aid = d.get("agentId")
             if d.get("type") == "started" and aid:
-                nazvy[aid] = d.get("label", aid)
-                print(f"{time.strftime('%H:%M')} START: {nazvy[aid]}", flush=True)
+                nazev = d.get("label", aid)
+                for stary, n in nazvy.items():          # restart po obnovení workflow: starý agent se stejným názvem je nahrazený
+                    if n == nazev and stary not in hotove:
+                        hotove.add(stary)
+                nazvy[aid] = nazev
+                print(f"{time.strftime('%H:%M')} START: {nazev}", flush=True)
             elif d.get("type") == "result" and aid:
                 hotove.add(aid)
                 print(f"{time.strftime('%H:%M')} HOTOVO: {nazvy.get(aid, aid)}", flush=True)
