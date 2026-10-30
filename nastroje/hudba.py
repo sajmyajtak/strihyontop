@@ -1,7 +1,7 @@
 """Generátor hudby do pozadí: syntéza v kódu, naše vlastní (bez licencí), přesně na doby pro animaci.
 
 Použití:
-  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni --delka 20 --out hudba.wav
+  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni|pohodova --delka 20 --out hudba.wav
         [--bpm 120] [--drop 4.0] [--konec 17.5] [--seed 1]
   --drop   čas nástupu plné části (zaokrouhlí se na celý takt), předtím úvod a stoupání
   --konec  čas finálního úderu (end card), zaokrouhlí se na dobu; potom už jen doznívá
@@ -118,6 +118,13 @@ def taiko(f0=95, f1=58):
     return np.tanh(1.4 * (y + k))
 
 
+def cinel(delka=1.6, dozneni=0.55):
+    """Jemný činel (crash) na drop a konec: jen vysoký šum s dlouhým dozněním, žádná rána."""
+    n = int(delka * SR)
+    t = cas(n)
+    return filtr(sum_(n), "highpass", 5500) * np.exp(-t / dozneni) * obalka(n, 0.002) * 0.6
+
+
 # ---------- nástroje ----------
 def sub(m, dur, vel=1.0):
     n = int((dur + 0.15) * SR)
@@ -202,6 +209,47 @@ def pizz(m, vel=0.8, dozneni=0.994):
     return y / (np.max(np.abs(y)) + 1e-9) * vel * obalka(n, 0.001, 0.35)
 
 
+def marimba(m, vel=0.8):
+    """Marimba (palička na dřevěném kameni): základ + alikvot ~4× (kámen je laděný na dvě oktávy výš)
+    + slabý ~10×, vyšší alikvoty doznějí rychleji, krátký měkký úder paličky."""
+    f = mtof(m)
+    n = int(1.3 * SR)
+    t = cas(n)
+    dozneni = 0.5 * (440 / f) ** 0.4                                     # nižší kameny znějí déle
+    y = np.sin(2 * np.pi * f * t) * np.exp(-t / dozneni)
+    if f * 4 < SR / 2.2:
+        y += 0.3 * np.sin(2 * np.pi * f * 3.98 * t) * np.exp(-t / (dozneni * 0.22))
+    if f * 10 < SR / 2.2:
+        y += 0.05 * np.sin(2 * np.pi * f * 9.9 * t) * np.exp(-t / 0.025)
+    y += filtr(sum_(n) * np.exp(-t / 0.0015), "bandpass", [700, 3500]) * 0.06
+    return y * obalka(n, 0.0015) * vel
+
+
+def basa_prsty(m, dur, vel=1.0):
+    """Prstová basa: kulatý základ + 2.–4. harmonická, které po brnknutí rychle ztmavnou.
+    Harmonické nesou basu i z telefonu, který pod ~100 Hz nehraje (I7)."""
+    f = mtof(m)
+    n = int((dur + 0.12) * SR)
+    t = cas(n)
+    jas = np.exp(-t / 0.09)
+    y = (np.sin(2 * np.pi * f * t) + (0.45 + 0.35 * jas) * np.sin(4 * np.pi * f * t)
+         + (0.18 + 0.3 * jas) * np.sin(6 * np.pi * f * t) + 0.12 * jas * np.sin(8 * np.pi * f * t))
+    return np.tanh(1.4 * y * obalka(n, 0.008, 0.9, dur, 0.07)) / np.tanh(1.4) * vel
+
+
+def kytara(noty, vel=0.7, tlumena=True):
+    """Brnknutí akordu na kytaru (Karplus-Strong), struny po 12 ms; tlumená = krátký „chop“ na dobu."""
+    out = np.zeros(int(1.0 * SR))
+    for i, m in enumerate(noty):
+        s = pizz(m, vel * (0.85 + 0.15 * rng.random()), 0.982 if tlumena else 0.996)
+        if tlumena:
+            s = s * np.exp(-cas(len(s)) / 0.07)
+        k = int(i * 0.012 * SR)
+        d = min(len(s), len(out) - k)
+        out[k:k + d] += s[:d]
+    return filtr(out, "highpass", 180) / np.sqrt(max(1, len(noty)))
+
+
 def pop(f0=500, f1=1400, delka=0.12):
     n = int(delka * SR)
     t = cas(n)
@@ -268,7 +316,21 @@ NALADY = {
     "vazna": dict(bpm=90, akordy=[(50, [0, 3, 7]), (46, [0, 4, 7]), (53, [0, 4, 7]), (48, [0, 4, 7])]),           # Dm Bb F C
     "drza": dict(bpm=116, akordy=[(53, [0, 4, 7]), (50, [0, 3, 7]), (46, [0, 4, 7]), (48, [0, 4, 7, 10])]),      # F Dm Bb C7
     "luxusni": dict(bpm=120, akordy=[(57, [0, 3, 7, 10, 14]), (53, [0, 4, 7, 11]), (50, [0, 3, 7, 10, 14]), (52, [0, 3, 7, 10])]),  # Am9 Fmaj7 Dm9 Em7
+    # Chill feel-good (reklama na jídlo): F dur, I–vi–ii–V v barvách maj9/m7/m9/9, Rhodes bez kořene (kořen hraje basa).
+    # Akordy se počítají OD DROPU: drop vždy přistane na tónice, takty před ním jsou obrat vi–ii–V (napětí → uvolnění).
+    "pohodova": dict(bpm=96, tonina=5, akordy=[(53, [4, 7, 11, 14]), (50, [0, 3, 7, 10]), (55, [3, 7, 10, 14]), (48, [4, 7, 10, 14])]),  # Fmaj9 Dm7 Gm9 C9
 }
+
+# Marimbový motiv nálady „pohodova“ pro každý akord: (doba v taktu, MIDI). Rytmus 3+3+2 šestnáctin a dvě osminy jako předtakt
+# do dalšího taktu. Těžké doby jen tóny akordu, stoupající rozklad (C–E–G, D–F–A, D–F–B, E–G–B) zní vesele a zpívá se.
+POHODA_MOTIV = [
+    [(0, 72), (0.75, 76), (1.5, 79), (3.0, 77), (3.5, 76)],    # Fmaj9: C5 E5 G5 | F5 E5
+    [(0, 74), (0.75, 77), (1.5, 81), (3.0, 79), (3.5, 77)],    # Dm7:   D5 F5 A5 | G5 F5
+    [(0, 74), (0.75, 77), (1.5, 82), (3.0, 81), (3.5, 79)],    # Gm9:   D5 F5 B5 | A5 G5
+    [(0, 76), (0.75, 79), (1.5, 82), (3.0, 81), (3.5, 79)],    # C9:    E5 G5 B5 | A5 G5
+]
+POHODA_OBRAT = [(0, 82), (0.75, 81), (1.5, 79), (2.0, 76), (2.75, 79)]     # poslední takt ii–V: B5 A5 G5 | E5 G5
+POHODA_LOGO = [72, 77, 81]                                                 # zvukové logo na konec: C5 F5 A5 nahoru do toniky
 
 
 # ---------- mix ----------
@@ -331,6 +393,9 @@ def aranzuj(nalada, delka, bpm, drop, konec):
     udalosti = [{"cas": round(drop, 4), "typ": "drop"}, {"cas": round(konec, 4), "typ": "konec"}]
     vel = lambda z=0.85: float(np.clip(rng.normal(z, 0.06), 0.4, 1))   # noqa: E731
     jit = lambda: rng.normal(0, 0.004)                                   # noqa: E731
+    takt_dropu = int(round(drop / takt))
+    ak_od_dropu = lambda b: (b - takt_dropu) % len(akordy)              # noqa: E731  index akordu počítaný od dropu (pohodova)
+    stupnice = {(NALADY[nalada].get("tonina", 0) + i) % 12 for i in (0, 2, 4, 5, 7, 9, 11)}   # durová stupnice tóniny
 
     def akord_v(t, stred=60):
         k, iv = akordy[int(t // takt) % len(akordy)]
@@ -440,12 +505,102 @@ def aranzuj(nalada, delka, bpm, drop, konec):
             if posledni_pred:
                 mx.pridej("fx", drop - 2 * doba, reverse_cinel(2 * doba), 0.45)
 
+        elif nalada == "pohodova":
+            sw = lambda d: d + (0.06 if round(d * 4) % 2 == 1 else 0)          # noqa: E731  šestnáctinový swing: lichá šestnáctina o kousek později
+            obrat = hlavni and t0 + takt >= konec - 1e-6                        # poslední takt před koncem: ii–V do toniky
+            useky = [(0.0, 2.0, 2), (2.0, 2.0, 3)] if obrat else [(0.0, 4.0, ak_od_dropu(b))]   # (od doby, délka v dobách, index akordu)
+            if not hlavni:
+                # Úvod (v obraze „fine dining“): jen Rhodes, lusknutí a shaker, na každou změnu akordu jemné cinknutí marimby.
+                # Poslední doba před dropem je nádech: ticho, jen stoupající šum a předtakt marimby do dropu.
+                _, _, ia = useky[0]
+                hlasy = akord(*akordy[ia], 62)
+                for d, dd, v in [(0, 1.75, 0.55), (2.5, 0.75, 0.45)]:
+                    for m in hlasy:
+                        mx.pridej("klavesy", t0 + sw(d) * doba + jit(), rhodes(m, dd * doba, vel(v)), 0.5)
+                for d in (1, 3):
+                    if not (posledni_pred and d == 3):
+                        mx.pridej("bici", t0 + d * doba + jit(), snap(), 0.4, pan=0.2)
+                for s in range(12 if posledni_pred else 16):
+                    mx.pridej("bici", t0 + sw(s / 4) * doba + jit(), shaker(), 0.08 * (1.5 if s % 2 else 1) * vel(), pan=-0.3)
+                mx.pridej("melodie", t0 + jit(), marimba(hlasy[-1] + 12, vel(0.55)), 0.45, pan=-0.15)
+                mx.pridej("melodie", t0 + sw(1.5) * doba + jit(), marimba(hlasy[1] + 12, vel(0.4)), 0.4, pan=-0.15)
+                if posledni_pred:
+                    for d in (0, 2):                                            # jemný kopák ohlásí drop
+                        mx.pridej("bici", t0 + d * doba, kick(95, 50, 0.45, 0.15, 0.12), 0.35)
+                    mx.pridej("fx", drop - 2 * doba, reverse_cinel(2 * doba), 0.32)
+                    for d, m in POHODA_MOTIV[3][3:]:                            # předtakt A5 G5 do prvního tónu dropu
+                        mx.pridej("melodie", t0 + sw(d) * doba + jit(), marimba(m, vel(0.7)), 0.5, pan=-0.15)
+            else:
+                if t0 < drop + 1e-6:
+                    mx.pridej("bici", drop, cinel(), 0.22)                     # jemný činel na drop
+                # Bicí: kopák 1, „a“ po 1, 3&; malý buben + tleskání na 2 a 4 o kousek později (uvolněně); hi-hat šestnáctiny se swingem.
+                for d in [0, 0.75, 2.5] + ([3.75] if b % 2 else []):
+                    tt = t0 + sw(d) * doba
+                    if tt < konec:
+                        mx.pridej("bici", tt, kick(95, 50, 0.45, 0.15, 0.12), 0.55)
+                        kicky.append(tt)
+                for d in (1, 3):
+                    tt = t0 + d * doba
+                    if tt < konec:
+                        mx.pridej("bici", tt + 0.008, snare(0.3, 0.09, 190), 0.3)
+                        mx.pridej("bici", tt + 0.012, clap(), 0.5)
+                        mx.pridej("fx", tt + 0.012, clap(), 0.16)
+                for s in range(16):
+                    tt = t0 + sw(s / 4) * doba
+                    if tt < konec:
+                        mx.pridej("bici", tt + jit(), hat(), (0.15 if s % 4 == 2 else 0.1 if s % 2 == 0 else 0.06) * vel(), pan=0.25)
+                        mx.pridej("bici", tt + jit(), shaker(), 0.06 * vel(), pan=-0.35)
+                if b % 2 == 1 and t0 + 3.5 * doba < konec:
+                    mx.pridej("bici", t0 + 3.5 * doba, hat(True), 0.15, pan=0.25)
+                for j, (od, dl, ia) in enumerate(useky):
+                    k, iv = akordy[ia]
+                    hlasy = akord(k, iv, 62)
+                    posledni_usek = j == len(useky) - 1
+                    # Rhodes: synkopované údery (v obratu dva kratší).
+                    vzor = [(0, 0.9, 0.7), (1.5, 0.4, 0.5), (2.5, 0.9, 0.65), (3.75, 0.2, 0.4)] if dl == 4 else [(0, 0.9, 0.7), (1.5, 0.4, 0.5)]
+                    for d, dd, v in vzor:
+                        tt = t0 + (od + sw(d)) * doba
+                        if tt < konec:
+                            for m in hlasy:
+                                mx.pridej("klavesy", tt + jit(), rhodes(m, dd * doba, vel(v)), 0.45)
+                    # Basa: kořen, „skok“, kvinta a přiblížení ke kořeni dalšího akordu (o tón shora nebo půltón zdola, ve stupnici).
+                    kb = basovy(k, 36)
+                    if posledni_usek:
+                        if obrat:                                               # po obratu přijde tónika finále
+                            dalsi = akordy[0][0]
+                        elif t0 + 2 * takt >= konec - 1e-6:                     # další takt je obrat, začíná ii
+                            dalsi = akordy[2][0]
+                        else:
+                            dalsi = akordy[ak_od_dropu(b + 1)][0]
+                        nb = basovy(dalsi, 36)
+                        pribl = nb - 1 if (nb - 1) % 12 in stupnice else nb + 2
+                    if dl == 4:
+                        tony = [(0, kb, 1.25), (1.75, kb, 0.25), (2.5, kb + 7, 0.75), (3.5, pribl, 0.45)]
+                    else:
+                        tony = [(0, kb, 1.0), (1.5, pribl if posledni_usek else kb + 7, 0.45)]
+                    for d, m, dd in tony:
+                        tt = t0 + (od + sw(d)) * doba
+                        if tt < konec:
+                            mx.pridej("basa", tt + jit(), basa_prsty(m, dd * doba, vel(0.9)), 0.6)
+                # Kytara: tlumené brnknutí na 2& a 4& (vesele „poskakuje“).
+                for d in (1.5, 3.5):
+                    tt = t0 + d * doba
+                    if tt < konec:
+                        ia = useky[-1][2] if d >= useky[-1][0] else useky[0][2]
+                        mx.pridej("kytara", tt + jit(), kytara([m + 12 for m in akord(*akordy[ia], 62)[1:]], vel(0.6)), 0.5, pan=0.35)
+                # Marimba: motiv podle akordu, v obratu sestup do toniky (zvukové logo ho dokončí na konci).
+                for d, m in (POHODA_OBRAT if obrat else POHODA_MOTIV[useky[0][2]]):
+                    tt = t0 + sw(d) * doba
+                    if tt < konec:
+                        mx.pridej("melodie", tt + jit(), marimba(m, vel(0.75)), 0.55, pan=-0.15)
+
     # Finále na end card: úder + závěrečný akord, který dozní do konce.
     _, noty = akord_v(0)
     koren0 = akordy[0][0]
     zbyva = max(delka - konec, 1.0)
-    mx.pridej("fx", konec, uder(jemny=nalada == "luxusni"), 0.45)
-    mx.pridej("bici", konec, uder(jemny=nalada == "luxusni"), 0.3)
+    if nalada != "pohodova":                                            # pohodová nálada končí bez hlubokého úderu (nic agresivního)
+        mx.pridej("fx", konec, uder(jemny=nalada == "luxusni"), 0.45)
+        mx.pridej("bici", konec, uder(jemny=nalada == "luxusni"), 0.3)
     if nalada == "vazna":
         mx.pridej("harmonie", konec, plocha(noty + [noty[0] - 12], zbyva, 1200, 0.6, 0.05))
         mx.pridej("melodie", konec, klavir(noty[-1] + 12, zbyva, 0.8), 0.6)
@@ -456,11 +611,24 @@ def aranzuj(nalada, delka, bpm, drop, konec):
         mx.pridej("bici", konec, clap(), 0.8)
         mx.pridej("melodie", konec + 0.12, pop(600, 2000, 0.2), 0.4)
         mx.pridej("basa", konec, basa_pluck(basovy(koren0, 36), 0.6, 1.0), 0.6)
-    else:
+    elif nalada == "luxusni":
         for m in noty:
             mx.pridej("klavesy", konec, rhodes(m, zbyva, 0.75), 0.45)
         mx.pridej("harmonie", konec, plocha([m + 12 for m in noty[1:4]], zbyva, 3200, 0.25, 0.3))
         mx.pridej("basa", konec, sub(basovy(koren0), zbyva * 0.6, 0.9), 0.5)
+    elif nalada == "pohodova":
+        # Tónika (Fmaj9) s kořenem v base, kytara nechá doznít, jemný kopák + tleskání + činel.
+        # Zvukové logo: marimba C5 F5 A5 v šestnáctinách, poslední tón přesně na konec (end card).
+        tonika = akord(*akordy[0], 62)
+        for m in tonika:
+            mx.pridej("klavesy", konec + jit(), rhodes(m, zbyva, 0.7), 0.5)
+        mx.pridej("kytara", konec, kytara([m + 12 for m in tonika], 0.75, tlumena=False), 0.5, pan=0.35)
+        mx.pridej("basa", konec, basa_prsty(basovy(koren0, 36), min(zbyva, 2.0), 0.95), 0.65)
+        mx.pridej("bici", konec, kick(95, 50, 0.45, 0.15, 0.12), 0.55)
+        mx.pridej("bici", konec + 0.012, clap(), 0.45)
+        mx.pridej("bici", konec, cinel(2.4, 0.8), 0.22)
+        for i, m in enumerate(POHODA_LOGO):
+            mx.pridej("melodie", konec - (len(POHODA_LOGO) - 1 - i) * doba / 4, marimba(m, 0.75 if i < 2 else 0.9), 0.6, pan=-0.15)
     kicky.append(konec)
 
     doby = [round(i * doba, 4) for i in range(int(delka / doba) + 1)]
@@ -474,18 +642,21 @@ NASTAVENI_MIXU = {
     "vazna": dict(bici=(0.8, 0.12, False), basa=(0.7, 0.0, True), harmonie=(1.1, 0.35, True), melodie=(1.1, 0.45, False), fx=(0.5, 0.8, False), rt60=3.2),
     "drza": dict(bici=(0.8, 0.06, False), basa=(0.45, 0.0, True), harmonie=(1.3, 0.3, True), melodie=(1.5, 0.18, False), fx=(0.45, 0.5, False), rt60=1.2),
     "luxusni": dict(bici=(0.7, 0.08, False), basa=(0.65, 0.0, True), klavesy=(1.2, 0.3, True), harmonie=(0.9, 0.5, True), fx=(0.45, 0.7, False), rt60=2.6),
+    # pohodová: jen lehké „pumpování“ od kopáku (sidechain 0,3), Rhodes s pomalým stereo tremolem v osminách (96 BPM → 3,2 Hz)
+    "pohodova": dict(bici=(0.75, 0.07, False), basa=(0.75, 0.0, True), klavesy=(1.1, 0.28, True), kytara=(0.6, 0.22, False),
+                     melodie=(0.95, 0.3, False), fx=(0.4, 0.6, False), rt60=1.6, sidechain=0.3, tremolo=3.2),
 }
 
 
 def mixuj(mx, kicky, nalada):
     nast = NASTAVENI_MIXU[nalada]
-    sc = sidechain(mx.n, kicky)
+    sc = sidechain(mx.n, kicky, nast.get("sidechain", 0.55))
     suchy = np.zeros((2, mx.n))
     send = np.zeros((2, mx.n))
     for bus, x in mx.busy.items():
         g, s, duck = nast.get(bus, (0.7, 0.2, False))
         if bus == "klavesy":
-            x = x * autopan(mx.n)
+            x = x * autopan(mx.n, nast.get("tremolo", 4.5))
         if duck:
             x = x * sc
         suchy += x * g
