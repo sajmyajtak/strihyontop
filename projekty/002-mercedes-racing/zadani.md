@@ -299,6 +299,17 @@ je o +3 dB silnější (+2 dB by nestačilo); (5) úder by limiter mačkal 445 m
 18,72–19,35 (4× převzorkování, koleno 6 dB pod stropem, zkreslení −24 dB = drsnost úderu), limiter pak > 1 dB jen 62 ms.
 Mimo upravené úseky je mix v2 s v1 shodný bit po bitu (0–3,5 / 20–26 / 26,5–30 s).
 
+**Zvuk v3 (zvukař, kolo 2, 2026-10-31)**: nález kritika „háček zvukově slabý, 0–1 s o 6–7 LU tišší než jízda“. `hudba.wav` ani časování beze změny.
+Události `projekty/002-mercedes-racing/sfx_udalosti_v3.json` (= v2 + podklad volnoběhu), výstupy `media/…/zvuk/zvuk_v3.wav`, `zvuk_bez_hudby_v3.wav`,
+`sfx_v3.wav|json`, `sfx_v3_log.txt`, `zvuk_v3_master.m4a`, `zvuk_v3_spektrogram.png`. Příkaz jako v2, jen `--udalosti …/sfx_udalosti_v3.json`,
+výstupy `_v3` a navíc první `--zisk-hudby "0:3,3.37:3,3.52:0"`.
+Rozhodnutí: (1) hudba 0–3,37 +3 dB, návrat na 0 v 3,37–3,52 schovaný v rampě automatiky nádechu, nádech 3,52–3,75 (−9 dB) beze změny;
+klonky relé mají `lu` proti hudbě, takže jdou s ní +3 dB (arpeggio je v hudbě); (2) nový PODKLAD `volnobeh` v `sfx.py` (V8 ~900 ot/min,
+zážehy 60 Hz s nerovnoměrným chodem, pod 90 Hz oříznuto) 0,0–3,45 s, −8 LU pod hudbou, doběh 0,25 s, takže v nádechu nic nezní;
+(3) varianta podkladu −6 LU přidala jen +0,4 LU → zůstává tichý −8. Mix v3 je s v2 shodný bit po bitu od 3,5201 s do konce.
+Naměřeno (master po AAC): I −13,9 LUFS, TP −1,2 dBTP; momentní max po 0,5 s 0,0 −18,1 · 0,5 −17,6 · 1,0 −17,1 · 2,0 −16,2 · 3,0 −14,6 (v2: −21,8 / −21,2 / −20,6 / −19,6 / −17,7),
+jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 s: sub 9 %, středy 35 % (celek sub 8 %, středy 45 %).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|

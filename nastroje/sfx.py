@@ -19,6 +19,9 @@ udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…
   pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6),
           "drive" (dB, jemné tanh nasycení zvuku: sníží poměr špička / tělo, takže hlavní efekt je slyšet a strop ho neusekne),
           "pan_do" (+ "pan_tau" s, výchozí 0,12): průjezd, panorama se kolem vrcholu přelije z `pan` do `pan_do`
+  PODKLAD (typy v PODKLADY, např. "volnobeh"): {"cas": OD, "do": DO, "typ": "volnobeh", "lu": -8} = souvislý zvuk od–do,
+          `lu` platí proti hudbě v celém úseku, vrchol se nezarovnává ani nekontroluje (V002 kolo 2: tělo háčku pod klonky).
+          Jen výjimečně: I3 chce zvuk na událost, ne koberec. Doběh podkladu nechat skončit před nádechem / tichem.
   --limiter DBFS = místo lineárního ztlumení celého mixu sběrnicový limiter jen na špičkách (192 kHz, latency=1). Pro hudbu s malou
           rezervou (sportovní: −14 LUFS při špičce −1,5 dBFS), kde se efekt sečte s úderem; bez volby se chová jako dřív (V001 bit po bitu).
 Závodní zvuky (V002): rele, ting, odpal, doppler(_tichy/_dvojity), prujezd_gt, prujezd_daleko, vzduch, svih(_rotace), prulet,
@@ -537,6 +540,23 @@ def dopad_logo(rng, v=1.0):
     return np.tanh(1.3 * telo) + zvon + 0.3 * sum_pasmo(rng, n, 2500, 9000) * obalka(n, 0.0008, 0.004)
 
 
+def volnobeh(rng, v=1.0, delka=3.0):
+    """PODKLAD (V002 kolo 2): volnoběh závodního V8, ~900 ot/min. Zážehy 60 Hz s nerovnoměrným „lope“ (klikový hřídel 15 Hz),
+    harmonické do ~1,8 kHz, aby byl slyšet i z telefonu; pod 90 Hz oříznuto (sub ≤ 30 %). Náběh 40 ms, doběh 0,25 s."""
+    n = int(delka * SR)
+    t = cas(n)
+    kolisani = 1 + 0.015 * dolni(rng.standard_normal(n), 4) / 0.05      # pomalé kolísání otáček (±1–2 %)
+    f = 60 * v * kolisani
+    x = motor_ton(f, rng, harm=30, hrubost=0.2)
+    klika = 2 * np.pi * np.cumsum(f / 4) / SR
+    lope = 1 + 0.35 * np.sin(klika) + 0.15 * np.sin(2 * klika + 1.3)    # nerovnoměrný chod (vačka)
+    x = horni(x * lope, 90, 4)
+    return x * np.clip(t / 0.04, 0, 1) * np.clip((delka - t) / 0.25, 0, 1) ** 1.5
+
+
+PODKLADY = {"volnobeh": volnobeh}                                        # souvislé zvuky (od–do), vrchol se nezarovnává
+
+
 ZVUKY = {
     "cvak": cvak, "cvak_suchy": lambda r, v: cvak(r, v, suchy=True), "klap": klap, "tuk": tuk, "glp": glp,
     "klouznuti": klouznuti, "posunuti": lambda r, v: klouznuti(r, 0.7 * v, 0.3), "sustnuti": sustnuti,
@@ -654,6 +674,21 @@ def stopa(udalosti, delka, hk=None):
     samotne = []
     for u in udalosti:
         rng = np.random.default_rng(u.get("seed", int(u["cas"] * 1000)))
+        if u["typ"] in PODKLADY:                                         # podklad: od `cas` do `do`, hlasitost proti hudbě v celém úseku
+            i, k = int(round(u["cas"] * SR)), int(round((u["do"] - u["cas"]) * SR))
+            x = PODKLADY[u["typ"]](rng, u.get("ton", 1.0), k / SR)
+            x = x / (np.max(np.abs(x)) + 1e-12)
+            uhel = (u.get("pan", 0.0) + 1) * np.pi / 4
+            st = np.zeros((2, n))
+            st[:, i:i + k] = np.stack([x * np.cos(uhel), x * np.sin(uhel)]) * np.sqrt(2)
+            stred, okno = (u["cas"] + u["do"]) / 2, u["do"] - u["cas"]
+            zisk = 10 ** ((hlasitost(hk, stred, okno) + u["lu"] - hlasitost(k_vazeni(st), stred, okno)) / 20)
+            zisk = min(zisk, 10 ** (u.get("strop", MAX_SPICKA) / 20) / np.max(np.abs(st)))
+            u["uroven"] = round(20 * np.log10(zisk * np.max(np.abs(st))), 1)
+            out += st * zisk
+            samotne.append(None)
+            u["vrchol_samotny"] = u["cas"]
+            continue
         x = horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60)
         if u["typ"] in SUMOVE:
             x = akcent(x, rng)
@@ -761,10 +796,19 @@ def main():
     # Vrchol v hotové stopě (všechny efekty dohromady) má smysl jen tam, kde zvuk v okně ±30 ms převládá.
     # Kde ho překryje delší soused (pesto po „pumf“, popy po křupnutí), platí vrchol samotného zvuku a `prekryto`.
     problemy = []
-    ob_stopy = obalka_vrcholu(np.sum(samotne, axis=0))                # mono součet: stejné měřítko jako samotný zvuk
+    ob_stopy = obalka_vrcholu(np.sum([m for m in samotne if m is not None], axis=0))   # mono součet bez podkladů
     for u, mono in zip(udalosti, samotne):
+        if mono is None:                                                 # podklad: žádný vrchol, hlasitost v celém úseku od–do
+            stred, okno = (u["cas"] + u["do"]) / 2, u["do"] - u["cas"]
+            u.update(prekryto=False, vrchol_ve_stope=u["cas"], odchylka_ms=0.0, odchylka_ve_stope_ms=0.0,
+                     lufs_400ms=round(hlasitost(sk_, stred, okno), 1))
+            if hk is not None:
+                u["hudba_lufs_400ms"] = round(hlasitost(hk, stred, okno), 1)
+                u["efekt_proti_hudbe_lu"] = round(u["lufs_400ms"] - u["hudba_lufs_400ms"], 1)
+                u["efekt_proti_hudbe_100ms_lu"] = u["efekt_proti_hudbe_lu"]
+            continue
         c = int(round(u["cas"] * SR))
-        sousede = [abs(v["cas"] - u["cas"]) for v in udalosti if abs(v["cas"] - u["cas"]) > 1e-6]
+        sousede = [abs(v["cas"] - u["cas"]) for v in udalosti if abs(v["cas"] - u["cas"]) > 1e-6 and v["typ"] not in PODKLADY]
         polo = int(min([0.03] + [d / 2 for d in sousede]) * SR)
         od, do = c - polo, c + polo
         ob = obalka_vrcholu(mono[od:do])
