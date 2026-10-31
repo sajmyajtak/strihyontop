@@ -5,7 +5,7 @@
 | Datum zadání | 2026-10-31 |
 | Platforma / formát | **16:9, 1920×1080, 60 fps** |
 | Délka | **30,0 s** (rozsah uživatele 25–35 s, zvoleno podle motionu a hudby) |
-| Stav | příprava |
+| Stav | **doručeno** (V002_v4, 2026-10-31), čeká na zpětnou vazbu |
 
 ## Zadání (doslova od uživatele)
 > okey hele není to špatný ale není to ono. potřebuju víc energetické at to není tak bez duši to video. tím myslím že at je to rychlejší a více zaživnější at má to více efektů. videa budeš dělat 16:9 a kolem 25-35 vteřin podle toho jaký si vybereš motion z strýnky. udělej jen vždy jedno video ale ted zkus s hudbou ale bez voiceover. udělej mi reklamu na https://www.mercedes-benz.cz/ maš tam i logo použij tam i barvy keteré jsou na stránkach a hudba bude sportovní a auto nebo ta reklama bude hlavně o závodění aut který má mercedes. motion at vybere hlavní agent a at jsou tam minimálně 3 ale můžeš použít i víc
@@ -320,6 +320,7 @@ jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 
 | 1 | technika · wow · zadání | kontrola V002_v1 | technika SCHVÁLENO, zadání SCHVÁLENO (všech 6 pravidel uživatele splněno), **wow 7,8 / energie 7,5 → OPRAVIT** | mrtvých 0,4 s před BUILT, statický úvod 0–2,8 (push-cuts do hledí), stoupání a drop 2 hlasitěji, splétání stop jako srážky, hrana masky GT 7,3; drobné: barvy loga a zaplavení, tyrkysový přepal, glitch 17,475, RACE okna bez vozu |
 | 2 | technika · wow · zadání | kontrola V002_v2 (opravy obrazu: push-cuts do hledí, drop 1 natvrdo, cop stop, sloup u GT; zvuk v2: stoupání a drop 2) | **wow 8,4 / energie 7,5**, technika OPRAVIT (GT couvá 7,13–7,5, LIGHTS přes helmu), zadání viz níže → 3. kolo | statická místa: CHASE THE LINE, tiker, stoupání T10, jiskry, T14; háček zvukově slabý |
 | 3 | technika · wow · zadání | kontrola V002_v3 (živější CHASE THE LINE, tiker, T10, jiskry, T14; GT bez couvání; zvuk v3 silnější háček) | technika SCHVÁLENO, **wow SCHVÁLENO 8,25 / energie 8**, zadání OPRAVIT | závažné: duhový chromatický lem na logu v dropu 2 (všichni 3), slabý úder loga 26,25 → režisérská oprava v4 |
+| režisér | animátor (cílená oprava) → kreativní ředitel (ověření) | v4: duhový lem na logu pryč (zelenožluté px 21 165 → 0), úder loga 26,25 (záblesk, rázový kruh, otřes), STAR #0078D6, zaplavení s přechodem, nájezd end card | **wow 8,4 / energie 8,1**, ověřeno | dluh: FOLLOW THE STAR se odkrývá 0,06 s místo 0,3 s; úder loga jasem slabší než dropy (záměr: logo se zklidní) |
 
 ## Chyby během výroby
 - C024: první spuštění přípravy zamítnuto (pokyn obejít 403 na webu značky) → pokyn odstraněn, logo z Commons, paleta předběžně.
@@ -332,10 +333,17 @@ jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 
 |---|---|---|---|
 | workflow příprava (5 agentů: analytik, zvukař, kreativní ředitel koncept, oponent, revize) | 500 581 | 121 | 35,7 min |
 | workflow výroba (24 agentů: zvukař ×3, animátor ×9, kreativní ředitel ×1, střihač ×3, kritici ×9) | 4 158 824 | 1 506 | 376 min |
+| workflow režisérská oprava v4 (animátor, kreativní ředitel) | 270 169 | 98 | 42,5 min |
+| **celkem změřeno** | **4 929 574** | **1 725** | **~7,6 h** |
+| hlavní chat (režisér) | neměřeno | | |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
+| v1 | 2026-10-31 | media/…/vystup/V002_v1.mp4 (interní) | první střih, wow 7,8 / energie 7,5 |
+| v2 | 2026-10-31 | V002_v2.mp4 (interní) | push-cuts do hledí, drop 1 natvrdo, cop stop, zvuk v2 (stoupání, drop 2), wow 8,4 / 7,5 |
+| v3 | 2026-10-31 | V002_v3.mp4 (interní) | živější statická místa, GT bez couvání, zvuk v3 (háček), wow 8,25 / 8 |
+| **v4** | 2026-10-31 | **V002_v4.mp4 → uživateli (SendUserFile)**, + `_bez_hudby`, plakát 19,75 s, `popisek.txt` | duhový lem pryč, úder loga, barvy značky přesně, wow 8,4 / 8,1 |
 
 ## Zpětná vazba (doslova)
 

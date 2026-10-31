@@ -15,6 +15,24 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### V002: Mercedes-Benz „FOLLOW THE STAR“ (2026-10-31, doručeno v4, čeká na zpětnou vazbu)
+- Zadání: projekty/002-mercedes-racing/zadani.md. 30 s, 1920×1080, 60 fps, sportovní hudba (nová nálada `sportovni`), bez VO, 4 motiony z prompt-motion.
+  Kola: v1 wow 7,8 / energie 7,5 → v2 8,4 / 7,5 → v3 8,25 / 8 → režisérská oprava v4 **8,4 / 8,1**. ~4,93 mil. tokenů, ~7,6 h práce agentů.
+- **Fungovalo**: koncept stojí na geometrii loga (linie → prstenec → hvězda ze světla), opět nejsilnější typ nápadu (stejně jako V001).
+  Oponentura konceptu na energii před stavbou (7,6 → revize 13 oprav). Zkušební list vozů ve variantách A/B schválený na 480 px dřív, než se stavěl pohyb
+  (chytil „Supru“ místo AMG GT, hranatou helmu, UI portál). Stavba pohybu po 3 blocích = žádný agent nenarazil na limit. Měření místo dojmů
+  (YDIF dropů, RMS stoupání, pixely barev, framemd5 při sestřihu).
+- **Nefungovalo / zdrželo**: renderer byl 5× pomalejší, než se myslelo (C027, opraveno za běhu); energie se zvedala pomalu, protože storyboard měl
+  „klidná“ místa (statický celek úvodu, stojící text, stojící hvězda), která se poznala až v pohybu. Chromatický posun přes RGB kanály na logu (C034)
+  prošel 2 koly, než ho chytili všichni kritici. Weby značky blokují roboty (403), paleta zůstala předběžná.
+- **Pro příště**: (1) energii hlídat už ve storyboardu: u každého taktu napsat, co se hýbe **nepřetržitě** (ne jen na dobu), text nikdy nestojí bez pohybu;
+  (2) úvod 0–0,5 s a end card mají mít pohyb od prvního snímku; (3) efekty „na logo“ jen v barvách palety; (4) kontrolní snímky klíčových úderů dělat
+  z výřezu s podsnímky, ne staticky (C028); (5) před dlouhým renderem změřit 1 s výřezu.
+- Nové nástroje a pravidla: `render_html.cjs` (CDP, 3 vlákna, `--rychle`, `--od`), `sfx.py` (`--zisk-hudby`, `--saturace`, `--limiter`, PODKLADY),
+  `hudba.py` nálada `sportovni`, `kontrola.sh` (pásy u všech skoků, přesný arch), `master_zvuk.sh` (latency, dolní propust), vzory workflow
+  v `nastroje/workflow/`. Chyby C025–C034. Pravidla I3 (podklad, stavba hlasitosti).
+- **Zpětná vazba uživatele**: (čeká se)
+
 ### V001: Bageterie Boulevard „Logo byla celou dobu bageta“ (2026-10-31, doručeno, čeká na zpětnou vazbu)
 - Zadání: projekty/001-bb-chill/zadani.md. Výsledek: 25 s, 1080×1920, 60 fps, wow 6,9 → 7,3 → **8,1**, schváleno všemi 3 kritiky ve 3. kole.
 - **Fungovalo**: porota konceptů (vítěz stál na geometrii loga), schválení klíčových snímků před stavbou pohybu (chytilo „rajče jako kámen“,
