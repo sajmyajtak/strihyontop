@@ -53,6 +53,8 @@ Obecná pravidla, která se tu hlavně uplatní: A1, A2, A5, A7, B1, B6, C1, C6,
   (známý dluh, pouceni.md); (2) pesto v 11,25 zůstává přesně podle vzorce storyboardu, obraz i zvuk mají stejné časy; (3) časy SFX, které
   zvukař doplnil (3,75 + 3,79; pesto 5,04–5,20; popy 7,53–7,68; rukola 8,125 / 8,165 / 8,205; pesto 16,25–16,33), jsou schválené a platí
   pro obraz (sfx.json); (4) hudba.py zůstává u jednoprůchodového loudnormu, finální hlasitost řeší master_zvuk.sh; (5) sfx.py zapsán do nástrojů.
+- **Rozhodnutí k opravám zvuku (kolo 1 → v2)**: hlavní momenty nese ztlumení hudby (drop +17,4 dB), efekty křupnutí a polknutí zesíleny o +5 až +6 dB.
+  Předztlumení −6 dB v 6,95–7,19 schváleno. Když kritik v kole 2 bude chtít víc, povolit efekt zhruba na úrovni hudby (I3).
 - **Výhrada režiséra k hudbě**: v nezávislém měření je mezi oktávami 1 kHz a 2 kHz propad ~13 dB (oktávy rel.: 500 Hz 0, 1 kHz −2,7,
   2 kHz −15,6, 4 kHz −13,9 dB). Jas na telefonu chybí → zvukař ve fázi 2 vyhladí (sousední oktávy 250 Hz–8 kHz max ~8 dB od sebe).
 

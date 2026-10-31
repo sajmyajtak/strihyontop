@@ -3,10 +3,15 @@
 Použití:
   python3 -I nastroje/sfx.py --udalosti udalosti.json --delka 25 --out sfx.wav
         [--hudba hudba.wav --mix zvuk.wav --bez-hudby zvuk_bez_hudby.wav] [--ticho 18.75-19.375]
+        [--automatika 7.215-7.49:-14:25:8 …]
+  --automatika OD-DO:DB[:DOLU_MS[:NAHORU_MS]] = automatika hlasitosti HUDBY jen v mixu (hudba.wav ani její časování se nemění):
+          v úseku OD–DO je hudba o DB tišší, náběh dolů končí v OD, návrat nahoru začíná v DO (výchozí 20 / 10 ms, kosinově).
+          Víc úseků se kombinuje minimem (platí nejhlubší ztlumení). Hlasitost efektů proti hudbě se počítá už proti ztlumené hudbě.
 udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…"}, …]
   cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
-  pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6)
+  pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6),
+          "drive" (dB, jemné tanh nasycení zvuku: sníží poměr špička / tělo, takže hlavní efekt je slyšet a strop ho neusekne)
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
@@ -290,6 +295,27 @@ OKNO_CIL = 0.1
 MAX_SPICKA = -6.0                                                       # dBFS: žádný efekt nesmí mít špičku nad touto mezí
 
 
+def nasyceni(x, drive_db):
+    """Měkké nasycení tanh (x normalizované na špičku 1): špičky se zakulatí, tělo zvuku zesílí o až `drive_db`."""
+    g = 10 ** (drive_db / 20)
+    return np.tanh(g * x) / np.tanh(g)
+
+
+def automatika_hudby(n, useky):
+    """Křivka zisku hudby (n vzorků) z úseků (od, do, dB, dolu_s, nahoru_s): kosinové rampy, kombinace minimem v dB."""
+    t = cas(n)
+    db = np.zeros(n)
+    for od, do, zisk, dolu, nahoru in useky:
+        k = np.zeros(n)                                                  # 0 = plná hudba, 1 = plné ztlumení
+        k[(t >= od) & (t <= do)] = 1
+        m = (t >= od - dolu) & (t < od)
+        k[m] = 0.5 - 0.5 * np.cos(np.pi * (t[m] - (od - dolu)) / dolu)
+        m = (t > do) & (t <= do + nahoru)
+        k[m] = 0.5 + 0.5 * np.cos(np.pi * (t[m] - do) / nahoru)
+        db = np.minimum(db, k * zisk)
+    return 10 ** (db / 20)
+
+
 def stopa(udalosti, delka, hk=None):
     """Vyrobí stereo stopu SFX a seznam samostatně umístěných zvuků (mono, pro kontrolu vrcholů).
     Každý zvuk se posune tak, aby jeho změřený vrchol padl na `cas`. Hlasitost: `lu` = o kolik LU je efekt tišší než hudba
@@ -303,6 +329,8 @@ def stopa(udalosti, delka, hk=None):
         if u["typ"] in SUMOVE:
             x = akcent(x, rng)
         x = x / (np.max(np.abs(x)) + 1e-12)
+        if u.get("drive"):
+            x = nasyceni(x, u["drive"])
         i = int(round(u["cas"] * SR)) - vrchol(x)
         if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
             x, i = x[-i:], 0
@@ -341,6 +369,7 @@ def main():
     ap.add_argument("--mix")
     ap.add_argument("--bez-hudby")
     ap.add_argument("--ticho", action="append", default=[], help="úsek od-do (s), kde nesmí znít žádný efekt")
+    ap.add_argument("--automatika", action="append", default=[], help="OD-DO:DB[:DOLU_MS[:NAHORU_MS]] ztlumení hudby v mixu")
     a = ap.parse_args()
     udalosti = sorted(json.loads(Path(a.udalosti).read_text()), key=lambda u: u["cas"])
     n = int(round(a.delka * SR))
@@ -351,6 +380,15 @@ def main():
         assert sr == SR and h.shape[0] == 2, f"{a.hudba}: čekám 48 kHz stereo"
         hudba = np.zeros((2, n))
         hudba[:, :min(h.shape[1], n)] = h[:, :n]
+        useky = []
+        for spec in a.automatika:
+            casti = spec.split(":")
+            od, do = map(float, casti[0].split("-"))
+            dolu = float(casti[2]) / 1000 if len(casti) > 2 else 0.02
+            nahoru = float(casti[3]) / 1000 if len(casti) > 3 else 0.01
+            useky.append((od, do, float(casti[1]), dolu, nahoru))
+        if useky:
+            hudba *= automatika_hudby(n, useky)
         hk = k_vazeni(hudba)
     sfx, samotne = stopa(udalosti, a.delka, hk)
     zapis_wav(a.out, sfx)
@@ -390,7 +428,8 @@ def main():
                   max_odchylka_ms=max(abs(u["odchylka_ms"]) for u in udalosti),
                   max_odchylka_ve_stope_ms=max(abs(u["odchylka_ve_stope_ms"]) for u in udalosti if not u["prekryto"]),
                   prekryte=[u["cas"] for u in udalosti if u["prekryto"]],
-                  spicka_sfx_dbfs=round(20 * np.log10(np.max(np.abs(sfx)) + 1e-12), 1), problemy=problemy)
+                  spicka_sfx_dbfs=round(20 * np.log10(np.max(np.abs(sfx)) + 1e-12), 1), problemy=problemy,
+                  automatika_hudby=a.automatika)
     if hudba is not None:
         souhrn["nejhlasitejsi_efekt_proti_hudbe_lu"] = max(u["efekt_proti_hudbe_lu"] for u in udalosti)
         souhrn["nejhlasitejsi_efekt_proti_hudbe_100ms_lu"] = max(u["efekt_proti_hudbe_100ms_lu"] for u in udalosti)

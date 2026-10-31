@@ -113,7 +113,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **I3** SFX na každou **událost** v obraze (klik, dopad, pop, otevření, logo), ne na každý pohyb. Umístit tak, aby **změřený vrchol** zvuku padl na událost.
   Běžné efekty tiše pod hudbou. **Klíčové momenty (drop, pointa, gag, logo) musí být slyšet**: efekt na úrovni hudby nebo nad ní
   (cca 0 až −3 LU v okně 100 ms) a hudba kolem nich ustoupí. **Nádech před dropem a „ticho jako pointa“ = hudba opravdu ztichne**
-  (ne jen řidší aranžmá). U prémiových značek jemné kliky a měkký dopad na logo, žádné hlasité whooshe všude. `[PM, V001 kontrola 1]`
+  (ne jen řidší aranžmá). Hlavní nástroj je **automatika hudby v mixu** (ztlumení před dropem a v pointě, `sfx.py --automatika od-do:dB:náběh:doběh`),
+  teprve potom hlasitější efekt (V001: drop +17,4 dB díky ztlumení). U prémiových značek jemné kliky a měkký dopad na logo, žádné hlasité whooshe všude. `[PM, V001 kontrola 1]`
 - **I4** Trendy zvuky z IG/TikTok knihovny se přidávají až v aplikaci při publikaci → dodat i verzi **bez hudby**. `[obecné]`
 - **I5** Hudba a SFX jen s **licencí pro komerční použití**, zdroje zapsat do zadání. Hudba z `nastroje/hudba.py` je naše vlastní (syntéza v kódu). `[PM]`
 - **I6** Ke každému videu **vlastní hudba podle tónu** (vážný / drzý / luxusní …), nálada a BPM do režijního listu. Animace se řídí `hudba.json`
