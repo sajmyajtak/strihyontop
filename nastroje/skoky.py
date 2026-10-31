@@ -1,6 +1,6 @@
 """Najde skoky v obraze z výstupu ffmpeg signalstats (YDIF = průměrný rozdíl jasu proti předchozímu snímku).
 
-Použití: python3 -I nastroje/skoky.py ydif.txt [podezrele.txt]
+Použití: python3 -I nastroje/skoky.py ydif.txt [podezrele.txt [vsechny_skoky.txt]]
 Skok = snímek s YDIF nad 4× medián okolí a nad 8. Dva skoky hned po sobě = probliknutí na 1 snímek, nebo velmi rychlý
 dvousnímkový přechod. Z rozdílů jasu to rozlišit nejde, proto se čísla snímků zapíšou do podezrele.txt k vizuální kontrole.
 """
@@ -46,3 +46,6 @@ for s in serie:
     print(f"{t:7.3f} s  snímek {i:5d}  YDIF max {max(y for *_, y in s):6.1f}  {druh}")
 if len(sys.argv) > 2:
     open(sys.argv[2], "w").write("".join(f"{i}\n" for i in podezrele))
+if len(sys.argv) > 3:
+    # Začátek každé série (střih, probliknutí, rychlý přechod): kontrola.sh z nich udělá pásy snímků pro kritika (V002).
+    open(sys.argv[3], "w").write("".join(f"{s[0][0]}\n" for s in serie))

@@ -30,15 +30,16 @@ KOREN=$(cd "$(dirname "$0")/.." && pwd)
 
   echo; echo "== Skoky v obraze (YDIF výrazně nad okolím): střihy, probliknutí, skoky o snímek"
   ffmpeg -hide_banner -nostats -v error -i "$V" -vf "signalstats,metadata=print:key=lavfi.signalstats.YDIF:file=$OUT/ydif.txt" -map 0:v -f null -
-  python3 -I "$KOREN/nastroje/skoky.py" "$OUT/ydif.txt" "$OUT/podezrele.txt"
+  python3 -I "$KOREN/nastroje/skoky.py" "$OUT/ydif.txt" "$OUT/podezrele.txt" "$OUT/skoky.txt"
 } | tee "$OUT/zprava.txt"
 
-# Pás 6 snímků kolem každého podezřelého místa: kritik ho musí prohlédnout (probliknutí vs. rychlý přechod).
-while read -r N; do
+# Pás 6 snímků kolem každého skoku (střih, probliknutí, rychlý přechod), nejvýš 30: kritik ho musí prohlédnout.
+# Dřív jen u probliknutí, takže u dropů a švihů pásy chyběly (V002).
+sort -n -u "$OUT/podezrele.txt" "$OUT/skoky.txt" | head -30 | while read -r N; do
   [ -n "$N" ] || continue
   ffmpeg -nostdin -hide_banner -loglevel error -y -i "$V" -vf "select='between(n\,$((N-2))\,$((N+3)))',scale=300:-1,tile=6x1" -fps_mode vfr -frames:v 1 "$OUT/pas_snimek_$N.jpg"
   echo "pás snímků k prohlédnutí: $OUT/pas_snimek_$N.jpg"
-done < "$OUT/podezrele.txt"
+done
 
 D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$V")
 W=$(ffprobe -v error -select_streams v -show_entries stream=width -of csv=p=0 "$V")

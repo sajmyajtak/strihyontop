@@ -13,6 +13,21 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C029: `kontrola.sh` nedělal pásy snímků u dropů a švihů (2026-10-31, V002, našel animátor, opravil režisér)
+- Příznak: u videa s 10 skoky (dropy, švihy, tiker) nevznikl žádný pás snímků, animátor je musel vyřezávat ručně.
+- Příčina: pásy se dělaly jen z `podezrele.txt`, kam `skoky.py` zapisuje jen dvousnímková probliknutí.
+- Oprava: `skoky.py` zapisuje začátek každé série do `skoky.txt` a `kontrola.sh` dělá pás 6 snímků u každého skoku i probliknutí (nejvýš 30).
+  Ověřeno na V002 v1: 10 pásů.
+- Prevence: nástroj pro kritika testovat i na videu s rychlými přechody, ne jen s probliknutím.
+
+### C028: Krátký záblesk na dropu byl kvůli závěrce skoro neviditelný (2026-10-31, V002, našel a opravil animátor)
+- Příznak: drop 1 v plném renderu vizuálně slabý, kontrola skoků ho ani neoznačila. Záblesk 0,05 s byl vidět asi z 30 %.
+- Příčina: závěrka 180° vycentrovaná na čas snímku: snímek přesně v čase události je napůl „před“ událostí a krátký záblesk se rozprůměruje.
+  Klíčové snímky (statické, bez podsnímků) to neukážou.
+- Oprava: záblesk 0,08 s (3 viditelné snímky), krytí 70 %, dosah přes vůz, nový render.
+- Prevence: v `animator.md`: krátké záblesky a dopady navrhovat s ohledem na závěrku a jejich sílu ověřovat na snímku čas + 1/60 s
+  v pásu z plného renderu (nebo `--od/--dur` výřezu s podsnímky), ne na statickém klíčovém snímku.
+
 ### C027: Plný render složité scény by trval 80 min až 2,7 h (2026-10-31, V002, našel animátor, opravil režisér)
 - Příznak: ~160–190 s výpočtu na 1 s videa (1920×1080, 60 fps, `--sub 4`). Video 30 s by se renderovalo ~80 min, s `--sub 8` ~2,7 h,
   a každé kolo oprav znovu.
