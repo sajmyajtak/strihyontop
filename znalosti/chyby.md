@@ -13,6 +13,13 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C031: Časy v archu `kontrola.sh` neseděly o ~0,25 s (2026-10-31, V002, našel kritik technika, opravil režisér)
+- Příznak: dlaždice „26.500“ ukazovala obsah ze ~26,75 s (rozevírající se CTA, které začíná v 26,72).
+- Příčina: filtr `fps=2` vybírá snímky se zaokrouhlením k nejbližšímu výstupnímu času, ne snímek přesně v čase popisku.
+- Oprava: arch vybírá snímky podle čísla (`select=not(mod(n,KROK))`, KROK = fps / 2). Ověřeno: dlaždice 26,5 = snímek 1590.
+  Skript se vyměnil atomicky (`mv`), protože ho souběžně používal jiný kritik (bash čte běžící skript průběžně).
+- Prevence: časy kritiků ověřovat přesným snímkem (`select=eq(n,N)`), arch je jen přehled.
+
 ### C030: Verze bez hudby (jen SFX) nešla namasterovat, smyčka s limiterem nezkonvergovala (2026-10-31, V002, našel střihač, opravil režisér)
 - Příznak: `master_zvuk.sh` na samotných SFX (−24 LUFS, velký poměr špičky a hlasitosti) skončil ve všech 4 pokusech na +0,1 až +0,6 dBTP.
 - Příčina: ostré transienty (švihy, kovové údery) mají energii nad 19 kHz, kodér AAC ji ořízne a vznikne překmit +2–3 dB nad true peak změřený ve WAV.

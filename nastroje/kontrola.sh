@@ -47,5 +47,7 @@ H=$(ffprobe -v error -select_streams v -show_entries stream=height -of csv=p=0 "
 N=$(python3 -c "import math; print(max(1, math.ceil(float('$D') * 2)))")
 if [ "$H" -gt "$W" ]; then COLS=8; SW=240; else COLS=4; SW=480; fi
 ROWS=$(( (N + COLS - 1) / COLS ))
-ffmpeg -hide_banner -loglevel error -y -i "$V" -vf "fps=2,scale=$SW:-1,drawtext=text='%{pts\:hms}':x=6:y=6:fontsize=18:fontcolor=white:box=1:boxcolor=black@0.6,tile=${COLS}x${ROWS}" -frames:v 1 "$OUT/arch.jpg"
+# Přesné snímky každých 0,5 s podle čísla snímku (fps=2 bral snímek o ~0,25 s později a popisky času neseděly, C031).
+KROK=$(ffprobe -v error -select_streams v -show_entries stream=r_frame_rate -of csv=p=0 "$V" | python3 -c "import sys; a, b = sys.stdin.read().strip().split('/'); print(max(1, round(float(a) / float(b) / 2)))")
+ffmpeg -hide_banner -loglevel error -y -i "$V" -vf "select='not(mod(n\,$KROK))',scale=$SW:-1,drawtext=text='%{pts\:hms}':x=6:y=6:fontsize=18:fontcolor=white:box=1:boxcolor=black@0.6,tile=${COLS}x${ROWS}" -fps_mode vfr -frames:v 1 "$OUT/arch.jpg"
 echo "arch: $OUT/arch.jpg"
