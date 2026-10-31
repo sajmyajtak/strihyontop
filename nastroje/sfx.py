@@ -7,6 +7,9 @@ Použití:
   --automatika OD-DO:DB[:DOLU_MS[:NAHORU_MS]] = automatika hlasitosti HUDBY jen v mixu (hudba.wav ani její časování se nemění):
           v úseku OD–DO je hudba o DB tišší, náběh dolů končí v OD, návrat nahoru začíná v DO (výchozí 20 / 10 ms, kosinově).
           Víc úseků se kombinuje minimem (platí nejhlubší ztlumení). Hlasitost efektů proti hudbě se počítá už proti ztlumené hudbě.
+  --zisk-hudby T:DB,T:DB,…[@HZ] = obálka zisku HUDBY v mixu po bodech (dB lineárně mezi body, před prvním a za posledním bodem
+          0 dB; úseků víc, násobí se), např. stoupání do dropu nebo ztišení jízdy (V002). S `@HZ` jen pásmo nad HZ (komplementární
+          dělení s nulovou fází: při stejném zisku se hudba složí zpět bit po bitu, časování se nemění). Uplatní se před --automatika.
 udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…"}, …]
   cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
@@ -626,6 +629,19 @@ def automatika_hudby(n, useky):
     return 10 ** (db / 20)
 
 
+def zisk_hudby(hudba, spec):
+    """Obálka zisku hudby po bodech „T:DB,T:DB,…[@HZ]“ (dB lineárně mezi body, mimo body 0 dB). S @HZ jen pásmo nad HZ."""
+    spec, _, hz = spec.partition("@")
+    body = sorted(tuple(map(float, b.split(":"))) for b in spec.split(","))
+    t = cas(hudba.shape[1])
+    db = np.interp(t, [b[0] for b in body], [b[1] for b in body], left=0.0, right=0.0)
+    g = 10 ** (db / 20)
+    if not hz:
+        return hudba * g
+    nizke = signal.sosfiltfilt(signal.butter(4, float(hz) / (SR / 2), output="sos"), hudba, axis=1)   # nulová fáze
+    return nizke + (hudba - nizke) * g
+
+
 def stopa(udalosti, delka, hk=None):
     """Vyrobí stereo stopu SFX a seznam samostatně umístěných zvuků (mono, pro kontrolu vrcholů).
     Každý zvuk se posune tak, aby jeho změřený vrchol padl na `cas`. Hlasitost: `lu` = o kolik LU je efekt tišší než hudba
@@ -692,6 +708,7 @@ def main():
     ap.add_argument("--bez-hudby")
     ap.add_argument("--ticho", action="append", default=[], help="úsek od-do (s), kde nesmí znít žádný efekt")
     ap.add_argument("--automatika", action="append", default=[], help="OD-DO:DB[:DOLU_MS[:NAHORU_MS]] ztlumení hudby v mixu")
+    ap.add_argument("--zisk-hudby", action="append", default=[], help="T:DB,T:DB,…[@HZ] obálka zisku hudby v mixu (viz docstring)")
     ap.add_argument("--limiter", type=float, help="strop mixu v dBFS (např. -1.5): místo lineárního ztlumení celého mixu jemný "
                     "limiter jen na špičkách, kde se efekt sečte s úderem hudby (hudba s malou rezervou, V002)")
     a = ap.parse_args()
@@ -704,6 +721,8 @@ def main():
         assert sr == SR and h.shape[0] == 2, f"{a.hudba}: čekám 48 kHz stereo"
         hudba = np.zeros((2, n))
         hudba[:, :min(h.shape[1], n)] = h[:, :n]
+        for spec in a.zisk_hudby:
+            hudba = zisk_hudby(hudba, spec)
         useky = []
         for spec in a.automatika:
             casti = spec.split(":")
@@ -753,7 +772,7 @@ def main():
                   max_odchylka_ve_stope_ms=max(abs(u["odchylka_ve_stope_ms"]) for u in udalosti if not u["prekryto"]),
                   prekryte=[u["cas"] for u in udalosti if u["prekryto"]],
                   spicka_sfx_dbfs=round(20 * np.log10(np.max(np.abs(sfx)) + 1e-12), 1), problemy=problemy,
-                  automatika_hudby=a.automatika)
+                  automatika_hudby=a.automatika, zisk_hudby=a.zisk_hudby)
     if hudba is not None:
         souhrn["nejhlasitejsi_efekt_proti_hudbe_lu"] = max(u["efekt_proti_hudbe_lu"] for u in udalosti)
         souhrn["nejhlasitejsi_efekt_proti_hudbe_100ms_lu"] = max(u["efekt_proti_hudbe_100ms_lu"] for u in udalosti)
