@@ -6,13 +6,15 @@ Použití:
   --drop   čas nástupu plné části (zaokrouhlí se na celý takt), předtím úvod a stoupání
   --konec  čas finálního úderu (end card), zaokrouhlí se na dobu; potom už jen doznívá
   --zlom / --drop2  (sportovni) zlom = jen pad + filtr + průjezd motoru, poslední takt před drop2 = stoupání; v JSON i „zlom“, „stoupani“, „drop2“
-Výstup: WAV 48 kHz stereo, přibližně −13 až −14 LUFS (jednoprůchodový loudnorm; přesnou hlasitost řeší nastroje/master_zvuk.sh)
+Výstup: WAV 48 kHz stereo, přibližně −13 až −14 LUFS (jednoprůchodový loudnorm; sportovni lineárně: zisk na −14 LUFS + limiter
+−1,5 dBFS s kompenzací zpoždění, aby zůstala stavba úvod < jízda < drop 2; přesnou hlasitost řeší nastroje/master_zvuk.sh)
 pro synchronizaci animace (hudba.json vedle WAV). `udalosti_nastroju`: časy po swingu pro každý nástroj
 (kopák, malý buben / tlesknutí, hi-hat, marimba s notou, kytara, basa, Rhodes…), `nastup` = skutečný začátek zvuku.
 Bez `nastup` = posun zvuku je náhodný (±4 ms), bere se `cas`. Shaker, plochy a stoupání se nezapisují (nejsou to údery).
 """
 import argparse
 import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -919,8 +921,8 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
         if uvod:
             posledni = abs(t0 + takt - drop) < 1e-6
             podil = (b + 1) / takt_dropu
-            arpeggio(t0, noty, 500 + 900 * podil, 900 + (2600 if posledni else 1200) * podil, 0.75)
-            basa_osminy(t0, k, 450 + 500 * podil, 0.45)
+            arpeggio(t0, noty, 500 + 900 * podil, 900 + (2600 if posledni else 1200) * podil, 0.3)
+            basa_osminy(t0, k, 450 + 500 * podil, 0.3)
             for s in range(8):
                 if s % 2 or posledni:
                     mx.pridej("bici", t0 + s * doba / 2, hat(), 0.28 if s % 2 else 0.16, pan=0.25)
@@ -936,7 +938,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
                 mx.pridej("fx", t0, stoupani(takt), 0.45)
                 mx.pridej("fx", drop - 2 * doba, reverse_cinel(2 * doba), 0.5)
                 zapis("obraceny_cinel", drop - 2 * doba, drop - 2 * doba, vrchol=round(drop, 5))
-                motor_na(t0, [(0, 75), (0.75, 175), (0.75, 125), (takt, 250)], takt, 0.5, druh="rev", vrchol=round(drop, 5))
+                motor_na(t0, [(0, 75), (0.75, 175), (0.75, 125), (takt, 250)], takt, 0.32, druh="rev", vrchol=round(drop, 5))
 
         elif jizda or finale:
             if abs(t0 - drop) < 1e-6:
@@ -960,16 +962,16 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
                     break
                 mx.pridej("bici", tt, hat(s % 4 == 2), (0.3 if s % 4 == 2 else 0.2 if s % 2 == 0 else 0.13) * vel(), pan=0.25)
                 zapis("hihat", tt, tt, **({"otevreny": True} if s % 4 == 2 else {}))
-            basa_osminy(t0, k, 1900 if finale else 1600, 0.6)
-            arpeggio(t0, noty, 3200, 3200, 0.75)
+            basa_osminy(t0, k, 1900 if finale else 1600, 0.6 if finale else 0.52)
+            arpeggio(t0, noty, 3200, 3200, 0.75 if finale else 0.62)
             mx.pridej("harmonie", t0, plocha(pad, min(takt, konec - t0), 2200, 0.3, 0.05))
             if finale:                                                  # drop 2: + staby na „a“ a arpeggio o oktávu výš
-                arpeggio(t0, noty, 4500, 4500, 0.32, oktava=12, ozvena=False)
+                arpeggio(t0, noty, 4500, 4500, 0.5, oktava=12, ozvena=False)
                 for d in (0.5, 1.5, 2.5, 3.5):
                     tt = t0 + d * doba
                     if not pred_koncem(tt):
                         break
-                    mx.pridej("lead", tt, supersaw(pad, doba * 0.3, vel(0.9)), 0.55)
+                    mx.pridej("lead", tt, supersaw(pad, doba * 0.3, vel(0.9)), 1.1)
                     zapis("stab", tt, tt, akord=[nota(m) for m in pad])
             if abs(t0 + takt - zlom) < 1e-6:                            # přechod do zlomu: vír na poslední dobu
                 vir(t0 + 3 * doba, zlom, 0.1, 0.4)
@@ -980,7 +982,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
 
         elif zlomu:                                                     # jen pad (filtr se otevírá) + průjezd motoru
             dl = stoupani_od - t0
-            mx.pridej("harmonie", t0, filtr_prubeh(plocha(pad + [pad[0] - 12], dl, 9000, 0.7, 0.08), 280, 1100), 1.0)
+            mx.pridej("harmonie", t0, filtr_prubeh(plocha(pad + [pad[0] - 12], dl, 9000, 0.7, 0.08), 280, 1100), 0.75)
             if abs(t0 - zlom) < 1e-6:
                 mx.pridej("fx", zlom, cinel(2.4, 0.9), 0.25)
                 zapis("cinel", zlom, zlom)
@@ -988,7 +990,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
                          pan_od=-0.9, pan_do=0.9, obalka=[(0, 0.15), (0.95, 1.0), (takt, 0.12)], vrchol=round(zlom + 0.95, 5))
 
         elif stoupani_:                                                 # stoupání do dropu 2
-            mx.pridej("harmonie", t0, filtr_prubeh(plocha(pad + [pad[0] - 12], takt, 9000, 0.7, 0.02), 1100, 6000), 1.0)
+            mx.pridej("harmonie", t0, filtr_prubeh(plocha(pad + [pad[0] - 12], takt, 9000, 0.7, 0.02), 1100, 6000), 0.8)
             for d in range(4):
                 kopak(t0 + d * doba, 0.7 + 0.1 * d, 0.26 + 0.03 * d)
             vir(t0, t0 + 2 * doba, 0.04, 0.16, 2)
@@ -998,7 +1000,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
             mx.pridej("fx", t0, stoupani(takt), 0.55)
             mx.pridej("fx", drop2 - 2 * doba, reverse_cinel(2 * doba), 0.55)
             zapis("obraceny_cinel", drop2 - 2 * doba, drop2 - 2 * doba, vrchol=round(drop2, 5))
-            motor_na(t0, [(0, 70), (0.6, 170), (0.6, 120), (1.25, 225), (1.25, 165), (takt, 300)], takt, 0.55,
+            motor_na(t0, [(0, 70), (0.6, 170), (0.6, 120), (1.25, 225), (1.25, 165), (takt, 300)], takt, 0.36,
                      druh="rev", vrchol=round(drop2, 5))
 
     # Konec (end card): úder, činel, akord (staby + pad + basa) a odjezd motoru doznívají do konce.
@@ -1069,7 +1071,9 @@ def mixuj(mx, kicky, nalada):
     return out
 
 
-def uloz(out, delka, cesta):
+def uloz(out, delka, cesta, linearni=False):
+    """`linearni` = jen zisk na −14 LUFS + jemný limiter (zachová stavbu úvod < jízda < drop 2). Jednoprůchodový loudnorm
+    je dynamický: tiché části zesílí a dropy srovná (sportovní úvod −21 → −16 dB, stejně hlasitý jako jízda)."""
     n = int(delka * SR)
     out = out[:, :n]
     fade = int(0.25 * SR)
@@ -1078,8 +1082,14 @@ def uloz(out, delka, cesta):
     tmp = cesta.with_suffix(".raw.wav")
     from scipy.io import wavfile
     wavfile.write(tmp, SR, (out.T * 32767).astype(np.int16))
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp), "-af", "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000",
-                    "-c:a", "pcm_s16le", str(cesta)], check=True)
+    af = "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000"
+    if linearni:
+        mer = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(tmp), "-af", "ebur128", "-f", "null", "-"],
+                             capture_output=True, text=True, check=True).stderr
+        hlasitost = float(re.findall(r"^\s+I:\s+(-?[\d.]+) LUFS", mer, re.M)[-1])
+        af = (f"volume={-14 - hlasitost:.2f}dB,aresample=192000,alimiter=limit={10 ** (-1.5 / 20):.4f}:attack=5:release=300:level=false:latency=1,"
+              "aresample=48000")
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp), "-af", af, "-c:a", "pcm_s16le", str(cesta)], check=True)
     tmp.unlink()
 
 
@@ -1140,7 +1150,7 @@ def main():
         mx, kicky, info = aranzuj(a.nalada, a.delka, bpm, drop, konec)
     cesta = Path(a.out)
     cesta.parent.mkdir(parents=True, exist_ok=True)
-    uloz(mixuj(mx, kicky, a.nalada), a.delka, cesta)
+    uloz(mixuj(mx, kicky, a.nalada), a.delka, cesta, linearni=a.nalada == "sportovni")
     info["pasma"], info["oktavy_db"] = kontrola_pasem(cesta)
     cesta.with_suffix(".json").write_text(json.dumps(info, ensure_ascii=False, indent=1))
     print(f"{cesta}: {a.nalada}, {bpm} BPM, drop {info['drop']} s, konec {info['konec']} s, délka {a.delka} s")
