@@ -11,7 +11,14 @@ udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…
   cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
   pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6),
-          "drive" (dB, jemné tanh nasycení zvuku: sníží poměr špička / tělo, takže hlavní efekt je slyšet a strop ho neusekne)
+          "drive" (dB, jemné tanh nasycení zvuku: sníží poměr špička / tělo, takže hlavní efekt je slyšet a strop ho neusekne),
+          "pan_do" (+ "pan_tau" s, výchozí 0,12): průjezd, panorama se kolem vrcholu přelije z `pan` do `pan_do`
+  --limiter DBFS = místo lineárního ztlumení celého mixu sběrnicový limiter jen na špičkách (192 kHz, latency=1). Pro hudbu s malou
+          rezervou (sportovní: −14 LUFS při špičce −1,5 dBFS), kde se efekt sečte s úderem; bez volby se chová jako dřív (V001 bit po bitu).
+Závodní zvuky (V002): rele, ting, odpal, doppler(_tichy/_dvojity), prujezd_gt, prujezd_daleko, vzduch, svih(_rotace), prulet,
+  nasati(_dlouhe), pneu(_svist), kov_uder(_suchy), cink_el, fup, brzdy, jiskry, skrt, zatah, vzum(_trisk), tik, radeni, glitch,
+  svetelny_uder, sssink, vuff, klap_kov, fump, dopad_logo. Šum má srovnanou obálku (`rovny_sum`), průjezdy „svist“ v nejbližším bodě:
+  změřený vrchol = navržený vrchol (rozptyl mezi seedy ≤ ~10 ms, zarovnání na událost pak přesně).
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
@@ -231,12 +238,315 @@ def dopad(rng, v=1.0):
     return x
 
 
+# ---------- závodní zvuky (V002): motor, doppler, švihy, kov, elektřina ----------
+# Šum má sám o sobě náhodně kolísající obálku, takže změřený vrchol by „bloudil“ ±desítky ms od navrženého místa.
+# `rovny_sum` obálku šumu srovná (vydělí vyhlazenou obálkou) a teprve pak se násobí navrženou obálkou s ostrým vrcholem:
+# změřený vrchol = navržený vrchol, zvuk se dá zarovnat na událost přesně.
+def rovny_sum(x, vyhlazeni=0.004):
+    e = np.abs(signal.hilbert(x))
+    m = max(1, int(vyhlazeni * SR))
+    e = np.convolve(e, np.ones(m) / m, mode="same")
+    return x / (e + 1e-3 * (e.max() + 1e-12))
+
+
+def sum_pasmo(rng, n, lo, hi):
+    return rovny_sum(pasmo(rng.standard_normal(n), lo, hi))
+
+
+def spicka(n, vrchol_s, nahoru_s, dolu_s):
+    """Obálka s ostrým vrcholem v `vrchol_s`: exponenciální náběh i doznění (tvar ∧), změřený vrchol na místě."""
+    t = cas(n)
+    return np.where(t < vrchol_s, np.exp(-(vrchol_s - t) / max(nahoru_s, 1e-4)), np.exp(-(t - vrchol_s) / max(dolu_s, 1e-4)))
+
+
+def motor_ton(f, rng, harm=14, hrubost=0.35):
+    """Řev motoru ze zadané okamžité výšky f (Hz, pole): pulzní vlna s harmonickými ~1/k^0,8, mírné kolísání (válce
+    nejsou stejné), tanh nasycení. Základ 150–600 Hz: na telefonu slyšet (pod ~100 Hz nehraje)."""
+    n = len(f)
+    jitter = 1 + 0.012 * dolni(rng.standard_normal(n), 40) / 0.1
+    faze = 2 * np.pi * np.cumsum(f * jitter) / SR
+    x = sum(np.sin(k * faze + rng.uniform(0, 2 * np.pi)) / k ** 0.8 for k in range(1, harm + 1) if k * np.max(f) < SR / 2.2)
+    x = x + hrubost * pasmo(rng.standard_normal(n), 300, 3000) * (0.6 + 0.4 * np.sin(faze / 2))
+    return np.tanh(1.8 * x / (np.max(np.abs(x)) + 1e-12))
+
+
+def doppler_jizda(rng, n, vrchol_s, f0, rychlost=70.0, vzdalenost=6.0, sum_lo=500, sum_hi=4000, sum_podil=0.5, svist=0.6):
+    """Průjezd kolem kamery: výška motoru podle Dopplera (blíží se výš, vzdaluje se níž), hlasitost ~1/vzdálenost,
+    vrchol hlasitosti přesně v okamžiku nejmenší vzdálenosti (`vrchol_s`). Vítr a pneumatiky = šum se stejnou obálkou."""
+    t = cas(n) - vrchol_s
+    x = rychlost * t
+    r = np.sqrt(x ** 2 + vzdalenost ** 2)
+    v_rad = rychlost * x / r                                             # + = vzdaluje se
+    f = f0 / (1 + v_rad / 343.0)
+    ob = (vzdalenost / r) ** 1.3
+    m = motor_ton(f, rng) * (1 - sum_podil) + sum_podil * sum_pasmo(rng, n, sum_lo, sum_hi)
+    m = rovny_sum(m, 0.003) * ob                                        # srovnat zvlnění harmonických: vrchol = nejbližší bod
+    # „svist“ vzduchu v nejbližším bodě (krátký šum 1–6 kHz): u širokého vrcholu jinak měření bloudí ±20 ms
+    return m + svist * sum_pasmo(rng, n, 1000, 6000) * spicka(n, vrchol_s, 0.006, 0.012)
+
+
+def vrstva_v(x, y, k):
+    """Přičte zvuk y do x od vzorku k (oříznutý na délku x)."""
+    x = x.copy()
+    m = min(len(y), len(x) - k)
+    x[k:k + m] += y[:m]
+    return x
+
+
+def kov(rng, n, f0, doba=0.08, partialy=(1.0, 2.76, 5.40, 8.93)):
+    """Kovová rezonance: neharmonické částečné tóny (tyč / plech), vyšší doznívají rychleji."""
+    t = cas(n)
+    return sum(np.sin(2 * np.pi * f0 * p * t + rng.uniform(0, 6.28)) * np.exp(-t * p ** 0.7 / doba) / (1 + 0.4 * i)
+               for i, p in enumerate(partialy) if f0 * p < SR / 2.2)
+
+
+def rele(rng, v=1.0):
+    """Elektrické „klonk“ relé startovní lampy: cvak kontaktu + tělo 210 → 150 Hz + krátký brum 100 Hz (proud do lampy)."""
+    n = int(0.3 * SR)
+    t = cas(n)
+    telo = (ton(210 * v, 150 * v, n, 0.02) + 0.5 * ton(420 * v, 300 * v, n, 0.02)) * obalka(n, 0.003, 0.035)
+    cvak_ = sum_pasmo(rng, n, 2000, 8000) * obalka(n, 0.0008, 0.004) * 0.8
+    brum = pasmo(np.sign(np.sin(2 * np.pi * 100 * t)), 200, 2500) * obalka(n, 0.006, 0.07) * 0.35
+    return telo + cvak_ + brum
+
+
+def ting(rng, v=1.0):
+    """Drobné kovové „ting“ (blýsknutí hvězdy, odlesk na logu, uzavření kruhu): krátký zvonivý kov ~2,1 kHz."""
+    n = int(0.6 * SR)
+    return kov(rng, n, 2100 * v, 0.22) * obalka(n, 0.001, 1.0) + 0.15 * sum_pasmo(rng, n, 5000, 11000) * obalka(n, 0.0008, 0.003)
+
+
+def odpal(rng, v=1.0):
+    """Drop 1 „LIGHTS OUT“: prásk (široký šum + tupý úder) a hned za ním řev motoru, který vytáčí 190 → 330 Hz."""
+    n = int(1.1 * SR)
+    t = cas(n)
+    prask = sum_pasmo(rng, n, 400, 10000) * obalka(n, 0.0015, 0.03)
+    uder = (ton(170 * v, 85 * v, n, 0.04) + 0.6 * ton(340 * v, 170 * v, n, 0.04) + 0.3 * ton(510 * v, 255 * v, n, 0.04)) * obalka(n, 0.002, 0.12)
+    f = 190 * v + 140 * v * (1 - np.exp(-t / 0.35))
+    rev = motor_ton(f, rng) * np.where(t < 0.04, (t / 0.04) ** 2, np.exp(-(t - 0.04) / 0.45)) * 0.45
+    return prask + 0.9 * uder + rev
+
+
+def doppler(rng, v=1.0, delka=1.2, f0=260, rychlost=70.0, vzdalenost=6.0, sum_podil=0.45, lo=500, hi=4000, svist=0.6):
+    """Průjezd s Dopplerem, vrchol hlasitosti uprostřed (v nejbližším bodě)."""
+    n = int(delka * SR)
+    return doppler_jizda(rng, n, delka / 2, f0 * v, rychlost, vzdalenost, lo, hi, sum_podil, svist)
+
+
+def doppler_dvojity(rng, v=1.0):
+    """Příjezd dvou soupeřů: dva průjezdy 110 ms po sobě (druhý o tón výš), první hlasitější (ten dává změřený vrchol)."""
+    a = doppler(rng, v, 1.0, 240, 75, 5.0)
+    return vrstva_v(a, 0.42 * doppler(rng, 1.12 * v, 1.0, 240, 75, 6.5, svist=0.2)[:len(a)], int(0.11 * SR))
+
+
+def prujezd_daleko(rng, v=1.0):
+    """Vzdálený průjezd (end card): měkký, ztlumené výšky, široký vrchol."""
+    return dolni(doppler(rng, v, 1.6, 230, 55, 12.0, 0.35, 300, 1800, svist=1.6), 2200)
+
+
+def vzduch(rng, v=1.0):
+    """Zpomalený průjezd ve zlomu: jen tichý vzduch (šum 250–2500 Hz), široký měkký vrchol, žádný motor."""
+    n = int(1.4 * SR)
+    s = sum_pasmo(rng, n, 250 * v, 2500 * v) * 0.7 + 0.3 * sum_pasmo(rng, n, 2500, 6000)
+    return dolni(s, 3500) * spicka(n, 0.7, 0.22, 0.26)
+
+
+def svih(rng, v=1.0, delka=0.3, vrchol_podil=0.45):
+    """Švih „vuš“: pásmo šumu stoupá a zase klesá (600 → 3 kHz → 1 kHz), ostrý vrchol obálky."""
+    n = int(delka * SR)
+    p = delka * vrchol_podil
+    t = cas(n)
+    s = rng.standard_normal(n)
+    nizko = sum_pasmo(rng, n, 500 * v, 1500 * v)
+    vysoko = rovny_sum(pasmo(s, 1800 * v, 6000 * v))
+    w = np.exp(-((t - p) / (delka / 4)) ** 2)                            # výšky jen kolem vrcholu = „otočení“ vzduchu
+    return (nizko * (1 - 0.6 * w) + vysoko * w) * spicka(n, p, delka / 6, delka / 5)
+
+
+def nasati(rng, v=1.0, delka=0.45):
+    """Nasátí / „vššš“ do bodu: šum houstne a stoupá (700 Hz → 7 kHz), crescendo, vrchol 3 ms před koncem, pak utne."""
+    n = int(delka * SR)
+    t = cas(n) / delka
+    s = rng.standard_normal(n)
+    x = rovny_sum((1 - t) * pasmo(s, 700 * v, 2500 * v) + t * pasmo(s, 2500 * v, 7500 * v))
+    e = t ** 3 * np.clip((n - np.arange(n)) / (0.003 * SR), 0, 1)
+    return x * e
+
+
+def pneu(rng, v=1.0, delka=0.2, f0=1350):
+    """Cvrknutí / svištění pneumatiky: tón s rychlým vibratem (gumový „chirp“) + šum asfaltu, vrchol po 15 ms."""
+    n = int(delka * SR)
+    t = cas(n)
+    f = f0 * v * (1 - 0.06 * t / delka) + 70 * np.sin(2 * np.pi * 47 * t)
+    faze = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(faze) + 0.35 * np.sin(2 * faze) + 0.15 * np.sin(3 * faze)
+    x = x + 0.5 * sum_pasmo(rng, n, 1500, 6000)
+    return x * spicka(n, 0.015, 0.006, delka / 4)
+
+
+def kov_uder(rng, v=1.0, doba=0.07):
+    """Tupý kovový úder (dopad textu, slovo tikeru): tělo 170 → 110 Hz + kovové částečné tóny ~620 Hz + cvak."""
+    n = int(0.35 * SR)
+    telo = (ton(170 * v, 110 * v, n, 0.03) + 0.6 * ton(340 * v, 220 * v, n, 0.03) + 0.3 * ton(510 * v, 330 * v, n, 0.03)) * obalka(n, 0.002, doba)
+    plech = kov(rng, n, 620 * v, doba * 0.8, (1.0, 2.32, 4.25, 6.63)) * obalka(n, 0.001, 1.0) * 0.5
+    return telo + plech + 0.5 * sum_pasmo(rng, n, 1500, 8000) * obalka(n, 0.0008, 0.004)
+
+
+def cink_el(rng, v=1.0):
+    """Elektrické „cink“ (světelný impuls po linii): FM tón ~3,2 kHz + 3 ms digitálního šumu."""
+    n = int(0.25 * SR)
+    t = cas(n)
+    x = np.sin(2 * np.pi * 3200 * v * t + 1.5 * np.exp(-t / 0.03) * np.sin(2 * np.pi * 4510 * v * t)) * obalka(n, 0.001, 0.07)
+    bity = np.round(rng.standard_normal(n) * 2) / 2
+    return x + 0.4 * horni(bity, 3000) * obalka(n, 0.0008, 0.003)
+
+
+def fup(rng, v=1.0):
+    """Průlet sloupu těsně u kamery „fup“: krátký závan 250–1500 Hz, vrchol po 50 ms."""
+    n = int(0.16 * SR)
+    return sum_pasmo(rng, n, 250 * v, 1500 * v) * spicka(n, 0.05, 0.018, 0.03)
+
+
+def brzdy(rng, v=1.0):
+    """Kvílení brzd: vysoký tón ~2,4 kHz s chvěním a klesající výškou, náběh 0,12 s, + tření."""
+    n = int(0.5 * SR)
+    t = cas(n)
+    f = 2400 * v * (1 - 0.05 * t) * (1 + 0.006 * np.sin(2 * np.pi * 9 * t)) + 25 * dolni(rng.standard_normal(n), 30) / 0.05
+    faze = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(faze) + 0.3 * np.sin(2 * faze) + 0.5 * sum_pasmo(rng, n, 1200, 5000)
+    return x * spicka(n, 0.12, 0.05, 0.12)
+
+
+def jiskry(rng, v=1.0, praskani=1.0):
+    """Škrtnutí podlahy o obrubník + praskání jisker: ostrý škrab 2–8 kHz, tupé „tk“ 220 Hz a dohasínající zrna (0,4 s)."""
+    n = int(0.5 * SR)
+    skrab = sum_pasmo(rng, n, 2000 * v, 8000) * (0.7 + 0.3 * np.sign(np.sin(2 * np.pi * 190 * cas(n)))) * obalka(n, 0.003, 0.06)
+    tk = ton(260 * v, 200 * v, n, 0.02) * obalka(n, 0.002, 0.025) * 0.5
+    zr = zrna(rng, n, 900 * praskani, 0.0008, 2500, 9000) * obalka(n, 0.01, 0.16)
+    return skrab + tk + 1.2 * praskani * zr / (np.max(np.abs(zr)) + 1e-12) * 0.6
+
+
+def zatah(rng, v=1.0):
+    """Zátah motoru na výjezdu: výška 230 → 430 Hz, hlasitost stoupá do 0,25 s a pak ujíždí."""
+    n = int(0.7 * SR)
+    t = cas(n)
+    f = 230 * v + 200 * v * np.clip(t / 0.5, 0, 1) ** 0.7
+    return motor_ton(f, rng) * spicka(n, 0.25, 0.1, 0.18)
+
+
+def vzum(rng, v=1.0, trisk=0.0):
+    """„Vžum“: rychlý blízký průjezd (krátký doppler) a volitelně krátký třesk ve vrcholu (vyletění vozu se zábleskem)."""
+    x = doppler(rng, v, 0.7, 300, 85, 3.5, 0.5, 700, 5000)
+    if trisk:
+        n = len(x)
+        k = n // 2 - int(0.0015 * SR)
+        tr = sum_pasmo(rng, n, 800, 10000) * obalka(n, 0.0015, 0.018) * trisk
+        x = vrstva_v(x, tr[:n - k], k)
+    return x
+
+
+def tik(rng, v=1.0):
+    """Tiché elektronické „tik“ sektorové brány: 1 ms cvak + sinus 2,4 kHz 25 ms."""
+    n = int(0.08 * SR)
+    t = cas(n)
+    return np.sin(2 * np.pi * 2400 * v * t) * obalka(n, 0.0008, 0.012) + 0.5 * sum_pasmo(rng, n, 3000, 9000) * obalka(n, 0.0005, 0.0015)
+
+
+def zap(rng, n, v=1.0, delka=0.05):
+    """Digitální „zap“: pravoúhlá vlna, výška skáče 150 → 1 300 Hz za `delka`, hrubě kvantovaná (bitcrush)."""
+    t = cas(n)
+    f = 150 * v + 1150 * v * np.clip(t / delka, 0, 1) ** 0.5
+    x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR))
+    return np.round(pasmo(x, 200, 7000) * 3) / 3
+
+
+def radeni(rng, v=1.0):
+    """Řazení: kovové cvaknutí převodovky + krátký digitální „zap“ (glitch akcent v obraze), vrchol v cvaknutí."""
+    n = int(0.25 * SR)
+    cv = (kov(rng, n, 1450 * v, 0.03) + 0.8 * sum_pasmo(rng, n, 2000, 9000) * obalka(n, 0.0006, 0.003)) * obalka(n, 0.0008, 1.0)
+    z = zap(rng, n, v) * obalka(n, 0.004, 0.035) * 0.45
+    return cv + z
+
+
+def glitch(rng, v=1.0):
+    """Elektrický glitch „zap“: bzučení 180 Hz sekané na 8ms kousky s náhodnou výškou, bitcrush, 0,14 s."""
+    n = int(0.14 * SR)
+    t = cas(n)
+    kus = int(0.008 * SR)
+    f = np.repeat(rng.choice([180, 360, 720, 1440], size=n // kus + 1) * v, kus)[:n]
+    x = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * (rng.random(n // kus + 1).repeat(kus)[:n] > 0.25)
+    x = np.round(pasmo(x, 150, 8000) * 2.5) / 2.5
+    return x * spicka(n, 0.006, 0.002, 0.05)
+
+
+def svetelny_uder(rng, v=1.0):
+    """Drop 2 „hvězda ze světla“: elektrický třesk (šum + praskání výboje) + hluboký dopad 120 → 60 Hz s harmonickými
+    (telefon slyší 2.–4. harmonickou) + třpytivý dozvuk (FM ~4 kHz, 0,6 s)."""
+    n = int(1.2 * SR)
+    t = cas(n)
+    tresk = sum_pasmo(rng, n, 600, 11000) * obalka(n, 0.0015, 0.035)
+    vyboj = zrna(rng, n, 2500, 0.0006, 2000, 10000) * obalka(n, 0.002, 0.08)
+    vyboj = vyboj / (np.max(np.abs(vyboj)) + 1e-12)
+    dopad_ = sum(ton(k * 120 * v, k * 60 * v, n, 0.06) / k ** 0.7 for k in (1, 2, 3, 4)) * obalka(n, 0.003, 0.2)
+    dopad_ = np.tanh(1.5 * dopad_) / np.tanh(1.5)
+    trpyt = np.sin(2 * np.pi * 4100 * v * t + 2 * np.sin(2 * np.pi * 5800 * v * t)) * obalka(n, 0.01, 0.25) * 0.18
+    return tresk + 0.5 * vyboj + 0.9 * dopad_ + trpyt
+
+
+def sssink(rng, v=1.0):
+    """Běh světla „šššink“: jasný šum 5–11 kHz + třpyt (3 vysoké tóny), roste 80 ms a doznívá."""
+    n = int(0.35 * SR)
+    t = cas(n)
+    tony = sum(np.sin(2 * np.pi * f * v * t) for f in (4200, 5300, 6650)) / 3
+    return (0.7 * sum_pasmo(rng, n, 5000 * v, 11000) + 0.5 * tony) * spicka(n, 0.08, 0.018, 0.07)
+
+
+def vuff(rng, v=1.0):
+    """Vlna zaplavení „vuff“: hluboký závan 150–900 Hz + měkký tón 150 → 100 Hz, vrchol po 80 ms."""
+    n = int(0.45 * SR)
+    s = sum_pasmo(rng, n, 150 * v, 900 * v) + 0.4 * ton(150 * v, 100 * v, n, 0.1)
+    return s * spicka(n, 0.08, 0.035, 0.1)
+
+
+def klap_kov(rng, v=1.0):
+    """Kovový „klap“ (odkrytí výsečí, zámek): dva kovové údery 9 ms po sobě, druhý (hlavní) silnější, + tělo 300 Hz."""
+    n = int(0.2 * SR)
+    a = kov(rng, n, 950 * v, 0.03, (1.0, 2.7, 5.1)) * obalka(n, 0.0008, 1.0)
+    a += 0.6 * ton(320 * v, 260 * v, n, 0.02) * obalka(n, 0.002, 0.03) + 0.6 * sum_pasmo(rng, n, 2000, 9000) * obalka(n, 0.0006, 0.003)
+    k = int(0.009 * SR)
+    return vrstva_v(0.45 * a, a[:n - k], k)
+
+
+def fump(rng, v=1.0):
+    """Průlet portálem „fump“: tupý závan 200–1 200 Hz + tón 180 → 120 Hz, vrchol po 15 ms."""
+    n = int(0.3 * SR)
+    return (sum_pasmo(rng, n, 200 * v, 1200 * v) + 0.6 * ton(180 * v, 120 * v, n, 0.04)) * spicka(n, 0.015, 0.006, 0.07)
+
+
+def dopad_logo(rng, v=1.0):
+    """Měkký kovový dopad loga + „cink“: tělo 165 → 110 Hz s harmonickými, zvonivý kov 1,8 kHz (doznívá 0,8 s), jemný cvak."""
+    n = int(1.2 * SR)
+    telo = (ton(165 * v, 110 * v, n, 0.04) + 0.6 * ton(330 * v, 220 * v, n, 0.04) + 0.35 * ton(495 * v, 330 * v, n, 0.04)) * obalka(n, 0.004, 0.11)
+    zvon = kov(rng, n, 1800 * v, 0.45, (1.0, 2.76, 5.40)) * obalka(n, 0.002, 1.0) * 0.45
+    return np.tanh(1.3 * telo) + zvon + 0.3 * sum_pasmo(rng, n, 2500, 9000) * obalka(n, 0.0008, 0.004)
+
+
 ZVUKY = {
     "cvak": cvak, "cvak_suchy": lambda r, v: cvak(r, v, suchy=True), "klap": klap, "tuk": tuk, "glp": glp,
     "klouznuti": klouznuti, "posunuti": lambda r, v: klouznuti(r, 0.7 * v, 0.3), "sustnuti": sustnuti,
     "sustnuti_tiche": lambda r, v: sustnuti(r, 1.2 * v, 0.18), "plink": plink, "pumf": pumf, "tup": tup, "bum": bum,
     "tsk": tsk, "nuz": nuz, "krupnuti": krupnuti, "trhnuti": trhnuti, "pop": pop_papir, "zip": zip_, "sss": sss,
     "sk": sk, "dopad": dopad,
+    # závodní (V002)
+    "rele": rele, "ting": ting, "odpal": odpal, "doppler": doppler, "doppler_tichy": lambda r, v: doppler(r, v, 1.0, 250, 60, 8.0),
+    "prujezd_gt": lambda r, v: doppler(r, v, 1.3, 175, 75, 4.0, 0.4, 400, 3500), "doppler_dvojity": doppler_dvojity,
+    "prujezd_daleko": prujezd_daleko, "vzduch": vzduch, "svih": svih, "svih_rotace": lambda r, v: svih(r, v, 0.32, 0.5),
+    "prulet": lambda r, v: svih(r, 0.85 * v, 0.4, 0.55), "nasati": nasati, "nasati_dlouhe": lambda r, v: nasati(r, v, 0.6),
+    "pneu": pneu, "pneu_svist": lambda r, v: pneu(r, v, 0.26, 950), "kov_uder": kov_uder,
+    "kov_uder_suchy": lambda r, v: kov_uder(r, v, 0.035), "cink_el": cink_el, "fup": fup, "brzdy": brzdy, "jiskry": jiskry,
+    "skrt": lambda r, v: jiskry(r, v, 0.35), "zatah": zatah, "vzum": vzum, "vzum_trisk": lambda r, v: vzum(r, v, 1.4),
+    "tik": tik, "radeni": radeni, "glitch": glitch, "svetelny_uder": svetelny_uder, "sssink": sssink, "vuff": vuff,
+    "klap_kov": klap_kov, "fump": fump, "dopad_logo": dopad_logo,
 }
 
 
@@ -331,11 +641,16 @@ def stopa(udalosti, delka, hk=None):
         x = x / (np.max(np.abs(x)) + 1e-12)
         if u.get("drive"):
             x = nasyceni(x, u["drive"])
-        i = int(round(u["cas"] * SR)) - vrchol(x)
+        vx = vrchol(x)
+        i = int(round(u["cas"] * SR)) - vx
         if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
-            x, i = x[-i:], 0
+            x, i, vx = x[-i:], 0, vx + i
         k = min(len(x), n - i)
         uhel = (u.get("pan", 0.0) + 1) * np.pi / 4
+        if "pan_do" in u:                                                # průjezd: panorama se přelije z `pan` do `pan_do` kolem vrcholu
+            tt = (np.arange(k) - vx) / SR
+            p = u.get("pan", 0.0) + (u["pan_do"] - u.get("pan", 0.0)) * (0.5 + 0.5 * np.tanh(tt / u.get("pan_tau", 0.12)))
+            uhel = (p + 1) * np.pi / 4
         st = np.zeros((2, n))
         st[:, i:i + k] = np.stack([x[:k] * np.cos(uhel), x[:k] * np.sin(uhel)]) * np.sqrt(2)
         if "lu" in u and hk is not None:
@@ -352,12 +667,19 @@ def stopa(udalosti, delka, hk=None):
     return out, samotne
 
 
-def zapis_wav(cesta, x):
-    """Stereo float → WAV 48 kHz 24 bit (přes ffmpeg, ať se nic neořízne na 16 bitech)."""
+def zapis_wav(cesta, x, af=None):
+    """Stereo float → WAV 48 kHz 24 bit (přes ffmpeg, ať se nic neořízne na 16 bitech), volitelně přes filtr `af`."""
     tmp = Path(str(cesta) + ".f32.wav")
     wavfile.write(tmp, SR, x.T.astype(np.float32))
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp), "-c:a", "pcm_s24le", str(cesta)], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(tmp)] + (["-af", af] if af else []) + ["-c:a", "pcm_s24le", str(cesta)],
+                   check=True)
     tmp.unlink()
+
+
+def limiter_af(strop_db):
+    """Sběrnicový limiter mixu: 192 kHz (mezivzorkové špičky), rychlý náběh na transienty efektů, `latency=1` (bez posunu, C025)."""
+    return (f"aresample=192000,alimiter=limit={10 ** (strop_db / 20):.4f}:attack=1:release=80:level=false:latency=1,"
+            "aresample=48000")
 
 
 def main():
@@ -370,6 +692,8 @@ def main():
     ap.add_argument("--bez-hudby")
     ap.add_argument("--ticho", action="append", default=[], help="úsek od-do (s), kde nesmí znít žádný efekt")
     ap.add_argument("--automatika", action="append", default=[], help="OD-DO:DB[:DOLU_MS[:NAHORU_MS]] ztlumení hudby v mixu")
+    ap.add_argument("--limiter", type=float, help="strop mixu v dBFS (např. -1.5): místo lineárního ztlumení celého mixu jemný "
+                    "limiter jen na špičkách, kde se efekt sečte s úderem hudby (hudba s malou rezervou, V002)")
     a = ap.parse_args()
     udalosti = sorted(json.loads(Path(a.udalosti).read_text()), key=lambda u: u["cas"])
     n = int(round(a.delka * SR))
@@ -438,10 +762,23 @@ def main():
         souhrn["spicka_mixu_dbfs"] = round(20 * np.log10(spicka + 1e-12), 1)
         rezerva = 10 ** (-1.5 / 20)                                       # jako hudba.py: špička vzorku ≤ −1,5 dBFS, true peak pak ≤ 0
         souhrn["zisk_mixu_db"] = round(min(0.0, 20 * np.log10(rezerva / spicka)), 2)   # hlasitost pak dorovná master_zvuk.sh
-        if spicka > rezerva:
+        af = None
+        if a.limiter is not None:                                        # celý mix zůstane hlasitý, ubere se jen na špičkách
+            souhrn["zisk_mixu_db"], af = 0.0, limiter_af(a.limiter)
+        elif spicka > rezerva:
             mix *= rezerva / spicka
         if a.mix:
-            zapis_wav(a.mix, mix)
+            zapis_wav(a.mix, mix, af)
+            if af:
+                _, lim = wavfile.read(a.mix)
+                lim = lim.T.astype(float) / 2 ** 31
+                m = int(0.005 * SR)
+                e0, e1 = (np.sqrt(np.convolve(np.sum(y, axis=0) ** 2, np.ones(m) / m, mode="same")) for y in (mix, lim))
+                gr = 20 * np.log10((e1 + 1e-9) / (e0 + 1e-9))
+                gr[e0 < 1e-3] = 0
+                souhrn["limiter"] = dict(strop_dbfs=a.limiter, max_ztlumeni_db=round(float(-gr.min()), 2),
+                                         ms_nad_1db=round(float((gr < -1).sum() / SR * 1000), 1),
+                                         spicka_po_dbfs=round(float(20 * np.log10(np.max(np.abs(lim)) + 1e-12)), 2))
         if a.bez_hudby:
             zapis_wav(a.bez_hudby, sfx)
     for u in udalosti:

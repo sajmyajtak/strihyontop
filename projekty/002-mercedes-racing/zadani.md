@@ -273,6 +273,12 @@ Nové a posunuté SFX pro zvukaře: ting hvězdy 0,469; průlety ramen 18,83 (d�
 Beze změny (podle oponentury): spojovací prvek a koncept, LIGHTS OUT na 3,75 s nádechem, nádech před drop 2, revolver +120°, tiker BUILT · TO · RACE,
 vracečka s jiskrami, mapa se sektorovými branami a morfem do kruhu, klidný zlom s odleskem 15,95, rým odlesku, zacvaknutí 26,25, glitch jen na řazení, pravidla značky, pořadí stavby.
 
+**Zvuk v1 (zvukař, 2026-10-31)**: 61 SFX podle S2 ze `projekty/002-mercedes-racing/sfx_udalosti.json` (zdroj, v gitu) → `media/…/zvuk/sfx.wav|json`, `zvuk_v1.wav`, `zvuk_bez_hudby_v1.wav`.
+Příkaz: `python3 -I nastroje/sfx.py --udalosti projekty/002-mercedes-racing/sfx_udalosti.json --delka 30 --out media/projekty/002-mercedes-racing/zvuk/sfx.wav --hudba media/projekty/002-mercedes-racing/hudba.wav --mix …/zvuk_v1.wav --bez-hudby …/zvuk_bez_hudby_v1.wav --automatika 3.52-3.72:-9:150:30 --automatika 18.40-18.72:-10:150:30 --ticho 16.70-17.35 --limiter -1.5`.
+Rozhodnutí zvukaře: (1) automatika končí návratem **v 3,75 / 18,75** (plné ztlumení 3,52–3,72 a 18,40–18,72, doběh 30 ms), aby náběh úderu dropu nebyl ztlumený;
+(2) T14 panorama podle obrazu (24,61 střed = horní rameno, 25,08 vpravo, 25,55 vlevo), ne „P, L, střed“ ze sloupce SFX; (3) startovní lampy panorama zleva doprava podle pozice pouzder;
+(4) mix přes sběrnicový limiter −1,5 dBFS (hudba má rezervu jen 12,5 dB, efekty na úderech by jinak vynutily lineární −2 dB a master by skončil −14,7 LUFS / −1,0 dBTP).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|

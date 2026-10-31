@@ -90,6 +90,8 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
   nad 2 kHz skoro nic). Vyrovnat je v projektu, který je poprvé použije. Změní se tím jejich zvuk, proto ne naslepo. Drzá a pohodová jsou v pořádku.
   Navíc (C026): vazna, drza, luxusni a pohodova se normalizují dynamickým loudnorm, který zploští kontrast dropu. Při dalším použití přepnout
   na lineární zisk + limiter jako `sportovni` a poslat uživateli poslechovou ukázku. `sportovni` (V002) je už v pořádku.
+- Spektrogram z `ffmpeg showspectrumpic` s logaritmickou osou kreslí vodorovnou čáru kolem 1,44 kHz. Je to chyba vykreslení, ne díra ve zvuku
+  (ověřeno Welchovou metodou, V002). Díry v pásmu posuzovat podle `oktavy_db`, ne podle obrázku.
 - Prostředí: 4 CPU, bez GPU. Render 1080×1920 krátkých videí je v pohodě, dlouhé 3D scény budou pomalé.
 - `render_html.cjs`: ~8 s výpočtu na 1 s videa 1080×1920 při 30 fps a 3 podsnímcích (15s video ≈ 2 min). Při 60 fps nebo `--sub 6` počítat 2× déle.
 - prompt-motion.com: data jsou ve stránce (Next.js RSC payload), stahuje se bez přihlášení. robots.txt: `use=reference`, `ai-train=no`, `/api/` zakázáno.

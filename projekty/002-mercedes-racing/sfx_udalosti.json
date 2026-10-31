@@ -1,0 +1,77 @@
+[
+ {"cas": 0.469, "typ": "rele", "lu": -6, "pan": -0.33, "ton": 1.0, "seed": 7, "popis": "T1 lampa 1 (klonk relé)", "drive": 3, "strop": -10},
+ {"cas": 0.469, "typ": "ting", "lu": -11, "pan": 0.0, "ton": 1.1, "popis": "T1 odlesk přejede hvězdu na nose (pod klonkem)", "strop": -10},
+ {"cas": 0.938, "typ": "rele", "lu": -6, "pan": -0.17, "ton": 1.02, "seed": 7, "popis": "T1 lampa 2", "drive": 3, "strop": -10},
+ {"cas": 1.406, "typ": "rele", "lu": -6, "pan": 0.0, "ton": 1.04, "seed": 7, "popis": "T1 lampa 3", "drive": 3, "strop": -10},
+
+ {"cas": 1.875, "typ": "rele", "lu": -6, "pan": 0.17, "ton": 1.06, "seed": 7, "popis": "T2 lampa 4", "drive": 3, "strop": -10},
+ {"cas": 2.344, "typ": "rele", "lu": -6, "pan": 0.33, "ton": 1.08, "seed": 7, "popis": "T2 lampa 5, všech 5 svítí", "drive": 3, "strop": -10},
+
+ {"cas": 3.75, "typ": "odpal", "lu": -1, "drive": 10, "strop": -6, "popis": "DROP 1 LIGHTS OUT: prásk + řev motoru (klíčový, 0 až −2 LU)"},
+ {"cas": 4.15, "typ": "prulet", "lu": -6, "popis": "T3 průlet prstencem hvězdy vššš", "strop": -10},
+ {"cas": 4.7, "typ": "doppler_tichy", "lu": -12, "pan": 0.3, "pan_do": -0.3, "popis": "T3 projetí mezi soupeři (doppler, tiše)", "strop": -10},
+ {"cas": 5.156, "typ": "pneu", "lu": -10, "pan": 0.3, "popis": "T3 cvrknutí pneu, švih doprava do stopy", "strop": -10},
+
+ {"cas": 5.7, "typ": "svih_rotace", "lu": -7, "pan": -0.3, "pan_do": 0.3, "pan_tau": 0.05, "popis": "T4 švih −90° vuš", "drive": 3, "strop": -10},
+ {"cas": 5.75, "typ": "kov_uder", "lu": -8, "popis": "T4 dopad CHASE THE LINE (tupý kovový úder)", "drive": 5, "strop": -10},
+ {"cas": 6.094, "typ": "cink_el", "lu": -13, "pan": 0.2, "popis": "T4 světelný impuls po linii 1 (tiše)", "strop": -10},
+ {"cas": 6.5625, "typ": "cink_el", "lu": -11, "pan": -0.2, "ton": 1.12, "popis": "T4 impuls 2, silnější", "strop": -10},
+ {"cas": 7.1, "typ": "prujezd_gt", "lu": -5, "pan": 0.8, "pan_do": -0.8, "pan_tau": 0.12, "popis": "T4 průjezd GT zprava doleva (řev + doppler)", "drive": 3, "strop": -10},
+
+ {"cas": 7.5, "typ": "fup", "lu": -12, "pan": 0.6, "pan_do": -0.6, "pan_tau": 0.03, "popis": "T5 tmavý sloup prosviští (wipe)", "strop": -10},
+ {"cas": 8.0, "typ": "doppler_tichy", "lu": -11, "pan": 0.6, "pan_do": 0.2, "ton": 0.92, "popis": "T5 soupeř se přisaje zprava", "strop": -10},
+ {"cas": 8.4375, "typ": "fup", "lu": -12, "pan": 0.6, "pan_do": -0.6, "pan_tau": 0.03, "ton": 0.9, "popis": "T5 druhý sloup", "strop": -10},
+ {"cas": 8.95, "typ": "svih", "lu": -8, "pan": 0.5, "pan_do": -0.5, "pan_tau": 0.04, "popis": "T5 švih doleva před vůz", "drive": 3, "strop": -10},
+
+ {"cas": 9.375, "typ": "kov_uder_suchy", "lu": -7, "ton": 1.0, "popis": "T6 BUILT", "drive": 5, "strop": -10},
+ {"cas": 9.844, "typ": "kov_uder_suchy", "lu": -7, "ton": 1.06, "popis": "T6 TO", "drive": 5, "strop": -10},
+ {"cas": 10.3125, "typ": "kov_uder_suchy", "lu": -6, "ton": 0.94, "popis": "T6 RACE", "drive": 5, "strop": -10},
+ {"cas": 11.2, "typ": "nasati", "lu": -7, "popis": "T6 nasátí do písmene A (crescendo, vrchol na konci)", "strop": -10},
+
+ {"cas": 11.4, "typ": "brzdy", "lu": -11, "popis": "T7 kvílení brzd", "strop": -10},
+ {"cas": 11.72, "typ": "jiskry", "lu": -6, "popis": "T7 apex: škrtnutí + praskání jisker", "drive": 5, "strop": -10},
+ {"cas": 12.2, "typ": "zatah", "lu": -12, "popis": "T7 zátah motoru (pod hudbou)", "strop": -10},
+ {"cas": 12.7, "typ": "vzum", "lu": -8, "popis": "T7 vžum odjezdu dolů z obrazu", "strop": -10},
+
+ {"cas": 13.594, "typ": "tik", "lu": -12, "pan": -0.4, "popis": "T8 sektorová brána 1", "strop": -10},
+ {"cas": 14.0625, "typ": "tik", "lu": -12, "pan": 0.4, "ton": 1.06, "popis": "T8 brána 2", "strop": -10},
+ {"cas": 14.531, "typ": "tik", "lu": -12, "pan": 0.0, "ton": 1.12, "popis": "T8 brána 3", "strop": -10},
+ {"cas": 15.0, "typ": "ting", "lu": -6, "ton": 0.8, "popis": "T8→T9 uzavření kruhu (s činelem H)", "strop": -10},
+ {"cas": 15.95, "typ": "vzduch", "lu": -12, "pan": -0.6, "pan_do": 0.6, "pan_tau": 0.3, "popis": "T9 zlom: tichý vzduch zpomaleného průjezdu, nic dalšího", "strop": -10},
+
+ {"cas": 17.475, "typ": "radeni", "lu": -8, "popis": "T10 řazení 1 + digitální zap (glitch)", "drive": 4, "strop": -10},
+ {"cas": 18.125, "typ": "radeni", "lu": -6, "ton": 1.06, "popis": "T10 řazení 2, silnější glitch", "drive": 4, "strop": -10},
+ {"cas": 18.74, "typ": "nasati_dlouhe", "lu": -8, "popis": "T10 nasátí vzduchu do bodu (v nádechu −10 dB)", "strop": -10},
+
+ {"cas": 18.75, "typ": "svetelny_uder", "lu": -1.5, "drive": 10, "strop": -6, "popis": "DROP 2 hvězda ze světla: elektrický třesk + hluboký dopad (klíčový, 0 až −2 LU)"},
+ {"cas": 18.83, "typ": "vzum", "lu": -12, "pan": 0.0, "popis": "T11 průlet ramenem nahoru", "strop": -10},
+ {"cas": 18.83, "typ": "vzum", "lu": -12, "pan": 0.0, "pan_do": 0.7, "ton": 1.06, "seed": 1883, "popis": "T11 průlet ramenem vpravo dolů", "strop": -10},
+ {"cas": 18.83, "typ": "vzum", "lu": -12, "pan": 0.0, "pan_do": -0.7, "ton": 0.94, "seed": 1884, "popis": "T11 průlet ramenem vlevo dolů", "strop": -10},
+ {"cas": 18.99, "typ": "sssink", "lu": -5, "popis": "T11 běh světla po ramenech a prstenci (stab 18,984)", "drive": 4, "strop": -10},
+ {"cas": 19.3, "typ": "vuff", "lu": -7, "popis": "T11 vlna modrého zaplavení", "strop": -10},
+ {"cas": 19.453, "typ": "klap_kov", "lu": -6, "popis": "T11 odkrytí výsečí (stab)", "drive": 6, "strop": -10},
+ {"cas": 19.922, "typ": "skrt", "lu": -11, "popis": "T11 škrtnutí na apexu ve 3 pohledech (tiše)", "strop": -10},
+
+ {"cas": 20.7, "typ": "svih_rotace", "lu": -6, "pan": -0.5, "pan_do": 0.5, "pan_tau": 0.06, "popis": "T12 švih revolveru +120°", "drive": 3, "strop": -10},
+ {"cas": 20.86, "typ": "jiskry", "lu": -6, "popis": "T12 jiskry ze 3 úhlů (stab 20,859)", "drive": 5, "strop": -10},
+ {"cas": 21.33, "typ": "jiskry", "lu": -9, "ton": 1.08, "popis": "T12 druhá menší sprška (tišší)", "drive": 5, "strop": -10},
+ {"cas": 21.5625, "typ": "glitch", "lu": -11, "popis": "T12 glitch akcent přes obraz (tiše)", "strop": -10},
+ {"cas": 22.27, "typ": "doppler_dvojity", "lu": -8, "pan": -0.4, "pan_do": 0.4, "pan_tau": 0.1, "popis": "T12 příjezd dvou soupeřů", "strop": -10},
+
+ {"cas": 22.734, "typ": "pneu_svist", "lu": -12, "pan": -0.4, "popis": "T13 výměna pruhů 1", "strop": -10},
+ {"cas": 23.203, "typ": "pneu_svist", "lu": -12, "pan": 0.4, "ton": 1.05, "popis": "T13 výměna pruhů 2", "strop": -10},
+ {"cas": 23.44, "typ": "fump", "lu": -8, "popis": "T13 průlet světelným portálem", "strop": -10},
+ {"cas": 23.672, "typ": "pneu_svist", "lu": -12, "pan": -0.4, "ton": 0.97, "popis": "T13 výměna pruhů 3", "strop": -10},
+ {"cas": 24.141, "typ": "pneu_svist", "lu": -12, "pan": 0.4, "ton": 1.03, "popis": "T13 výměna pruhů 4", "strop": -10},
+
+ {"cas": 24.61, "typ": "vzum_trisk", "lu": -6, "pan": 0.0, "popis": "T14 vyletění vozu horním ramenem + záblesk", "drive": 6, "strop": -10},
+ {"cas": 25.08, "typ": "vzum_trisk", "lu": -6, "pan": 0.5, "ton": 1.05, "popis": "T14 vyletění pravým ramenem", "drive": 6, "strop": -10},
+ {"cas": 25.55, "typ": "vzum_trisk", "lu": -6, "pan": -0.5, "ton": 1.1, "popis": "T14 vyletění levým ramenem", "drive": 6, "strop": -10},
+ {"cas": 26.24, "typ": "nasati", "lu": -5, "popis": "T14 smrštění ve víru: sání 25,79 → 26,24", "strop": -10},
+
+ {"cas": 26.25, "typ": "dopad_logo", "lu": -2, "drive": 8, "strop": -6, "popis": "END CARD zacvaknutí loga: měkký kovový dopad + cink (klíčový, 0 až −3 LU)"},
+ {"cas": 26.45, "typ": "vzum", "lu": -7, "ton": 0.85, "pan": -0.7, "pan_do": 0.7, "pan_tau": 0.1, "popis": "T15 průjezd pod logem zleva doprava (odjezd)", "strop": -10},
+
+ {"cas": 28.2, "typ": "ting", "lu": -8, "ton": 1.15, "popis": "T16 odlesk po logu (tiše)", "strop": -10},
+ {"cas": 29.36, "typ": "prujezd_daleko", "lu": -14, "pan": -0.5, "pan_do": 0.5, "pan_tau": 0.3, "popis": "T16 vzdálený průjezd bokehu za logem (hodně tiše)", "strop": -10}
+]
