@@ -30,7 +30,9 @@ for pokus in 1 2 3 4; do
     CIL_I=$NOVY
   else
     CIL_I=$I
-    LIMITER=",aresample=192000,alimiter=limit=$(python3 -c "print(round(10 ** ((float('$TP') - 1.2) / 20), 4))"):attack=5:release=300:level=false:latency=1"
+    # Dolní propust 19 kHz: ostré transienty nad ~19 kHz kodér AAC ořízne a vznikne překmit +2–3 dB nad naměřený true peak,
+    # smyčka s limiterem pak nezkonverguje (C030, SFX bez hudby).
+    LIMITER=",lowpass=f=19000:p=2,lowpass=f=19000:p=2,aresample=192000,alimiter=limit=$(python3 -c "print(round(10 ** ((float('$TP') - 1.2) / 20), 4))"):attack=5:release=300:level=false:latency=1"
   fi
 done
 

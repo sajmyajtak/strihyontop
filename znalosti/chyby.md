@@ -13,6 +13,14 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C030: Verze bez hudby (jen SFX) nešla namasterovat, smyčka s limiterem nezkonvergovala (2026-10-31, V002, našel střihač, opravil režisér)
+- Příznak: `master_zvuk.sh` na samotných SFX (−24 LUFS, velký poměr špičky a hlasitosti) skončil ve všech 4 pokusech na +0,1 až +0,6 dBTP.
+- Příčina: ostré transienty (švihy, kovové údery) mají energii nad 19 kHz, kodér AAC ji ořízne a vznikne překmit +2–3 dB nad true peak změřený ve WAV.
+  Limiter to před kódováním nevidí.
+- Oprava: ve větvi limiteru `master_zvuk.sh` dolní propust 19 kHz (2× 2 póly) před limiterem. Ověřeno na stejném souboru: 2. pokus −15,0 LUFS / −1,8 dBTP.
+  Hlavní mix s hudbou jde cestou bez limiteru, ta se nemění.
+- Prevence: komentář ve skriptu. Syntetické SFX zbytečně nad 18 kHz netlačit (zvukař).
+
 ### C029: `kontrola.sh` nedělal pásy snímků u dropů a švihů (2026-10-31, V002, našel animátor, opravil režisér)
 - Příznak: u videa s 10 skoky (dropy, švihy, tiker) nevznikl žádný pás snímků, animátor je musel vyřezávat ručně.
 - Příčina: pásy se dělaly jen z `podezrele.txt`, kam `skoky.py` zapisuje jen dvousnímková probliknutí.
