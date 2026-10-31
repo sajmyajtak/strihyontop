@@ -19,6 +19,9 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **A4** Délka podle obsahu: logo/showreel smyčka **8–15 s**, příběh/reklama **25–40 s**, vzdělávací/návod **45–75 s**. `[R1–R5]`
 - **A5** Bezpečné zóny 9:16: důležitý text ne do horních ~250 px, spodních ~400 px ani k pravému okraji ~120 px. `[obecné]`
 - **A6** 4:3 (1080×810) jde použít pro „čistou“ designovou ukázku. R3 v něm měla nejvíc dosahu, ale výchozí zůstává 9:16. `[R3]`
+- **A8** **Hrdina musí být na telefonu velký**: hlavní objekt zabírá zhruba ≥ 75 % šířky obrazu nebo ≥ 45 % výšky v klíčových momentech
+  a obraz je svisle vyvážený, bez prázdné poloviny (spodních ~400 px pro UI se nepočítá). Drobné změny (mezera 2 px, posun 4 px) na telefonu
+  nikdo nevidí: stupňování musí být vidět na zmenšenině 270 px. `[V001 kontrola 1]`
 - **A7** Předlohu 16:9 nebo 1:1 pro 9:16 **přeskládat, ne oříznout**: řady pod sebe, kamera svisle, souřadnice přepočítat. 81 % katalogu prompt-motion je 16:9. `[PM]`
 
 ## B. Háček (první 1–3 s)
@@ -108,7 +111,9 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **I2** Hudba pod hlasem s **duckingem** (ztlumení jen během řeči). Cíl: hlas **≈ 9–12 dB nad hudbou v pásmu řeči 300 Hz–4 kHz**, kontrolovat po frázích.
   Paušálních 15–20 dB jen u husté, hlasité hudby. `[PM, obecné]`, ověřit na prvním videu s hlasem
 - **I3** SFX na každou **událost** v obraze (klik, dopad, pop, otevření, logo), ne na každý pohyb. Umístit tak, aby **změřený vrchol** zvuku padl na událost.
-  Pod hudbou tiše, jinak ticho. U prémiových značek jemné kliky a měkký dopad na logo, žádné hlasité whooshe všude. `[PM]`
+  Běžné efekty tiše pod hudbou. **Klíčové momenty (drop, pointa, gag, logo) musí být slyšet**: efekt na úrovni hudby nebo nad ní
+  (cca 0 až −3 LU v okně 100 ms) a hudba kolem nich ustoupí. **Nádech před dropem a „ticho jako pointa“ = hudba opravdu ztichne**
+  (ne jen řidší aranžmá). U prémiových značek jemné kliky a měkký dopad na logo, žádné hlasité whooshe všude. `[PM, V001 kontrola 1]`
 - **I4** Trendy zvuky z IG/TikTok knihovny se přidávají až v aplikaci při publikaci → dodat i verzi **bez hudby**. `[obecné]`
 - **I5** Hudba a SFX jen s **licencí pro komerční použití**, zdroje zapsat do zadání. Hudba z `nastroje/hudba.py` je naše vlastní (syntéza v kódu). `[PM]`
 - **I6** Ke každému videu **vlastní hudba podle tónu** (vážný / drzý / luxusní …), nálada a BPM do režijního listu. Animace se řídí `hudba.json`
