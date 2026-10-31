@@ -35,6 +35,7 @@ limit délky výstupu a desítky minut ticha. Ticho > 15 min → zkontrolovat po
    Materiály: podsložka projektu na Drive v „Střižna – materiály pro portfolio / 01 Projekty“ (postup v `znalosti/znacka.md`) →
    `nastroje/drive.sh` → `nastroje/materialy.py` → prohlédnout `_prehled.jpg` a varování (HDR, různé fps, otočení).
    Když chybí něco, bez čeho video nejde (materiál, text, logo), zeptat se hned a jednou souhrnně. Ostatní rozhodnout sám a zapsat proč.
+   **Web značky, který blokuje automatický přístup (403), se nikdy neobchází** (C024): oznámit uživateli, požádat o screenshot nebo soubory na Drive.
 2. **Režijní list** (do `zadani.md`): koncept jednou větou, prompt nebo šablona z prompt-motion (vyberu sám, nebo ten od uživatele),
    použitá pravidla, storyboard po dobách nebo větách, akceptační kritéria pro kritika.
 3. **Delegace**: animátor / střihač dostanou přesný úkol (co přečíst, kam uložit, kritéria). Nezávislé části běží paralelně.

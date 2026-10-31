@@ -13,6 +13,14 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C024: Prompt pro analytika obsahoval obcházení ochrany webu (2026-10-31, V002, zastavila bezpečnostní pravidla)
+- Příznak: spuštění workflow zamítnuto („Bot Check Circumvention“). V úkolu stálo „kdyby web blokoval přístup, zkus jiný User-Agent“.
+- Příčina: web mercedes-benz.cz vrací automatickým požadavkům 403 (ochrana proti robotům) a já jsem to navrhl obejít.
+- Oprava: pokyn odstraněn. Weby, které blokují automatický přístup, se nenačítají ani neobcházejí. Logo z veřejného oficiálního zdroje
+  (Wikimedia Commons), paleta předběžně a k ověření se požádá uživatel (screenshot / soubory na Drive).
+- Prevence: **nikdy neobcházet ochranu webů** (User-Agent, headless prohlížeč na blokovanou stránku…). Při 403 to oznámit uživateli
+  a požádat o podklady. Zapsáno v CLAUDE.md (Příjem).
+
 ### C023: master_zvuk.sh pustil true peak −0,96 dBTP (2026-10-31, V001, našel střihač)
 - Příznak: s cílem ≤ −1 dBTP skončil mix na −0,96 dBTP a skript ho přijal.
 - Příčina: tolerance +0,05 dB v podmínce ukončení.

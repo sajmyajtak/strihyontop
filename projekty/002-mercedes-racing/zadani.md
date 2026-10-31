@@ -39,6 +39,11 @@
   4. **Food craving launch film** ([`ultimaxbt-2ddf1e`](https://prompt-motion.com/ultimaxbt-2ddf1e)): souvislý záběr, **přechody zaplavením
      barvou z objektu**, zvuk na každou událost, 8 podsnímků u rychlých pohybů.
 
+- **Web Mercedesu blokuje automatický přístup (403)** na mercedes-benz.cz, .com, group i amg. Obcházet ochranu nebudeme (pokus o to
+  zastavila bezpečnostní pravidla prostředí a je to správně). Proto: **logo z Wikimedia Commons** (oficiální hvězda) a **předběžná paleta**
+  (černá, bílá, stříbrná, modrý akcent #0078D6) jako CSS proměnné. Uživatel byl požádán o screenshot webu, podle něj se paleta ověří a případně
+  vymění před finálním renderem. Texty jen obecné nebo vlastní claimy reklamy, žádná fakta (C8).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709
 2. −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
