@@ -75,7 +75,11 @@ if (!fs.existsSync(html) || !(DUR > 0)) {
     const vf = SUB > 1 ? `tmix=frames=${SUB},select='eq(mod(n\\,${SUB})\\,${SUB - 1})',setpts=N/(${FPS}*TB)` : 'null';
     const ff = ['-v', 'error', '-y', '-f', 'image2pipe', '-c:v', 'png', '-framerate', String(FPS * SUB), '-i', '-'];
     if (audio) ff.push('-i', path.resolve(audio));
-    ff.push('-vf', vf, '-r', String(FPS), '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-movflags', '+faststart');
+    // Barvy: převod RGB → YUV výslovně maticí BT.709 (omezený rozsah) a stejné tagy do streamu, aby přehrávače a sítě
+    // nehádaly matici a neposunuly odstín (nález kritika V001: color_* = unknown).
+    const vfBarvy = `${vf},scale=out_color_matrix=bt709:out_range=tv,format=yuv420p`;
+    ff.push('-vf', vfBarvy, '-r', String(FPS), '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p',
+      '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv', '-movflags', '+faststart');
     if (audio) ff.push('-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-shortest');
     ff.push(out);
     const enc = spawn('ffmpeg', ff, { stdio: ['pipe', 'inherit', 'inherit'] });
