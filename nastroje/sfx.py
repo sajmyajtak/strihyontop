@@ -6,7 +6,7 @@ Použití:
 udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…"}, …]
   cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
-  pan −1 … 1, volitelně "ton" (násobek výšky) a "seed" (stejný seed = stejný zvuk)
+  pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6)
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
@@ -265,9 +265,13 @@ def vrchol(x, od=0, do=None):
 
 
 # ---------- skládání stopy ----------
+SUMOVE = {"klouznuti", "posunuti", "sustnuti", "sustnuti_tiche", "sss", "sk", "tsk", "zip", "trhnuti"}   # plochý šumový vrchol
+
+
 def akcent(x, rng, sila=1.2):
     """Krátký dotek (2 ms šumu 1–6 kHz) přesně ve vrcholu. Šumové zvuky (klouznutí, šustnutí) mají plochý vrchol a obálka
-    RMS 2 ms ho pak najde kdekoli v rozmezí ±15 ms. S dotekem padne vrchol na stejné místo při každém způsobu měření."""
+    RMS 2 ms ho pak najde kdekoli v rozmezí ±15 ms. S dotekem padne vrchol na stejné místo při každém způsobu měření.
+    Tónové a měkké zvuky (tup, bum, glp) ho nedostanou: cvakl by v nich a zvedl špičku."""
     p = vrchol(x)
     m = int(0.002 * SR)
     if p - m < 0 or p + m > len(x):
@@ -295,7 +299,9 @@ def stopa(udalosti, delka, hk=None):
     samotne = []
     for u in udalosti:
         rng = np.random.default_rng(u.get("seed", int(u["cas"] * 1000)))
-        x = akcent(horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60), rng)
+        x = horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60)
+        if u["typ"] in SUMOVE:
+            x = akcent(x, rng)
         x = x / (np.max(np.abs(x)) + 1e-12)
         i = int(round(u["cas"] * SR)) - vrchol(x)
         if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
@@ -306,7 +312,7 @@ def stopa(udalosti, delka, hk=None):
         st[:, i:i + k] = np.stack([x[:k] * np.cos(uhel), x[:k] * np.sin(uhel)]) * np.sqrt(2)
         if "lu" in u and hk is not None:
             zisk = 10 ** ((hlasitost(hk, u["cas"], OKNO_CIL) + u["lu"] - hlasitost(k_vazeni(st), u["cas"], OKNO_CIL)) / 20)
-            zisk = min(zisk, 10 ** (MAX_SPICKA / 20) / np.max(np.abs(st)))
+            zisk = min(zisk, 10 ** (u.get("strop", MAX_SPICKA) / 20) / np.max(np.abs(st)))
             u["uroven"] = round(20 * np.log10(zisk * np.max(np.abs(x))), 1)
         else:
             zisk = 10 ** (u["uroven"] / 20)
@@ -391,8 +397,10 @@ def main():
         mix = hudba + sfx
         spicka = np.max(np.abs(mix))
         souhrn["spicka_mixu_dbfs"] = round(20 * np.log10(spicka + 1e-12), 1)
-        if spicka > 0.99:                                                # nesmí se ořezat, hlasitost dorovná master_zvuk.sh
-            mix *= 0.99 / spicka
+        rezerva = 10 ** (-1.5 / 20)                                       # jako hudba.py: špička vzorku ≤ −1,5 dBFS, true peak pak ≤ 0
+        souhrn["zisk_mixu_db"] = round(min(0.0, 20 * np.log10(rezerva / spicka)), 2)   # hlasitost pak dorovná master_zvuk.sh
+        if spicka > rezerva:
+            mix *= rezerva / spicka
         if a.mix:
             zapis_wav(a.mix, mix)
         if a.bez_hudby:
