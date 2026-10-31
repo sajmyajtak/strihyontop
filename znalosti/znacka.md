@@ -5,14 +5,15 @@ Výchozí hodnoty pro každé video. Konkrétní zadání je vždy přebíjí.
 | | |
 |---|---|
 | Jazyk videí | **angličtina** (texty na obrazovce, titulky, CTA) |
-| Voiceover | **zatím žádný.** Později hlas přes **ElevenLabs** (API klíč v prostředí jako `ELEVENLABS_API_KEY`, zatím nenastaveno) |
+| Voiceover | **zatím žádný** (hudba ano). Později hlas přes **ElevenLabs** (API klíč v prostředí jako `ELEVENLABS_API_KEY`, zatím nenastaveno) |
 | Hudba | **vytvářet ke každému videu podle tónu** (vážný / drzý / luxusní …): „fakt dobrou hudbu do pozadí“. Nástroj `nastroje/hudba.py`; až bude ElevenLabs, zvážit Eleven Music |
 | Barvy | **podle typu videa**, uživatel je pošle v zadání |
 | Fonty | podle zadání. Jinak výrazné bezpatkové z Google Fonts (ověřeno: Anton, Inter) |
 | Tón | podle zadání (vážný / drzý / luxusní …) |
 | CTA na konci | **podle zadání** |
 | Materiály | **Google Drive** (viz níže) |
-| Platformy | IG Reels / TikTok / Shorts, 9:16 (pokud zadání neříká jinak) |
+| Formát a délka | **16:9, 1920×1080, 60 fps, 25–35 s** podle zvoleného motionu (rozhodnutí 2026-10-31). Vždy **jedno video naráz** |
+| Styl | **energický, rychlý, živý, hodně efektů** (zpětná vazba V001: „ať to není bez duše“) |
 | Logo, podpis na end card | ? (zatím nedodáno) |
 | Zakázané nástroje | **Higgsfield nepoužívat** (rozhodnutí uživatele 2026-10-30) |
 

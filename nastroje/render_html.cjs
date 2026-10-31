@@ -2,7 +2,7 @@
 // Stránka musí mít window.seek(t): nastaví celý obraz pro čas t v sekundách, bez CSS animací a časovačů.
 //
 // Použití:
-//   node nastroje/render_html.cjs --html scena.html --out video.mp4 --dur 15 [--w 1080 --h 1920 --fps 30]
+//   node nastroje/render_html.cjs --html scena.html --out video.mp4 --dur 30 [--w 1920 --h 1080 --fps 60]   (výchozí 16:9, 9:16 = --w 1080 --h 1920)
 //        [--sub 4]            podsnímky na snímek, zprůměrované = rozmazání pohybem (1 = vypnuto, rychlé přechody 8)
 //        [--zaverka 0.5]      jakou část snímku podsnímky pokryjí (0.5 = filmová závěrka 180°), vystředěno na čas snímku
 //        [--audio hudba.wav]  přimíchat zvuk
@@ -24,7 +24,7 @@ const flag = (name) => args.includes('--' + name);
 
 const html = path.resolve(opt('html'));
 const out = path.resolve(opt('out', 'video.mp4'));
-const W = +opt('w', 1080), H = +opt('h', 1920), FPS = +opt('fps', 30);
+const W = +opt('w', 1920), H = +opt('h', 1080), FPS = +opt('fps', 60);
 const DUR = +opt('dur');
 const SUB = Math.max(1, +opt('sub', 4));
 const ZAVERKA = Math.min(1, Math.max(0, +opt('zaverka', 0.5)));

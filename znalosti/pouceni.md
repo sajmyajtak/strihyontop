@@ -25,7 +25,11 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 - **Pro příště**: (1) vztahovat výtky „neviditelné na telefonu“ k zmenšenině 270 px už v klíčových snímcích; (2) přechody textu stavět vždy přísně
   po sobě (nikdy dvě vrstvy textu v jednom snímku), to je teď v pokynu V001 a patří to do pravidel D/E po zpětné vazbě; (3) u spec reklam
   v popisku neoznačovat značku @handle.
-- Zpětná vazba uživatele: (doplnit)
+- **Zpětná vazba uživatele**: „není to špatný ale není to ono… víc energetické, ať to není tak bez duši… rychlejší, živější, víc efektů.“
+- **Hlavní poučení**: kritici dali 8,1, a přesto to uživatele nenadchlo. **Laťku jsme kalibrovali na střídmost (prompt-motion: žádná záře,
+  žádné efekty, jeden švih za video), ale uživatel chce energii.** Zapsáno do pravidel (C7, D2, G2, G6, vkus uživatele nahoře v pravidlech).
+  Kreativní ředitel a kritici teď hodnotí energii a živost jako hlavní kritérium.
+- Nová výchozí nastavení: 16:9, 25–35 s, jedno video naráz, hudba bez voiceoveru.
 
 ### 2026-10-30: V001 porota konceptů (první workflow s více agenty)
 - Uživatel: **na každý úkol vlastní agent, ostatní agenti se ptají hlavního, video má být „wow“**. Zavedeny role zvukař a kreativní ředitel,

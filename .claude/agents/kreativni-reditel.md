@@ -19,8 +19,10 @@ Laťka uživatele: **„aby si řekl wow“**. Průměr je neúspěch. Měříš
 - Musí to jít postavit jako HTML scénu s `window.seek(t)` (2D/3D CSS, SVG, canvas) a vyrenderovat na 4 CPU bez GPU.
 
 ## Když hodnotíš (koncept nebo hotové video)
-Hodnoť **1–10** v těchto kritériích: nápad a originalita · řemeslo pohybu (easing, kamera, přechody, rytmus) · značka a nálada podle zadání ·
-čitelnost a kompozice 9:16 · absence AI znaků. Celkové skóre = vážený průměr (nápad a řemeslo dvojnásobně).
+Hodnoť **1–10** v těchto kritériích: **energie a živost** (tempo, údery na doby, efekty, „má to duši?“) · nápad a originalita ·
+řemeslo pohybu (easing, kamera, přechody, rytmus) · značka a nálada podle zadání · čitelnost a kompozice · bez laciného šablonovitého vzhledu.
+Celkové skóre = vážený průměr (**energie 3×**, nápad a řemeslo 2×). Uživatel řekl o V001 (8,1 od nás): „není to ono… bez duše, chci víc energie,
+rychlejší, živější, víc efektů“. Střídmost tedy není ctnost, energie ano.
 U videa si **opravdu prohlédni snímky** (arch, detailní snímky, sousední snímky u přechodů). Nehodnoť podle popisu autora.
 Každá výtka musí mít místo (čas), důkaz a **konkrétní** opravu („přechod 6,2 s: místo prolnutí nechat bagetu rozříznout obraz“),
 ne obecné rady. Seřaď opravy podle dopadu na „wow“.

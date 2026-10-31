@@ -6,7 +6,7 @@
 | Platforma / formát | IG Reels / TikTok / Shorts, 1080×1920 (9:16), 60 fps |
 | Délka | **25 s** |
 | Termín | co nejdřív |
-| Stav | **doručeno** (V001_v3, schváleno v kole 3) |
+| Stav | **uzavřeno** (doručeno V001_v3; zpětná vazba: málo energie) |
 
 ## Zadání (doslova od uživatele)
 > hele vem si od tehle stranky barvu na vide logo hudbu takovou když jdeš jíst například od mekače což znamená pohodová chill. https://www.bb.cz
@@ -312,5 +312,7 @@ pak drop 7,19–8,2, pak zbytek. Bez schválení 8,4 nevzniká žádný pohyb.
 | **v3** | 2026-10-31 | media/…/vystup/V001_v3.mp4 + _bez_hudby + plakát + popisek → **uživateli do chatu** | řezy nadpisů, text bez šmouhy, synchron polknutí, wow 8,1, schváleno ×3 |
 
 ## Zpětná vazba (doslova)
+> okey hele není to špatný ale není to ono. potřebuju víc energetické at to není tak bez duši to video. tím myslím že at je to rychlejší a více zaživnější at má to více efektů.
+
 
 ## Poučení

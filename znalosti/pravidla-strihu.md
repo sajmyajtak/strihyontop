@@ -4,6 +4,8 @@
 Po každé referenci a po každém hotovém videu se doplňuje nebo upravuje.
 
 **Priorita při konfliktu:** pravidla ze zadání konkrétního videa > `znacka.md` > tento dokument.
+**Vkus uživatele (V001, 2026-10-31):** „potřebuju víc energetické, ať to není tak bez duši… rychlejší a více živější, ať má víc efektů.“
+To má přednost před obecnými zdroji (prompt-motion, reference). Kreativní ředitel a kritici hodnotí **energii a živost** jako hlavní kritérium.
 Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i výchozí zákazy (např. šmouhy v D2, záři v G2). Výjimku zapsat do zadání.
 
 **Zdroje:** `[R1]`–`[R5]` = rozbory v `reference/`, `[PM]` = prompt-motion.com (`prompt-motion/poznatky.md`),
@@ -12,12 +14,13 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 ---
 
 ## A. Formát a technika
-- **A1** Výchozí formát 9:16, **1080×1920**. **Animace z kódu 60 fps**, natočený materiál v nativních fps (obvykle 30).
-  30 fps u animace jen tam, kde je pohyb pomalý a šetří se čas renderu. `[R1–R5, PM]`
+- **A1** Výchozí formát **16:9, 1920×1080** (rozhodnutí uživatele 2026-10-31; 9:16 jen když to zadání řekne). **Animace z kódu 60 fps**,
+  natočený materiál v nativních fps (obvykle 30). `[uživatel 2026-10-31, PM]`
 - **A2** Hlasitost **−14 LUFS integrated**, true peak ≤ −1 dBTP, **měřeno po zakódování do AAC** (`nastroje/master_zvuk.sh`). Všech 5 referencí mělo −14,1 až −14,3 LUFS. `[R1–R5, PM]`
 - **A3** Export H.264 (High), yuv420p, AAC 48 kHz, `+faststart`. `[obecné]`
-- **A4** Délka podle obsahu: logo/showreel smyčka **8–15 s**, příběh/reklama **25–40 s**, vzdělávací/návod **45–75 s**. `[R1–R5]`
-- **A5** Bezpečné zóny 9:16: důležitý text ne do horních ~250 px, spodních ~400 px ani k pravému okraji ~120 px. `[obecné]`
+- **A4** Délka **25–35 s** podle zvoleného motionu z prompt-motion (rozhodnutí uživatele 2026-10-31). Vždy **jedno video naráz**. `[uživatel 2026-10-31]`
+- **A5** Bezpečné zóny: **16:9** = důležitý text uvnitř 90 % obrazu (okraj 96 px vlevo/vpravo, 54 px nahoře/dole), spodních ~140 px
+  může zakrýt ovládání přehrávače. **9:16** = ne do horních ~250 px, spodních ~400 px ani k pravému okraji ~120 px. `[obecné]`
 - **A6** 4:3 (1080×810) jde použít pro „čistou“ designovou ukázku. R3 v něm měla nejvíc dosahu, ale výchozí zůstává 9:16. `[R3]`
 - **A8** **Hrdina musí být na telefonu velký**: hlavní objekt zabírá zhruba ≥ 75 % šířky obrazu nebo ≥ 45 % výšky v klíčových momentech
   a obraz je svisle vyvážený, bez prázdné poloviny (spodních ~400 px pro UI se nepočítá). Drobné změny (mezera 2 px, posun 4 px) na telefonu
@@ -47,15 +50,16 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **C5** Logo / showreel: krátká smyčka, ve videu zopakovaná 2–3×. `[R5]`
 - **C6** Konec = **end card** (logo, podpis, @jméno, CTA). Drží **1,5–3 s**, ve smyčce stačí 1–1,5 s, s jemným pohybem (dotlačení 2–4 %), nikdy zamrzlý obraz.
   Dlouhý podpis (~10 s, R3) jen u konceptů, kde end card nese text nebo manifest. `[R1, R3, R4, PM]`
-- **C7** Nová **myšlenka** každých ~1,5–2 s, drobná vizuální **událost** na každou dobu hudby. V emoční pointě tempo zpomalit (jediné záměrné ticho ~0,4 s).
-  Uvnitř videa žádné zastavení > 1 s bez textu ke čtení. `[R2, R3, PM]`
+- **C7** **Energie (vkus uživatele, V001)**: událost na **každou dobu**, nová myšlenka nebo scéna každých **~1–1,5 s**, aspoň jeden
+  „úder“ (impakt, švih, záblesk, změna měřítka) na takt. Tempo hudby u energických zadání 120–140 BPM. Zpomalení jen jako krátký
+  kontrast před dropem (max ~0,5 s). `[V001 zpětná vazba uživatele, R2, PM]`
 - **C8** **Fakta a čísla nevymýšlet** (procenta, jména zákazníků, výsledky). Čísla jen ověřená od uživatele, jinak zjevně ukázková. Texty značky citovat doslova. `[PM]`
 
 ## D. Střih, rytmus, přechody
 - **D1** **Hlas řídí střih**: každá vizuální změna sedí na slovo nebo přízvuk, bez hlasu na dobu hudby. `[R2, R4, PM]`
-- **D2** Přechody tak, že **další scéna vzniká z předchozí**: sdílený prvek (tlačítko se rozroste do stránky, tečka se změní v logo), morf tvaru,
-  zaplavení barvou z objektu (přes všechny 4 rohy, ~0,3 s), match cut, souvislá kamera, zoom skrz objekt.
-  **Whip a světelná šmouha nanejvýš 1× za video** jako akcent. Nikdy prolínačka celých scén, náhodný wipe, spin ani glitch. `[R1, R2, R3, PM]`
+- **D2** Přechody tak, že **další scéna vzniká z předchozí** (sdílený prvek, morf, zaplavení barvou, match cut, zoom skrz objekt),
+  a k tomu **energické přechody na doby**: švihy s rozmazáním, světelné šmouhy, záblesky na úder, rychlé zoomy. Smí být **víckrát za video**,
+  když sedí na rytmus (V001: střídmost působila „bez duše“). Nikdy líná prolínačka celých scén bez důvodu. `[R1, R2, R3, PM, V001]`
 - **D3** Tvrdé střihy jen tam, kde dávají rytmus: kroky návodu (~4 s na krok), výčty. `[R2]`
 - **D4** Krátké video stavět jako **smyčku**: poslední snímek navazuje na první včetně polohy a rychlosti prvků. `[R3, R5, PM]`
 - **D5** Rozmazání pohybem: (1) v kódu podle rychlosti a směru (svislý švih = svislá šmouha), (2) render s podsnímky **4 u běžného pohybu, 6–8 u rychlých přechodů**
@@ -92,13 +96,15 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   - černá + limetkově žlutá + růžová `[R2]`
   - téměř černá + červená `[R4]`
   - tmavě fialová + neonově růžová `[R5]`
-- **G2** Tmavé pozadí + jeden akcent působí prémiově. **Záře jen tam, kde je sama konceptem nebo zdrojem světla**: neonové logo / nápis (R5),
-  jeden zvýrazněný prvek nebo wordmark na end card. Nikdy na UI textu ani titulcích a nikdy jako dekorace všeho. Záře je nejčastější AI poznávací znak. `[R2, R4, R5, PM]`
+- **G2** Záře, světlo a lesk jsou **vítané, když nesou energii nebo značku** (světla aut, světelné stopy, lesk loga, odlesk na laku, akcentní barva).
+  Nesmí jen zakrývat slabý nápad. `[R2, R4, R5, PM, V001]`
 - **G3** Emoční momenty: teplé světlo, vinětace, zrnitost. `[R3]`
 - **G4** Jednotný UI systém: karty se zaoblenými rohy, jemné okraje, malé štítky, monospace popisky. `[R4]`
 - **G5** Barvy značky (`znacka.md`) mají přednost před paletami z referencí.
-- **G6** **AI poznávací znaky** (`prompt-motion/poznatky.md`, oddíl 4) jsou ve výchozím stavu **zakázané**: záře, výbuchy částic, odlesky, třes kamery,
-  RGB split, prolínačky scén, generické gradienty, skákavý easing, text v rozích, „cokoli, co vypadá jako šablona“. Výjimku musí zdůvodnit koncept a zapisuje se do zadání. `[PM]`
+- **G6** **Efekty ano, laciný šablonovitý vzhled ne.** Uživatel chce **víc efektů a energie** (V001): rychlostní čáry, světelné stopy, záblesky
+  a otřes kamery na údery, částice z dopadu, glitch jako akcent, chromatický posun na švihu jsou povolené, **když sedí na dobu a vycházejí
+  z děje**. Zakázané zůstává jen to, co nic nevyjadřuje: náhodné částice bez příčiny, generické gradienty, text v rozích, vzhled jako
+  z šablony (`prompt-motion/poznatky.md` oddíl 4 je seznam rizik, ne zákazů). Vkus uživatele má přednost před střídmostí z prompt-motion. `[V001, PM]`
 
 ## H. Formát „natočená obrazovka“
 - **H1** Animaci přehrát na notebooku nebo monitoru a natočit telefonem v tmavé místnosti, barevné ambientní světlo ladí s paletou. Působí opravdově a „ne jako AI“. `[R1, R2, R5]`
@@ -133,6 +139,7 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 
 ## K. Kontrola před odevzdáním
 Technický podklad: `nastroje/kontrola.sh VIDEO media/kontrola/<projekt>/kolo<n>`. Pak nezávislý kritik.
+- [ ] **Energie**: událost na každou dobu, úder každý takt, nikde „mrtvá“ pasáž delší než ~1 s (C7) — vkus uživatele
 - [ ] Háček v 1. sekundě, snímek 0 je hotový obraz, funguje bez zvuku (B1, B5, B6)
 - [ ] Před plným renderem: snímek na každou dobu (`--nahled doby --bpm …`) nebo každých 0,5 s + 4 klíčové snímky v plném rozlišení
 - [ ] Rozlišení, fps a délka podle zadání (A1, A4)

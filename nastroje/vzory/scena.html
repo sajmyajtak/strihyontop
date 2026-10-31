@@ -1,7 +1,7 @@
 <!doctype html>
 <!-- Výchozí kostra scény pro render_html.cjs. Všechno se počítá z času t ve window.seek(t),
      žádné CSS animace, přechody, časovače ani stav mezi snímky, takže každý snímek jde vyrenderovat přesně a opakovaně.
-     ?mrizka v URL zobrazí bezpečné zóny 9:16 (pravidlo A5). -->
+     ?mrizka v URL zobrazí bezpečné zóny (pravidlo A5): 16:9 okraj 5 %, pro 9:16 přepnout třídu na .svisle. -->
 <html lang="cs">
 <head>
 <meta charset="utf-8">
@@ -11,15 +11,17 @@
   #scena { position: relative; width: 100%; height: 100%; font-family: system-ui, sans-serif; color: #fff; }
   /* Žádné will-change: prvek by se rasterizoval v původní velikosti a při zoomu kamery by text byl rozmazaný. */
   .prvek { position: absolute; }
-  #mrizka { position: absolute; inset: 0; pointer-events: none; display: none;
-    box-shadow: inset 0 250px 0 rgba(255,0,0,.25), inset 0 -400px 0 rgba(255,0,0,.25), inset -120px 0 0 rgba(255,0,0,.25); }
+  /* Bezpečné zóny (A5): 16:9 = text uvnitř 90 % obrazu (okraj 5 %), .svisle = 9:16 (horních 250, spodních 400, pravých 120 px). */
+  #mrizka { position: absolute; left: 5%; right: 5%; top: 5%; bottom: 5%; pointer-events: none; display: none;
+    outline: 3px dashed rgba(255,0,0,.8); box-shadow: 0 0 0 4000px rgba(255,0,0,.18); }
+  #mrizka.svisle { left: 0; right: 120px; top: 250px; bottom: 400px; }
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute"><filter id="smer"><feGaussianBlur id="smerBlur" stdDeviation="0 0"/></filter></svg>
 <div id="scena">
   <div id="svet">
-    <div class="prvek" id="titulek" style="left:0;right:0;top:45%;text-align:center;font-size:120px;font-weight:800">TITULEK</div>
+    <div class="prvek" id="titulek" style="left:0;right:0;top:45%;text-align:center;font-size:140px;font-weight:800">TITULEK</div>
   </div>
   <div id="mrizka"></div>
 </div>
