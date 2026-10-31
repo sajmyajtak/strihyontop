@@ -61,6 +61,8 @@
   hranice bloků 18,75 (v 18,72 jen bod a slabé hrany tratě) · švih 5,625 vrcholí 5,695, v 5,72 dobíhá ~15° · soupeř v T5 ~10–15 % obrazu
   (kola hrdiny zůstávají na linii) · výseče: ramena prodloužená k okraji jako pás šířky špičky · prstenec mizí při odkrytí výsečí 19,453–19,553 ·
   GT-bok = varianta B (tmavá silueta s okrajovým světlem a stříbrnou horní plochou).
+  Blok C: okamžik B (20,74–22,27) hrdina shora jen ~20 % šířky dolní výseče (plynulé přerostení do T13) · vozy v T14 jsou světelné (rým s drop 2) ·
+  smrštění hvězdy ease-in, zacvaknutí v 26,25 je zastavení v plné rychlosti (tvar, střed a měřítko v 26,25 přesně).
 
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709
