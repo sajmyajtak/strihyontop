@@ -22,6 +22,9 @@ Uživateli se neptáš. Když si nevíš rady, vrať režisérovi **OTÁZKA PRO 
 4. Mix: hudba + efekty → `zvuk.wav` (48 kHz stereo). Pak `nastroje/master_zvuk.sh` (−14 LUFS, ≤ −1 dBTP po AAC).
    Ověř pásma (sub ≤ 30 %, středy ≥ 30 %) a že efekty nejsou slyšet víc než hudba.
 5. Poslouchat neumíš: kvalitu dokládej měřením (pásma, LUFS, true peak, časy vrcholů efektů vs. časy událostí) a spektrogramem, který si prohlédneš.
+6. **Stavba hlasitosti (C032)**: změř RMS v okně 50 ms po půlsekundách. Stoupání před dropem musí **růst** a hlavní úder (drop) být
+   nejhlasitější místo videa (o ≥ 1 dB nad jízdou a finále). Nástroje: `sfx.py --zisk-hudby` (obálka zisku hudby), `--automatika` (nádech),
+   `--saturace` (měkké nasycení špiček na úderu místo tvrdého limiteru). Zvuky nad ~18 kHz zbytečně nesyntetizuj (C030, překmity po AAC).
 
 ## Hlášení režisérovi
 ```

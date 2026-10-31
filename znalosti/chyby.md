@@ -13,6 +13,16 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C032: Stoupání před dropem 2 sláblo a drop 2 byl nejtišší úder (2026-10-31, V002, našel kreativní ředitel, opravil zvukař)
+- Příznak: RMS v okně 50 ms ve stoupání 16,5–18,0 klesalo (−17 → −15,9 dB, pod úrovní jízdy) a drop 2 (−11,9) byl tišší než drop 1 i finále,
+  i když má být nejsilnějším momentem.
+- Příčina: hudba je mezi údery stoupání řidší, bez automatiky proto zní slaběji. Rezerva na úderu jen ~0,5 dB (poměr špičky a průměru 9–11 dB),
+  takže samotné zesílení by limiter zmáčkl.
+- Oprava: `sfx.py --zisk-hudby` (stoupání 0 → +4 dB, vysoké pásmo +2 dB navíc, jízda T3–T8 −1 dB, drop 2 +3 dB) a `--saturace` na úderu dropu 2.
+  Výsledek: stoupání roste až nad úroveň jízdy, drop 2 je nejhlasitější místo videa (−9,2 dB v okně 50 ms), mimo upravené úseky bit po bitu stejné.
+- Prevence: zvukař u každého stoupání a dropu měří RMS v okně 50 ms: stoupání musí růst a hlavní úder být nejhlasitější místo videa (o ≥ 1 dB).
+  Pravidlo do instrukcí zvukaře.
+
 ### C031: Časy v archu `kontrola.sh` neseděly o ~0,25 s (2026-10-31, V002, našel kritik technika, opravil režisér)
 - Příznak: dlaždice „26.500“ ukazovala obsah ze ~26,75 s (rozevírající se CTA, které začíná v 26,72).
 - Příčina: filtr `fps=2` vybírá snímky se zaokrouhlením k nejbližšímu výstupnímu času, ne snímek přesně v čase popisku.

@@ -287,6 +287,18 @@ Rozhodnutí zvukaře: (1) automatika končí návratem **v 3,75 / 18,75** (plné
 (2) T14 panorama podle obrazu (24,61 střed = horní rameno, 25,08 vpravo, 25,55 vlevo), ne „P, L, střed“ ze sloupce SFX; (3) startovní lampy panorama zleva doprava podle pozice pouzder;
 (4) mix přes sběrnicový limiter −1,5 dBFS (hudba má rezervu jen 12,5 dB, efekty na úderech by jinak vynutily lineární −2 dB a master by skončil −14,7 LUFS / −1,0 dBTP).
 
+**Zvuk v2 (zvukař, kolo 1, 2026-10-31)**: nález kritika „stoupání slabší než jízda, drop 2 nejtišší ze tří úderů“. `hudba.wav` ani časování beze změny,
+jen obálka zisku hudby v mixu (nové volby `sfx.py --zisk-hudby` a `--saturace`). Výstupy `media/…/zvuk/zvuk_v2.wav`, `zvuk_bez_hudby_v2.wav`, `sfx_v2.wav|json`,
+`sfx_v2_log.txt`, `zvuk_v2_master.m4a`, `zvuk_v2_spektrogram.png` (v1 soubory ponechány). Příkaz jako v1, navíc / jinak:
+`--automatika 18.40-18.72:-13:150:30 --zisk-hudby "3.55:0,3.70:-1,14.97:-1,15.0:0,16.875:0,17.5:1,18.0:2.5,18.40:4,18.45:3,18.70:3,19.10:3,19.6:0"
+--zisk-hudby "16.875:0,17.5:0.5,18.0:1.5,18.40:2,18.45:0@150" --saturace 18.72-19.35:6`, výstupy `sfx_v2.wav`, `zvuk_v2.wav`, `zvuk_bez_hudby_v2.wav`.
+Rozhodnutí: (1) T3–T8 −1 dB (rampa schovaná v nádechu 3,55–3,70, návrat 14,97–15,0 před činelem zlomu); (2) stoupání 16,875–18,40 roste celé 0 → +4 dB
+a pásmo nad 150 Hz (vír, riser, rev motoru, obrácený činel) dalších 0 → +2 dB, kopák a sub tedy jen +4 (pásma beze změny); (3) nádech ztlumení −13 dB proti
+obálce +3 dB = −10 dB proti původní hudbě jako dřív; (4) drop 2 +3 dB 18,70–19,10, návrat do 19,6; SFX úrovně `lu` jdou s hudbou, takže i světelný úder
+je o +3 dB silnější (+2 dB by nestačilo); (5) úder by limiter mačkal 445 ms o > 1 dB a zbylo by jen +1 dB → místo toho měkké nasycení špiček mixu
+18,72–19,35 (4× převzorkování, koleno 6 dB pod stropem, zkreslení −24 dB = drsnost úderu), limiter pak > 1 dB jen 62 ms.
+Mimo upravené úseky je mix v2 s v1 shodný bit po bitu (0–3,5 / 20–26 / 26,5–30 s).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|

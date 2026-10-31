@@ -10,6 +10,9 @@ Použití:
   --zisk-hudby T:DB,T:DB,…[@HZ] = obálka zisku HUDBY v mixu po bodech (dB lineárně mezi body, před prvním a za posledním bodem
           0 dB; úseků víc, násobí se), např. stoupání do dropu nebo ztišení jízdy (V002). S `@HZ` jen pásmo nad HZ (komplementární
           dělení s nulovou fází: při stejném zisku se hudba složí zpět bit po bitu, časování se nemění). Uplatní se před --automatika.
+  --saturace OD-DO:KOLENO_DB = měkké nasycení špiček MIXU v úseku (4× převzorkování, náběh/doběh 20 ms) před limiterem: sníží poměr
+          špička / tělo úderu, takže úder může být hlasitější, aniž by ho limiter dlouho mačkal (V002 drop 2). Pod kolenem
+          (KOLENO_DB pod stropem limiteru, výchozí strop −1,5) se signál nemění, nad ním tanh do stropu.
 udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…"}, …]
   cas     = kdy má padnout ZMĚŘENÝ vrchol (obálka analytického signálu vyhlazená 2 ms), ne začátek zvuku
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
@@ -692,6 +695,23 @@ def zapis_wav(cesta, x, af=None):
     tmp.unlink()
 
 
+def saturace(mix, od, do, koleno_db, strop_db=-1.5, nabeh=0.02):
+    """Měkké nasycení špiček mixu v úseku od–do: pod kolenem beze změny, nad ním tanh ke stropu. 4× převzorkování, bez posunu."""
+    a, b = max(0, int((od - nabeh) * SR)), min(mix.shape[1], int((do + nabeh) * SR))
+    L = 10 ** (strop_db / 20)
+    k = L * 10 ** (-koleno_db / 20)
+    x = signal.resample_poly(mix[:, a:b], 4, 1, axis=1)
+    ax = np.abs(x)
+    y = np.where(ax > k, np.sign(x) * (k + (L - k) * np.tanh((ax - k) / (L - k))), x)
+    y = signal.resample_poly(y, 1, 4, axis=1)[:, :b - a]
+    t = cas(b - a) + a / SR
+    w = np.clip(np.minimum((t - (od - nabeh)) / nabeh, ((do + nabeh) - t) / nabeh), 0, 1)
+    w = 0.5 - 0.5 * np.cos(np.pi * w)                                   # kosinový náběh a doběh
+    out = mix.copy()
+    out[:, a:b] = mix[:, a:b] * (1 - w) + y * w
+    return out
+
+
 def limiter_af(strop_db):
     """Sběrnicový limiter mixu: 192 kHz (mezivzorkové špičky), rychlý náběh na transienty efektů, `latency=1` (bez posunu, C025)."""
     return (f"aresample=192000,alimiter=limit={10 ** (strop_db / 20):.4f}:attack=1:release=80:level=false:latency=1,"
@@ -709,6 +729,7 @@ def main():
     ap.add_argument("--ticho", action="append", default=[], help="úsek od-do (s), kde nesmí znít žádný efekt")
     ap.add_argument("--automatika", action="append", default=[], help="OD-DO:DB[:DOLU_MS[:NAHORU_MS]] ztlumení hudby v mixu")
     ap.add_argument("--zisk-hudby", action="append", default=[], help="T:DB,T:DB,…[@HZ] obálka zisku hudby v mixu (viz docstring)")
+    ap.add_argument("--saturace", action="append", default=[], help="OD-DO:KOLENO_DB měkké nasycení špiček mixu v úseku")
     ap.add_argument("--limiter", type=float, help="strop mixu v dBFS (např. -1.5): místo lineárního ztlumení celého mixu jemný "
                     "limiter jen na špičkách, kde se efekt sečte s úderem hudby (hudba s malou rezervou, V002)")
     a = ap.parse_args()
@@ -772,11 +793,16 @@ def main():
                   max_odchylka_ve_stope_ms=max(abs(u["odchylka_ve_stope_ms"]) for u in udalosti if not u["prekryto"]),
                   prekryte=[u["cas"] for u in udalosti if u["prekryto"]],
                   spicka_sfx_dbfs=round(20 * np.log10(np.max(np.abs(sfx)) + 1e-12), 1), problemy=problemy,
-                  automatika_hudby=a.automatika, zisk_hudby=a.zisk_hudby)
+                  automatika_hudby=a.automatika, zisk_hudby=a.zisk_hudby,
+                  saturace=a.saturace)
     if hudba is not None:
         souhrn["nejhlasitejsi_efekt_proti_hudbe_lu"] = max(u["efekt_proti_hudbe_lu"] for u in udalosti)
         souhrn["nejhlasitejsi_efekt_proti_hudbe_100ms_lu"] = max(u["efekt_proti_hudbe_100ms_lu"] for u in udalosti)
         mix = hudba + sfx
+        for spec in a.saturace:
+            useky_, koleno = spec.split(":")
+            od, do = map(float, useky_.split("-"))
+            mix = saturace(mix, od, do, float(koleno), a.limiter if a.limiter is not None else -1.5)
         spicka = np.max(np.abs(mix))
         souhrn["spicka_mixu_dbfs"] = round(20 * np.log10(spicka + 1e-12), 1)
         rezerva = 10 ** (-1.5 / 20)                                       # jako hudba.py: špička vzorku ≤ −1,5 dBFS, true peak pak ≤ 0

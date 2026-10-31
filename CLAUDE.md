@@ -95,7 +95,8 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
   + `x.json` s dobami, takty, dropem a koncem pro synchronizaci animace. Sám kontroluje pásma (telefon pod ~100 Hz nehraje).
 - `nastroje/sfx.py`: zvukové efekty syntézou ze seznamu událostí (JSON) → sfx.wav + sfx.json + mix; změřený vrchol přesně na čas události,
   hlasitost `lu` pod hudbou (okno 100 ms, K-vážení). `--automatika OD-DO:dB:dolů_ms:nahoru_ms` ztlumení hudby, `--ticho OD-DO` úsek bez efektů,
-  `--limiter -1.5` sběrnicový limiter mixu pro hudbu s malou rezervou (V002). Seznam událostí ukládat do `projekty/0xx-*/sfx_udalosti.json` (v gitu). `hudba.json` obsahuje i `udalosti_nastroju` (časy kopáku, marimby… pro synchronizaci obrazu).
+  `--limiter -1.5` sběrnicový limiter mixu pro hudbu s malou rezervou (V002), `--zisk-hudby T:dB,…[@Hz]` obálka zisku hudby (stoupání do dropu),
+  `--saturace OD-DO:dB` měkké nasycení špiček na úderu místo tvrdého limiteru. Seznam událostí ukládat do `projekty/0xx-*/sfx_udalosti.json` (v gitu). `hudba.json` obsahuje i `udalosti_nastroju` (časy kopáku, marimby… pro synchronizaci obrazu).
 - `nastroje/drive.sh ID_NEBO_ODKAZ [cíl]`: stažení souboru nebo celé složky z Google Drive (konektor jen k hledání a malým souborům).
 - `nastroje/materialy.py SLOZKA`: příprava materiálů (HEIC → JPG, otočení podle EXIF, HDR / proměnlivé fps / otočení videa), katalog + `_prehled.jpg`.
 - **Higgsfield NEPOUŽÍVAT** (rozhodnutí uživatele 2026-10-30). Hlas a případně hudba později přes ElevenLabs (`ELEVENLABS_API_KEY`).
