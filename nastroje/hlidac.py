@@ -13,11 +13,13 @@ ap = argparse.ArgumentParser()
 ap.add_argument("run_dir")
 ap.add_argument("--ticho", type=float, default=15, help="minuty bez zápisu, po kterých se agent nahlásí")
 ap.add_argument("--interval", type=float, default=30)
+ap.add_argument("--jen-nove", action="store_true", help="historii deníku načíst potichu, hlásit jen nové události (pro opětovné zapnutí)")
 a = ap.parse_args()
 run = Path(a.run_dir)
 
 nazvy, hotove, nahlaseno_ticho, limity = {}, set(), set(), {}
 videno_radku = 0
+potichu = a.jen_nove          # první průchod jen načte stav, nic nehlásí
 
 
 def posledni_zaznam(agent_id):
@@ -56,10 +58,12 @@ while True:
                     if n == nazev and stary not in hotove:
                         hotove.add(stary)
                 nazvy[aid] = nazev
-                print(f"{time.strftime('%H:%M')} START: {nazev}", flush=True)
+                if not potichu:
+                    print(f"{time.strftime('%H:%M')} START: {nazev}", flush=True)
             elif d.get("type") == "result" and aid:
                 hotove.add(aid)
-                print(f"{time.strftime('%H:%M')} HOTOVO: {nazvy.get(aid, aid)}", flush=True)
+                if not potichu:
+                    print(f"{time.strftime('%H:%M')} HOTOVO: {nazvy.get(aid, aid)}", flush=True)
         videno_radku = len(radky)
     for aid, nazev in nazvy.items():
         if aid in hotove:
@@ -69,9 +73,11 @@ while True:
             continue
         if pocet_limitu > limity.get(aid, 0):
             limity[aid] = pocet_limitu
-            print(f"{time.strftime('%H:%M')} LIMIT VÝSTUPU ×{pocet_limitu}: {nazev} (přemýšlí moc dlouho najednou, zvážit restart s effort high a psaním po částech)", flush=True)
+            if not potichu:
+                print(f"{time.strftime('%H:%M')} LIMIT VÝSTUPU ×{pocet_limitu}: {nazev} (přemýšlí moc dlouho najednou, zvážit restart s effort high a psaním po částech)", flush=True)
         ticho = (time.time() - mtime) / 60
         if ticho >= a.ticho and (aid, int(mtime)) not in nahlaseno_ticho:
             nahlaseno_ticho.add((aid, int(mtime)))
             print(f"{time.strftime('%H:%M')} TICHO {ticho:.0f} min: {nazev}", flush=True)
+    potichu = False
     time.sleep(a.interval)
