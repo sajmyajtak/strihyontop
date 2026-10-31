@@ -13,6 +13,21 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C026: Jednoprůchodový loudnorm v `hudba.py` zploštil stavbu skladby (2026-10-31, V002, našel zvukař)
+- Příznak: úvod sportovní hudby byl stejně hlasitý jako jízda a drop 2 skoro nevynikl, i když aranžmá bylo správně
+  (před normalizací úvod −21,2 a drop 2 −14,5 dB, po ní −16 a −15,9 dB).
+- Příčina: `loudnorm` v jednom průchodu běží v dynamickém režimu: tiché části zesílí, hlasité ztlumí. Kontrast dropu zmizí.
+- Oprava: nálada `sportovni` se normalizuje lineárním ziskem a jemným limiterem. Ostatní nálady zatím beze změny (bit po bitu),
+  protože by se změnil jejich zvuk.
+- Prevence: dluh zapsán v `pouceni.md` (vazna, drza, luxusni, pohodova přepnout na lineární normalizaci při prvním dalším použití,
+  s poslechovou ukázkou pro uživatele). Pravidlo pro nástroje: hlasitost celé skladby jen lineárním ziskem (a limiterem), nikdy dynamickým loudnorm.
+
+### C025: Limiter `alimiter` posunul zvuk o 5 ms (2026-10-31, V002, našel zvukař, opravil režisér)
+- Příznak: celá hudba po limiteru zpožděná o 240 vzorků (5,00 ms při 48 kHz), změřeno křížovou korelací se syntézou.
+- Příčina: `alimiter` má look-ahead a bez `latency=1` latenci nevyrovná.
+- Oprava: `latency=1` v `hudba.py` (zvukař) i ve větvi limiteru v `nastroje/master_zvuk.sh` (režisér). Ověřeno šumem: bez volby posun 240 vzorků, s ní 0.
+- Prevence: každý `alimiter` v nástrojích vždy s `latency=1`. Synchronizaci zvuku po každém novém filtru ověřit křížovou korelací, ne poslechem.
+
 ### C024: Prompt pro analytika obsahoval obcházení ochrany webu (2026-10-31, V002, zastavila bezpečnostní pravidla)
 - Příznak: spuštění workflow zamítnuto („Bot Check Circumvention“). V úkolu stálo „kdyby web blokoval přístup, zkus jiný User-Agent“.
 - Příčina: web mercedes-benz.cz vrací automatickým požadavkům 403 (ochrana proti robotům) a já jsem to navrhl obejít.

@@ -30,7 +30,7 @@ for pokus in 1 2 3 4; do
     CIL_I=$NOVY
   else
     CIL_I=$I
-    LIMITER=",aresample=192000,alimiter=limit=$(python3 -c "print(round(10 ** ((float('$TP') - 1.2) / 20), 4))"):attack=5:release=300:level=false"
+    LIMITER=",aresample=192000,alimiter=limit=$(python3 -c "print(round(10 ** ((float('$TP') - 1.2) / 20), 4))"):attack=5:release=300:level=false:latency=1"
   fi
 done
 
