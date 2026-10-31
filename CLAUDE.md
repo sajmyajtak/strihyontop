@@ -86,6 +86,7 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 - `nastroje/kontrola.sh VIDEO SLOZKA`: technická kontrola pro kritika (parametry, LUFS/TP, zamrzlé a prázdné úseky, skoky a probliknutí + pásy snímků, arch s časy)
 - `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC (při přetečení ubere hlasitost v toleranci, pak jemný limiter)
 - `nastroje/prompt_motion.py`: katalog prompt-motion.com
+- `nastroje/workflow/`: ověřené vzory workflow (příprava, výroba) k převzetí pro další video, viz README tamtéž
 - `nastroje/hlidac.py RUN_DIR [--jen-nove]`: hlídač běžícího workflow (spouštět přes Monitor): START / HOTOVO / TICHO > 15 min / LIMIT VÝSTUPU u každého agenta; `--jen-nove` při opětovném zapnutí nepřehrává historii
 - ffmpeg: střih, barvy, titulky
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
