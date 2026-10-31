@@ -80,8 +80,9 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 ## Nástroje
 - `nastroje/analyzuj.sh`: rozbor reference
 - `nastroje/prepis.py`: přepis řeči (`--slova` = časy slov pro titulky, `--model medium --jazyk cs` pro češtinu)
-- `nastroje/render_html.cjs`: HTML scéna s `window.seek(t)` → MP4 snímek po snímku. Podsnímky vystředěné, závěrka 180° (`--sub 4`, rychlé přechody 8).
-  `--nahled 0.5 | doby --bpm 120 | casy --casy 0,1.5` = jen kontrolní snímky. 1920×1080 (výchozí) i 1080×1920 při 60 fps a 4 podsnímcích ≈ 16 s výpočtu na 1 s videa (8 podsnímků ≈ 33 s).
+- `nastroje/render_html.cjs`: HTML scéna s `window.seek(t)` → MP4 snímek po snímku. Podsnímky vystředěné, závěrka 180° (`--sub 4`, rychlé úseky
+  `--sub-rychle 8 --rychle od-do,…`), 3 prohlížeče najednou (`--vlakna`), výřez `--od`. Snímání přes CDP (C027).
+  `--nahled 0.5 | doby --bpm 120 | casy --casy 0,1.5` = jen kontrolní snímky. Čas výpočtu závisí na scéně: změřit 1 s výřezu (V002 ≈ 35 s na 1 s videa).
 - `nastroje/vzory/scena.html`: kostra scény (easing podle pravidel F, pružina 3 % + kriticky tlumená, `kf()`, `nahoda(seed)`, `kamera()`, `rozmazani()`, `?mrizka` = bezpečné zóny)
 - `nastroje/kontrola.sh VIDEO SLOZKA`: technická kontrola pro kritika (parametry, LUFS/TP, zamrzlé a prázdné úseky, skoky a probliknutí + pásy snímků, arch s časy)
 - `nastroje/master_zvuk.sh VSTUP VYSTUP`: hlasitost na −14 LUFS / ≤ −1 dBTP, měřeno po AAC (při přetečení ubere hlasitost v toleranci, pak jemný limiter)

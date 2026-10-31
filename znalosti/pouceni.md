@@ -93,7 +93,8 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 - Spektrogram z `ffmpeg showspectrumpic` s logaritmickou osou kreslí vodorovnou čáru kolem 1,44 kHz. Je to chyba vykreslení, ne díra ve zvuku
   (ověřeno Welchovou metodou, V002). Díry v pásmu posuzovat podle `oktavy_db`, ne podle obrázku.
 - Prostředí: 4 CPU, bez GPU. Render 1080×1920 krátkých videí je v pohodě, dlouhé 3D scény budou pomalé.
-- `render_html.cjs`: ~8 s výpočtu na 1 s videa 1080×1920 při 30 fps a 3 podsnímcích (15s video ≈ 2 min). Při 60 fps nebo `--sub 6` počítat 2× déle.
+- `render_html.cjs` (V002, 1920×1080, 60 fps, `--sub 4`, složitá canvas scéna se zrnem): původně ~190 s výpočtu na 1 s videa, z toho většina
+  kódování PNG v `page.screenshot`. Po C027 (CDP `optimizeForSpeed`, 3 prohlížeče): ~35 s na 1 s. Prázdná scéna je řádově rychlejší, vždy změřit výřez.
 - prompt-motion.com: data jsou ve stránce (Next.js RSC payload), stahuje se bez přihlášení. robots.txt: `use=reference`, `ai-train=no`, `/api/` zakázáno.
   Odkazy na zdroj: holý profil x.com/p4nthera_ je autor webu, ne tvůrce videa.
 - Google Fonts v rendereru fungují (ověřeno: Anton, Inter 800 s plnou českou diakritikou). Kontrola: `document.fonts.check('800 96px Inter', 'ď')`.

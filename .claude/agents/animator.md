@@ -22,7 +22,10 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 4. Fonty načítat lokálně nebo z Google Fonts. Před renderem ověř, že se načetly (renderer čeká na `document.fonts.ready`).
 5. **Nejdřív kontrolní snímky**: `node nastroje/render_html.cjs --html … --dur N --nahled doby --bpm 120` (snímek na každou dobu) nebo `--nahled 0.5`,
    plus klíčové momenty `--nahled casy --casy 0,1.6,…`. Prohlédni je a oprav nepořádek, překryvy, nečitelnost, text v bezpečných zónách a cokoli mimo dobu.
-6. Teprve pak plný render: `node nastroje/render_html.cjs --html … --out … --dur N --fps 60 --sub 4` (u rychlých přechodů `--sub 8`). Čas: 15 s při 60 fps ≈ 3–4 min.
+6. Teprve pak plný render: `node nastroje/render_html.cjs --html … --out … --dur N --fps 60 --sub 4 --sub-rychle 8 --rychle 3.7-4.25,…`
+   (8 podsnímků jen v rychlých úsecích, zbytek 4). Renderuje se ve 3 prohlížečích najednou (`--vlakna 3`, výchozí). Výřez: `--od 3.7 --dur 4.25`.
+   Čas závisí na scéně: změř 1 s výřezu a vynásob (V002: složitá scéna ~35 s výpočtu na 1 s videa při `--sub 4`).
+   Výkon scény: žádný `filter: blur` / `ctx.filter` na velké vrstvy ani na mnoho malých prvků v každém podsnímku, záře jako předem rozmazané sprity.
    Po renderu `nastroje/kontrola.sh` a prohlédnout `arch.jpg`. Hlasitost doladit `nastroje/master_zvuk.sh`.
    Zvuk: `--audio soubor.wav`, nebo `--audio-z-kodu` (stránka má `window.renderAudio()` → WAV base64).
    Hudba: `python3 -I nastroje/hudba.py --nalada … --delka N --out media/projekty/…/hudba.wav --drop … --konec …`. Časy z `hudba.json`

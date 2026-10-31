@@ -13,6 +13,17 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C027: Plný render složité scény by trval 80 min až 2,7 h (2026-10-31, V002, našel animátor, opravil režisér)
+- Příznak: ~160–190 s výpočtu na 1 s videa (1920×1080, 60 fps, `--sub 4`). Video 30 s by se renderovalo ~80 min, s `--sub 8` ~2,7 h,
+  a každé kolo oprav znovu.
+- Příčina: hlavní náklad nebyla scéna (~31 s na 1 s), ale kódování PNG v `page.screenshot` (550–650 ms na podsnímek, zrno se špatně komprimuje).
+  Renderer navíc běžel v jednom prohlížeči, i když jsou 4 CPU. Odhad „16 s na 1 s“ v CLAUDE.md byl změřený na jednoduché scéně.
+- Oprava: `render_html.cjs` snímá přes CDP `Page.captureScreenshot` s `optimizeForSpeed` (pixely ověřeně totožné, ~2,5× rychlejší),
+  renderuje úseky ve 3 prohlížečích najednou a spojí je bez překódování (bezeztrátově ověřeno: totožné snímky), umí 8 podsnímků jen
+  v rychlých úsecích (`--sub-rychle 8 --rychle …`) a výřez (`--od`). Změřeno: 1 s videa 189 s → 75 s (CDP) → 36 s (3 vlákna).
+- Prevence: v instrukcích animátora „změř 1 s výřezu a vynásob“ místo pevného odhadu, výkonová pravidla scény (žádný blur filtr na mnoho prvků,
+  záře jako sprity), workflow šablona renderuje `--sub 4` + rychlé úseky 8. Před dlouhým renderem vždy změřit výřez.
+
 ### C026: Jednoprůchodový loudnorm v `hudba.py` zploštil stavbu skladby (2026-10-31, V002, našel zvukař)
 - Příznak: úvod sportovní hudby byl stejně hlasitý jako jízda a drop 2 skoro nevynikl, i když aranžmá bylo správně
   (před normalizací úvod −21,2 a drop 2 −14,5 dB, po ní −16 a −15,9 dB).

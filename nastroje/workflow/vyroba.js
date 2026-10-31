@@ -67,7 +67,9 @@ const KONTROLA = {
 
 const otazky = []
 const sber = (kdo, r) => { if (r && r.otazky_pro_rezisera) for (const q of r.otazky_pro_rezisera) otazky.push(`${kdo}: ${q}`); return r }
-const RENDER = (v) => `node nastroje/render_html.cjs --html ${M}/scena/index.html --out ${M}/render/V002_obraz_v${v}.mp4 --dur 30 --fps 60 --sub 8 --audio ${M}/hudba.wav`
+// Rychlé úseky (švihy, dropy, průlety) dostanou 8 podsnímků, zbytek 4; renderuje se ve 3 prohlížečích (C027). Úseky převzít ze storyboardu.
+const RYCHLE = '3.7-4.25,5.6-5.85,7.0-7.55,8.88-9.1,10.78-11.25,16.875-17.34,17.45-17.5,18.1-18.15,18.72-19.0,20.6-20.85,26.2-26.3'
+const RENDER = (v) => `node nastroje/render_html.cjs --html ${M}/scena/index.html --out ${M}/render/V002_obraz_v${v}.mp4 --dur 30 --fps 60 --sub 4 --sub-rychle 8 --rychle ${RYCHLE} --audio ${M}/hudba.wav`
 
 // ---------- VÝROBA: zvuk ∥ obraz ----------
 phase('Výroba')
