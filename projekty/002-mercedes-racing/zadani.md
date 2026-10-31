@@ -305,6 +305,7 @@ Mimo upravené úseky je mix v2 s v1 shodný bit po bitu (0–3,5 / 20–26 / 26
 | příprava | analytik ∥ zvukař → kreativní ředitel → oponent → revize | logo, předběžná paleta, nálada `sportovni`, koncept FOLLOW THE STAR, storyboard S1 → S2 | oponent: energie 8, celkem 7,6 → revize 13 oprav (odhad autora ~9) | drop 2 musí stát jako plakát, ramena = polygony loga, výseče = 3 kamery, T14 nejsilnější, CTA mercedes-benz.cz |
 | výroba | zvukař ∥ animátor (vozy, klíčové snímky → schválení 7/10, energie 6,5 → 12 oprav → pohyb A, B, C → render) | SFX 61 událostí, render v1 (24 min, 2× kvůli zesílení dropu 1), střih v1 | – | renderer zrychlen 5× (C027) |
 | 1 | technika · wow · zadání | kontrola V002_v1 | technika SCHVÁLENO, zadání SCHVÁLENO (všech 6 pravidel uživatele splněno), **wow 7,8 / energie 7,5 → OPRAVIT** | mrtvých 0,4 s před BUILT, statický úvod 0–2,8 (push-cuts do hledí), stoupání a drop 2 hlasitěji, splétání stop jako srážky, hrana masky GT 7,3; drobné: barvy loga a zaplavení, tyrkysový přepal, glitch 17,475, RACE okna bez vozu |
+| 2 | technika · wow · zadání | kontrola V002_v2 (opravy obrazu: push-cuts do hledí, drop 1 natvrdo, cop stop, sloup u GT; zvuk v2: stoupání a drop 2) | **wow 8,4 / energie 7,5**, technika OPRAVIT (GT couvá 7,13–7,5, LIGHTS přes helmu), zadání viz níže → 3. kolo | statická místa: CHASE THE LINE, tiker, stoupání T10, jiskry, T14; háček zvukově slabý |
 
 ## Chyby během výroby
 - C024: první spuštění přípravy zamítnuto (pokyn obejít 403 na webu značky) → pokyn odstraněn, logo z Commons, paleta předběžně.
