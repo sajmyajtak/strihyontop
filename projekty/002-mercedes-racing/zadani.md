@@ -56,6 +56,12 @@
   - Zlom 15,0–16,875 zůstává bez rytmu (kontrast, nejdelší mezera ~0,95 s je v toleranci kritéria 3).
   - `master_zvuk.sh` limiter bez `latency=1` (posun 5 ms) opravil režisér (C025). Dynamický loudnorm u ostatních nálad = dluh (C026).
 
+- **Odchylky od storyboardu S2 schválené režisérem při stavbě** (kritik je nehlásí jako chybu):
+  zoom do otvoru „A“ ×74 místo ×24 (změřený otvor je menší, jinak by v 11,25 zůstal obrys písmene) · vůz z vracečky vystřelí nahoru (geometrie U) ·
+  hranice bloků 18,75 (v 18,72 jen bod a slabé hrany tratě) · švih 5,625 vrcholí 5,695, v 5,72 dobíhá ~15° · soupeř v T5 ~10–15 % obrazu
+  (kola hrdiny zůstávají na linii) · výseče: ramena prodloužená k okraji jako pás šířky špičky · prstenec mizí při odkrytí výsečí 19,453–19,553 ·
+  GT-bok = varianta B (tmavá silueta s okrajovým světlem a stříbrnou horní plochou).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709
 2. −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
