@@ -13,6 +13,14 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C033: Tyrkysové lemy ze sčítání světla a couvající vůz při „chytání“ kamerou (2026-10-31, V002 kola 1–2, našli kritici, opravil animátor)
+- Příznak: (a) bílé jádro na modré záři mělo tyrkysový lem (140,241,255), mimo paletu a blízko barvy sponzora (C8); (b) GT při přechodu
+  do T5 zastavil a jel zpět proti směru přídě (7,13–7,5 s).
+- Příčina: (a) režim `lighter` sčítá kanály, B se ořízne na 255 a přebytek dorovná G, takže odstín sjede k tyrkysové; (b) Hermitova křivka
+  s počáteční rychlostí vozu a nulovou koncovou rychlostí přestřelí, vůz na obrazovce couvá.
+- Oprava: světlo na modrou plochu skládat překrytím (`source-over`) nebo `screen` (volba `op` ve `FX.zare`); přechod přes schovaný střih.
+- Prevence: v `animator.md`. Polohu vozu na obrazovce kontrolovat na monotónnost (pás po 1 snímku), přes úmyslný skok počítat rychlost jednostranně.
+
 ### C032: Stoupání před dropem 2 sláblo a drop 2 byl nejtišší úder (2026-10-31, V002, našel kreativní ředitel, opravil zvukař)
 - Příznak: RMS v okně 50 ms ve stoupání 16,5–18,0 klesalo (−17 → −15,9 dB, pod úrovní jízdy) a drop 2 (−11,9) byl tišší než drop 1 i finále,
   i když má být nejsilnějším momentem.

@@ -26,6 +26,8 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
    (8 podsnímků jen v rychlých úsecích, zbytek 4). Renderuje se ve 3 prohlížečích najednou (`--vlakna 3`, výchozí). Výřez: `--od 3.7 --dur 4.25`.
    Čas závisí na scéně: změř 1 s výřezu a vynásob (V002: složitá scéna ~35 s výpočtu na 1 s videa při `--sub 4`).
    Výkon scény: žádný `filter: blur` / `ctx.filter` na velké vrstvy ani na mnoho malých prvků v každém podsnímku, záře jako předem rozmazané sprity.
+   Světlo na modré (C033): bílé jádro ani záři na modrou nesčítat (`lighter` přetéká do tyrkysové), skládat `source-over` nebo `screen`.
+   Pohyb objektu, který kamera „chytá“: poloha na obrazovce musí být monotónní (žádné couvání), jinak schovaný střih.
    Záblesky a dopady (C028): závěrka zprůměruje snímek přes půl snímku kolem času, krátký záblesk se rozmaže. Sílu ověř ve výřezu
    s podsnímky (`--od T-0.1 --dur T+0.2`) na snímku čas + 1/60 s, ne na statickém klíčovém snímku.
    Po renderu `nastroje/kontrola.sh` a prohlédnout `arch.jpg`. Hlasitost doladit `nastroje/master_zvuk.sh`.
