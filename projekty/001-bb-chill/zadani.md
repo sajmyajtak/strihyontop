@@ -58,6 +58,19 @@ Obecná pravidla, která se tu hlavně uplatní: A1, A2, A5, A7, B1, B6, C1, C6,
 - **Výhrada režiséra k hudbě**: v nezávislém měření je mezi oktávami 1 kHz a 2 kHz propad ~13 dB (oktávy rel.: 500 Hz 0, 1 kHz −2,7,
   2 kHz −15,6, 4 kHz −13,9 dB). Jas na telefonu chybí → zvukař ve fázi 2 vyhladí (sousední oktávy 250 Hz–8 kHz max ~8 dB od sebe).
 
+## POKYN REŽISÉRA PRO KOLO 3 (poslední, má přednost před storyboardem)
+Řezy nadpisů selhaly dvakrát (kolo 1 i 2: „NXT EAST“, dvojtisk). Teď platí:
+1. **Řezy nadpisů 7,8125 / 12,5 / 17,5 s přísně po sobě, nikdy dvě vrstvy textu ve stejném snímku:**
+   (a) linka řezu se nakreslí (0,10 s); (b) horní půlka starého textu odjede nahoru, spodní dolů, každá **úplně ven ze své masky** (ease-in 0,12 s),
+   linka zmizí s nimi; (c) **teprve potom** nový text vyroste z linie řezu (ease-out 0,25 s). Ověřit pásem 12 snímků po 1/60 s kolem každého řezu
+   (render --nahled casy) a **prohlédnout**: v žádném snímku nesmí být starý a nový text zároveň.
+   **Když to nejde čistě, nahraď to jednodušším**: starý text odjede nahoru maskou, nový vyjede z linky. Čitelnost má přednost před efektem.
+2. **Text se nikdy nerozmazává**: posuny textu (dorovnání ALWAYS FAST 17,97 s, FAST → NOT FAST FOOD. 20,2–20,4 s) jen kriticky tlumené
+   (≥ 0,35 s, bez skoků), `rozmazani()` jen na náplň. Žádné cuknutí o 22 px ve 2 snímcích.
+3. **Polknutí 0,625 s**: 0,18 s ease-in, pohyb **skončí současně s vrcholem zvuku „glp“ (0,62–0,64 s)**, ne o 75 ms dřív.
+4. **Drop**: šmouha písmen loga slabší (šmouha v kódu na půlkách max 2 px), BAGETERIE musí zůstat čitelné v každém snímku.
+5. Plakát (barva) řeší režisér při doručení, zkratka smyčky 24,98 → 0 je přijatá (end card je záměrně jiný než snímek 0).
+
 ## Reference
 | ID | odkaz | co z ní převzít |
 |---|---|---|
