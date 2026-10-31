@@ -13,6 +13,16 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C034: Duhový lem na logu v dropu 2 a ztmavená barva značky na end card (2026-10-31, V002 kolo 3, našli všichni 3 kritici, opravil animátor v4)
+- Příznak: (a) prstenec a ramena hvězdy v 18,78–18,93 s v zelených a žlutých pásech (~40–50 px místo 6 px), přímo na logu v nejsilnějším momentu;
+  (b) „STAR“ na end card #0072CC místo #0078D6.
+- Příčina: (a) radiální chromatický posun přes R/G/B kanály na celé světelné vrstvě: G se posouval s R, z bílé vznikla žlutá, z modré záře
+  zelenožlutá, posun rostl se vzdáleností od středu a prstenec se zároveň zvětšoval; (b) vinětace se kreslila až po textu.
+- Oprava: na logu žádné RGB kanály, jen tečné duchy tónované barvou palety přes `screen` (RGB posun jen na rychlostních čarách); vinětace pod texty.
+  Ověřeno pixely: zelenožluté body kolem hvězdy 21 165 → 0, STAR odchylka ≤ 2.
+- Prevence: v `animator.md`: chromatický posun na logu a barvách značky nikdy přes R/G/B kanály; barvy značky kreslit nad vinětaci a zrno
+  a změřit v hotovém MP4. Kritik zadání měří barvy loga a akcentů v pixelech (už to dělá, chytil to).
+
 ### C033: Tyrkysové lemy ze sčítání světla a couvající vůz při „chytání“ kamerou (2026-10-31, V002 kola 1–2, našli kritici, opravil animátor)
 - Příznak: (a) bílé jádro na modré záři mělo tyrkysový lem (140,241,255), mimo paletu a blízko barvy sponzora (C8); (b) GT při přechodu
   do T5 zastavil a jel zpět proti směru přídě (7,13–7,5 s).
