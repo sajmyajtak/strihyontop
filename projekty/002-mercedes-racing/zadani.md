@@ -63,6 +63,8 @@
   GT-bok = varianta B (tmavá silueta s okrajovým světlem a stříbrnou horní plochou).
   Blok C: okamžik B (20,74–22,27) hrdina shora jen ~20 % šířky dolní výseče (plynulé přerostení do T13) · vozy v T14 jsou světelné (rým s drop 2) ·
   smrštění hvězdy ease-in, zacvaknutí v 26,25 je zastavení v plné rychlosti (tvar, střed a měřítko v 26,25 přesně).
+  Kolo 2–3: hvězda ze světla se v T14 otáčí po celý takt (energie, oprava „statického T14“), tvar a ramena po 120° drží ·
+  úsek 9,0–9,4 průjezd GT zprava doleva (oprava střihače, mrtvý úsek před BUILT).
 
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709
@@ -317,6 +319,7 @@ jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 
 | výroba | zvukař ∥ animátor (vozy, klíčové snímky → schválení 7/10, energie 6,5 → 12 oprav → pohyb A, B, C → render) | SFX 61 událostí, render v1 (24 min, 2× kvůli zesílení dropu 1), střih v1 | – | renderer zrychlen 5× (C027) |
 | 1 | technika · wow · zadání | kontrola V002_v1 | technika SCHVÁLENO, zadání SCHVÁLENO (všech 6 pravidel uživatele splněno), **wow 7,8 / energie 7,5 → OPRAVIT** | mrtvých 0,4 s před BUILT, statický úvod 0–2,8 (push-cuts do hledí), stoupání a drop 2 hlasitěji, splétání stop jako srážky, hrana masky GT 7,3; drobné: barvy loga a zaplavení, tyrkysový přepal, glitch 17,475, RACE okna bez vozu |
 | 2 | technika · wow · zadání | kontrola V002_v2 (opravy obrazu: push-cuts do hledí, drop 1 natvrdo, cop stop, sloup u GT; zvuk v2: stoupání a drop 2) | **wow 8,4 / energie 7,5**, technika OPRAVIT (GT couvá 7,13–7,5, LIGHTS přes helmu), zadání viz níže → 3. kolo | statická místa: CHASE THE LINE, tiker, stoupání T10, jiskry, T14; háček zvukově slabý |
+| 3 | technika · wow · zadání | kontrola V002_v3 (živější CHASE THE LINE, tiker, T10, jiskry, T14; GT bez couvání; zvuk v3 silnější háček) | technika SCHVÁLENO, **wow SCHVÁLENO 8,25 / energie 8**, zadání OPRAVIT | závažné: duhový chromatický lem na logu v dropu 2 (všichni 3), slabý úder loga 26,25 → režisérská oprava v4 |
 
 ## Chyby během výroby
 - C024: první spuštění přípravy zamítnuto (pokyn obejít 403 na webu značky) → pokyn odstraněn, logo z Commons, paleta předběžně.
@@ -328,6 +331,7 @@ jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 
 | agent / úkol | tokeny | akce nástrojů | čas |
 |---|---|---|---|
 | workflow příprava (5 agentů: analytik, zvukař, kreativní ředitel koncept, oponent, revize) | 500 581 | 121 | 35,7 min |
+| workflow výroba (24 agentů: zvukař ×3, animátor ×9, kreativní ředitel ×1, střihač ×3, kritici ×9) | 4 158 824 | 1 506 | 376 min |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
