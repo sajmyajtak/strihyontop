@@ -15,6 +15,18 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### V001: Bageterie Boulevard „Logo byla celou dobu bageta“ (2026-10-31, doručeno, čeká na zpětnou vazbu)
+- Zadání: projekty/001-bb-chill/zadani.md. Výsledek: 25 s, 1080×1920, 60 fps, wow 6,9 → 7,3 → **8,1**, schváleno všemi 3 kritiky ve 3. kole.
+- **Fungovalo**: porota konceptů (vítěz stál na geometrii loga), schválení klíčových snímků před stavbou pohybu (chytilo „rajče jako kámen“,
+  „chleba jako prkénko“ a „rukolu jako javor“ dřív, než se drahé renderovalo), nezávislí kritici s důkazy po snímcích, automatika hudby
+  (ztlumení před dropem dá +17 dB kontrast), **závazný pokyn režiséra**, když se stejná chyba opakuje (řezy nadpisů selhaly 2×, po pokynu napoprvé).
+- **Nefungovalo / zdržení**: maximální úroveň přemýšlení a obří výstupy (C018), limit účtu (C020), pravidlo „SFX tiše pod hudbou“ utopilo pointy (I3 upraveno),
+  chybělo pravidlo o velikosti hrdiny (A8). Celkem ~3,7 mil. tokenů změřeno, ~5,3 h práce agentů.
+- **Pro příště**: (1) vztahovat výtky „neviditelné na telefonu“ k zmenšenině 270 px už v klíčových snímcích; (2) přechody textu stavět vždy přísně
+  po sobě (nikdy dvě vrstvy textu v jednom snímku), to je teď v pokynu V001 a patří to do pravidel D/E po zpětné vazbě; (3) u spec reklam
+  v popisku neoznačovat značku @handle.
+- Zpětná vazba uživatele: (doplnit)
+
 ### 2026-10-30: V001 porota konceptů (první workflow s více agenty)
 - Uživatel: **na každý úkol vlastní agent, ostatní agenti se ptají hlavního, video má být „wow“**. Zavedeny role zvukař a kreativní ředitel,
   koncept přes porotu: 3 návrhy (A animátor, B a C kreativní ředitelé z jiných úhlů) → 3 porotci s různými pohledy naslepo → syntéza.

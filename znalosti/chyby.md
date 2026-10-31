@@ -13,6 +13,17 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C023: master_zvuk.sh pustil true peak −0,96 dBTP (2026-10-31, V001, našel střihač)
+- Příznak: s cílem ≤ −1 dBTP skončil mix na −0,96 dBTP a skript ho přijal.
+- Příčina: tolerance +0,05 dB v podmínce ukončení.
+- Oprava: tolerance zrušena (podmínka ≤ cíl), ověřeno na V001_v3 (−14,0 LUFS / −1,0 dBTP).
+- Prevence: limity bez tolerance, rezervu řeší cíl, ne podmínka.
+
+### C022: Mezikrok přes MKV zkrátil video na 24,999 s (2026-10-31, V001 střih, našel a opravil střihač)
+- Příčina: MKV ukládá časy v milisekundách, 1500 snímků při 60 fps se zaokrouhlilo.
+- Oprava: mezikrok přes MOV, délka 25,000 s, video stopa bit po bitu stejná (MD5).
+- Prevence: při kopírování stop mezi kontejnery nepoužívat MKV jako mezikrok, používat MOV nebo MP4. Délku vždy ověřit ffprobe.
+
 ### C021: Průběžné commity režiséra zmátly zvukaři základ pro porovnání (2026-10-31, V001 výroba, našel zvukař)
 - Příznak: zvukař porovnával hashe pohodové nálady „proti HEAD“, jenže HEAD už obsahoval jeho vlastní rozpracovanou verzi
   (režisér ji kvůli stop hooku průběžně commitoval). Porovnával tedy verzi samu se sebou.

@@ -6,7 +6,7 @@
 | Platforma / formát | IG Reels / TikTok / Shorts, 1080×1920 (9:16), 60 fps |
 | Délka | **25 s** |
 | Termín | co nejdřív |
-| Stav | výroba |
+| Stav | **doručeno** (V001_v3, schváleno v kole 3) |
 
 ## Zadání (doslova od uživatele)
 > hele vem si od tehle stranky barvu na vide logo hudbu takovou když jdeš jíst například od mekače což znamená pohodová chill. https://www.bb.cz
@@ -287,6 +287,7 @@ pak drop 7,19–8,2, pak zbytek. Bez schválení 8,4 nevzniká žádný pohyb.
 | F1b | porota (3 kreativní ředitelé) + syntéza | výběr konceptu ze 3 návrhů (A ubrus, B rozkrojené logo, C kapela surovin) + finální storyboard | vítěz **B** (2 hlasy ze 3) | skóre B 7,05 · A 6,98 · C 6,38; zapracováno: akt 1 = stoupající tlak ve švu místo bubliny a čepice (logo tuhé), nůž jako příčina řezu, chleba na řezu, řez nadpisu o swingovou osminu později, servírování na marimbu místo cedulky menu, sdílená slova ALWAYS / FAST, větší náplň ve snímku 0, EXPRESS GOURMET. 108 px |
 | V1 (kolo 1) | zvukař, animátor (klíčové snímky → kreativní ředitel 7,1 → oprava → pohyb a render), střihač, 3 kritici | první celé video 25 s | **OPRAVIT** (wow 6,9; technika, zadání: OPRAVIT) | hrdina malý na telefonu a prázdná spodní polovina; zvuk nenese drop, zip ani ticho gagu (SFX o 11–15 dB pod hudbou, hudba nemlčí); tlak ve švu v aktu 1 neviditelný; servírování nečitelné; zaklapnutí zplácne náplň; řezy nadpisů se kříží do „NXT EAST“; polknutí 3 snímky; šmouha na textu 20,1–20,4; pesto přes písmena loga. Všechna pravidla uživatele splněna. Režisér upravil I3 a přidal A8 |
 | V2 (kolo 2) | zvukař (automatika hudby, drop +17,4 dB, ticho gagu), animátor (větší hrdina, tlak ve švu, servírování, zaklapnutí; 2 rendery), střihač, 3 kritici | opravy po kole 1 | **OPRAVIT** (wow **7,3**; technika: BLOKUJÍCÍ) | řezy nadpisů se pořád kříží (2. kolo stejná chyba), polknutí předbíhá zvuk o 75 ms, šmouha a cuknutí textu 17,97 a 20,2 s, plakát s posunutou žlutou (převod BT.709 → JPEG). Pochváleno: drop (ticho, nůž, křupnutí +18 dB), gag „kde je?“ čitelný bez zvuku. Režisér zapsal závazný pokyn pro kolo 3 |
+| V3 (kolo 3) | animátor (pokyn režiséra: řezy nadpisů přísně po sobě, text bez šmouhy, synchron polknutí), střihač, 3 kritici | poslední kolo | **SCHVÁLENO ×3** (wow **8,1**) | 0 závažných, 11 drobných: logo v aktu 1 menší (67 % šířky), repríza tlaku 14,4–16,9 s bez nové informace, samotné „FAST“ 0,3 s ve 20,2 s, stejné komůrky rajčat, nůž těsně pod písmeny, šmouha na dropu 6–10 px. Režisér: z popisku odstraněn @handle značky, zpřísněna tolerance master_zvuk.sh |
 
 ## Chyby během výroby
 - C016 (fonty z Google se nestáhly před měřením, opraveno, prevence v `scena.html`), C017 (příliš tmavý mix pohodové hudby, kontrola pásem ho neodhalí)
@@ -296,12 +297,19 @@ pak drop 7,19–8,2, pak zbytek. Bez schválení 8,4 nevzniká žádný pohyb.
 |---|---|---|---|
 | animator: fáze 1 (značka, hudba, koncept) | 403 696 | 114 | 40,7 min |
 | workflow koncept (obnovený běh: návrhy B + C, 3 porotci, syntéza) | 486 830 | 81 | 20,6 min |
-| zastavený agent C v prvním běhu (3× limit výstupu, nic nezapsal, C018) | ~694 000 (z transkriptu: výstup 386 590 + vstup 307 903) | – | 70 min, ztráta |
-| workflow výroba, 1. pokus (zvukař + animátor, přerušeno limitem účtu po ~7 min, C020) | 234 247 | 52 | 7,6 min |
+| zastavený agent C v prvním běhu (3× limit výstupu, nic nezapsal, C018) | ~694 000 (odhad z transkriptu) | – | 70 min, ztráta |
+| workflow výroba, 1. pokus (přerušen limitem účtu, C020) | 234 247 | 52 | 7,6 min |
+| workflow výroba, 2. pokus (20 agentů: zvukař, animátor ×5, kreativní ředitel, střihač ×3, kritici ×9, zvukař opravy) | 2 589 169 | 951 | 229 min |
+| **celkem změřeno** | **3 713 942** | **1 198** | ~5,3 h |
+| celkem včetně odhadu zastaveného agenta | ~4 408 000 | | |
+| hlavní chat (režisér) | neměřeno | | |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
+| v1 | 2026-10-31 | media/…/vystup/V001_v1.mp4 (interní) | první celé video, wow 6,9 |
+| v2 | 2026-10-31 | media/…/vystup/V001_v2.mp4 (interní) | větší hrdina, automatika zvuku, wow 7,3 |
+| **v3** | 2026-10-31 | media/…/vystup/V001_v3.mp4 + _bez_hudby + plakát + popisek → **uživateli do chatu** | řezy nadpisů, text bez šmouhy, synchron polknutí, wow 8,1, schváleno ×3 |
 
 ## Zpětná vazba (doslova)
 

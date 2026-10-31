@@ -24,7 +24,7 @@ for pokus in 1 2 3 4; do
   PO_I=$(grep -E "^\s+I:" <<<"$PO" | tail -1 | awk '{print $2}')
   PO_TP=$(grep -E "^\s+Peak:" <<<"$PO" | tail -1 | awk '{print $2}')
   echo "pokus $pokus (cíl $CIL_I LUFS${LIMITER:+, limiter}): po AAC I=$PO_I LUFS, TP=$PO_TP dBTP"
-  if python3 -c "import sys; sys.exit(0 if float('$PO_TP') <= float('$TP') + 0.05 else 1)"; then break; fi
+  if python3 -c "import sys; sys.exit(0 if float('$PO_TP') <= float('$TP') else 1)"; then break; fi
   NOVY=$(python3 -c "print(round(float('$CIL_I') - (float('$PO_TP') - float('$TP')) - 0.1, 2))")
   if python3 -c "import sys; sys.exit(0 if float('$NOVY') >= float('$I') - 1 else 1)"; then
     CIL_I=$NOVY
