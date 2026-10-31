@@ -931,7 +931,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
                     zapis("maly_buben_tlesknuti", t0 + d * doba, t0 + d * doba, jen_tlesknuti=True)
             if posledni:                                                # nádech před dropem
                 for d in range(3):
-                    kopak(t0 + d * doba, 0.85, 0.55)
+                    kopak(t0 + d * doba, 0.85, 0.3)
                 vir(t0 + 2 * doba, drop, 0.06, 0.42)
                 mx.pridej("fx", t0, stoupani(takt), 0.45)
                 mx.pridej("fx", drop - 2 * doba, reverse_cinel(2 * doba), 0.5)
@@ -990,7 +990,7 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
         elif stoupani_:                                                 # stoupání do dropu 2
             mx.pridej("harmonie", t0, filtr_prubeh(plocha(pad + [pad[0] - 12], takt, 9000, 0.7, 0.02), 1100, 6000), 1.0)
             for d in range(4):
-                kopak(t0 + d * doba, 0.7 + 0.1 * d, 0.5 + 0.05 * d)
+                kopak(t0 + d * doba, 0.7 + 0.1 * d, 0.26 + 0.03 * d)
             vir(t0, t0 + 2 * doba, 0.04, 0.16, 2)
             vir(t0 + 2 * doba, t0 + 3 * doba, 0.18, 0.3, 4)
             vir(t0 + 3 * doba, drop2, 0.3, 0.5, 8)
