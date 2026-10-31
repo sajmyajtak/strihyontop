@@ -293,7 +293,7 @@ MAX_SPICKA = -6.0                                                       # dBFS: 
 def stopa(udalosti, delka, hk=None):
     """Vyrobí stereo stopu SFX a seznam samostatně umístěných zvuků (mono, pro kontrolu vrcholů).
     Každý zvuk se posune tak, aby jeho změřený vrchol padl na `cas`. Hlasitost: `lu` = o kolik LU je efekt tišší než hudba
-    v okně 400 ms (potřebuje K-váženou hudbu `hk`), jinak `uroven` = špička v dBFS."""
+    v okně OKNO_CIL (potřebuje K-váženou hudbu `hk`), jinak `uroven` = špička v dBFS. Do `uroven` se zapíše výsledná špička."""
     n = int(round(delka * SR))
     out = np.zeros((2, n))
     samotne = []
@@ -313,9 +313,9 @@ def stopa(udalosti, delka, hk=None):
         if "lu" in u and hk is not None:
             zisk = 10 ** ((hlasitost(hk, u["cas"], OKNO_CIL) + u["lu"] - hlasitost(k_vazeni(st), u["cas"], OKNO_CIL)) / 20)
             zisk = min(zisk, 10 ** (u.get("strop", MAX_SPICKA) / 20) / np.max(np.abs(st)))
-            u["uroven"] = round(20 * np.log10(zisk * np.max(np.abs(x))), 1)
         else:
-            zisk = 10 ** (u["uroven"] / 20)
+            zisk = 10 ** (u["uroven"] / 20) / np.max(np.abs(st))
+        u["uroven"] = round(20 * np.log10(zisk * np.max(np.abs(st))), 1)
         out += st * zisk
         mono = np.zeros(n)
         mono[i:i + k] = x[:k] * zisk

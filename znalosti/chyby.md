@@ -13,6 +13,13 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C021: Průběžné commity režiséra zmátly zvukaři základ pro porovnání (2026-10-31, V001 výroba, našel zvukař)
+- Příznak: zvukař porovnával hashe pohodové nálady „proti HEAD“, jenže HEAD už obsahoval jeho vlastní rozpracovanou verzi
+  (režisér ji kvůli stop hooku průběžně commitoval). Porovnával tedy verzi samu se sebou.
+- Oprava: zvukař sám přešel na základ 0af1765 (poslední stav před ním). Režisér nezávisle ověřil: drzá a luxusní jsou stejné bit po bitu.
+- Prevence: v zadání pro agenta, který mění nástroje, **uvádět pevný základní commit** (hash), ne HEAD. Režisér během práce agentů
+  commituje průběžné snímky, takže HEAD se pod rukama mění.
+
 ### C020: Výrobu přerušil 5hodinový limit účtu (2026-10-30, V001 výroba, workflow vrátil chybu)
 - Příznak: zvukař i animátor po ~7 min skončili s „You've hit your 5-hour limit · resets 11:40pm (UTC)“. Workflow vrátil „animátor nedodal render“.
   Hlídač ukazoval jen TICHO, protože skutečnou příčinu hlásí až výsledek workflow (pole failures).

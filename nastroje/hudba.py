@@ -5,7 +5,7 @@ Použití:
         [--bpm 120] [--drop 4.0] [--konec 17.5] [--seed 1]
   --drop   čas nástupu plné části (zaokrouhlí se na celý takt), předtím úvod a stoupání
   --konec  čas finálního úderu (end card), zaokrouhlí se na dobu; potom už jen doznívá
-Výstup: WAV 48 kHz stereo na −14 LUFS (true peak ≤ −1,5 dBTP) + JSON se všemi dobami, takty a událostmi
+Výstup: WAV 48 kHz stereo, přibližně −13 až −14 LUFS (jednoprůchodový loudnorm; přesnou hlasitost řeší nastroje/master_zvuk.sh)
 pro synchronizaci animace (hudba.json vedle WAV). `udalosti_nastroju`: časy po swingu pro každý nástroj
 (kopák, malý buben / tlesknutí, hi-hat, marimba s notou, kytara, basa, Rhodes…), `nastup` = skutečný začátek zvuku.
 Bez `nastup` = posun zvuku je náhodný (±4 ms), bere se `cas`. Shaker, plochy a stoupání se nezapisují (nejsou to údery).

@@ -90,6 +90,8 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
 - `nastroje/hudba.py --nalada vazna|drza|luxusni --delka N --out x.wav [--bpm --drop --konec]`: vlastní hudba do pozadí (syntéza, bez licencí),
   + `x.json` s dobami, takty, dropem a koncem pro synchronizaci animace. Sám kontroluje pásma (telefon pod ~100 Hz nehraje).
+- `nastroje/sfx.py`: zvukové efekty syntézou ze seznamu událostí (JSON) → sfx.wav + sfx.json + mix; změřený vrchol přesně na čas události,
+  hlasitost `lu` pod hudbou (okno 100 ms, K-vážení). `hudba.json` obsahuje i `udalosti_nastroju` (časy kopáku, marimby… pro synchronizaci obrazu).
 - `nastroje/drive.sh ID_NEBO_ODKAZ [cíl]`: stažení souboru nebo celé složky z Google Drive (konektor jen k hledání a malým souborům).
 - `nastroje/materialy.py SLOZKA`: příprava materiálů (HEIC → JPG, otočení podle EXIF, HDR / proměnlivé fps / otočení videa), katalog + `_prehled.jpg`.
 - **Higgsfield NEPOUŽÍVAT** (rozhodnutí uživatele 2026-10-30). Hlas a případně hudba později přes ElevenLabs (`ELEVENLABS_API_KEY`).

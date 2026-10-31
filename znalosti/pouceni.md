@@ -70,6 +70,8 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 - **TikTok**: yt-dlp v tomto prostředí selhává („Unexpected response from webpage request“). Obejití imitací prohlížeče zablokovala bezpečnostní pravidla prostředí. TikToky si nechat **poslat jako soubor**.
 - **Přepis**: faster-whisper (`nastroje/prepis.py`). Zvuk se musí předávat přes ffmpeg, vestavěné dekódování padá na verzi PyAV. Model `small` stačí na angličtinu, pro češtinu `medium` / `large-v3`.
 - Whisper občas zkomolí jména a značky („Higgs Field“, „Enmi Ogoki“ = „DM me UGOKI“). Přepis vždy porovnat s obrazem.
+- **Známý dluh hudby**: nové kontrole po oktávách neprojdou nálady **vážná** (250→500 Hz +16 dB, středy 85 %) a **luxusní** (1→2 kHz −12,7 dB,
+  nad 2 kHz skoro nic). Vyrovnat je v projektu, který je poprvé použije. Změní se tím jejich zvuk, proto ne naslepo. Drzá a pohodová jsou v pořádku.
 - Prostředí: 4 CPU, bez GPU. Render 1080×1920 krátkých videí je v pohodě, dlouhé 3D scény budou pomalé.
 - `render_html.cjs`: ~8 s výpočtu na 1 s videa 1080×1920 při 30 fps a 3 podsnímcích (15s video ≈ 2 min). Při 60 fps nebo `--sub 6` počítat 2× déle.
 - prompt-motion.com: data jsou ve stránce (Next.js RSC payload), stahuje se bez přihlášení. robots.txt: `use=reference`, `ai-train=no`, `/api/` zakázáno.

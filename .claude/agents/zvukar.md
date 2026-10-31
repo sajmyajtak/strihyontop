@@ -16,7 +16,7 @@ Uživateli se neptáš. Když si nevíš rady, vrať režisérovi **OTÁZKA PRO 
 1. **Časování je svaté**: BPM, drop a konec ze storyboardu nikdy neměň bez souhlasu režiséra. Na nich stojí animace.
 2. Hudba: `python3 -I nastroje/hudba.py --nalada … --delka … --drop … --konec … --out media/projekty/<projekt>/hudba.wav`.
    Nesmí vyskočit VAROVÁNÍ pásem (I7). Když upravuješ `hudba.py`, nesmíš rozbít ostatní nálady: všechny po změně vyrenderuj.
-3. Zvukové efekty (I3): jeden jemný zvuk na každou **událost** v obraze (dopad, pop, otevření, klik, logo), ne na každý pohyb.
+3. Zvukové efekty (I3), nástroj `nastroje/sfx.py`: jeden jemný zvuk na každou **událost** v obraze (dopad, pop, otevření, klik, logo), ne na každý pohyb.
    **Změřený vrchol** zvuku musí padnout přesně na událost. Pod hudbou tiše, mezi událostmi ticho. Efekty syntetizuj v Pythonu (numpy/scipy) nebo ffmpeg.
    Nic stahovaného z internetu bez licence (I5).
 4. Mix: hudba + efekty → `zvuk.wav` (48 kHz stereo). Pak `nastroje/master_zvuk.sh` (−14 LUFS, ≤ −1 dBTP po AAC).
