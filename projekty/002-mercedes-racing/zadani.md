@@ -59,10 +59,37 @@
 ## Materiály
 | soubor | kde je | použití |
 |---|---|---|
+| `Mercedes-Logo.svg` (originál, 1,5 MB, chromová 3D hvězda z ~1 250 plochých cest) | `media/projekty/002-mercedes-racing/znacka/` ← [Commons](https://commons.wikimedia.org/wiki/File:Mercedes-Logo.svg) | zdroj tvaru; do scény jen jako PNG (`mercedes-hvezda-original_1024.png`), když chceme chrom |
+| `mercedes-hvezda-plocha.svg` (1 cesta, 610 B, `fill="currentColor"`) | tamtéž | hlavní logo do scény (maska, záblesk, obrys, end card). Shoda s originálem 97,75 % pixelů (rozdíl jen na hranách) |
+| `mercedes-hvezda-fazety.svg` (7 cest, ramena dělená na světlou / tmavou plochu, barvy z CSS proměnných `--mb-hvezda-*`) | tamtéž | „kovová“ hvězda bez 1,5 MB SVG, světlo shora jako originál |
+| PNG náhledy `*_1024.png`, `hvezda_generator.py` (geometrie změřená z originálu) | tamtéž | kontrola tvaru, znovuvytvoření |
+| `znacka.css` (paleta jako CSS proměnné), `vzornik-znacky.html/.jpg` (paleta + fonty + hvězda na 1920×1080) | tamtéž | vložit do scény; vzorník pro kreativního ředitele a animátora |
+
+**Licence loga**: soubor na Commons nahrál uživatel *Khaled* (2018-07-15, „own work“, podle *Mercedes-Benz Logo 2010.svg*), licence **CC BY-SA 4.0**.
+Hvězda je zároveň **ochranná známka Mercedes-Benz Group AG** (licence Commons se týká jen kresby, ne práva ke známce).
+Uvedení zdroje do popisku: „Mercedes star: Khaled / Wikimedia Commons, CC BY-SA 4.0“. Spec reklama s disclaimerem (J5).
 
 ## Režijní list
 - **Koncept jednou větou**: (doplní kreativní ředitel)
-- **Vzhled**: (barvy a font z webu doplní analytik)
+- **Vzhled** (analytik, 2026-10-31). **Barvy jsou PŘEDBĚŽNÉ, NEOVĚŘENO z webu** (mercedes-benz.cz vrací 403, čeká se na screenshot od uživatele).
+  Všechny barvy jen přes proměnné z `media/projekty/002-mercedes-racing/znacka/znacka.css`, ať jdou vyměnit na jednom místě.
+  - Základ (digitální paleta MB): `--mb-cerna #000000` pozadí a end card · `--mb-bila #FFFFFF` hlavní text, záblesky, světlomety ·
+    `--mb-modra #0078D6` **jediný akcent** (klíčové slovo, linka, UI prvek; modrá odkazů a tlačítek webu)
+  - Stříbro a šedá (lak „stříbrných šípů“, kov hvězdy): `--mb-stribro-svetle #E6E8EA` odlesk · `--mb-stribro #C9CDD0` lak, prstenec, kovový text ·
+    `--mb-seda #8E969B` stín laku, disclaimer · `--mb-grafit #1E2124` asfalt, střed vinětace
+  - Závodní doplněk, odvozený z modré (ne nová barva, G1): `--mb-modra-zare #4DA8FF` světelné stopy, záře, rychlostní čáry · `--mb-modra-tmava #00508F` odlesk na asfaltu
+  - Volitelně `--mb-brzdove-svetlo #FF2A2A`: jen fyzická zadní světla vozu, malé plochy, nikdy text. **Ne tyrkysová** (to je barva sponzora, C8).
+  - Poměr: ~70 % černá / grafit, ~20 % stříbro a bílá, ~10 % modrá. Modrá na černé má kontrast ~4,6 : 1 → v textu jen velké nadpisy, menší text bílý.
+  - **Font** (MB Corpo A / Corpo S jsou proprietární): **Archivo** (Google Fonts, latin-ext, osa šířky 62–125 %) jako jediná rodina (E4):
+    nadpisy `font-stretch:125%; font-weight:900`, pro rychlost kurzíva, VERZÁLKY; podnadpisy 112 % / 800; „Mercedes-Benz“ na end card 100 % / 600 s prostrkáním.
+    Proč: rozšířený grotesk = závodní / motorsport vzhled, přitom střídmý a „německy“ technický jako Corpo S; jedna proměnná rodina = nadpis i text.
+    Text a disclaimer: **Inter Tight** 500 (nejbližší neutrálnímu Corpo S). Patkové Corpo A (slovní značka) **nenapodobovat**, nevypadalo by to jako falešné logo.
+    Pozor: Archivo 125 % / 900 při 170 px má na řádek max. ~12 znaků v bezpečné zóně (A5), „FULL THROTTLE“ už přetéká → 140 px nebo šířka 112 %.
+    Do `FONTY` ve scéně: `'900 italic 150px Archivo'`, `'800 150px Archivo'`, `'600 60px Archivo'`, `'500 40px "Inter Tight"'` (C016).
+  - **Logo**: `mercedes-hvezda-plocha.svg` (hlavní, `currentColor`), `mercedes-hvezda-fazety.svg` (kov), chrom jen jako PNG. Hvězdu nedeformovat
+    (jen jednotné měřítko a otočení), prostor kolem ≥ 25 % průměru, na end card průměr ~300–360 px.
+  - **Hesla** (anglicky, bez tečky, bez faktů a čísel): LIGHTS OUT · FULL THROTTLE · BUILT TO RACE · CHASE THE LINE · FASTER BY DESIGN ·
+    EVERY CORNER COUNTS · FOLLOW THE STAR (end card). Disclaimer: „Concept ad · not affiliated with Mercedes-Benz“.
 
 ## Storyboard / časová osa
 (doplní kreativní ředitel)
