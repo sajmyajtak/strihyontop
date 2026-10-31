@@ -265,6 +265,21 @@ def vrchol(x, od=0, do=None):
 
 
 # ---------- skládání stopy ----------
+def akcent(x, rng, sila=1.2):
+    """Krátký dotek (2 ms šumu 1–6 kHz) přesně ve vrcholu. Šumové zvuky (klouznutí, šustnutí) mají plochý vrchol a obálka
+    RMS 2 ms ho pak najde kdekoli v rozmezí ±15 ms. S dotekem padne vrchol na stejné místo při každém způsobu měření."""
+    p = vrchol(x)
+    m = int(0.002 * SR)
+    if p - m < 0 or p + m > len(x):
+        return x
+    okno = np.hanning(2 * m)
+    d = pasmo(rng.standard_normal(2 * m + 200), 1000, 6000)[100:-100] * okno
+    uroven = obalka_vrcholu(x)[p]
+    x = x.copy()
+    x[p - m:p + m] += d / (np.sqrt(np.mean(d ** 2)) + 1e-12) * uroven * sila
+    return x
+
+
 # Hlasitost efektu se cílí v okně 100 ms (ucho sčítá krátké zvuky zhruba tak dlouho). V okně 400 ms (EBU momentary)
 # by se 5ms cvaknutí „rozředilo“ a pro stejný údaj by muselo mít špičku nad hudbou. Kontrola se hlásí v obou oknech.
 OKNO_CIL = 0.1
@@ -280,7 +295,7 @@ def stopa(udalosti, delka, hk=None):
     samotne = []
     for u in udalosti:
         rng = np.random.default_rng(u.get("seed", int(u["cas"] * 1000)))
-        x = horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60)
+        x = akcent(horni(ZVUKY[u["typ"]](rng, u.get("ton", 1.0)), 60), rng)
         x = x / (np.max(np.abs(x)) + 1e-12)
         i = int(round(u["cas"] * SR)) - vrchol(x)
         if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
@@ -338,7 +353,7 @@ def main():
     # Vrchol v hotové stopě (všechny efekty dohromady) má smysl jen tam, kde zvuk v okně ±30 ms převládá.
     # Kde ho překryje delší soused (pesto po „pumf“, popy po křupnutí), platí vrchol samotného zvuku a `prekryto`.
     problemy = []
-    ob_stopy = obalka_vrcholu(sfx)
+    ob_stopy = obalka_vrcholu(np.sum(samotne, axis=0))                # mono součet: stejné měřítko jako samotný zvuk
     for u, mono in zip(udalosti, samotne):
         c = int(round(u["cas"] * SR))
         sousede = [abs(v["cas"] - u["cas"]) for v in udalosti if abs(v["cas"] - u["cas"]) > 1e-6]
