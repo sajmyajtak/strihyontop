@@ -1,0 +1,812 @@
+[
+ {
+  "cas": 0.5,
+  "typ": "svetla",
+  "lu": -8,
+  "strop": -12,
+  "popis": "T1 Iconic Glow: ledvinky se rozsvítí (cink skla, ping D6)"
+ },
+ {
+  "cas": 1.0,
+  "typ": "svetla",
+  "lu": -9,
+  "ton": 0.75,
+  "strop": -12,
+  "popis": "T1 světlomety (nízký hukot světel, o kvartu níž)"
+ },
+ {
+  "cas": 1.6,
+  "typ": "svih_mekky_kratky",
+  "lu": -12,
+  "pan": 0.4,
+  "pan_do": -0.3,
+  "strop": -16,
+  "popis": "T1 rychlý oblouk otočky 030 → 090 (1,5–1,75)"
+ },
+ {
+  "cas": 2.0,
+  "typ": "klik",
+  "lu": -10,
+  "strop": -14,
+  "popis": "T2 karta 21″ / 909 M (bod → linka → karta), měkký klik"
+ },
+ {
+  "cas": 3.0,
+  "typ": "detent",
+  "lu": -14,
+  "strop": -22,
+  "popis": "T2 karta odchází do linky a bodu (tick)"
+ },
+ {
+  "cas": 3.5,
+  "typ": "zaverka",
+  "lu": -8,
+  "pan": -0.2,
+  "strop": -12,
+  "popis": "T2 záblesk jízdy 1 (flash cut 3,5–3,583): cvak závěrky + vzduch"
+ },
+ {
+  "cas": 3.75,
+  "typ": "zaverka",
+  "lu": -7,
+  "pan": 0.2,
+  "ton": 1.08,
+  "strop": -12,
+  "popis": "T2 záblesk jízdy 2 (flash cut 3,75–3,833)"
+ },
+ {
+  "cas": 3.93,
+  "typ": "ev_najezd",
+  "lu": -5,
+  "konec": 3.95,
+  "strop": -8,
+  "popis": "T2 elektrický nájezd i7 3,0–3,93 (kola se roztáčejí), vrchol na konci, utne před nádechem 3,95"
+ },
+ {
+  "cas": 4.0,
+  "typ": "ev_uder",
+  "lu": -2,
+  "strop": -3,
+  "popis": "DROP 1: vůz vyjede ze studia (náraz + závan + výstřel tónu pohonu)"
+ },
+ {
+  "cas": 4.15,
+  "typ": "ev_prujezd",
+  "lu": -4,
+  "pan": 0.75,
+  "pan_do": -0.8,
+  "od": 4.0,
+  "strop": -8,
+  "popis": "T3 průjezd I 50,80 profilem doleva (Doppler zprava doleva, vrchol 4,15)"
+ },
+ {
+  "cas": 4.5,
+  "typ": "svih_mekky",
+  "lu": -7,
+  "pan": 0.5,
+  "pan_do": -0.5,
+  "strop": -12,
+  "popis": "T3 střih C 24,36: nakloněný průjezd bokem (whoosh)"
+ },
+ {
+  "cas": 5.0,
+  "typ": "vzduch",
+  "lu": -9,
+  "od": 4.9,
+  "strop": -14,
+  "popis": "T3 střih B 11,00: let nad kapotou (vzduch)"
+ },
+ {
+  "cas": 5.5,
+  "typ": "fup",
+  "lu": -9,
+  "pan": -0.2,
+  "strop": -14,
+  "popis": "T3 střih B 11,60: sklo → střecha (vzduch nad střechou)"
+ },
+ {
+  "cas": 5.75,
+  "typ": "fup",
+  "lu": -9,
+  "pan": 0.2,
+  "ton": 0.85,
+  "strop": -14,
+  "popis": "T3 střih H 44,80: kamera přeskočí hřeben (vzduch)"
+ },
+ {
+  "cas": 6.0,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -16,
+  "popis": "T4 dron J: bod na silnici vedle vozu (klik)"
+ },
+ {
+  "cas": 6.5,
+  "typ": "sklo_pop",
+  "lu": -11,
+  "strop": -16,
+  "popis": "T4 karta Electric range (WLTP) 686 km vstoupí"
+ },
+ {
+  "cas": 6.5625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.0,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (1/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.01,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (2/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.6875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.02,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (3/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.75,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.03,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (4/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.8125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.04,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (5/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.05,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (6/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 6.9375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.06,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (7/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 7.0625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.07,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (8/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 7.1875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.08,
+  "strop": -28,
+  "popis": "T4 rolování číslic 686 (9/9, návrh: animátor naváže na změny číslic)"
+ },
+ {
+  "cas": 7.25,
+  "typ": "ding",
+  "lu": -9,
+  "strop": -16,
+  "popis": "T4 686 dosedne + modrá lišta (sklo, tiše)"
+ },
+ {
+  "cas": 7.75,
+  "typ": "detent",
+  "lu": -14,
+  "strop": -22,
+  "popis": "T4 karta odchází do linky a bodu (tick)"
+ },
+ {
+  "cas": 8.0,
+  "typ": "vzduch",
+  "lu": -9,
+  "od": 7.97,
+  "strop": -14,
+  "popis": "T5 střih B 11,90: let nad čelním sklem (vzduch přes sklo)"
+ },
+ {
+  "cas": 8.25,
+  "typ": "ev_prujezd",
+  "lu": -5,
+  "pan": -0.6,
+  "pan_do": 0.7,
+  "od": 8.0,
+  "strop": -8,
+  "popis": "T5 střih W 8,40: sledovací záběr, vůz jede doprava od kamery (střihač), průjezd zleva doprava"
+ },
+ {
+  "cas": 8.75,
+  "typ": "sterk",
+  "lu": -9,
+  "strop": -14,
+  "popis": "T5 střih H 44,50: kamera nízko přeskakuje kamení"
+ },
+ {
+  "cas": 9.0,
+  "typ": "ev_prujezd_tichy",
+  "lu": -9,
+  "pan": 0.1,
+  "pan_do": 0.7,
+  "od": 8.95,
+  "strop": -12,
+  "popis": "T5 střih W 9,60: vůz blíž, záď 3/4 odjíždí doprava (střihač)"
+ },
+ {
+  "cas": 10.0,
+  "typ": "svih_mekky",
+  "lu": -6,
+  "pan": 0.6,
+  "pan_do": -0.6,
+  "strop": -10,
+  "popis": "T5→T6 švih P2 9,94–10,0 doleva do rendru (vrchol 10,0)"
+ },
+ {
+  "cas": 10.25,
+  "typ": "hover",
+  "lu": -14,
+  "strop": -24,
+  "popis": "T6 pilulka BMW Iconic Glow: text odkryt"
+ },
+ {
+  "cas": 10.96,
+  "typ": "svetla",
+  "lu": -8,
+  "strop": -12,
+  "popis": "T6 záře Iconic Glow se rozzáří (swell 10,94–10,97) → protisvětlo"
+ },
+ {
+  "cas": 12.0,
+  "typ": "ponor",
+  "lu": -4,
+  "od": 11.5,
+  "strop": -8,
+  "popis": "T6→T7 ponor do střechy (klesající závan 11,5–12,0, vrchol 12,0 = tma skla / strop)"
+ },
+ {
+  "cas": 12.5,
+  "typ": "sklo_pop",
+  "lu": -11,
+  "strop": -16,
+  "popis": "T7 bod u Panoramic Vision → pilulka BMW Panoramic Vision"
+ },
+ {
+  "cas": 13.0,
+  "typ": "svih_mekky_kratky",
+  "lu": -10,
+  "pan": 0.3,
+  "pan_do": -0.4,
+  "strop": -16,
+  "popis": "T7 obraz se zmenší do dlaždice a odjede doleva (swoosh)"
+ },
+ {
+  "cas": 13.25,
+  "typ": "dosednuti",
+  "lu": -10,
+  "pan": 0.3,
+  "strop": -16,
+  "popis": "T7 dlaždice 2 vyjede (dosednutí)"
+ },
+ {
+  "cas": 13.5,
+  "typ": "trpyt",
+  "lu": -9,
+  "strop": -16,
+  "popis": "T7 ovladače CraftedClarity se rozsvítí (sklo ting) + pilulka změní text"
+ },
+ {
+  "cas": 14.0,
+  "typ": "klik",
+  "lu": -11,
+  "pan": 0.3,
+  "strop": -16,
+  "popis": "T8 dlaždice 3 (Merino) vyjede, pilulka přeskočí"
+ },
+ {
+  "cas": 14.5,
+  "typ": "klik_uchop",
+  "lu": -11,
+  "pan": -0.1,
+  "strop": -16,
+  "popis": "T8 dlaždice 4 + bod skočí do rohu (stisk −15 % = výběr)"
+ },
+ {
+  "cas": 15.9,
+  "typ": "svih_mekky_dlouhy",
+  "lu": -8,
+  "strop": -12,
+  "popis": "T8 najetí na dlaždici 4, rohy se otevřou (15,75–16,0)"
+ },
+ {
+  "cas": 16.0,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.0,
+  "pan": -0.4,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 1/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.125,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.045,
+  "pan": 0,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 2/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.25,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.09,
+  "pan": 0.4,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 3/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.375,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.135,
+  "pan": -0.4,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 4/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.5,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.18,
+  "pan": 0,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 5/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.5,
+  "typ": "dosednuti",
+  "lu": -9,
+  "ton": 0.8,
+  "strop": -14,
+  "popis": "T9 mřížka poskočí o 2 % (řazení v hudbě)"
+ },
+ {
+  "cas": 16.625,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.225,
+  "pan": 0.4,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 6/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.75,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.27,
+  "pan": -0.4,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 7/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 16.875,
+  "typ": "detent",
+  "lu": -13,
+  "ton": 1.315,
+  "pan": 0,
+  "strop": -20,
+  "popis": "T9 dlaždice mřížky 8/8 se rozsvítí (spiccato osminy)"
+ },
+ {
+  "cas": 17.0,
+  "typ": "kuze",
+  "lu": -8,
+  "strop": -14,
+  "popis": "T9 kamera do dlaždice 5: ruce sevřou M volant (kůže)"
+ },
+ {
+  "cas": 17.7,
+  "typ": "ev_najezd_dlouhy",
+  "lu": -4,
+  "konec": 17.745,
+  "strop": -6,
+  "popis": "T9 elektrický nájezd 16,0–17,7 (stoupání), utne do nádechu 17,745"
+ },
+ {
+  "cas": 18.0,
+  "typ": "ev_uder",
+  "lu": -2,
+  "ton": 0.94,
+  "strop": -0.5,
+  "popis": "DROP 2: bod vybuchne do světelných stop (nejsilnější úder videa)"
+ },
+ {
+  "cas": 18.1,
+  "typ": "ev_prujezd_tesny",
+  "lu": -3,
+  "pan": 0.9,
+  "pan_do": -0.9,
+  "pan_tau": 0.06,
+  "od": 18.0,
+  "strop": -6,
+  "popis": "T10 F: vůz prolétne těsně kolem kamery (Doppler, vrchol 18,1)"
+ },
+ {
+  "cas": 18.25,
+  "typ": "pneu_hukot",
+  "lu": -9,
+  "pan": -0.2,
+  "strop": -14,
+  "popis": "T10 G: vůz zezadu shora ujíždí (pneumatiky)"
+ },
+ {
+  "cas": 18.75,
+  "typ": "fup",
+  "lu": -8,
+  "strop": -14,
+  "popis": "T10 H: kamera přelétá těsně nad střechou"
+ },
+ {
+  "cas": 19.0,
+  "typ": "klik",
+  "lu": -10,
+  "strop": -15,
+  "popis": "T10 bod na asfaltu → karta Power"
+ },
+ {
+  "cas": 19.125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.0,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (1/7)"
+ },
+ {
+  "cas": 19.1875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.01,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (2/7)"
+ },
+ {
+  "cas": 19.25,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.02,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (3/7)"
+ },
+ {
+  "cas": 19.3125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.03,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (4/7)"
+ },
+ {
+  "cas": 19.375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.04,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (5/7)"
+ },
+ {
+  "cas": 19.4375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.05,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (6/7)"
+ },
+ {
+  "cas": 19.5,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.06,
+  "strop": -28,
+  "popis": "T10 rolování 500 kW (7/7)"
+ },
+ {
+  "cas": 19.6,
+  "typ": "ding",
+  "lu": -9,
+  "strop": -16,
+  "popis": "T10 500 kW dosedne + lišta"
+ },
+ {
+  "cas": 19.875,
+  "typ": "detent",
+  "lu": -15,
+  "strop": -22,
+  "popis": "T10 karta odchází do bodu"
+ },
+ {
+  "cas": 20.0,
+  "typ": "pneu_hukot",
+  "lu": -8,
+  "pan": 0.2,
+  "strop": -13,
+  "popis": "T11 C 21,72: vůz se vrhá do zatáčky (pneumatiky + vzduch)"
+ },
+ {
+  "cas": 20.5,
+  "typ": "ev_prujezd",
+  "lu": -6,
+  "pan": -0.6,
+  "pan_do": 0.6,
+  "od": 20.35,
+  "strop": -10,
+  "popis": "T11 C 23,76: nakloněný průjezd bokem (Doppler)"
+ },
+ {
+  "cas": 21.0,
+  "typ": "klik",
+  "lu": -10,
+  "strop": -15,
+  "popis": "T11 bod → karta 0–100 km/h"
+ },
+ {
+  "cas": 21.3125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.0,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (1/7)"
+ },
+ {
+  "cas": 21.375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.01,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (2/7)"
+ },
+ {
+  "cas": 21.4375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.02,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (3/7)"
+ },
+ {
+  "cas": 21.5,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.03,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (4/7)"
+ },
+ {
+  "cas": 21.5625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.04,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (5/7)"
+ },
+ {
+  "cas": 21.625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.05,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (6/7)"
+ },
+ {
+  "cas": 21.6875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.06,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s (7/7)"
+ },
+ {
+  "cas": 21.75,
+  "typ": "ding",
+  "lu": -9,
+  "ton": 1.06,
+  "strop": -16,
+  "popis": "T11 3.8 s dosedne + lišta + kroužek"
+ },
+ {
+  "cas": 22.0,
+  "typ": "prepinac",
+  "lu": -11,
+  "strop": -16,
+  "popis": "T12 štítek se přemění na Top speed (tick)"
+ },
+ {
+  "cas": 22.0625,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.0,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (1/8)"
+ },
+ {
+  "cas": 22.125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.01,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (2/8)"
+ },
+ {
+  "cas": 22.1875,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.02,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (3/8)"
+ },
+ {
+  "cas": 22.25,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.03,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (4/8)"
+ },
+ {
+  "cas": 22.3125,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.04,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (5/8)"
+ },
+ {
+  "cas": 22.375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.05,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (6/8)"
+ },
+ {
+  "cas": 22.4375,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.06,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (7/8)"
+ },
+ {
+  "cas": 22.5,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.07,
+  "strop": -28,
+  "popis": "T12 rolování 250 km/h (8/8)"
+ },
+ {
+  "cas": 22.6,
+  "typ": "ding",
+  "lu": -9,
+  "ton": 1.12,
+  "strop": -16,
+  "popis": "T12 250 km/h dosedne + lišta"
+ },
+ {
+  "cas": 22.8,
+  "typ": "ev_prujezd",
+  "lu": -4,
+  "pan": 0.6,
+  "pan_do": -0.9,
+  "od": 22.45,
+  "strop": -8,
+  "popis": "T12 D 30,1: vůz v protisvětle projede doleva z obrazu (Doppler, 22,7–22,95)"
+ },
+ {
+  "cas": 23.1,
+  "typ": "svih_mekky_kratky",
+  "lu": -10,
+  "pan": -0.7,
+  "strop": -16,
+  "popis": "T12 pásy písmen vjedou zleva"
+ },
+ {
+  "cas": 23.15,
+  "typ": "svih_mekky_kratky",
+  "lu": -10,
+  "pan": 0.7,
+  "ton": 1.1,
+  "strop": -16,
+  "popis": "T12 pásy písmen vjedou zprava"
+ },
+ {
+  "cas": 23.25,
+  "typ": "dosednuti",
+  "lu": -9,
+  "strop": -14,
+  "popis": "T12 písmena i7 M70 dosednou"
+ },
+ {
+  "cas": 23.5,
+  "typ": "fup",
+  "lu": -12,
+  "pan": 0.3,
+  "strop": -18,
+  "popis": "T13 výměna záběru v písmenech (I průjezd)"
+ },
+ {
+  "cas": 24.0,
+  "typ": "fup",
+  "lu": -11,
+  "pan": -0.3,
+  "ton": 1.15,
+  "strop": -18,
+  "popis": "T13 výměna záběru v písmenech (F průlet) + nádech písma"
+ },
+ {
+  "cas": 25.0,
+  "typ": "fump",
+  "lu": -6,
+  "strop": -10,
+  "popis": "T13 průlet otvorem „7“ → celý obraz (dron J)"
+ },
+ {
+  "cas": 25.95,
+  "typ": "tah_prstence",
+  "lu": -8,
+  "strop": -14,
+  "popis": "T13 clona z bodu 25,75–26,0 (crescendo do prstence)"
+ },
+ {
+  "cas": 26.0,
+  "typ": "logo_lux",
+  "lu": -2.5,
+  "strop": -3,
+  "popis": "T14 LOGO: prstenec = vnější kruh, první čtvrtina dopadne"
+ },
+ {
+  "cas": 26.25,
+  "typ": "dosednuti",
+  "lu": -10,
+  "ton": 1.1,
+  "strop": -16,
+  "popis": "T14 druhá modrá čtvrtina dopadne"
+ },
+ {
+  "cas": 26.5,
+  "typ": "trpyt",
+  "lu": -11,
+  "strop": -18,
+  "popis": "T14 písmena BMW naskočí po obvodu (ting)"
+ },
+ {
+  "cas": 27.5,
+  "typ": "prepinac",
+  "lu": -13,
+  "strop": -20,
+  "popis": "T14 nadpis mění řez 300 → 700 (tichý klap)"
+ },
+ {
+  "cas": 28.0,
+  "typ": "trpyt",
+  "lu": -12,
+  "ton": 0.89,
+  "strop": -20,
+  "popis": "T15 glint po vnějším kruhu loga"
+ }
+]

@@ -33,6 +33,9 @@ Prémiové UI a luxusní vůz (V003, dolní propust 11 kHz, tóny v D moll): det
   svetla(_cervena), tik_cislo, zamek(_nizko), radeni_lux, radeni_bublina, zapaleni, klik_uder (drop 1), svetla_uder (drop 2),
   svih_mekky(_kratky/_dlouhy), tah_prstence, dosednuti, klik_kov, logo_lux. Šum má srovnanou obálku (`rovny_sum`), průjezdy „svist“ v nejbližším bodě:
   změřený vrchol = navržený vrchol (rozptyl mezi seedy ≤ ~10 ms, zarovnání na událost pak přesně).
+Elektrický vůz (V004, BMW i7, žádný spalovací motor): ev_prujezd(_tesny/_tichy) (Doppler tónu pohonu + pneumatiky + vítr),
+  ev_najezd(_dlouhy) (stoupající tón pohonu, vrchol na konci), ev_uder (drop: náraz + závan + „výstřel“ tónu pohonu),
+  pneu_hukot, ponor (klesající závan + tupý tón na konci), zaverka (flash cut), kuze (stisk volantu), sterk (kamení), ding (číslo dosedne).
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
@@ -762,6 +765,143 @@ def logo_lux(rng, v=1.0):
     return _lux(vrstva_v(telo + 0.4 * zvon, 0.8 * klik_kov(rng, 0.9 * v), 0))
 
 
+# ---------- elektrický vůz (V004, BMW i7): žádný spalovací motor, pohon = vysoký tón střídače dvou motorů, pneumatiky a vzduch ----------
+def ev_ton(f, rng):
+    """Tón elektrického pohonu z okamžité výšky f (Hz, pole): přední a zadní motor (základ + o kvintu výš, mírně rozladěné),
+    2.–3. harmonická, jemné chvění střídače (PWM) a „zpívající“ vibrato 6 Hz. Normalizováno na špičku 1, nic nad ~9 kHz (C030)."""
+    n = len(f)
+    t = cas(n)
+    faze = 2 * np.pi * np.cumsum(f * (1 + 0.002 * np.sin(2 * np.pi * 6 * t))) / SR
+    faze2 = 2 * np.pi * np.cumsum(1.4983 * f * 1.003) / SR
+    x = np.sin(faze) + 0.35 * np.sin(2 * faze + 0.7) + 0.12 * np.sin(3 * faze + 1.9) + 0.45 * np.sin(faze2) + 0.12 * np.sin(2 * faze2 + 0.4)
+    x = x + 0.18 * np.sin(faze / 2 + 0.3)                                # subharmonická = tělo (při f ≥ 220 Hz nad 110 Hz, telefon ji slyší)
+    x = x * (1 + 0.08 * np.sin(2 * np.pi * 37 * t)) + 0.12 * pasmo(rng.standard_normal(n), 3000, 8000) * (f / (np.max(f) + 1e-12))
+    return dolni(x, 9000, 4) / (np.max(np.abs(x)) + 1e-12)
+
+
+def ev_jizda(rng, n, vrchol_s, f0, rychlost=60.0, vzdalenost=4.0, ton_podil=0.35, svist=0.6, pneu_lo=150, pneu_hi=1400):
+    """Průjezd elektrického vozu kolem kamery (jako `doppler_jizda`, ale bez motoru): Dopplerův posun tónu pohonu,
+    hukot pneumatik (šum `pneu_lo`–`pneu_hi` se vzorkem dezénu 90 Hz) a vítr 900–5 500 Hz, hlasitost ~1/vzdálenost,
+    změřený vrchol v nejbližším bodě (`vrchol_s`) díky krátkému „svistu“ vzduchu."""
+    t = cas(n) - vrchol_s
+    x = rychlost * t
+    r = np.sqrt(x ** 2 + vzdalenost ** 2)
+    v_rad = rychlost * x / r
+    f = f0 / (1 + v_rad / 343.0)
+    ob = (vzdalenost / r) ** 1.3
+    pn = sum_pasmo(rng, n, pneu_lo, pneu_hi) * (1 + 0.25 * np.sin(2 * np.pi * 90 * cas(n)))
+    vitr = sum_pasmo(rng, n, 900, 5500)
+    m = ton_podil * ev_ton(f, rng) + (1 - ton_podil) * (0.65 * pn + 0.35 * vitr)
+    m = rovny_sum(m, 0.003) * ob
+    return dolni(m + svist * sum_pasmo(rng, n, 1000, 6000) * spicka(n, vrchol_s, 0.006, 0.012), 10000)
+
+
+def ev_prujezd(rng, v=1.0, delka=1.0, f0=620, rychlost=60.0, vzdalenost=4.0, ton_podil=0.35, svist=0.6):
+    """Průjezd i7 kolem kamery, vrchol uprostřed (nejbližší bod)."""
+    n = int(delka * SR)
+    return ev_jizda(rng, n, delka / 2, f0 * v, rychlost, vzdalenost, ton_podil, svist)
+
+
+def ev_najezd(rng, v=1.0, delka=0.92, f_od=170, f_do=880):
+    """Elektrický nájezd (roztočení kol, stoupání): tón pohonu stoupá `f_od` → `f_do` (ease-in), crescendo tónu, pneumatik
+    a vzduchu, vrchol 3 ms před koncem `delka` a pak rychle utne (náběh do střihu / nádechu). Bez řevu spalovacího motoru."""
+    n = int(delka * SR)
+    t = cas(n) / delka
+    f = (f_od + (f_do - f_od) * t ** 1.6) * v
+    pn = sum_pasmo(rng, n, 180, 1500) * t
+    vitr = sum_pasmo(rng, n, 1200 * v, 6000)
+    x = rovny_sum(0.62 * ev_ton(f, rng) + 0.24 * pn + 0.14 * t ** 2 * vitr, 0.004)
+    e = (0.04 + 0.96 * t ** 2.4) * np.clip((n - np.arange(n)) / (0.003 * SR), 0, 1)
+    tt = cas(n) - (delka - 0.004)
+    svist = 0.9 * sum_pasmo(rng, n, 1500, 6000) * np.exp(-np.clip(-tt, 0, None) / 0.03 - np.clip(tt, 0, None) / 0.002)   # jednoznačný vrchol na konci
+    return dolni(x * e + svist, 9000)
+
+
+def ev_uder(rng, v=1.0, prechod=0.9, sila=1.0):
+    """Drop (V004): vůz vyrazí. Jako `svetla_uder` (C035: vrchol na náběhu), ale místo řevu motoru elektrický „výstřel“:
+    (1) tělo = náraz 110 → 55 Hz s harmonickými do ~550 Hz, tlakový závan vzduchu 200–2 500 Hz a tón pohonu, který vystřelí
+    320 → 760 Hz a doznívá (zrychlení), vše přes tanh; (2) navrch transient (první puls nárazu v kosinové fázi + cvak)."""
+    n = int(1.1 * SR)
+    t = cas(n)
+    zaklad = sum(ton_c(j * 110 * v, j * 55 * v, n, 0.07) / j ** 0.8 for j in (1, 2, 3, 4, 5))
+    nar = zaklad / (np.max(np.abs(zaklad)) + 1e-12) * obalka(n, 0.0015, 0.2)
+    zavan = 0.45 * sila * sum_pasmo(rng, n, 200, 2500) * spicka(n, 0.004, 0.002, 0.12)
+    f = (320 + 440 * (1 - np.exp(-t / 0.18))) * v
+    vystrel = 0.4 * sila * ev_ton(f, rng) * np.where(t < 0.03, (t / 0.03) ** 2, np.exp(-(t - 0.03) / 0.3))
+    telo = _lux(np.tanh(2.5 * (nar + zavan + vystrel)) / np.tanh(2.5)) * np.exp(-t / 0.5)
+    trans = zaklad * obalka(n, 0.0015, 0.003)
+    trans = trans / (np.max(np.abs(trans)) + 1e-12) + 0.5 * sum_pasmo(rng, n, 1200, 7000) * obalka(n, 0.0008, 0.003)
+    return telo + prechod * _lux(trans)
+
+
+def pneu_hukot(rng, v=1.0, delka=0.6, vrchol_podil=0.3):
+    """Hukot pneumatik po asfaltu (vůz ujíždí / vrhá se do zatáčky): šum 140–1 300 Hz se vzorkem dezénu (~90 Hz),
+    ostrý vrchol obálky (∧) v `vrchol_podil` délky + krátký svist ve vrcholu."""
+    n = int(delka * SR)
+    p = delka * vrchol_podil
+    x = sum_pasmo(rng, n, 140 * v, 1300 * v) * (1 + 0.3 * np.sin(2 * np.pi * 90 * v * cas(n))) + 0.25 * sum_pasmo(rng, n, 1300, 4000)
+    return dolni(rovny_sum(x, 0.003) * spicka(n, p, p / 3, delka / 3.5) + 0.4 * sum_pasmo(rng, n, 1000, 5000) * spicka(n, p, 0.005, 0.01), 8000)
+
+
+def ponor(rng, v=1.0, delka=0.6):
+    """Ponor do střechy (V004 P4): závan, jehož pásmo klesá 3,5 kHz → 300 Hz (kamera se noří do tmy), crescendo, na konci
+    měkký tupý tón 160 → 80 Hz s harmonickými; vrchol 3 ms před koncem `delka`, pak doznění 0,12 s."""
+    n = int(delka * SR)
+    d = n + int(0.25 * SR)
+    t = cas(d) / delka
+    s = rng.standard_normal(d)
+    hor = rovny_sum(pasmo(s, 1500 * v, 4500 * v))
+    dol = rovny_sum(pasmo(s, 250 * v, 900 * v))
+    w = np.clip(t, 0, 1) ** 1.5
+    x = (1 - w) * hor + w * dol
+    e = np.where(t < 1, np.clip(t, 0, 1) ** 2.5, np.exp(-(t - 1) * delka / 0.12))
+    m = d - n
+    tupy = np.zeros(d)
+    tupy[n:] = sum(ton_c(j * 160 * v, j * 80 * v, m, 0.05) / j ** 0.8 for j in (1, 2, 3, 4)) * obalka(m, 0.0015, 0.1)
+    x = x * e
+    return _lux(x / (np.max(np.abs(x)) + 1e-12) + 0.7 * np.tanh(1.3 * tupy) / np.tanh(1.3))
+
+
+def zaverka(rng, v=1.0):
+    """Záblesk jízdy (flash cut): „cvak“ závěrky = dva kliky 12 ms po sobě (druhý hlavní, dává vrchol) + krátký závan vzduchu 400–3 000 Hz."""
+    a = klik(rng, 1.25 * v, 0.5)
+    k = int(0.012 * SR)
+    n = int(0.2 * SR)
+    x = np.zeros(n)
+    x[:len(a)] += 0.4 * a
+    x[k:k + len(a)] += a
+    x[k:] += 0.5 * sum_pasmo(rng, n - k, 400 * v, 3000 * v) * spicka(n - k, 0.004, 0.003, 0.05)
+    return _lux(x)
+
+
+def kuze(rng, v=1.0):
+    """Stisk koženého volantu („grip“): tlumené vrzání kůže (tón 190 → 240 Hz s chvěním) + drobné praskání 600–3 000 Hz, vrchol po 30 ms."""
+    n = int(0.22 * SR)
+    t = cas(n)
+    f = (190 + 50 * (1 - np.exp(-t / 0.05))) * v * (1 + 0.04 * np.sin(2 * np.pi * 31 * t))
+    faze = 2 * np.pi * np.cumsum(f) / SR
+    vrz = np.sin(faze) + 0.6 * np.sin(2 * faze + 1) + 0.35 * np.sin(3 * faze + 2) + 0.2 * np.sin(5 * faze)
+    x = 0.6 * vrz + 0.6 * rovny_sum(pasmo(rng.standard_normal(n), 400 * v, 2200 * v)) + zrna(rng, n, 160, 0.001, 600, 3000) * 3
+    return _lux(x * spicka(n, 0.03, 0.012, 0.05))
+
+
+def sterk(rng, v=1.0):
+    """Kamení pod nízko letící kamerou: závan 200–2 500 Hz + hustá zrna 1–6 kHz (štěrk), vrchol po 50 ms."""
+    n = int(0.3 * SR)
+    x = sum_pasmo(rng, n, 200 * v, 2500 * v) + 2.5 * zrna(rng, n, 900, 0.0012, 1000, 6000)
+    return dolni(rovny_sum(x, 0.003) * spicka(n, 0.05, 0.02, 0.07), 9000)
+
+
+def ding(rng, v=1.0):
+    """Tichý skleněný „ding“ (číslo dosedne, V004): A6 + kvinta E7 + oktáva A7 (harmonické, doznění 0,2 s) s kosinovým
+    náběhem 2 ms a jemným cvakem; vrchol na náběhu."""
+    n = int(0.45 * SR)
+    t = cas(n)
+    x = sum(a * np.cos(2 * np.pi * 1760 * v * p * t) * np.exp(-t * p ** 0.5 / 0.2) for p, a in [(1, 1), (1.5, 0.45), (2, 0.3), (3, 0.08)])
+    x = x * obalka(n, 0.002, 10.0) + 0.25 * sum_pasmo(rng, n, 2500, 7000) * obalka(n, 0.0005, 0.0015)
+    return _lux(x)
+
+
 PODKLADY = {"volnobeh": volnobeh}                                        # souvislé zvuky (od–do), vrchol se nezarovnává
 
 
@@ -788,6 +928,11 @@ ZVUKY = {
     "radeni_bublina": lambda r, v: radeni_lux(r, v, 0.6), "zapaleni": zapaleni, "klik_uder": klik_uder, "svetla_uder": svetla_uder,
     "svih_mekky": svih_mekky, "svih_mekky_kratky": lambda r, v: svih_mekky(r, v, 0.24), "svih_mekky_dlouhy": lambda r, v: svih_mekky(r, v, 0.5),
     "tah_prstence": tah_prstence, "dosednuti": dosednuti, "klik_kov": klik_kov, "logo_lux": logo_lux,
+    # elektrický vůz (V004)
+    "ev_prujezd": ev_prujezd, "ev_prujezd_tesny": lambda r, v: ev_prujezd(r, v, 0.8, 700, 80, 1.8, 0.3, 0.9),
+    "ev_prujezd_tichy": lambda r, v: ev_prujezd(r, v, 1.2, 560, 50, 8.0, 0.4, 0.5),
+    "ev_najezd": ev_najezd, "ev_najezd_dlouhy": lambda r, v: ev_najezd(r, v, 1.7, 200, 1000), "ev_uder": ev_uder,
+    "pneu_hukot": pneu_hukot, "ponor": ponor, "zaverka": zaverka, "kuze": kuze, "sterk": sterk, "ding": ding,
 }
 
 
