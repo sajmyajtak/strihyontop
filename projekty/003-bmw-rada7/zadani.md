@@ -208,6 +208,12 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   přepínač 16,25, zámky 7,6 / 9,0 / 17,875, třpyt 5,75. Když animátor zvolí jiný průběh, napíše skutečné časy do zadání a zvukař je přesune.
   Verze bez hudby zůstává v úrovni mixu efektů (pro trendový zvuk v aplikaci), nenormalizovat na −14 LUFS.
 
+- **Odpovědi režiséra ke klíčovým snímkům** (2026-11-01, po prohlédnutí archu): síla dropu 2 se měří **expozicí a kontrastem** (EV, std jasu), ne YDIF
+  (odhalení z tmy nemůže přerůst změnu na světlé scéně) · **noční karoserie nesmí působit jako šedý hliněný model**: v masce karoserie smí grade zvednout
+  světla laku o ~0,3–0,5 EV a přidat jemnou S-křivku, aby bílý lak četl jako bílý v noci (studio zůstává ~#060606, tvar beze změny); k tomu jemný
+  odlesk po laku na 18,0 (past 7) · A8 na 0,0 stačí přes šířku (76 %), scénu nezvětšovat · kostka interiéru: pitch −6° ano (víc palubní desky a dřeva) ·
+  kurzor „grab“ jako sevřená ruka (macOS styl), ne otevřená dlaň · banding v černé: jemný šum ze spritu ano.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -497,6 +503,33 @@ Každý snímek ve 100 % a ve zmenšenině 270 px (A8). Odmítnout, když platí
 6. Změřit 1 s výřezu (odhad 12–17 s výpočtu na 1 s videa), pak `--nahled doby --bpm 120` (snímek na každou dobu) a teprve potom plný render
    s `--sub 4`, rychlé úseky `--sub-rychle 8 --rychle 0-1.05,3.9-4.4,5.9-6.1,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.35`.
 7. Kritik dostane zadání a video, ne toto zdůvodnění (kontrola podle tabulky kontrolních snímků výše).
+
+### Výroba kroky 0–2 (animátor 2026-11-01): testy, kostra, klíčové snímky dropů
+Scéna `media/projekty/003-bmw-rada7/scena/` (`index.html` + `jadro.js`, `foto.js`, `ui.js`, `kostka.js`, `hlavni.js`, `styl.css`),
+podklady z rendrů `scena/skripty/priprava.py` → `scena/podklady/`, klíčové snímky s podsnímky `scena/skripty/klicove.sh` → `scena/kontrolni/` (100 % + 480 px).
+- **Test 0a, světla g03 (past 16): funguje, jen denní svícení.** Maska z rozdílu g04 − g03 omezená na horní LED pásy. Spodní světlomety vynechány:
+  na `zap/uhel_340` nesvítí a noční záře kolem nich by ve dne působila jako šmouha. Obrys ledvinek je v g03 už ve dne jasnější než v noci
+  (241 vs 227), takže rozsvícený vzhled drží bez úprav. 4,017 vedle 3,95 ve 100 %: DRL i obrys svítí stejně, bez šedého lemu.
+- **Test 0b, kostka interiéru (past 17): funguje, ale ve WebGL, ne v CSS 3D.** Chromium v CSS 3D nekreslí stěny, které protínají rovinu kamery
+  (černé klíny), a softwarové GL rozmaže velké ořezané trojúhelníky (stěny proto jako mřížka 24×24). Obrázky z file:// WebGL nepřijme
+  (cizí původ) → stěny jako data URL v `podklady/kostka_tex.js`. Orientace ověřená na švech: **bok1 = vlevo** (strana řidiče), bok2 = vpravo.
+  Ohnisko 1170 px = stěna 1,17×, vodorovné FOV ~79°. Snímky 10,3 / 11,2 / 11,9 (yaw 0 → −35° doleva) bez švu, okraj u kraje obrazu mírně měkčí
+  (přirozený širokoúhlý vzhled). Doporučení: pitch −6° (víc palubní desky, méně čelního skla), rozhodne se v bloku interiéru.
+- **Test 0c, noční grade + doplnění černé (past 18): funguje.** Studio g02/g04 je jednolité #161616 → po gradu #060606 (medián 6,0), karoserie
+  ±0 (g04 82 → 82, g02 63 → 60). Doplnění stejnou barvou je bezešvé (sloupce u hrany rendru 5,0/255 všude, zesílení ×12 bez švu);
+  vinětace se kreslí přes celý snímek, ne přes rendr. Maska světel v noci = jasné pixely vozu (> 140): LED pásy, světlomety **i obrys Iconic Glow** (SPZ pod prahem).
+- **Nalezeno a opraveno**: vrstvy 2,5D g03 (maska + pozadí) dávaly u pneumatik světlý lem (doplněné pozadí pod vozem je světlé, odchylka až 156/255).
+  Vrstva vozu teď nese pixely rendru s alfou u podlahy rozšířenou o 16 px (kontaktní stín jede s vozem): p99,9 odchylky 43 → 4,8/255.
+  Bez paralaxy se kreslí celý rendr (přesně originál).
+- **Rozhodnutí v kostře**: zmenšení otočky S0 = 0,73 (uhel_060 na 0,0 = 76 % šířky, A8 přes šířku; 45 % výšky by znamenalo vůz 1517 px v scéně 1536 px,
+  na krajích bez vzduchu) · střih 4,000 srovnaný podle středu a spodku bboxu a **stejné výšky** vozu (340 vs g03 mají jiný poměr stran: šířka +9 %),
+  g03 vlevo doplněný o 140 px studia (jen první snímky rozšíření scény) · nájezd 4,0–4,35 kolem bodu tak, aby vůz skončil na (820, 850), 0,937× nativního ·
+  karoserie na dropu 2 vystupuje až od 16,035 (kubický ease-out; exponenciální by na 16,02 ukázal 28 % karoserie) · g02 na dropu 2 větší (0,98×, 65 % výšky,
+  bbox x 59–997, dotlačení kolem pravé hrany vozu) · velké číslo: jednotka „km/h“ pod číslem vpravo (vedle čísla by blok přesáhl sloupec a sahal na vůz) ·
+  písmena loga dosedají 1/240 s před dobou, takže snímek 22,000 = originál bit po bitu (ověřeno na podsnímcích).
+- **Síla dropů** (snímky z MP4, `kontrolni/100`): drop 1 3,95 → 4,35 YDIF 38,7, změna expozice 1,06 EV · drop 2 15,983 → 16,40 YDIF 18,2, **2,0 EV**,
+  jas 0,9 → 18,0, kontrast (std) 8 → 33 · 15,983 průměr 0,9 (≤ 12 ✓) · 16,017 max 255, 5 905 px > 235 (✓), karoserie 0 %.
+  YDIF (průměrný absolutní rozdíl jasu) u odhalení z tmy do noční scény nemůže přerůst změnu na světlé scéně: drop 2 je silnější v expozici a kontrastu, ne v YDIF (otázka pro režiséra).
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
