@@ -717,6 +717,19 @@ rychlé úseky `6.45-6.75,6.85-7.1` a `11.95-12.6` místo `6.4-6.6,6.9-7.1` a `1
   plakát 18,45 s (noční vůz se světly + 250 km/h), `popisek.txt` (otázka přesunuta za disclaimer, před hashtagy, J3). Kontrola `media/kontrola/003-bmw-rada7/strih-v2/`.
 - Pozor (C-kandidát): mezikontejner MKV zaokrouhlí časy snímků na 1 ms (60 fps → kroky 16/17 ms, délka stopy 24,999 s). Pro spojení obrazu s PCM zvukem použít MOV.
 
+### Střih v3 (střihač 2026-11-01): drop 1 + export
+- **Drop 1 (závažná)**: nádech 3,875–3,983 na 0,94 už byl ve v3 animátora. Doplněno ve scéně (`foto.js` `drop1O`, `drift1`; `b3.js` `g03Bod` sdílí `drift1`;
+  záloha původních souborů jen ve scratchpadu): **překmit vozu** `1 + 0,03·sin²(π·u)` na 4,0–4,35 kolem stejného pevného bodu jako nájezd → vrchol +2,2 % ve 4,2,
+  na 4,35 přesně původní rámování (`D1_KONEC` beze změny, stoupání 14,0 se nemění). **Drift 4,35–6,0**: posun vozu 40 → 64 px rendru (~61 px na obrazovce),
+  kubický ease-out s náběhem přes časovou deformaci τ 0,04 (rychlost hned po dosednutí, bez hrbu), hloubka D 0,05 smootherstep beze změny.
+  Šířka vozu 3,983 ≈ 1 074 px → vrchol 4,2 ≈ 1 354 px (1,26×) → 4,35 ≈ 1 325 px; g03 nejvýš ~0,95× nativního (G7). YDIF (plné rozlišení) 4,35–4,5 medián 0,04 → **1,07**,
+  4,35–5,0 0,34 → 1,14, snímků < 0,1 v 4,35–5,0: 7 → 0. Popisek „BMW Iconic Glow“ i match cut kola (kolo0 = g03Bod 5,983) jedou s driftem, g05 6,0–7,0 se proto
+  posunul o ~22 px (pokrytí obrazu ověřeno, PSNR proti v3 jinde než 3,4–7,0 = beze změny; 3,4–4,0 jen šum kodéru ~58 dB).
+- **12,0 (drobná)**: ve v3 už je tvrdý střih na g13 (odpověď 4), koláž dvou perspektiv nevzniká (pás 11,9–12,6 ověřen) → beze změny.
+- Render `render/V003_obraz_v3b.mp4` stejným příkazem jako v3 (416 s). Export: `vystup/V003_v3.mp4` (video stopa bit po bitu z renderu, `zvuk_v3.wav` přes MOV →
+  `master_zvuk.sh`: −13,9 LUFS / −1,2 dBTP, posun 0 vzorků), `vystup/V003_v3_bez_hudby.mp4` (`zvuk_bez_hudby_v3_stejny_zisk.m4a` kopírováno, −23,2 LUFS / −1,4 dBTP,
+  korelace s `zvuk_bez_hudby_v3.wav` 0,997, posun 0; rozhodnutí „nenormalizovat“), plakát 18,45 s, popisek beze změny. Kontrola `media/kontrola/003-bmw-rada7/strih-v3/`.
+
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
 - End card „THE NEW 7 SERIES“ + tlačítko „Configure yours“ (vlastní copy, CTA odkazuje na konfigurátor = koncept).
