@@ -750,6 +750,13 @@ v nádechu (−34 dBFS, utnutý 3,97), dosednutí ukazatele na „Performance“
 Naměřeno: vrcholy 0,0 ms od událostí (ve stopě max 0,2 ms, překryté jen 4,1 a 16,25 dozvukem úderu), klíčové efekty 4,0 / 16,0 / 22,0 = −2,0 / −3,0 / −2,2 LU proti hudbě (100 ms),
 master po AAC −13,9 LUFS / −1,2 dBTP, pásma sub 21 % · středy 36 %, RMS 50 ms: stoupání −17,4 → −16,8 → −16,0 → −13,0, drop 2 −7,0 (finále −9,8, výkon −10,7, drop 1 −11,8, jízda −13,9).
 
+**Zvuk v3 (zvukař, kolo 2 → v3, 2026-11-01)**: nález kritika (verze bez hudby se starou stopou, C039) opraven přegenerováním obou WAV ze stejného zdroje
+stejným příkazem (jen výstupy `sfx_v3.wav|json`, `zvuk_v3.wav`, `zvuk_bez_hudby_v3.wav`, log `sfx_v3_log.txt`). Změny zdroje `sfx_udalosti.json`: (1) **světla 2,1 → 2,0**
+(odpověď ke kolu 2 bod 2: rozdíl zap − vyp naskočí na úder 2,000; hum 1,88–2,0, ping D6 na 2,000 s kopákem a basou); (2) náraz knobu 15,5 `konec` 15,72 (dozvuk −101 dBFS
+zasahoval do ticha 15,73–16,0, teď −240). Proti v1b se mix liší jen v 1,86–2,66 a 15,715–15,724; hudba a její časování beze změny. Odvozené soubory: `zvuk_v3_master.m4a`
+(−13,9 LUFS / −1,2 dBTP, zisk +0,29 dB), `zvuk_bez_hudby_v3_stejny_zisk.m4a` (stejný zisk +0,29 dB, dolní propust 19 kHz + strop −1,4 dBFS jen na úderu 16,0 (≤ 0,55 dB),
+−23,2 LUFS / −1,4 dBTP, posun 0 vzorků). Staré odvozeniny ze 4:36 přesunuty do `zvuk/zastarale_pred_v1b/`.
+
 ## Chyby během výroby
 
 ## Spotřeba tokenů

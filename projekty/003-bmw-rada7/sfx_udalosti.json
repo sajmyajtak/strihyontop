@@ -64,11 +64,11 @@
   "popis": "T1 krok 8 = puštění vozu, měkký klik (basa 1,0 v hudbě)"
  },
  {
-  "cas": 2.1,
+  "cas": 2.0,
   "typ": "svetla",
   "lu": -8,
   "strop": -12,
-  "popis": "T2 probuzení předních světel: hum + ping D6"
+  "popis": "T2 světla naskočí na úder 2,000 (rozdíl zap − vyp za 2 snímky, odpověď režiséra ke kolu 2 bod 2): hum 1,88–2,0 + ping D6 [zvukař v3: 2,1 → 2,0]"
  },
  {
   "cas": 3.5,
@@ -427,7 +427,8 @@
   "lu": -11,
   "pan": 0.4,
   "strop": -17,
-  "popis": "T8 náraz knobu na konec dráhy noci (B1) [režisér]"
+  "konec": 15.72,
+  "popis": "T8 náraz knobu na konec dráhy noci (B1) [režisér]; konec 15,72 = dozvuk nezasáhne ticho 15,73–16,0 [zvukař v3]"
  },
  {
   "cas": 16.0,
