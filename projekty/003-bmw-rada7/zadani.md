@@ -219,6 +219,9 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   podle skutečných časů v obraze (dosednutí „Performance“ 16,13, švih knobu 20,875, dopad pilulky 13,875, náraz knobu 15,5) po dokončení všech bloků;
   bloky B2 a B3 ať skutečné časy událostí, které se liší od sloupce zvuku, zapíšou sem do zadání stejně.
 
+- **Odpovědi režiséra k bloku B2** (2026-11-01): disclaimer v 23,5 **ano** · rychlý úsek pro oběh prstence **20.7-21.7** (opraveno v příkazu renderu výše)
+  · tichý švih na přílet kurzoru 24,0 **ano** (doplní režisér do SFX spolu s posuny z B1).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -506,7 +509,7 @@ Každý snímek ve 100 % a ve zmenšenině 270 px (A8). Odmítnout, když platí
 4. **Logo a end card 20,75–25,0** (M7 podle vrstev, kontrola překrytím s originálem na 22,0).
 5. **Úvod 0–4** (krokování otočky, probuzení světel, háček) → **exteriér 4–10** → **interiér 10–14** → **výkon 16–21**.
 6. Změřit 1 s výřezu (odhad 12–17 s výpočtu na 1 s videa), pak `--nahled doby --bpm 120` (snímek na každou dobu) a teprve potom plný render
-   s `--sub 4`, rychlé úseky `--sub-rychle 8 --rychle 0-1.05,3.9-4.4,5.9-6.1,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.35`.
+   s `--sub 4`, rychlé úseky `--sub-rychle 8 --rychle 0-1.05,3.9-4.4,5.9-6.1,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.7`.
 7. Kritik dostane zadání a video, ne toto zdůvodnění (kontrola podle tabulky kontrolních snímků výše).
 
 ### Výroba kroky 0–2 (animátor 2026-11-01): testy, kostra, klíčové snímky dropů
@@ -571,6 +574,30 @@ Kontrolní snímky s podsnímky `scena/kontrolni_b1/` (100 %, 480 px, `arch_480.
   Záběr 20,0 se tlačí až do 21,3 (dřív stál 20,5–21,0). **Zaplavení 21,0–21,3** v minimální verzi (kruh studia z knobu, poloměr do 1 320 px, všechny 4 rohy kryté v 21,25), aby šlo zkontrolovat předání; blok loga ho smí doladit. Knob zůstává v (960, 290) do 21,25.
 - **Měření**: 15,983 průměr 0,6 (≤ 12 ✓) · 16,017 max 255, 7 778 px > 235 ✓ · 16,40 průměr 15,5, std 24,2 · YDIF 15,983 → 16,40 = 15,8. Výkon (C027): 1 s výřezu 18–19 `--sub 4` = 16 s, 16,5–17,5 `--sub 8` = 21 s (včetně startu prohlížečů).
 - **Pro zvukaře (posunuté nebo nové časy)**: dopad pilulky do lišty 13,875 (nové), knob narazí na konec dráhy noci 15,5 (= kopák), stažení dráhy 20,5–20,75, švih knobu nejrychlejší 20,875 (ve zvuku 20,95), ukazatel dosedá na „Performance“ už 16,13 (ve zvuku 16,25).
+
+### Výroba B2: logo a end card 20,75–25,0 + úvod 0,0–4,0 (animátor 2026-11-01)
+Kontrolní snímky s podsnímky `scena/kontrolni_b2/` (38 časů, 100 % + 480 px, `arch_480.jpg`), pásy `kontrolni_b2/pasy/` (3,9–4,4 a 21,8–22,2 celé,
+3,97–4,02 a 21,97–22,02 ve 100 %). Nové časy v `CASY`: `nadpis`, `zareUvod`, `prstenec`, `knobSplyne`, `ctvrtiny`, `pismena`, `endNadpis`, `cta`, `disclaimerOd`, `kurzorEnd`, `klikEnd`.
+- **Úvod**: kurzor „grab“ = sevřená ruka (macOS closedhand, 4 klouby, palec přitisknutý). Nadpis ① „THE NEW BMW 7 SERIES“ 1,0–2,0 nahoře na stěně scény
+  (y 128–232, vůz od y ~300), maska zdola jako celek 0,2 s, prostrkání −1 % → +3 %, odchod maskou nahoru 1,875–2,0. Probuzení světel 2,0 doplněno o **nádech záře**
+  z rozmazaného rozdílu `zap − vyp` úhlu 340 (`skripty/zare_uvod.py` → `podklady/u340_zare.png`, práh 20/255, `screen`, max 0,7, vrchol 2,1 = „shimmer“), ve stejné kruhové masce.
+  Kroky otočky na 0,05 / 0,067 / 0,983 / 1,017 ostré, bez dvojitých kol.
+- **Logo (M7)**: `knobCil` (960, 296) = horní bod střednice prstence. ① 21,25–21,6 knob **oběhne prstenec a vede hranu odkrytí** (smoothstep, 28 → 22 px, bílý s okrajem,
+  aby byl na světlém studiu vidět), 21,56–21,66 se zúží na tloušťku prstence a rozplyne. ② čtvrtiny se neobjevují krytím (poloprůhledná světle modrá = mimo paletu),
+  ale **kruhem ze středu** (maska 0,12 s) a dotáčejí se o 90°. ③ B / M / W dosedají **dostředivě po své radiále** (dřív B a W jely tečně). **Snímek 22,000 = originál
+  bit po bitu** na všech 5 podsnímcích (porovnání s čistým SVG, max. rozdíl 0). Barvy v MP4: modrá (0, 101, 176), prstenec (111, 108, 110) = #0066B1 / #6F6F6F ±4.
+- **End card**: logo + texty v kontejneru `#endSvet`, dotlačení 1,00 → 1,03 od 22,0 + 1/240 do 25,0 (nenulová rychlost na konci, nikdy nestojí). 22,5 „THE NEW 7 SERIES“
+  (44 px, y 692–748), 23,0 modrá tečka se roztáhne do „Configure yours“ (dvě hrany na dvou pružinách, text vlastní maskou až 23,2–23,42), 23,5 disclaimer (y 912–939 i po dotlačení),
+  24,0 kurzor přilétá zdola zprava v pohybu, hover ×1,25, **24,5 klik** (stisk −15 % na 3 snímky, kroužek, tlačítko krátce #0653B6 a −2 %). 24,983 ≠ 23,983 (průměr 1,1).
+- **Rozhodnutí**: disclaimer 23,5 místo 22,5 (událost na každou dobu: 22,0 · 22,5 · 23,0 · 23,5 · 24,0 · 24,5, nikdy dva texty naráz přicházející) ·
+  text tlačítka bez roztahování prostrkání (skutečné UI; dřív text dojel k okraji a kurzor ho překryl) · rychlé úseky pro render **20,7–21,7** (oběh prstence je rychlý,
+  peak ~78 px/snímek), upraveno v `skripty/klicove.sh`; do příkazu plného renderu dát `…,20.7-21.7` místo `20.7-21.35`.
+- **Nalezeno a opraveno**: prázdný celoobrazový kontejner `#endSvet` (a z-index knobu) měnil v Chromiu skládání vrstev a tím jemně pixely **celého obrazu i v hotových
+  blocích** (13,8 / 18,017 / 20,5 průměr 0,16–0,35, max 73 na hranách). Kontejner se teď kreslí jen od 21,25, z-index knobu jen při oběhu prstence → 3,95 / 4,0 / 4,017 / 4,35
+  (proti `kontrolni_v2`) a 13,8 / 16,4 / 18,017 / 20,5 (proti `kontrolni_b1`) **bit po bitu shodné**.
+- **Výkon (C027)**: 1 s výřezu, 3 prohlížeče: 21,0–22,0 (`--sub 8` do 21,7) 22 s · 23,0–24,0 14 s · 0,0–1,0 (`--sub 8`) 17 s (včetně startu prohlížečů), pod limitem 25 s.
+- **Pro zvukaře**: nové vizuální události bez SFX: nádech záře 2,0–2,45 (vrchol 2,1 = stávající „svetla“) · disclaimer 23,5 (tichý, zvuk netřeba) · kurzor vlétá 24,0 (případně tichý švih).
+  Knob se rozplyne 21,6–21,66 (= „tah_prstence“ 21,6 sedí).
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
