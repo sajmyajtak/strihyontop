@@ -222,6 +222,12 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
 - **Odpovědi režiséra k bloku B2** (2026-11-01): disclaimer v 23,5 **ano** · rychlý úsek pro oběh prstence **20.7-21.7** (opraveno v příkazu renderu výše)
   · tichý švih na přílet kurzoru 24,0 **ano** (doplní režisér do SFX spolu s posuny z B1).
 
+- **Zvuk v1b (režisér, 2026-11-01, po blocích B1–B3)**: SFX přesunuty na skutečné časy obrazu: přepínač Performance 16,25 → **16,13**, švih knobu
+  20,95 → **20,875**; přidány dopad pilulky **13,875**, náraz knobu **15,5**, tichý švih kurzoru **24,0**, lišta pod okraj **5,875** a zpět **7,0** (82 událostí).
+  Přegenerováno stejným příkazem do stejných souborů (`zvuk_v1.wav`, `zvuk_bez_hudby_v1.wav`), master −13,9 LUFS / −1,2 dBTP, hudba posun 0 vzorků,
+  změny jen v okolí těchto časů. Odpovědi k B3: studio otočky o ~7/255 chladnější než galerie na střizích 4,0 a 8,0 nechat · výkon kostky (~24 s na 1 s) stačí ·
+  švih 6,44–6,56 přidán do rychlých úseků renderu.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -509,7 +515,7 @@ Každý snímek ve 100 % a ve zmenšenině 270 px (A8). Odmítnout, když platí
 4. **Logo a end card 20,75–25,0** (M7 podle vrstev, kontrola překrytím s originálem na 22,0).
 5. **Úvod 0–4** (krokování otočky, probuzení světel, háček) → **exteriér 4–10** → **interiér 10–14** → **výkon 16–21**.
 6. Změřit 1 s výřezu (odhad 12–17 s výpočtu na 1 s videa), pak `--nahled doby --bpm 120` (snímek na každou dobu) a teprve potom plný render
-   s `--sub 4`, rychlé úseky `--sub-rychle 8 --rychle 0-1.05,3.9-4.4,5.9-6.1,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.7`.
+   s `--sub 4`, rychlé úseky `--sub-rychle 8 --rychle 0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.7`.
 7. Kritik dostane zadání a video, ne toto zdůvodnění (kontrola podle tabulky kontrolních snímků výše).
 
 ### Výroba kroky 0–2 (animátor 2026-11-01): testy, kostra, klíčové snímky dropů
@@ -598,6 +604,27 @@ Kontrolní snímky s podsnímky `scena/kontrolni_b2/` (38 časů, 100 % + 480 px
 - **Výkon (C027)**: 1 s výřezu, 3 prohlížeče: 21,0–22,0 (`--sub 8` do 21,7) 22 s · 23,0–24,0 14 s · 0,0–1,0 (`--sub 8`) 17 s (včetně startu prohlížečů), pod limitem 25 s.
 - **Pro zvukaře**: nové vizuální události bez SFX: nádech záře 2,0–2,45 (vrchol 2,1 = stávající „svetla“) · disclaimer 23,5 (tichý, zvuk netřeba) · kurzor vlétá 24,0 (případně tichý švih).
   Knob se rozplyne 21,6–21,66 (= „tah_prstence“ 21,6 sedí).
+
+### Výroba B3: pohyb 4,0–14,0 (animátor 2026-11-01)
+Nový modul `scena/b3.js` (časy v `CASY`: `tecka`, `linka`, `pilulka`, `puls2`, `popisekPryc`, `svih1/2`, `odleskBok`, `kota*`, `krokyZad`, `uhlyZad`, `svetlaZad`,
+`listRust`, `listBila`, `interier`, `kostka`, `volic`, `glintVolic`, `dvere`, `prosivani`, `lounge`), podklady `skripty/b3_podklady.py` → `podklady/g14_chrom.png`,
+`podklady/g10_lak.png` (z testu 2b). Kontrolní snímky s podsnímky `scena/kontrolni_b3/` (31 časů, 100 % + 480 px, `arch_480.jpg`), pásy `kontrolni_b3/pasy/` (5,9–6,1 a 6,9–7,1).
+- **4,35–6,0**: kurzor letí k obrysu ledvinek, 5,0 klik → modrá tečka s pulzem, linka 1 px, 5,25 pilulka „BMW Iconic Glow“ (kruh → pilulka, pružina 3 %) na stěně vpravo nahoře,
+  5,5 kurzor odjede zrychlením, 5,75 druhý pulz, 5,875–6,0 odchod do tečky; lišta 5,875–6,0 pod okraj (pneumatika g05 by ji jinak křížila).
+- **Glint 5,75 vypuštěn** (povolená záloha): obrys Iconic Glow má v g03 jas 224 (lak 197), +12 % screen = +3,7/255, neviditelné. Na 5,75 jen druhý pulz tečky.
+- **6,0–7,0**: g06 je g05 posunutý přesně o 220 px (průměrný rozdíl 0,28/255), proto jeden záběr g05 (1,15× nativního) se dvěma švihy doleva (6,44–6,56 a 6,86–7,0).
+  Match cut: náboj kola 5,983 (727, 737) → 6,017 (720, 737), posun 7 px.
+- **7,0–8,0**: g10 1,1×, přijede po švihu exponenciálně (1002 → 912), odlesk softboxu v masce laku, kóta od nárazníku k nárazníku nad střechou + „5,395 mm“ (sloupce číslic odstupňovaně, na čase snímku), lišta se vrací 7,0–7,3.
+- **8,0–10,0**: otočka 270 → 180 srovnaná na bbox g10 (šířka, střed, spodek), kroky na čase snímku (8,133 ostré), kurzor „ruka“ chytí bok 8,0 a táhne doprava (švih, dosednutí 9,0),
+  9,0 zadní světla rostoucím kruhem z rozdílu zap/vyp, dotlačení 1,00 → 1,05 + srovnání na střed (912 → 960), 9,5 kurzor k liště, 9,875 hover „Comfort“, 10,0 klik.
+- **10,0–13,5**: ukazatel přeskočí na „Comfort“ a vyroste v list (horní hrana napřed, kriticky tlumeně, modrá → bílá do 10,15; do 10,15 DOM nad lištou, pak plátno), lišta 10,0–10,15 dolů,
+  zadní pohled pod listem 0,96 a −25 %, od 11,0 (střih uvnitř listu) g03 den = stav B1 na 13,5. Interiér se otevře ze středu 10,15–10,4, kostka (WebGL, pitch −6°) yaw 0 → −40° 10,25–12,45 (sinusová ease-in-out),
+  11,0 g14 výřez 0,855× nativního + glint po chromu voliče (maska jas + bez barvy, dřevo mimo), 11,5 zpět do kostky, 12,0 g13 vjede zprava (náběžná hrana = levý okraj rendru, otevřené dveře), kostka odjíždí pomaleji,
+  13,0 přiblížení na prošívání; rámování g13 (`g13Pohled`) končí na 13,5 přesně v rámování B1 (`kresliObsahListu` beze změny výstupu).
+- **„YOUR PRIVATE LOUNGE“ dole vlevo bílým** (y 816–920) se stínem 1 px: nahoře je světlý strop přerušený tmavou opěrkou hlavy, tmavý ani bílý text by tam nebyl čitelný (záloha ze storyboardu).
+- **Regrese**: 1,5 / 3,95 / 4,0 / 4,017 / 4,35 / 13,5 / 13,8 / 14,0 / 16,4 / 18,017 / 20,5 / 22,0 / 24,983 bit po bitu shodné s `kontrolni_b2` / `kontrolni_b1`.
+- **Výkon (C027)**: 1 s 6,4–7,4 = 19 s, 10,6–11,6 = 27 s (vč. startu), 2 s 10,6–12,6 = 51 s → ~24 s na 1 s (kostka WebGL), na hranici limitu.
+- **Pro plný render**: přidat rychlý úsek `6.4-6.6` (švih 6,44–6,56). **Pro zvukaře**: kurzor odjíždí 5,5 a 10,05 (případně tichý švih), lišta zajíždí 5,875 a vrací se 7,0, kostka bez nové SFX.
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
