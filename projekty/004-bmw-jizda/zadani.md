@@ -51,6 +51,14 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   rychlost 18–26, **end card 26,0–30,0** (logo na finální úder 26,0).
 - **Fakta** (výkon, zrychlení, max. rychlost, dojezd…) jen doslova z bmw.cz / konfigurátoru pro tuto konfiguraci.
 
+- **Odpovědi režiséra analytikovi** (2026-11-01): tiskové materiály z newsroom.bmwgroup.com **smí** zůstat: stránky i soubory jsou veřejné a určené
+  ke stažení, běžný curl s výchozí hlavičkou dostal 200 bez jakéhokoli obcházení (bez změny User-Agenta, bez stealth, bez captchy); 503 pro headless
+  prohlížeč jsme neobcházeli jiným prohlížečem ani maskováním. Kdyby kterýkoli zdroj blokoval i běžný požadavek, končíme (C024).
+  Podmínky: vše © BMW AG, jen nekomerční portfolio s disclaimerem, uživatel bude upozorněn. Vůz: **i7 M70 xDrive, Alpine White**, kola 21" 909 M.
+  Fakta (doslova z konfigurátoru): 500 kW (680 k), 0–100 km/h 3,8 s, 250 km/h, dojezd 686 km (WLTP).
+  **Rozpor**: žádný záběr jízdy v Alpine White / M70 neexistuje → otázka na uživatele (jízda stříbrné i7 z tiskového filmu vs. jen vůz uživatele
+  v rendrech), odpověď sem.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
@@ -64,6 +72,35 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
 ## Materiály
 | soubor | kde je | použití |
 |---|---|---|
+| katalog všech materiálů V004 (konfigurace doslova, technické údaje, tabulky videí a fotek, shoda barvy, podmínky) | `media/projekty/004-bmw-jizda/materialy/katalog.md` | číst před storyboardem |
+| galerie konfigurátoru, 14 pohledů (Alpine White, i7 M70, 909 M, Merino Black), 2560×1646 / 2560×1536 | `media/projekty/004-bmw-jizda/materialy/konfigurator/galerie/` | „náš“ vůz: hrdinské záběry, den → noc, detail kola, salon |
+| otočka 360°, 36 × 10°, světla zap / vyp (pixelově zarovnané páry), 2560×1440 | `…/konfigurator/360_svetla_zap/`, `…/360_svetla_vyp/` | turntable, rozsvícení, 2,5D „jízda“ (varianta b) |
+| interiér 360°: 6 stěn kostky 2000×2000 + náhled panoramatu | `…/konfigurator/interier_kostka/` | salon: panorama / paralaxa |
+| snímky konfigurátoru a technických údajů, výpis výbavy | `…/konfigurator/_snimek_*.png`, `_souhrn_vybava.txt` | zdroj faktů (ne do videa) |
+| 4 tisková videa BMW Group 1920×1080 25 fps (i7 60 stříbrná jízda, M760e modrá jízda, 740 dvoubarevná jízda, Individual výroba) | `media/projekty/004-bmw-jizda/materialy/videa/press_PF00101{51..54}_*.mp4` | **skutečná jízda** (jiná barva); oříznout titulní kartu 0–4,3 s |
+| 39 videí z bmw.cz (i7, M modely, řada 7), 1646×720 a menší, 25 fps | `…/materialy/videa/i7web_*`, `m7web_*`, `7web_*` | salon (displeje, volant, ovladače), záběry jízdy v jiné barvě |
+| náhledové archy všech videí (snímek po 2 s) | `…/materialy/videa/_archy/` | výběr záběrů |
+| 10 tiskových fotek LCI 8K (stříbrná i7 60, jízda s rozmazaným pozadím) + 10 fotek z bmw.cz (2560 px) | `media/projekty/004-bmw-jizda/materialy/fotky/` | doplněk; jiná barva (kromě černého interiéru) |
+
+## Materiál jízdy (analytik, 2026-11-01)
+- **Vůz z odkazu**: BMW i7 M70 xDrive Sedan (81HY, M modely), **Nemetalický lak Alpine White** (P0300), 21" M aerodynamická kola 909 M Multicolour,
+  BMW Individual kůže Merino Black (FVCSW), obložení M Carbon Fibre. **Fakta (konfigurátor, doslova)**: 500 kW (680 k), 1015 Nm, 0–100 km/h 3,8 s,
+  max. rychlost 250 km/h, dojezd (WLTP) 686 km, baterie 112,4 kWh, DC 250 kW (10–80 % za 0:28 h). Podrobně v katalogu.
+- **Co máme**: (1) přesný vůz jen jako **rendry konfigurátoru** (galerie, otočka 360° se světly zap/vyp, interiér 360°), kvalita výborná, ale vůz stojí ve studiu;
+  (2) **skutečnou jízdu** v rozlišení 1080p z tiskové zprávy BMW Group „The new BMW 7 Series.“ (22. 4. 2026): i7 60 **stříbrná**, M760e **tmavě modrá**,
+  740 **dvoubarevná**; (3) jízdu z bmw.cz jen 720p (stříbrná i7, modrá M760e, dvoubarevná 740, zčásti CGI); (4) salon: tmavá videa displejů a ovládání
+  (Panoramic Vision, volant, skleněné ovladače), čalounění v nich skoro není vidět → použitelné pro náš černý interiér; videa zadních sedadel jsou koňaková / bílá.
+- **Barva**: **žádný dostupný záběr jízdy není v Alpine White ani v provedení M70.** Nejblíž je **stříbrná i7 60** (`press_PF0010152`, 55,9 s, 1080p, dron,
+  sledovací auto, nízké průjezdy, motion blur), světlá barva, stejná karoserie po faceliftu; liší se ledvinky (chromová mřížka vs. M černá), kola a M prvky.
+- **Kvalita**: tisková videa 1920×1080, 25 fps (pro 60 fps výstup převzorkovat: zdvojení snímků nebo interpolace, rychlé pohyby raději s motion blur);
+  web 1646×720 → na 16:9 zvětšení 1,5× (měkké). Fotky z tiskové zprávy 8K.
+- **Podmínky**: bmw.cz: „Obsah těchto webových stránek nesmí být pro komerční účely kopírován, rozšiřován, pozměňován nebo zpřístupňován třetím osobám.“
+  Newsroom bez výslovné licence, určeno médiím. → jen nekomerční portfolio s disclaimerem, © BMW AG.
+- **Doporučení analytika** (rozhoduje režisér): kombinace (a)+(b). Rychlost a jízdu nést **skutečnými záběry stříbrné i7 60** tam, kde vůz není poznat
+  zepředu (zadní a boční průjezdy, dron z dálky, nízko u kola, rozmazání, světla v noci), protože tam rozdíl barvy (stříbrná vs. bílá) i M prvků splývá;
+  „náš“ vůz zepředu a v detailu ukazovat **jen rendry konfigurátoru** (2,5D sledovací záběr z otočky 360°, rozsvícení světel, salon z kostky).
+  Žádné přebarvování cizí jízdy na bílou (riziko nerealistického vzhledu a nesouladu ledvinek M70). Tmavě modrou M760e a dvoubarevnou 740 nepoužívat
+  (na první pohled jiný vůz). Pokud musí být všude přesně Alpine White, je to otázka na uživatele.
 
 ## Režijní list
 - **Koncept jednou větou**: (doplní kreativní ředitel)
