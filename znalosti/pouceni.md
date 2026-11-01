@@ -15,7 +15,7 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
-### V003: BMW řada 7 „ONE CONTROL“ (2026-11-01, doručeno v4, čeká na zpětnou vazbu)
+### V003: BMW řada 7 „ONE CONTROL“ (2026-11-01, doručeno v4, zpětná vazba „není to ono“)
 - Zadání: projekty/003-bmw-rada7/zadani.md. 25 s, 16:9, 60 fps, luxusní sportovní hudba (nová nálada `luxsport`), bez VO, 7 motionů, skládací logo.
   Kola: v1 7,5 / realismus 8 / energie 6,5 (blokující 259 km/h) → v2 8 / 8 / 7,5 → v3 8,3 / 8,5 / 8 (schváleno všemi) → režisérská oprava v4
   **8,5 / 8,6 / 8,3**. ~6,24 mil. tokenů, ~7,4 h práce agentů.
@@ -31,7 +31,11 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
   produktu nesou tvrdé střihy na doby, dotlačení a stavy světla, ne efekty přes vůz.
 - Nové nástroje a pravidla: `hudba.py` nálada `luxsport`, `sfx.py` (`ton_c`, prémiové UI zvuky), `render_html.cjs` CRF 14 + aq-mode 3, `setup.sh` + rembg,
   pravidla G7 (realismus), G8 (SaaS motion), D7 (přímá manipulace), vkus uživatele V002. Chyby C035–C041.
-- **Zpětná vazba uživatele**: (čeká se)
+- **Zpětná vazba uživatele** (2026-11-01): „není to ono… realistické auto… že animuješ, aby to vypadalo realisticky při ukázce auta i rychlosti, výkonu,
+  a ty obrázky byly jen doplnění materiálu… auto se bude pohybovat a jet rychle.“
+- **Hlavní poučení**: kritici hodnotili realismus *obrazu* (8,6), ale uživatel chtěl realismus *pohybu*: **jedoucí auto**. Statický render
+  posouvaný kamerou je pro něj „prezentace“. U aut (a produktů v pohybu) je hlavní materiál **pohyb** (skutečné záběry jízdy), rendry jen doplněk.
+  Kritici musí mít v zadání výslovně „vůz jede“ a hodnotit, jestli divák vidí jízdu. Zapsáno do vkusu uživatele a G7.
 
 ### V002: Mercedes-Benz „FOLLOW THE STAR“ (2026-10-31, doručeno v4, zpětná vazba 2026-11-01)
 - Zadání: projekty/002-mercedes-racing/zadani.md. 30 s, 1920×1080, 60 fps, sportovní hudba (nová nálada `sportovni`), bez VO, 4 motiony z prompt-motion.

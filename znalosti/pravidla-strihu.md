@@ -9,6 +9,8 @@ To má přednost před obecnými zdroji (prompt-motion, reference). Kreativní �
 **Vkus uživatele (V002, 2026-11-01):** energie OK („není to špatný“), ale **nic kresleného**: produkty (auta…) **realisticky**, ze skutečných
 rendrů / fotek výrobce, tak aby nikdo nepoznal, že video dělala AI. Oblíbený styl: **SaaS motion** (čisté UI prvky, karty, plynulá kamera,
 kinetická typografie, produkt jako hrdina). Laťka: realismus + wow + energie.
+**Vkus uživatele (V003, 2026-11-01):** u aut **vůz musí jet** (pohyb, rychlost, jízdní záběry), statické rendry posouvané kamerou nestačí
+(„není to ono“). Rendry a fotky jsou jen doplněk; hlavní materiál je skutečný pohyb. Kritici hodnotí, jestli divák vidí jízdu.
 Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i výchozí zákazy (např. šmouhy v D2, záři v G2). Výjimku zapsat do zadání.
 
 **Zdroje:** `[R1]`–`[R5]` = rozbory v `reference/`, `[PM]` = prompt-motion.com (`prompt-motion/poznatky.md`),

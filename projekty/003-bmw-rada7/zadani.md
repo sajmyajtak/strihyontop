@@ -5,7 +5,7 @@
 | Datum zadání | 2026-11-01 |
 | Platforma / formát | **16:9, 1920×1080, 60 fps** |
 | Délka | **25,0 s** (pokyn uživatele 2026-11-01) |
-| Stav | **doručeno** (V003_v4, 2026-11-01), čeká na zpětnou vazbu |
+| Stav | **uzavřeno** (V003_v4 doručeno, zpětná vazba „není to ono“ 2026-11-01) |
 
 ## Zadání (doslova od uživatele)
 > není to špatný ale pted použij realný modely 3D od bmw který mají na stránkách a zkus udělat tu reklamu víc realičtnější tím co myslím je že at není to tak moc kreslený ale saas motion který je velice populárny ale použij realisticke modely aut který fakt vypadají jak v realitě
@@ -830,5 +830,13 @@ C032, max RMS 50 ms: stoupání 14,0 / 14,5 / 15,0 = −15,9 / −14,7 / −13,0
 | **v4** | 2026-11-01 | **V003_v4.mp4 → uživateli (SendUserFile)** + `_bez_hudby`, plakát 18,45 s, `popisek.txt` | cílené drobnosti, wow 8,5 / realismus 8,6 / energie 8,3 |
 
 ## Zpětná vazba (doslova)
+2026-11-01:
+> není to ono ja jsem chtěl asi vybereš realistické auto jak vypada že animuješ aby to vypadalo realstické při ukázce auta i rychlosti výkonu a ty obrazky byly jen dopnění materialu. Udělej to na bmw : [bmw.cz]
+>
+> udělej to na tenhle vůz poslal jsem ti odkaz: [konfigurátor G70/81HY/…]
+>
+> a chci aby si z toho webu vybral fotky auta a máš tam i přístup 360 kameře kterou můžeš použit. Udělej fakt realistickou reklamu kde auto se bude pohybovat a ejt rychle i ukazka nového modelu a jeho salonu. 30s video dlouhé, hudba sport luxus, 16:9, bez voice over,dynamické, k tomu realistické záběry a saas motion graphics zaběry: [4 odkazy prompt-motion]
+
+Výklad: statické rendry rozpohybované 2,5D nestačí. Uživatel chce **vůz v pohybu** (jízda, rychlost), realisticky; fotky a rendry jen jako doplněk. Další video V004.
 
 ## Poučení
