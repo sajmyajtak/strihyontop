@@ -92,6 +92,10 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   podržený poslední snímek volantu pod vinětací ano · karta 21″ / 909 M nad kapotou s linkou vedle přídě, vůz 77 % šířky ano · karty na stopáži
   bez stínu ano (G8 stín platí pro UI na neutrálním pozadí, ne přes video).
 
+- **Odpovědi režiséra k bloku 1** (2026-11-01): dlaždice 2 mřížky = B_1100 ano · drop 2 = F s expozicí po snímcích (jas 80–133) ano, varianta (c) ne ·
+  ochlazení studia i na tváři M70 ano (jedno studio) · bod u karty 686 km dát **před vůz do bezpečné zóny** (UI nikdy u okraje x > 1824) ·
+  **stejný úsek záběru se ve videu nesmí opakovat** (X_0448 je buď v 7,0–8,0, nebo v 25,0–25,75, ne v obou; blok 2 to ověří a případně použije jiný čistý záběr).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
