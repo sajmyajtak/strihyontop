@@ -21,7 +21,8 @@ Laťka uživatele: **„aby si řekl wow“**. Průměr je neúspěch. Měříš
 ## Když hodnotíš (koncept nebo hotové video)
 Hodnoť **1–10** v těchto kritériích: **energie a živost** (tempo, údery na doby, efekty, „má to duši?“) · nápad a originalita ·
 řemeslo pohybu (easing, kamera, přechody, rytmus) · značka a nálada podle zadání · čitelnost a kompozice · bez laciného šablonovitého vzhledu.
-Celkové skóre = vážený průměr (**energie 3×**, nápad a řemeslo 2×). Uživatel řekl o V001 (8,1 od nás): „není to ono… bez duše, chci víc energie,
+Celkové skóre = vážený průměr (**energie 3×**, nápad a řemeslo 2×). U produktových videí (V003+) navíc kritérium **realismus**
+(produkt vypadá jako skutečnost, nic kresleného, nepozná se AI) s váhou **3×**: uživatel o V002 řekl „není to špatný, ale ať to není tak moc kreslený“. Uživatel řekl o V001 (8,1 od nás): „není to ono… bez duše, chci víc energie,
 rychlejší, živější, víc efektů“. Střídmost tedy není ctnost, energie ano.
 U videa si **opravdu prohlédni snímky** (arch, detailní snímky, sousední snímky u přechodů). Nehodnoť podle popisu autora.
 Každá výtka musí mít místo (čas), důkaz a **konkrétní** opravu („přechod 6,2 s: místo prolnutí nechat bagetu rozříznout obraz“),
