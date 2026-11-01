@@ -237,6 +237,10 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   (ffmpeg `deblock` nebo `hqdn3d` slabě, jen na pozadí studia, ne na voze) a přes celý obraz dát velmi jemné zrno ze spritu (±1/255), které schová
   zbytkové bloky i banding. Kde to jde, místo otočky použít ostřejší galerii.
 
+- **Odpovědi režiséra k opravám v2** (2026-11-01): hranice noci ~150 px před knobem (lineární přepočet) zatím nechat, rozhodne kolo 2 kontroly ·
+  nájezd dropu 1 na 1,11 stačí · zaplavení dál z knobu (rým konceptu) · nové tiché SFX pro 1,875 (ztlumení studia), 14,0 (knob na začátek dráhy)
+  a lety kurzoru netřeba, světlomet v 15,0 kryje zvuk řazení.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -647,6 +651,30 @@ Kontrolní snímky na doby a po 0,25 s `media/…/render/doby_nahled/`, okolí d
 - **Rychlé úseky**: podle Pořadí stavby a B3, ne podle starého příkazu: `0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.7`.
 - **Kontrola MP4**: −14,1 LUFS / −1,2 dBFS (jen hudba), bez zamrzlých ani černých úseků; skoky = plánované střihy a kroky otočky; 10,183 „probliknutí“ = otevírání interiéru
   maskou ze středu listu (pás snímků), ne chyba. Logo na 22,000: modrá (0, 101, 176), šedá (111, 110, 110) = `#0066B1` / `#6F6F6F` ±4. Návaznosti 4,0 / 10,0 / 13,5 / 16,0 / 21,0 bez skoku, vždy nejvýš jeden text.
+
+### Opravy obrazu kolo 1 → v2 (animátor 2026-11-01)
+Render `media/…/render/V003_obraz_v2.mp4` (25,0 s, 8,6 Mbit/s, −14,1 LUFS / −1,2 dBFS, ~8 min výpočtu), kontrola `media/kontrola/003-bmw-rada7/animator-v2/`.
+Rychlé úseky (sub 8): `0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,7.3-8.0,8.1-8.45,9.95-10.55,11.95-12.55,13.45-14.3,15.9-17.6,17.85-18.05,18.7-18.9,19.7-19.9,20.6-21.7` (i v `skripty/klicove.sh`).
+- **Počitadlo (blokující „259 km/h“)**: `nastavPocitadlo` jako počítadlo kilometrů s přenosem (vyšší řád se hne jen když jsou nižší číslice 9, přechod jen v posledních 0,35 jednotky)
+  a hodnota omezená stropem (250 / 57 / 230). Ověřeno po snímcích 17,52–17,95, 18,8–19,05, 19,8–20,05: sled 245 → 249 → 249/250 → 250, nikdy nad cílem.
+- **Posuvník noci (M3a)**: 14,0–14,25 ukazatel → posuvník na nule (knob s kurzorem odjede na začátek dráhy, nádech), 14,25–15,5 tah; hranice = (x_knob − 240) / 1440 × 2000 − 40
+  (měkký okraj 80 px celý mimo obraz na začátku i konci). Klíče z rámování stoupání: levý světlomet přejede **15,0** (řazení), pravý **15,25** (shimmer), 15,5 konec dráhy;
+  zaváhání 14,5 / 15,0 = časová deformace (3 snímky na ~25 % rychlosti, bez couvání). Odchylka hranice od knobu: 15,0 −21 px, 15,25 +151 px (lineární přepočet podle storyboardu).
+- **Noční lak** (`skripty/noc_grade.py` v3): v masce vozu S-křivka se středem ~70 (lak 92 → 112), +0,4 EV ve světlech laku, přechodový filtr střecha +0,4 → prahy −0,4 EV, úbytek k zádi −0,3 EV.
+  Nový `podklady/g04_nocA.png` (stejná karoserie, studio rendru) pro 14,0–15,5. Rendr g04 v bodech: dveře 92 → 126, horní blatník 147, spodek dveří 104, kapota 190. Odlesk 18,0 jádro 0,15 → 0,26.
+- **Rychlé pohyby (C003)**: vjezd g13 12,0–12,5 kubický ease-out + rozmazání v kódu (`rozmazX`, 6 kopií v rámci podsnímku, kostka WebGL jen jednou); let kurzoru 7,3–8,0 a 9,25–9,855 mocninný dojezd.
+- **Úvod**: 1,875–2,0 studio −1 EV (celý obraz, maska vozu pro otočku není), světla 340 jako rozdíl zap − vyp (`podklady/u340_rozdil.png`) přičtený po ztlumení, návrat 2,2–2,6;
+  záře 0,7 → 1,0. Dotlačení na doby 2,5 / 3,0 / 3,5 (+1,6 %, 0,3 s) + podklad 0,6 %/s, zdvih scény 1,045 a hlubší stín. **Rámování g03 od 4,35 je pevně z v1**
+  (popisek, match cut, stoupání), proto nájezd dropu 1 je teď 1,00 → 1,11 (dřív 1,18).
+- **9,0–10,0**: 9,5–9,95 dotlačení 1,05 → 1,12 na zadní světla, kurzor odstartuje 9,25, hover „Comfort“ 9,875 natáhne ukazatel o 8 px (navazuje na list).
+- **Výkon a logo**: bublina měkce omezená k x ≤ 1824, dráha končí 1810; knob při letu naroste na ~42 px; zaplavení 21,0–21,33 poloměrem na čase snímku (ostrý okraj),
+  r = 14 + 1250·x^1,25; knob na světlém studiu s okrajem #6F6F6F a stínem; logo se 21,25–22,0 dotlačí 0,94 → 1,00 (knob obíhá ve stejném měřítku, cíl letu (960, 311,8)),
+  snímek 22,000 beze změny (statický snímek bit po bitu = v1). Disclaimer `#666666`. Noční zrno ±1/255 ze dvou spritů (lighter + difference), posun podle snímku.
+- **YDIF po čtvrtsekundách (480×270, v1 → v2)**: 2,0 0,12 → 0,41 · 2,25 0,09 → 4,93 · 2,5 0,12 → 1,23 · 2,75 0,10 → 0,08 · 3,0 0,10 → 0,46 · 3,25 0,21 → 0,37 · 3,5 0,22 → 0,74 ·
+  9,5 0,15 → 0,58 · 9,75 0,09 → 0,15 · 21,25 0,04 → 2,17 · 21,75 0,03 → 0,06. Cíl ≥ 0,6 všude splněn není (2,75 a 9,75).
+- **Beze změny (vědomě)**: drop 2 16,0–16,5 vůz uprostřed (schválená odchylka režiséra), plakát 0,0 (odpověď režiséra: A8 přes šířku stačí), „YOUR PRIVATE LOUNGE“ dole bílým,
+  zaplavení z knobu (storyboard, past 12), časy čtvrtin a písmen loga (zvuk), CRF 16 v nástroji (bitrate je teď 8,6 Mbit/s).
+- **Pro zvukaře**: levý světlomet se odkryje 15,0 (= řazení), ztlumení studia 1,875–2,0 (případně tichý „zhasnutí“ dozvuk), knob 14,0–14,25 odjede doleva (nádech), let kurzoru od 7,3 a 9,25.
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
