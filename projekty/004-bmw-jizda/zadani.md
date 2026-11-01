@@ -247,6 +247,7 @@ Kreativní ředitel, 2026-11-01. Hudba `hudba.json` (120 BPM, doba 0,5 s, takt 2
 čas „src“ = čas ve zdrojovém souboru (titulní karta 0–4,3 s se nepoužívá). Rychlost **1,2×** (výstup d s = zdroj 1,2·d s) nebo **2,4×** (zdroj 2,4·d s),
 uvnitř jednoho záběru se rychlost nemění. **Hranice záběrů zdroje** (ffmpeg scdet): 4,48 · 7,08 · 9,28 · 13,52 · 18,2 · 21,68 · 25,0 · 28,08 · 30,6 · 34,6 · 37,56 · 40,28 · 42,08 · 44,44 · 51,44.
 **Čisté úseky** (ověřeno snímky na začátku, uprostřed a na konci, bez čelního pohledu s chromovými ledvinkami): A 8,30–9,20 u kola · B 11,00–12,80 let nad kapotou ke střeše · C 21,70–24,95 záď 3/4 → střecha shora → nakloněný bok · D 28,60–30,55 silnice v protisvětle, vůz v dálce · E 30,65–34,55 dron nad vozem (ledvinky jen shora a malé, povoleno jako „dron“, test C) · F 39,97–40,27 průlet těsně kolem kamery · G 40,30–42,05 sledovací záběr zezadu shora · H 44,50–45,40 kamera přelétá těsně nad střechou · I 50,80–51,40 průjezd bokem, záď odjíždí z obrazu · J 52,30–55,85 dron nad pobřežím, vůz malý.
+**Čisté úseky doplněné při opravě v4 (režisér, ověřeno po 0,04 s)**: B 12,80–13,40 (konec průletu nad střechou, střih zdroje 13,52; jen zrcadleně, odlesk slunce 12,80–13,12 ztlumit).
 **Zakázané**: 7,08–8,25 · 9,28–10,95 · 13,52–21,65 · 25,0–28,05 · 37,56–39,95 · 42,08–44,45 · 45,45–50,75 (čelní pohledy).
 **Po oponentuře zakázané i**: **A 8,30–9,20** (snímek 8,30: leštěné aero kolo i7 60 r ≈ 230 px přes čtvrtinu obrazu + nárazník i7 60 a hrana chromových ledvinek
 na x ≈ 560–830, výřez 1,08× ani 1,15× je neschová; vedle karty „909 M“ by divák viděl jiná kola) · **E 30,65–34,55** (dron zepředu: ledvinky s chromovým rámem
@@ -498,10 +499,23 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
 | 3 | kritik · kreativní ředitel | kontrola V004_v3 (zrychlení shora 9.9 → 3.8, nový záběr 22,0–22,5, karta 686 větší, odchody karet) | KŘ **SCHVÁLENO** wow 8,2 / jízda 8,5 / realismus 8 / energie 8; kritik **BLOKUJÍCÍ**: nový záběr L_0816 (22,0–22,5) je ze zakázaného úseku A (aero kolo i7 60, lamely ledvinek) | zvuk nesedí na nový střih (průjezd 22,05), tiky 3.8 ze starého rolování, 686 jen ~0,4 s, prázdný obdélník karty 21″ 3 snímky |
 | oprava režiséra (v4) | režisér sám, bez agentů | L_0816 → B_1280 (tisk 12,80–13,40, průlet nad střechou, zrcadleno, karta nad silnicí); karta 686 rychlejší růst a rolování (klid ~0,5 s); karta 21″ odchod 0,10; SFX přepočítané z funkce rolování (686, 3.8 shora), průjezd 22,52 na skutečný průjezd D_3008, vzduch 22,1, ding 250 22,6; render + master + kontrola | vlastní kontrola po snímcích (viz Verze) | – |
 
+## Kolo 4 a oprava v4b (2026-11-01)
+- **Kolo 4** (2 agenti, jen opravená místa + regrese): KŘ **SCHVÁLENO wow 8,3 / jízda 8,7 / realismus 8,2 / energie 8,2**; kritik **OPRAVIT** (nic blokujícího).
+  Regrese: obraz mimo ohlášená místa bit po bitu shodný s v3 (oba agenti nezávisle). Nálezy: G9 ≥ 0,5 s porušují i karty 500 / 3.8 / 250 (závažná),
+  dingy 250 a 500 mimo dosednutí (závažná), B_1280 připomíná B_1220 z 11,95 zrcadlově, hvězda odlesku (KŘ závažná), slabý zvuk nového záběru, sklo_pop 686 o 43 ms dřív.
+- **Odpovědi režiséra na otázky**: (1) G9 „2 snímky“ platí pro plně krycí prázdný obdélník, stažení do bodu se nepočítá (pravidlo upřesněno);
+  (2) ding 250 na 22,6 byl chyba režiséra (C047), patří na dosednutí; (3) G9 platí pro všechny karty → opraveno; (4) B 12,80–13,40 zapsán do čistých úseků;
+  (5) verze bez hudby je záměrně jen stopa efektů v úrovni mixu (−23 LUFS), nenormalizovaná.
+- **Oprava v4b (režisér)**: karty 500 kW (karta 19,06, růst 0,3, roll 19,08–19,30), 3.8 s (karta 21,06, roll 21,12–21,42), 250 km/h (roll2 22,0–22,3) a 686 (odchod 6,93,
+  odK 0,07) → klid hotové hodnoty ≥ 0,5 s všude. Střih 22,0: švih podél diagonály silnice (C_2232 21,95–22,0 a B_1280 22,0–22,1, `svihSmer`, ≤ 130 px), záblesk +0,6 EV
+  2 snímky, hvězda odlesku ztlumena −1,3 EV měkkou maskou (polohy změřené v sekvenci, do 22,3). Zvuk v4b (82 událostí): tiky a dingy z funkce rolování
+  (500: 19,088 / 19,153, ding 19,21 · 3.8: 21,135 / 21,202 / 21,288, ding 21,35 · 250: 22,059 / 22,112, ding 22,17), sklo_pop 686 6,233, detent 686 6,93, švih 22,0,
+  vzduch jako nápor 22,0 → vrchol 22,4 (−5 LU, panorama zleva doprava), hudba −2 dB 22,0–22,45 (`--automatika 22.0-22.45:-2:20:40`), průjezd 22,52 beze změny.
+
 ## Chyby během výroby
 Zapsáno v `znalosti/chyby.md`: **C042** motiv V8 v hudbě elektromobilu (→ `--motor elektricky`) · **C043** animátor dvakrát nedodržel pokyn režiséra
 (opakovaný X_0448, zrychlení zdola) · **C044** náhradní záběr ze zakázaného úseku (L_0816) · **C045** zvuk nesledoval změny obrazu v opravném kole ·
-**C046** karta 686 krátká, prázdný obdélník karty 3 snímky. Další nálezy kritiků (bod na karoserii v1, ozvěny číslic, hrana rendru 10,5, slabý drop 2)
+**C046** karta 686 krátká, prázdný obdélník karty 3 snímky · **C047** ding posunutý z dosednutí. Další nálezy kritiků (bod na karoserii v1, ozvěny číslic, hrana rendru 10,5, slabý drop 2)
 opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 
 ## Spotřeba tokenů
@@ -511,7 +525,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | workflow koncept (2 agenti: kreativní ředitel, oponent s revizí) | 451 382 | 110 | 31,4 min |
 | workflow výroba (16 agentů: střihač, zvukař ×3, animátor ×5, kreativní ředitel ×4, kritik ×3) | 3 248 216 | 1 111 | 224 min |
 | režisér: oprava v4 (záběr, karty, posuny SFX, render, master, kontrola) | neměřeno (hlavní chat) | – | – |
-| **součet pomocných agentů (20)** | **4 146 044** | **1 435** | **317 min** |
+| workflow kolo 4 (2 agenti: kritik, kreativní ředitel) | 275 046 | 99 | 11,3 min |
+| **součet pomocných agentů (22)** | **4 421 090** | **1 534** | **328 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |

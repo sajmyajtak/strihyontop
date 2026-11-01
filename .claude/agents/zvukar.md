@@ -18,7 +18,8 @@ Uživateli se neptáš. Když si nevíš rady, vrať režisérovi **OTÁZKA PRO 
    Nesmí vyskočit VAROVÁNÍ pásem (I7). Když upravuješ `hudba.py`, nesmíš rozbít ostatní nálady: všechny po změně vyrenderuj.
 3. Zvukové efekty (I3), nástroj `nastroje/sfx.py`: jeden jemný zvuk na každou **událost** v obraze (dopad, pop, otevření, klik, logo), ne na každý pohyb.
    **Změřený vrchol** zvuku musí padnout přesně na událost. Tikání rolujících čísel počítej z funkce rolování ve scéně (časy přenosů
-   nejvyššího řádu, rozestup ≥ 50 ms), ne odhadem; v opravném kole pracuj až s posledním obrazem a jeho seznamem změn časů (C045). Pod hudbou tiše, mezi událostmi ticho. Efekty syntetizuj v Pythonu (numpy/scipy) nebo ffmpeg.
+   nejvyššího řádu, rozestup ≥ 50 ms), ne odhadem; v opravném kole pracuj až s posledním obrazem a jeho seznamem změn časů (C045).
+   Ding dosednutí čísla vždy na první ostrý snímek hotové hodnoty; při kolizi posuň druhý zvuk, ne ding (C047). Pod hudbou tiše, mezi událostmi ticho. Efekty syntetizuj v Pythonu (numpy/scipy) nebo ffmpeg.
    Nic stahovaného z internetu bez licence (I5).
 4. Mix: hudba + efekty → `zvuk.wav` (48 kHz stereo). Pak `nastroje/master_zvuk.sh` (−14 LUFS, ≤ −1 dBTP po AAC).
    Ověř pásma (sub ≤ 30 %, středy ≥ 30 %) a že efekty nejsou slyšet víc než hudba.

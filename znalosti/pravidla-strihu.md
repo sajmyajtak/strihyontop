@@ -119,8 +119,9 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   Render zvětšovat nejvýš do nativního rozlišení (~1,3× u 2560 px ve 1080p). Otočku z 36 snímků po 10° nikdy pomalu (trhá), jen rychlý oblouk
   s rozmazáním na úder. `[V003]`
 - **G9** **Rolující čísla** smí cestou ukázat jen hodnoty **horší** než fakt (rychlost a výkon rostou zdola, čas zrychlení klesá shora),
-  nikdy lepší (V003: „259 km/h“, V004: „3.7 s“). Konečná hodnota přesně podle zdroje. Hotová hodnota stojí čitelně **≥ 0,5 s**,
-  při odchodu karty zůstane prázdný tvar nejvýš 2 snímky (C046). `[V003, V004]`
+  nikdy lepší (V003: „259 km/h“, V004: „3.7 s“). Konečná hodnota přesně podle zdroje. Hotová hodnota stojí čitelně **≥ 0,5 s** (u všech karet,
+  rolování radši krátké a dřív), při odchodu karty zůstane **plně krycí** prázdný obdélník nejvýš 2 snímky (následné stažení do bodu se nepočítá) (C046).
+  Zvuk „ding“ patří na první ostrý snímek hotové hodnoty; když koliduje s jiným zvukem, posouvá se ten druhý, ne ding (C047). `[V003, V004]`
 - **G8** **SaaS motion**: neutrální světlé pozadí, karty s 1px okrajem a měkkým dvouvrstvým stínem, jeden akcent jen na akci, kurzor změny
   způsobuje a nikdy jen nepluje, nejvýš 1–2 skleněné prvky a nikdy přes produkt (detail `prompt-motion/poznatky.md` oddíl 11.1). `[V003, PM]`
 

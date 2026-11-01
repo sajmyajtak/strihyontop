@@ -13,11 +13,19 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C047: Ding posunutý z dosednutí kvůli souběhu s jiným zvukem (2026-11-01, V004 v4, režisér, našli kritik a kreativní ředitel)
+- Příznak: ding karty 250 km/h zněl 22,60, číslo ale dosedlo 22,38; ding 500 kW 19,58 proti dosednutí 19,45.
+- Příčina: režisér posunul ding 250 za vrchol průjezdu 22,52, aby ho průjezd nezakryl; ding 500 zůstal z odhadu zvukaře (konec rolování místo ostrého snímku).
+- Oprava (v4b): rolování zkráceno (G9), dingy na první ostrý snímek (500 19,21 · 3.8 21,35 · 250 22,17), průjezd zůstal 22,52 jako samostatný úder.
+- Prevence: G9 doplněno („ding na první ostrý snímek, při kolizi se posouvá druhý zvuk“), `zvukar.md`.
+
 ### C046: Karta faktu stála krátce a při odchodu zůstal prázdný obdélník 3 snímky (2026-11-01, V004 kola 1–3, našli kritik a kreativní ředitel, opravil režisér)
 - Příznak: hotové „686 km“ bylo čitelné jen ~0,38 s (karta na dronu 6,0–7,0); u karty „21″ / 909 M“ stál po zmizení textu plně krycí prázdný obdélník 3 snímky.
 - Příčina: karta se vešla mezi dva střihy jen proto, že rolování začalo až po pomalém růstu tvaru (0,3 s); u větší karty delší odchod (`odK` 0,15) než u ostatních.
 - Oprava (v4): růst 0,22 s, rolování 6,26–6,44, odchod 6,91 → klidná hodnota ~0,5 s; `odK` karty kola 0,10.
 - Prevence: pravidlo G9 doplněno: hotová hodnota stojí čitelně ≥ 0,5 s, prázdný tvar při odchodu nejvýš 2 snímky. Když se karta mezi střihy nevejde, zkrátit růst a rolování, ne klid.
+- Doplněk (kolo 4, kritik): režisér ve v4 opravil jen kartu 686, ostatní karty (500 kW 0,30 s, 3.8 s 0,25 s, 250 km/h 0,40 s) pravidlo porušovaly dál. Ve v4b
+  všechny karty: rolování 0,22–0,3 s a dřív, klid ≥ 0,5 s. **Nové pravidlo se hned uplatní na všechna místa, kterých se týká**, ne jen na to, kde vzniklo.
 
 ### C045: Zvuk nesledoval změny obrazu v opravném kole (2026-11-01, V004 kolo 3, našel kritik)
 - Příznak: v `V004_v3` zněl silný průjezd vozu 22,05 nad záběrem, kde nic neprojíždí, a skutečný průjezd 22,5 byl bez zvuku; tikání „3.8 s“
