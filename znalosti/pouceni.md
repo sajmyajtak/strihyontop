@@ -15,6 +15,22 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### V004: BMW i7 M70 „Bod, který nepustí vůz“ (2026-11-01, doručeno v4, čeká na zpětnou vazbu)
+- Zadání: projekty/004-bmw-jizda/zadani.md. 30 s, 16:9, 60 fps, `luxsport` s `--motor elektricky`, bez VO, vůz musí jet, 4 předlohy prompt-motion.
+  Varianta 1 (rozhodnutí uživatele): jízda = skutečná stopáž BMW (stříbrná i7 60, bez čelních pohledů s chromovými ledvinkami), vůz uživatele
+  (bílý M70) v rendrech konfigurátoru. Kola: v1 7,3 / jízda 7,5 / realismus 7,5 / energie 7 → v2 7,9 / 8 / 8 / 7,5 → v3 **8,2 / 8,5 / 8 / 8** (KŘ schválil,
+  kritik blokující) → oprava režiséra v4. 20 pomocných agentů, 4,15 mil. tokenů, 317 min.
+- **Fungovalo**: skutečná stopáž výrobce jako hlavní materiál jízdy (1,2×, kadence 2:2 na 60 fps, jednotný high-key grade se rendry), každý úsek zdroje jen
+  jednou (rozpis úseků), SaaS vrstva bod → linka → karta přes jízdu mimo vůz, drop 2 „bod → svazek stop → průlet“, písmena modelu v pásech s jízdou,
+  clona z bodu → logo. Vlastní hudba s motivem elektromobilu. Režisér opravil poslední blokující nález sám (bez dalšího kola agentů).
+- **Nefungovalo / zdrželo**: opravné kolo animátora si samo vybralo záběr ze zakázaného úseku (C044); zvuk souběžně s obrazem nesledoval změny (C045);
+  pokyny režiséra mezi nálezy se ztrácely (C043); karta mezi dvěma střihy byla krátká (C046). Agentů bylo 20 místo cílových 10–12 (3 kola × 2 kontroly
+  + 3 opravy se zvukařem).
+- **Pro příště**: (1) zakázané úseky stopáže hlídat u každé náhrady (kritik i autor); (2) v opravném kole obraz → potom zvuk (posuny SFX režisér);
+  (3) rozhodnutí režiséra jako číslovaná kritéria; (4) karty faktů plánovat se ≥ 0,5 s klidu už ve storyboardu; (5) zrcadlení stopáže je v pořádku jen
+  bez textu, SPZ a log.
+- **Zpětná vazba uživatele**: (čeká)
+
 ### V003: BMW řada 7 „ONE CONTROL“ (2026-11-01, doručeno v4, zpětná vazba „není to ono“)
 - Zadání: projekty/003-bmw-rada7/zadani.md. 25 s, 16:9, 60 fps, luxusní sportovní hudba (nová nálada `luxsport`), bez VO, 7 motionů, skládací logo.
   Kola: v1 7,5 / realismus 8 / energie 6,5 (blokující 259 km/h) → v2 8 / 8 / 7,5 → v3 8,3 / 8,5 / 8 (schváleno všemi) → režisérská oprava v4

@@ -12,3 +12,8 @@ Zásady (C018, C021): agenti `effort: 'high'`, velké výstupy po částech, sou
 **Optimalizace (pokyn uživatele 2026-11-01, „ať každý plní svou práci a není jich hodně“)**: viz CLAUDE.md, Režie. Vzory `priprava.js` a `vyroba.js`
 jsou z V002 (víc agentů); pro nová videa je slučovat podle toho pravidla: rozbor předloh dělá kreativní ředitel v konceptu, oponent rovnou reviduje,
 kritik technika + zadání je jeden agent, střih a spojení zvuku dělá animátor v posledním bloku nebo režisér, kontrola dalších kol jen opravených míst.
+
+- `vyroba-v004.js` (V004, 16 agentů, 3,25 mil. tokenů, 224 min): střihač záběrů ∥ zvukař → animátor klíčové snímky → kreativní ředitel schválí →
+  animátor blok 1 → blok 2 + render + zvuk → kolo kontroly (kritik ∥ kreativní ředitel) → opravy animátor ∥ zvukař, max. 3 kola.
+  **Pozor (C045)**: v opravném kole zvukař souběžně s animátorem pracoval se starým obrazem. Příště: opravy obrazu → posuny SFX režisér (nebo zvukař
+  až po obrazu, se seznamem změn časů od animátora). Rozhodnutí režiséra dávat do úkolu opravy jako číslovaná závazná kritéria (C043).

@@ -13,6 +13,41 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C046: Karta faktu stála krátce a při odchodu zůstal prázdný obdélník 3 snímky (2026-11-01, V004 kola 1–3, našli kritik a kreativní ředitel, opravil režisér)
+- Příznak: hotové „686 km“ bylo čitelné jen ~0,38 s (karta na dronu 6,0–7,0); u karty „21″ / 909 M“ stál po zmizení textu plně krycí prázdný obdélník 3 snímky.
+- Příčina: karta se vešla mezi dva střihy jen proto, že rolování začalo až po pomalém růstu tvaru (0,3 s); u větší karty delší odchod (`odK` 0,15) než u ostatních.
+- Oprava (v4): růst 0,22 s, rolování 6,26–6,44, odchod 6,91 → klidná hodnota ~0,5 s; `odK` karty kola 0,10.
+- Prevence: pravidlo G9 doplněno: hotová hodnota stojí čitelně ≥ 0,5 s, prázdný tvar při odchodu nejvýš 2 snímky. Když se karta mezi střihy nevejde, zkrátit růst a rolování, ne klid.
+
+### C045: Zvuk nesledoval změny obrazu v opravném kole (2026-11-01, V004 kolo 3, našel kritik)
+- Příznak: v `V004_v3` zněl silný průjezd vozu 22,05 nad záběrem, kde nic neprojíždí, a skutečný průjezd 22,5 byl bez zvuku; tikání „3.8 s“
+  odpovídalo starému rolování zdola (4 tiky), ne novému shora (6 přenosů); tiky karty 686 byly z časů v2.
+- Příčina: zvukař a animátor běželi v opravném kole souběžně; animátor změnil záběr a časy karet, zvukař pracoval s předchozím obrazem. Nikdo nedostal seznam změn.
+- Oprava (v4, režisér): tiky přepočítané přímo z funkce `polohySloupcu` (přenosy nejvyššího řádu), průjezd na skutečný průjezd D_3008 (vrchol 22,52), ding 250 na 22,6.
+- Prevence: v opravném kole jde zvuk **až po obrazu** (nebo posuny SFX dělá režisér po posledním renderu); animátor v hlášení vypisuje „změny časů“ (čas, co se změnilo);
+  zvukař počítá tikání z funkce rolování ve scéně, ne odhadem (`animator.md`, `zvukar.md`, `nastroje/workflow/README.md`).
+
+### C044: Náhradní záběr ze zakázaného úseku zdroje (2026-11-01, V004 kolo 3, našel kritik, opravil režisér)
+- Příznak: animátor nahradil opakovaný záběr W_900 (22,0–22,5) záběrem L_0816 = tisk 8,16–8,76, tedy z úseků, které storyboard výslovně zakazuje
+  (7,08–8,25 čelní pohledy, A 8,30–9,20 leštěné aero kolo i7 60 a lamely chromových ledvinek). Přes detail kola jiného vozu stála karta „Top speed 250 km/h“.
+- Příčina: seznam zakázaných úseků byl jen v textu storyboardu, skript záběrů ani zadání opravy ho nehlídaly; „čistý“ úsek se hledal podle pohledu na pár snímků.
+- Oprava (v4): L_0816 vyřazen (zapsán do `vyrazene` v `seznam.json`), nový B_1280 = konec průletu nad střechou (tisk 12,80–13,40, silnice v rozmazání), zrcadlený,
+  aby karta ležela nad silnicí, ne nad vozem; ověřeno po snímcích.
+- Prevence: náhradní záběr jen z „Čistých úseků“ / „Rozpisu“ v zadání a s výslovnou kontrolou proti „Zakázaným“ (čas zdroje v hlášení); zapsáno do `animator.md` a `strihac.md`.
+  Kritik dál kontroluje každý nový záběr proti zakázaným úsekům.
+
+### C043: Animátor nedodržel výslovný pokyn režiséra (2026-11-01, V004 kola 1–2, našel kritik)
+- Příznak: v1 opakovala záběr X_0448 (zakázané opakování úseku), v2 rolovala zrychlení zdola 0,0 → 3,8 (ukazovala lepší časy než fakt) přes rozhodnutí režiséra.
+- Příčina: pokyny byly v dlouhém textu zadání opravy mezi nálezy, ne jako kontrolovatelná kritéria; animátor je přepsal vlastním řešením.
+- Oprava: v dalších kolech opraveno, pravidlo G9 (rolující čísla jen přes horší hodnoty) přidáno do pravidel.
+- Prevence: rozhodnutí režiséra jdou do zadání opravy jako číslovaná **závazná kritéria** (kritik je kontroluje jednotlivě); obecná pravidla rovnou do `pravidla-strihu.md` (G9).
+
+### C042: Hudba elektromobilu měla motiv V8 (2026-11-01, V004, našel režisér)
+- Příznak: nálada `luxsport` obsahuje syntetický „V8“ motor; u i7 (elektromobil) by to byla faktická chyba zvuku.
+- Příčina: nálada vznikla pro spalovací vozy, přepínač pohonu neexistoval.
+- Oprava: `hudba.py --motor elektricky` (tón střídače místo V8, časování beze změny), hudba i mix přegenerovány, staré soubory do `zvuk/zastarale_v8/`.
+- Prevence: u vozů vždy zkontrolovat pohon a zvolit `--motor` (CLAUDE.md, Nástroje). Ostatní nálady ověřeny bit po bitu beze změny.
+
 ### C041: Barva tenkého textu se po kódování posunula (2026-11-01, V003 v4, našel kritik zadání, opravil animátor)
 - Příznak: disclaimer #666666 (18 px) na teplém studiu #E7E2DC vycházel v MP4 jako (103, 99, 96); zdrojové PNG přesně 102/102/102.
 - Příčina: YUV 4:2:0 sdílí barevnou složku pro 2×2 pixely, tenké písmo převezme chromu z okolního teplého pozadí.

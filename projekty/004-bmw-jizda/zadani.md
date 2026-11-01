@@ -479,14 +479,23 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
 | výroba | zvukař ∥ střihač (32 záběrů) → animátor klíčové snímky (neschváleno 7,6) → blok 1 s opravami → blok 2 + render + zvuk | render v1, mix v1b (elektrický motiv, režisér) | – | – |
 | 1 | kritik · kreativní ředitel | kontrola V004_v1 | kritik **BLOKUJÍCÍ** (bod na karoserii 7,4–8,0), wow 7,3 / jízda 7,5 / realismus 7,5 / energie 7 | opakovaný záběr X_0448, ozvěny číslic (C040), slabý výbuch stop dropu 2, statický úvod 1,5–3,9 a end card, 250 km/h nad prázdnou silnicí, hrana rendru 10,5 |
 | 2 | kritik · kreativní ředitel | kontrola V004_v2 (bod mimo karoserii, X_0448 jen jednou, číslice bez ozvěn, drop 2 svazek stop, úvod se záblesky jízdy) | wow 7,9 / jízda 8 / realismus 8 / energie 7,5, **BLOKUJÍCÍ: zrychlení roluje zdola (0,0 → 3,8), proti pokynu režiséra G9** | 250 km/h na už viděném záběru, statická end card, karta 686 krátká, prázdné obdélníky při odchodu karet |
+| 3 | kritik · kreativní ředitel | kontrola V004_v3 (zrychlení shora 9.9 → 3.8, nový záběr 22,0–22,5, karta 686 větší, odchody karet) | KŘ **SCHVÁLENO** wow 8,2 / jízda 8,5 / realismus 8 / energie 8; kritik **BLOKUJÍCÍ**: nový záběr L_0816 (22,0–22,5) je ze zakázaného úseku A (aero kolo i7 60, lamely ledvinek) | zvuk nesedí na nový střih (průjezd 22,05), tiky 3.8 ze starého rolování, 686 jen ~0,4 s, prázdný obdélník karty 21″ 3 snímky |
+| oprava režiséra (v4) | režisér sám, bez agentů | L_0816 → B_1280 (tisk 12,80–13,40, průlet nad střechou, zrcadleno, karta nad silnicí); karta 686 rychlejší růst a rolování (klid ~0,5 s); karta 21″ odchod 0,10; SFX přepočítané z funkce rolování (686, 3.8 shora), průjezd 22,52 na skutečný průjezd D_3008, vzduch 22,1, ding 250 22,6; render + master + kontrola | vlastní kontrola po snímcích (viz Verze) | – |
 
 ## Chyby během výroby
+Zapsáno v `znalosti/chyby.md`: **C042** motiv V8 v hudbě elektromobilu (→ `--motor elektricky`) · **C043** animátor dvakrát nedodržel pokyn režiséra
+(opakovaný X_0448, zrychlení zdola) · **C044** náhradní záběr ze zakázaného úseku (L_0816) · **C045** zvuk nesledoval změny obrazu v opravném kole ·
+**C046** karta 686 krátká, prázdný obdélník karty 3 snímky. Další nálezy kritiků (bod na karoserii v1, ozvěny číslic, hrana rendru 10,5, slabý drop 2)
+opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
 |---|---|---|---|
 | workflow podklady (2 agenti: analytik materiál, animátor test) | 446 446 | 214 | 61,6 min |
 | workflow koncept (2 agenti: kreativní ředitel, oponent s revizí) | 451 382 | 110 | 31,4 min |
+| workflow výroba (16 agentů: střihač, zvukař ×3, animátor ×5, kreativní ředitel ×4, kritik ×3) | 3 248 216 | 1 111 | 224 min |
+| režisér: oprava v4 (záběr, karty, posuny SFX, render, master, kontrola) | neměřeno (hlavní chat) | – | – |
+| **součet pomocných agentů (20)** | **4 146 044** | **1 435** | **317 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |

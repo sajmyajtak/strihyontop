@@ -31,11 +31,11 @@
   "popis": "T2 karta 21″ / 909 M (bod → linka → karta), měkký klik"
  },
  {
-  "cas": 3.0,
+  "cas": 2.8,
   "typ": "detent",
   "lu": -14,
   "strop": -22,
-  "popis": "T2 karta odchází do linky a bodu (tick)"
+  "popis": "T2 karta 21″ odchází do linky a bodu 2,8 (U_karta1.odchod; v4: bylo 3,0)"
  },
  {
   "cas": 3.5,
@@ -121,66 +121,42 @@
   "popis": "T4 dron J_5232: bod za zádí vyskočí (pružina 6,12–6,3) a vyrazí linka 6,14 (v3: bylo 6,0, obraz v2)"
  },
  {
-  "cas": 6.25,
+  "cas": 6.19,
   "typ": "sklo_pop",
   "lu": -11,
   "strop": -16,
-  "popis": "T4 karta Electric range (WLTP) 686 km vyroste 6,25 (U_karta686.karta, v3: bylo 6,5)"
+  "popis": "T4 karta Electric range (WLTP) 686 km vyroste 6,16 (U_karta686.karta, v4: rust 0,22) ; zvuk 6,19 = 50 ms za klikem 6,14 (tvar karty už roste)"
  },
  {
-  "cas": 6.3094,
+  "cas": 6.265,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.0,
   "strop": -28,
-  "popis": "T4 rolování 686 (1/5): stovky 1→2 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
+  "popis": "T4 rolování 686 (1/2): stovky 0→1 (ui.js polohySloupcu, roll 6,26–6,44, ease-out cubic; v4), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.3941,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.01,
-  "strop": -28,
-  "popis": "T4 rolování 686 (2/5): stovky 3→4 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
- },
- {
-  "cas": 6.4613,
+  "cas": 6.3266,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.02,
   "strop": -28,
-  "popis": "T4 rolování 686 (3/5): stovky 4→5 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
+  "popis": "T4 rolování 686 (2/2): stovky 4→5 (ui.js polohySloupcu, roll 6,26–6,44, ease-out cubic; v4), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.532,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.03,
-  "strop": -28,
-  "popis": "T4 rolování 686 (4/5): jednotky dosednou na 6 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
- },
- {
-  "cas": 6.626,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.04,
-  "strop": -28,
-  "popis": "T4 rolování 686 (5/5): desítky dosednou na 8 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
- },
- {
-  "cas": 6.72,
+  "cas": 6.38,
   "typ": "ding",
   "lu": -9,
   "strop": -16,
-  "popis": "T4 686 dosedne (stovky dosednou na 6 v 6,72) + modrá lišta 6,72 (v3: bylo 7,23); doznění utne kosinový doběh do střihu 7,0 (na W_1788 žádná karta)",
+  "popis": "T4 686 dosedne (stovky 5→6 v 6,361, lišta 6,32–6,54; v4: bylo 6,72); doznění utne kosinový doběh do střihu 7,0",
   "konec": 7.0
  },
  {
-  "cas": 6.84,
+  "cas": 6.91,
   "typ": "detent",
   "lu": -12,
   "strop": -19,
-  "popis": "T4 karta 686 odchází do linky a bodu 6,84 (U_karta686.odchod, v3: bylo 7,75); o 2 dB silnější, aby vystoupil z doznění dingu, utne se ve střihu 7,0",
+  "popis": "T4 karta 686 odchází do linky a bodu 6,91 (U_karta686.odchod, v4: bylo 6,84); utne se ve střihu 7,0",
   "konec": 7.0
  },
  {
@@ -546,44 +522,52 @@
   "popis": "T11 bod → karta 0–100 km/h"
  },
  {
-  "cas": 21.2759,
+  "cas": 21.275,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.0,
   "strop": -28,
-  "popis": "T11 rolování 3.8 s (1/4): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T11 rolování 3.8 s shora (1/5): přenos nejvyššího řádu 9→8 (ui.js polohySloupcu dolu, exponent 1,7; v4 podle kritika kolo 3)"
  },
  {
-  "cas": 21.3467,
+  "cas": 21.328,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.01,
   "strop": -28,
-  "popis": "T11 rolování 3.8 s (2/4): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T11 rolování 3.8 s shora (2/5): přenos nejvyššího řádu 8→7 (ui.js polohySloupcu dolu, exponent 1,7; v4 podle kritika kolo 3)"
  },
  {
-  "cas": 21.4592,
+  "cas": 21.386,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.02,
   "strop": -28,
-  "popis": "T11 rolování 3.8 s (3/4): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T11 rolování 3.8 s shora (3/5): přenos nejvyššího řádu 7→6 (ui.js polohySloupcu dolu, exponent 1,7; v4 podle kritika kolo 3)"
  },
  {
-  "cas": 21.59,
+  "cas": 21.4515,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.03,
   "strop": -28,
-  "popis": "T11 rolování 3.8 s (4/4): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T11 rolování 3.8 s shora (4/5): přenos nejvyššího řádu 6→5 (ui.js polohySloupcu dolu, exponent 1,7; v4 podle kritika kolo 3)"
  },
  {
-  "cas": 21.68,
+  "cas": 21.529,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "ton": 1.04,
+  "strop": -28,
+  "popis": "T11 rolování 3.8 s shora (5/5): přenos nejvyššího řádu 5→4 (ui.js polohySloupcu dolu, exponent 1,7; v4 podle kritika kolo 3)"
+ },
+ {
+  "cas": 21.64,
   "typ": "ding",
   "lu": -9,
   "ton": 1.06,
   "strop": -16,
-  "popis": "T11 3.8 s dosedne (první ostrý snímek 21,683) + lišta + kroužek"
+  "popis": "T11 3.8 s: poslední přenos 4→3 (21,634, režim dolu) = dosednutí na fakt + lišta 21,75 (v4: bylo 21,68)"
  },
  {
   "cas": 22.0,
@@ -593,23 +577,22 @@
   "popis": "T12 štítek se přemění na Top speed (tick)"
  },
  {
-  "cas": 22.05,
-  "typ": "ev_prujezd",
-  "lu": -4,
-  "pan": 0.2,
-  "pan_do": -0.9,
-  "od": 21.9,
-  "strop": -8,
-  "popis": "T12 D_3008 (22,0–22,5): vůz v rozmazání přes levou polovinu odjede doleva z obrazu 22,0–22,12 (Doppler, vrchol 22,05, kolo 1 kritik); doznění utne kosinový doběh do střihu na W_900 (22,5), jinak by končilo tvrdě v 22,55",
-  "konec": 22.5
- },
- {
   "cas": 22.0724,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.0,
   "strop": -28,
   "popis": "T12 rolování 250 km/h (1/6): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+ },
+ {
+  "cas": 22.1,
+  "typ": "vzduch",
+  "lu": -13,
+  "od": 22.0,
+  "konec": 22.5,
+  "pan": -0.3,
+  "strop": -18,
+  "popis": "T12 B_1280 (22,0–22,5): průlet nad střechou, silnice ubíhá v rozmazání (vzduch jako B 11,00 na 5,0); v4 nový záběr místo L_0816 ; lu −13, aby tikání 250 nezakrýval"
  },
  {
   "cas": 22.1302,
@@ -652,12 +635,23 @@
   "popis": "T12 rolování 250 km/h (6/6): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
  },
  {
-  "cas": 22.55,
+  "cas": 22.52,
+  "typ": "ev_prujezd",
+  "lu": -5,
+  "pan": 0.2,
+  "pan_do": -0.9,
+  "od": 22.42,
+  "strop": -8,
+  "popis": "T12 D_3008 (22,5–23,0): vůz v rozmazání projede přes levou polovinu doleva z obrazu 22,5–22,62 (Doppler, vrchol 22,52 hned po střihu, vůz je nejblíž); v4: bylo 22,05 (kritik kolo 3), doznění utne kosinový doběh do střihu 23,0",
+  "konec": 23.0
+ },
+ {
+  "cas": 22.6,
   "typ": "ding",
   "lu": -9,
   "ton": 1.12,
   "strop": -16,
-  "popis": "T12 250 km/h dosedne (první ostrý snímek 22,55) + lišta"
+  "popis": "T12 250 km/h dosedne (roll2 i lišta 22,6; v4: bylo 22,55, 80 ms za vrcholem průjezdu, aby ho nezakryl)"
  },
  {
   "cas": 22.8,
