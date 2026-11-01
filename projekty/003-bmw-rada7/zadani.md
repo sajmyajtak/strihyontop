@@ -191,6 +191,12 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   + disclaimer, nic víc · vlastní anglická hesla smí (bez faktů), ale **méně textu**: nejvýš ~4–5 textových momentů za 25 s, energii nese pohyb ·
   logo varianta A (21,0–22,0) platí · kolo ve výkonu vynechat je v pořádku · klíčové snímky obou dropů schválí kreativní ředitel dřív, než se staví zbytek.
 
+- **Odpovědi režiséra k oponentuře** (2026-11-01): nová stavba dropu 2 **ano** (noc dokončená do 15,5, 15,75–16,0 zatmění se skutečným tichem, na 16,0 z černé
+  nejdřív světla g02, pak karoserie). Ticho udělá zvukař **automatikou v mixu** (`sfx.py --automatika`), hudba.wav a její časování se nemění ·
+  barevná úprava nočních rendrů g02/g04 (hlubší černá, kontrast, chlad, vinětace) **ano**, je to grading, ne změna tvaru vozu · test kostky interiéru
+  jako CSS 3D (natočení ~35°) **ano**, udělá ho animátor ve výrobě v bloku interiéru; když neprojde (ostrost, výpočet), luxus zůstane na g12–g14 se střihy ·
+  „skládací logo“ = **skládání z dílů** (prstenec → čtvrtiny → písmena), ne origami.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
