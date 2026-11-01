@@ -181,6 +181,11 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   když má kreativní ředitel silný důvod · otočka 360° jen jako rychlý oblouk s rozmazáním na úder, žádný pomalý turntable · ukázková videa motionů
   v `media/prompt-motion/videa_v003/` ponechat jako vizuální reference.
 
+- **Odpovědi režiséra k testu realismu** (2026-11-01): den → noc (g01→g02, g03→g04) a rozsvícení světel z párů zap/vyp **smí** být hlavní wow
+  přechod (např. do výkonu na drop 2) · otočka 360° **jen krokováním úhlů na doby tvrdým střihem** (klikání v konfigurátoru), vůz se plynule neotočí
+  ani nerozjede, s tím počítat · interiér (luxus 10–14 s) stavět z g12–g14 s 2,5D nájezdem, panorama z kostky jen jako možnost (otestuje animátor
+  ve výrobě) · popisek „BMW Iconic Glow“ smí (název z bmw.cz, prvek je vidět v rendru) · výkon **bez koní**: 230 kW, 0–100 km/h in 5.7 s, 250 km/h.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -283,6 +288,48 @@ stojí a podle rychlosti se prolínají 3 předem rozmazané verze (rozmazání 
 ráfek má rozmazání kopiemi v kódu + podsnímky. **Rychlá rotace (≥ ~2 ot./s) je přesvědčivá.** Výhrada: **brzdový třmen je v ráfku a točí se s ním**,
 při pomalém valení je to vidět (u skutečného auta stojí). Logo na středu se točí (u pevných středů ve skutečnosti taky). Kolo se točí na stojícím autě:
 ve videu jen s pohybem okolí (kamera, rychlostní linky v UI) nebo jako detail na střih.
+
+| # | technika | verdikt | důkaz | výpočet |
+|---|---|---|---|---|
+| 4 | rozsvícení světel | **funguje** | `t4_svetla.mp4`, `t4_svetla_pas.jpg`, `t4_svetla_detail_predek.jpg` | 7 s za 66 s |
+| 5 | kamera 2,5D (stěna / podlaha / vůz) | **s výhradou** (malé posuny) | `t5_kamera.mp4`, `t5_kamera_detail.jpg` | 4 s za 40 s |
+| 5b | otočka 360° (prolnutí / švih) | **nefunguje** plynule, jen krokování | `t5b_otocka_*_pas.jpg` | ffmpeg, sekundy |
+| 6 | SaaS: skleněná karta, popisek s linkou, kurzor, přepínač Night | **funguje** | `t6_saas.mp4`, `t6_saas_pas.jpg`, `t6_nahled/` | **1 s výřezu = 12 s**, 4 s za 40 s |
+
+**4. Světla.** Nic se nekreslí: k obrázku „vyp“ se přičte (`lighter`) kladný rozdíl zap − vyp z konfigurátoru (páry jsou pixelově zarovnané),
+odhalený rostoucím kruhem od středu masky („uvítací“ náběh LED, 0,25–0,55 s), + slabá záře = rozmazaný rozdíl (`screen`, krátký nádech při zapnutí).
+Zadní světla (úhel 180) naskočí červeně a jen ve svítilnách: velmi přesvědčivé. Předek ve dne (úhel 030): rozsvítí se obrys ledvinek Iconic Glow
+a denní svícení, ve 100 % jasné, v celku jemné. Den → noc (g01 → g02, stejná kamera, prolnutí 1,6 s) působí jako stmívání studia, světla zůstanou:
+nejsilnější „wow“ z rendrů. Mezi stavy je obraz chvíli šedivý (prolnutí v sRGB), na dobu ho zkrátit.
+
+**5. Kamera 2,5D** (g03). Žádná mapa hloubky (MiDaS/torch tu není a natažené okraje by stejně vznikly), místo ní **známá geometrie studia**:
+stěna = svislá rovina, podlaha = vodorovná rovina kreslená po pásech 4 px, každý pás ve své hloubce Z(y) = K / (y − yV) (úběžník yV ≈ 760),
+vůz = karta v hloubce styku předního kola. Nájezd 12 % + boční posun ±90 px za 4 s: stěna se posouvá pomaleji, podlaha plynule, vržený stín jede
+s podlahou, nic se nenatahuje. Výhrada: vůz je plochá karta (při velkém posunu by se neměnila perspektiva vozu) a při krajní výchylce je za pravým
+rohem nárazníku u styku stěny a podlahy vidět drobná tmavší ploška z doplněného pozadí. **Držet boční posun do ~±60 px a nájezd do ~10 %.**
+**5b. Otočka 360°** (36 snímků po 10°): prolnutí sousedních úhlů dělá dvojitá kola, švih 180° za 0,5 s (rozmazání z 6 kroků) taky. Plynulá rotace
+z rendrů nejde. Použitelné: **krokování úhlů na doby** (tvrdý střih po 10–30°, jako klikání v konfigurátoru), případně krok schovaný za švihem UI.
+
+**6. SaaS přes fotku.** Fotka v canvasu, UI v DOM nad ní (Manrope ze `znacka.css`): skleněná karta `backdrop-filter: blur(22px) saturate(1.25)`
+s fakty doslova z bmw.cz (230 kW (313 hp), 0–100 km/h 5.7 s, 250 km/h), pružina 3 %, řádky postupně; tečka s pulzem na ledvince + linka, která
+se vykreslí, a skleněná pilulka „BMW Iconic Glow“; kurzor přijede ease-out, klikne (zmáčknutí 12 %), přepínač zmodrá (#1C69D4) a fotka přejde
+do noci (g03 → g04). Karta a popisek při nočním režimu plynule přejdou na tmavé sklo se světlým textem (na tmavém studiu byla světlá karta nečitelná).
+Výkon v pořádku: 1 s výřezu 12 s výpočtu (V002 složitá scéna ~35 s). Drobnosti: bílá linka nad bílou kapotou má slabý kontrast (přidat jemný stín),
+uprostřed prolnutí den/noc je text karty krátce málo kontrastní.
+
+**Limity materiálu.** Statické rendry z pevných kamer: 14 pohledů galerie + 36 úhlů otočky (po 10°) + interiér (kostka). Žádný skutečný 3D model,
+žádná jízda: vůz se nikdy nehne vůči podlaze (kola stojí na místě), pohyb jen kamerou 2,5D, světlem, UI a střihem. Páry den/noc existují jen
+pro g01/g02 a g03/g04, páry světel zap/vyp pro všech 36 úhlů otočky. Detail kola jen g05/g06 (předek). Rendry mají studio, které nejde změnit
+bez vyříznutí (na tmavé UI pozadí funguje vůz + `*_stin.png`, stín je tam ale málo vidět).
+
+**Doporučení pro koncept.**
+1. Stavět na tom, co je skutečné: **přepínače stavů z konfigurátoru** (světla zap/vyp, den/noc, úhel otočky) ovládané kurzorem a UI kartami.
+   SaaS „konfigurátor jako zážitek“ je přirozený jazyk pro tenhle materiál a nic nevymýšlí. Den → noc s rozsvícením je kandidát na drop 2 (výkon).
+2. Kamera: pomalé nájezdy 2,5D (do 10 %, posun do ±60 px), střih na dobu mezi pohledy galerie, otočka jen po krocích na doby.
+3. Odlesk po laku jen na bocích (g07, g10) a na nočních záběrech, slabě a jednou za záběr. Na 3/4 bílém laku spíš ne.
+4. Rotace kola jen rychlá (výkon, 16–22 s), jako detail g05 s rychlostními linkami v UI nebo na střih, ne pomalé valení.
+5. Interiér (luxus, 10–14 s) zatím netestován: kostka 2000×2000 dovolí pomalé panorama (pohled z kostky v canvasu/WebGL), doporučuji samostatný krátký test.
+6. Před plným renderem počítat ~10–17 s výpočtu na 1 s videa pro tyto scény (bez zrna a těžkých filtrů).
 
 ## Storyboard / časová osa
 (doplní kreativní ředitel)
