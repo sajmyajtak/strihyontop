@@ -13,6 +13,15 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C048: Lokální retuš stopáže udělala viditelnou skvrnu (2026-11-01, V004 v4b, režisér, našli kritik i kreativní ředitel)
+- Příznak: ztlumení hvězdy odlesku v B_1280 (kruhová maska −1,3 EV, r 190 px) přesahovalo ze skla na světlý písek: tmavá kulatá skvrna ~200–250 px
+  jela s hranou střechy 22,10–22,27, působila jako špína na objektivu. Druhý pokus (ztlumit jen světlé tóny) udělal z hvězdy tmavou díru s prstencem,
+  třetí (razítko ze skla vedle) tmavší kotouč a zub na hraně střechy.
+- Příčina: zásah do skutečného záběru maskou, která nesleduje tvar objektu ani jas okolí; kontrolní snímky režisér prošel jen zmenšené.
+- Oprava (v4c): hvězdu jen měkce rozostřit (blur 14 px, měkký kruh r 70) a jen ve snímcích, kde leží uvnitř skla (22,0–22,2), u hrany nic. Výsledek: rozptýlený odlesk bez hvězdy.
+- Prevence: retuš stopáže jen tam, kde zásah nemůže přetéct na jiný povrch (nebo v masce objektu), přednost má rozostření / změkčení před ztmavením a razítkem;
+  kontrolovat výřez v plném rozlišení po snímcích a porovnat s verzí bez zásahu (`animator.md`).
+
 ### C047: Ding posunutý z dosednutí kvůli souběhu s jiným zvukem (2026-11-01, V004 v4, režisér, našli kritik a kreativní ředitel)
 - Příznak: ding karty 250 km/h zněl 22,60, číslo ale dosedlo 22,38; ding 500 kW 19,58 proti dosednutí 19,45.
 - Příčina: režisér posunul ding 250 za vrchol průjezdu 22,52, aby ho průjezd nezakryl; ding 500 zůstal z odhadu zvukaře (konec rolování místo ostrého snímku).

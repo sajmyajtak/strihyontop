@@ -35,6 +35,7 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
    Pohyb objektu, který kamera „chytá“: poloha na obrazovce musí být monotónní (žádné couvání), jinak schovaný střih.
    Záblesky a dopady (C028): závěrka zprůměruje snímek přes půl snímku kolem času, krátký záblesk se rozmaže. Sílu ověř ve výřezu
    s podsnímky (`--od T-0.1 --dur T+0.2`) na snímku čas + 1/60 s, ne na statickém klíčovém snímku.
+   Retuš stopáže (C048): jen tam, kde zásah nepřeteče na jiný povrch; raději změkčit / rozostřit než ztmavit nebo razítkovat; kontrola výřezu 1:1 proti verzi bez zásahu.
    Náhradní záběr (C044): jen z oddílu „Čisté úseky“ / „Rozpis“ v zadání, nikdy z „Zakázaných“; v hlášení uveď čas ve zdroji a že je mimo zakázané.
    Změny časů (C045): když změníš záběr, střih nebo časy karet / čísel, vypiš je v hlášení („čas: co se změnilo“), aby šel zvuk posunout.
    Po renderu `nastroje/kontrola.sh` a prohlédnout `arch.jpg`. Hlasitost doladit `nastroje/master_zvuk.sh`.

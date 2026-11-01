@@ -512,10 +512,24 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
   (500: 19,088 / 19,153, ding 19,21 · 3.8: 21,135 / 21,202 / 21,288, ding 21,35 · 250: 22,059 / 22,112, ding 22,17), sklo_pop 686 6,233, detent 686 6,93, švih 22,0,
   vzduch jako nápor 22,0 → vrchol 22,4 (−5 LU, panorama zleva doprava), hudba −2 dB 22,0–22,45 (`--automatika 22.0-22.45:-2:20:40`), průjezd 22,52 beze změny.
 
+## Kolo 5 a oprava v4c (2026-11-01)
+- **Kolo 5** (2 agenti, jen místa opravená ve v4b + regrese): KŘ **SCHVÁLENO wow 8,3 / jízda 8,8 / realismus 8,0 / energie 8,4**; kritik **OPRAVIT**.
+  Regrese: mimo 6,15–7,0, 18,9–20,0, 20,92–22,8 bit po bitu shodné s v4. Shodný hlavní nález obou: maska ztlumení odlesku dělá na písku tmavou skvrnu (C048).
+  Kritik dále: dingy na posledním přenosu, ne na ustálení (−50 až −97 ms); 500 kW ustálené 0,43–0,47 s; popisek 686 přečnívá nad tvar v podsnímcích 376–377
+  (od v4); tik 500 před viditelnou kartou; detent 500 o 27 ms pozdě; schodovitý obrys při nástupu karet 500 / 3.8. KŘ: stupňování zvuku k 250 slabé
+  (hudba ztlumená během švihu), švih tichý.
+- **Odpovědi režiséra**: (1) „první ostrý snímek“ = první **ustálený** snímek (pravidlo G9 upřesněno); (2) popisek 686 opravit hned; (3) odlesk: ani ztlumení
+  jasu, ani razítko neprošly kontrolou výřezu 1:1 (díra s prstencem, tmavý kotouč, zub hrany) → hvězda se jen měkce rozostří uvnitř skla; (4) v4 ani v4b
+  uživatel nedostal, doručí se až konečná verze.
+- **Oprava v4c (režisér)**: odlesk = `rozostriOdlesk` (blur 14 px, měkký kruh r 70, snímky 0–5, slábne 22,15–22,2); karta 500 roll 19,08–19,27 a odchod 19,80;
+  obsah 686 až 6,29–6,34; podsnímky 8 i v nástupech karet (6,15–6,35 · 19,05–19,25 · 21,05–21,2). Zvuk v4c (85 událostí): dingy na ustálení (686 6,40 · 500 19,27 ·
+  3.8 21,417 · 250 22,25), tiky 500 jen viditelné (19,17 / 19,22), + tik 21,35 a 22,163, detent 500 19,77, nádech hudby 21,88–22,0 −3 dB místo ztlumení
+  během švihu, švih 22,0 +3 dB + nízký úder `fump`, vzduch +2 dB, průjezd +2 dB (−6 dBFS jako průlet 18,1).
+
 ## Chyby během výroby
 Zapsáno v `znalosti/chyby.md`: **C042** motiv V8 v hudbě elektromobilu (→ `--motor elektricky`) · **C043** animátor dvakrát nedodržel pokyn režiséra
 (opakovaný X_0448, zrychlení zdola) · **C044** náhradní záběr ze zakázaného úseku (L_0816) · **C045** zvuk nesledoval změny obrazu v opravném kole ·
-**C046** karta 686 krátká, prázdný obdélník karty 3 snímky · **C047** ding posunutý z dosednutí. Další nálezy kritiků (bod na karoserii v1, ozvěny číslic, hrana rendru 10,5, slabý drop 2)
+**C046** karta 686 krátká, prázdný obdélník karty 3 snímky · **C047** ding posunutý z dosednutí · **C048** retuš odlesku udělala skvrnu. Další nálezy kritiků (bod na karoserii v1, ozvěny číslic, hrana rendru 10,5, slabý drop 2)
 opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 
 ## Spotřeba tokenů
@@ -526,7 +540,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | workflow výroba (16 agentů: střihač, zvukař ×3, animátor ×5, kreativní ředitel ×4, kritik ×3) | 3 248 216 | 1 111 | 224 min |
 | režisér: oprava v4 (záběr, karty, posuny SFX, render, master, kontrola) | neměřeno (hlavní chat) | – | – |
 | workflow kolo 4 (2 agenti: kritik, kreativní ředitel) | 275 046 | 99 | 11,3 min |
-| **součet pomocných agentů (22)** | **4 421 090** | **1 534** | **328 min** |
+| workflow kolo 5 (2 agenti: kritik, kreativní ředitel) | 311 587 | 114 | 11,8 min |
+| **součet pomocných agentů (24)** | **4 732 677** | **1 648** | **340 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
