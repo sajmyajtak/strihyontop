@@ -77,6 +77,10 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   polohu vozu po 0,25 s v G 40,90–42,05, C 22,32–23,52 a D 29,20–30,40 a po snímcích ověřit, že karta nikdy nevjede na vůz · záblesky jízdy na 3,5 a 3,75
   jako předzvěst **ano**.
 
+- **Odpovědi režiséra ke střihači** (2026-11-01, závazné pro animátora): slot 22,0–23,0 = **D_3008 + W_900** (X_0448 zůstává pro 25,0–25,75) ·
+  slot 6,0–8,0: **J_5232 jen snímky 0–34** (do 53,72, kdy jsou ledvinky ještě nečitelné), **bez punch-inu**, zbytek do 8,0 doplnit čistým záběrem
+  zezadu nebo shora (G_4088 / H_4508, bez čelního pohledu) · volant: dlaždice 4 začne v 14,77 · SPZ v tiskové stopáži nerozmazávat (skutečný materiál).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
@@ -365,6 +369,37 @@ Seřazeno podle dopadu na „wow“:
    místem pro fakta a morfem štítku 500 kW → 3.8 s → 250 km/h, motiondsgnr mřížka 16–17,5 beze změny, lukasersil stopy jako odkrytí + pásy písmen + clona.
 **Beze změny (funguje)**: snímek 0 s rozsvícením ledvinek z rozdílu zap − vyp, karta 686 km na dronu J s punch-inem, P3 záře → odraz slunce, salon
 jako deska s dlaždicemi, mřížka 3×3, nádech 17,75 jen s bodem, bod → clona → prstenec loga, disclaimer.
+
+## Záběry pro scénu (střihač, 2026-11-01)
+Výstup `media/projekty/004-bmw-jizda/zabery/<id>/000.jpg…` (JPG q2, BT.709 → sRGB/JFIF převedeno explicitně), u každého `pas.jpg` (všechny snímky)
+a `nahled.jpg` (první / střed / konec), přehled všech `_prehled_1–4.jpg`, seznam `zabery/seznam.json`, skript `zabery/_skript/zabery.py`
+(znovu vyrobí jeden nebo všechny záběry). **32 záběrů, 718 snímků, 115 MB.**
+- **Technika**: výřez podle **indexu snímku** zdroje (web videa mají rozbitá časová razítka kontejneru, `-ss` by tam vybral jiné snímky), takže začátky
+  jsou vždy na mřížce 25 fps (časy ze storyboardu, které na ní neleží, posunuty o 0,02 s). Každý zdrojový snímek = 1 snímek sekvence 30 fps
+  = **rychlost 1,2×**; ve scéně index `floor((t − t0 + 1/120)·30)` = přesná kadence 2:2 na 60 fps, žádná interpolace, ověřeno: žádné dva sousední
+  snímky nejsou stejné. Grade = `test_a.sh` high-key (sytost 0,7, teplé výšky, křivka), převod do RGB s maticí BT.709 (o ~2/255 světlejší než
+  test A, kde se převádělo výchozí maticí). Web W o něco méně teplé výšky. Zrno není zapečené (přidá scéna jednotně).
+- **Ořezy**: tisk 1920×1080 beze změny (bez textu, bez vodoznaku) kromě `B_1100` a záblesku `Z_B1108`: **výřez 1,15× ukotvený vpravo nahoře**, protože
+  v B 11,00–11,40 je u levého okraje shora vidět chromový rámeček ledvinek i7 60. Web W 1646×720 → okno 1280×720 od x = 360 → 1,5× lanczos + unsharp 0,35.
+  Volant okno od x = 120 (texty displejů „48“, „Ind…“ zůstanou mimo), 1,5×. Ovladače CraftedClarity nativně 1280×720 (jen dlaždice). Dlaždice mřížky 960×540.
+- **Rozpis** (id → slot): I_5080 → 4,0 · C_2436 → 4,5 · B_1100 → 5,0 · B_1160 → 5,5 · H_4480 → 5,75 · J_5232 → 6,0–8,0 · B_1188 → 8,0 · W_840 → 8,25 ·
+  H_4448 → 8,75 · W_960 → 9,0–10,0 · D_2840 → 11,0 · B_1220 → 11,5 · F_4000 → 18,0 · G_4028 → 18,25 · H_4508 → 18,75 · G_4088 → 19,0–20,0 ·
+  C_2172 → 20,0 · C_2376 → 20,5 · C_2232 → 21,0–22,0 · záblesky Z_C2440 → 3,5, Z_B1108 → 3,75 · písmena G_4028 / I_5080 / F_4000 / H_4480_L ·
+  mřížka M2_C2376, M4_G4120, M6_J5300, M8_I5080 · salon S_ovladace → 13,25, S_volant → 14,5–17,23 · rezerva W_788, W_900, X_0448, D_3008.
+- **Vyřazeno / změněno při prohlídce po snímcích** (rozhodnutí v kompetenci střihače, k potvrzení režisérem):
+  1. **D 29,20–30,40 (22,0–23,0, karta Top speed) vyřazen**: vůz přijíždí **čelně**, chromové ledvinky i7 60 čitelné od 29,20 (vůz ~180 px) do 30,04
+     (~260 px). Náhrada: `D_3008` (30,08–30,60, 13 snímků = 0,43 s: průjezd v rozmazání doleva, pak prázdná silnice v protisvětle), zbytek slotu viz otázky.
+  2. **J 54,72–55,62 (25,0–25,75) vyřazen**: vůz jede **ke kameře** (ne „odjíždí“), na 55,00–55,40 je maska ledvinek shora čitelná. Náhrada `X_0448`
+     (4,48–7,08, dosud nepoužitý dron nad útesem a pobřežní silnicí; vůz malý vjede vpravo dole od snímku 28 a **odjíždí** nahoru doleva), pro 25,0–25,75 snímky 42–64.
+  3. **J_5232 (6,0–8,0) riziko**: od 53,72 (snímek 35) vůz přijíždí čelně 70–100 px a ledvinky jsou poznat jako tvar se světlem; punch-in 1,15× na 7,0
+     to zesílí. Návrh: 7,0–8,0 střih na `X_0448` snímky 35–64 (nový rámec na kopák místo punch-inu).
+  4. **F začíná 40,00** místo 39,97: snímek 39,96 ukazuje chromové ledvinky zepředu. F má tedy 7 snímků (0,233 s), poslední podržet o 1/60 s.
+  5. **D (11,0) posunut na 28,40–29,00** (`D_2840`): na 29,04–29,16 je vůz zepředu už 70 px; odraz slunce na asfaltu je stejný (YAVG 145).
+  6. **Ovladače CraftedClarity začínají 2,40**, ne 2,0 (do 2,36 je ve zdroji jiný záběr: lesklá lišta). 79 snímků = 2,63 s.
+  7. **Volant má jen 82 čistých snímků (7,96–11,24) = 2,73 s**, storyboard chce 14,5–17,5 = 3,0 s (chybí 8 snímků), viz otázky.
+- **Poznámky pro animátora**: W vůz jede **doprava od kamery** (sledovací záběr, pozadí ubíhá doleva), směr švihu P2 doleva tedy sedí s pozadím, ne s vozem.
+  C_2172 a G_4028 / G_4088 mají čitelnou SPZ i7 60 (M DI 285E, skutečná stopáž, ponecháno). Jas desek (YAVG): B_1100 135 (1,9 % pixelů ≥ 254,
+  bílá kapota), D_2840 145, I_5080 112, W_960 113, G_4088 88, B_1220 69.
 
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
