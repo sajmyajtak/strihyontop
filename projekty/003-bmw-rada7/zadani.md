@@ -232,6 +232,11 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   ředitele při schválení klíčových snímků); pravidlo „vůz vlevo, x ≤ 1000“ platí až od 16,5 (střihy výkonu). Verze bez hudby smí mít úroveň efektů (nenormalizovat).
   Přepis řeči netřeba (bez voiceoveru). Noční lak: grade v masce karoserie **+0,4 EV a S-křivka už od 14,0** (lak musí číst jako bílý), viz odpovědi výše.
 
+- **Pokyn režiséra k artefaktům na stěně studia (kolo 1, nález kritika zadání)**: příčinou jsou hlavně silně komprimované zdrojové snímky otočky 360°
+  (~60 kB WebP) a CRF 16. Režisér přepnul renderer na CRF 14 + aq-mode 3 (C037). Animátor: snímky otočky před použitím jemně vyhladit
+  (ffmpeg `deblock` nebo `hqdn3d` slabě, jen na pozadí studia, ne na voze) a přes celý obraz dát velmi jemné zrno ze spritu (±1/255), které schová
+  zbytkové bloky i banding. Kde to jde, místo otočky použít ostřejší galerii.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených

@@ -13,6 +13,20 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C038: Do commitu se dostal dočasný soubor místo nástroje (2026-11-01, V003, režisér)
+- Příznak: commit „render_html.cjs CRF 14…“ obsahoval jen `nastroje/.r.tmp`; nástroj se nevyměnil.
+- Příčina: `node --check` odmítl příponu `.tmp` a zastavil řetěz `&&`, ale `git add -A && git commit` byl na samostatném řádku, takže proběhl.
+- Oprava: dočasný soubor odstraněn z gitu, nástroj vyměněn a ověřen, nový commit.
+- Prevence: dočasné soubory psát do scratchpadu (ne do repozitáře) se správnou příponou (`.cjs`), commit spouštět jen na konci jednoho řetězu `&&`
+  a před commitem zkontrolovat `git status`.
+
+### C037: Skvrnité bloky na světlé stěně studia (2026-11-01, V003 kolo 1, našel kritik zadání, opravil režisér + animátor)
+- Příznak: na světlé stěně a v jemných přechodech kompresní bloky, ve 100 % ubírají dojmu drahé reklamy; video jen 3,7 Mbit/s.
+- Příčina: (1) zdrojové snímky otočky 360° z konfigurátoru jsou silně komprimované (~60 kB WebP), (2) CRF 16 s výchozím aq-mode na velkých
+  plochých plochách šetří bity. Měření na výřezu stěny: CRF 12 + aq-mode 3 = o ~37 % menší průměrná chyba než CRF 16.
+- Oprava: `render_html.cjs` CRF 14 + `aq-mode=3`; animátor jemně vyhladí pozadí ve zdrojích otočky a přidá velmi jemné zrno.
+- Prevence: u fotorealistických podkladů vždy zkontrolovat kvalitu zdroje ve 100 % (ne jen rozlišení) a plochy s jemným přechodem ve výsledném MP4.
+
 ### C036: Kolize klíčů časové osy mezi moduly scény (2026-11-01, V003, našel a opravil animátor)
 - Příznak: lišta se na 16,000 objevila skokem i s textem, protože blok B3 přes `Object.assign(CASY, …)` přepsal klíč `listaZpet` z jádra (16,05 → 7,0).
   Regresní kontrola to nechytila, protože porovnávala jen čas po skončení přechodu.

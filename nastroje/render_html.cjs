@@ -69,7 +69,7 @@ const ffVideo = (vstupFps, vf, cil, audio) => {
   // Barvy: převod RGB → YUV výslovně maticí BT.709 (omezený rozsah) a stejné tagy do streamu, aby přehrávače a sítě
   // nehádaly matici a neposunuly odstín (nález kritika V001: color_* = unknown).
   ff.push('-vf', `${vf},scale=out_color_matrix=bt709:out_range=tv,format=yuv420p`, '-r', String(FPS),
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p',
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '14', '-x264-params', 'aq-mode=3', '-pix_fmt', 'yuv420p',   // CRF 14 + aq-mode 3: méně bloků na světlých plochách a v přechodech (V003, C037)
     '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv', '-movflags', '+faststart');
   if (audio) ff.push('-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-shortest');
   ff.push(cil);
