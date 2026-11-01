@@ -13,6 +13,15 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C039: Verze bez hudby vznikla ze zastaralého odvozeného souboru (2026-11-01, V003 kolo 2, našel kritik zadání)
+- Příznak: `V003_v2_bez_hudby.mp4` měla efekty z doby před posunem na skutečné časy obrazu (švih 20,95 místo 20,875, chybí 24,0 / 5,875 / 15,5).
+  Hlavní verze byla v pořádku (ověřeno korelací s novým mixem, 0,998–0,9996).
+- Příčina: režisér přegeneroval WAV (`zvuk_v1.wav`, `zvuk_bez_hudby_v1.wav`), ale nechal ve složce starší odvozené soubory
+  (`zvuk_bez_hudby_v1_stejny_zisk.m4a`, `zvuk_v1_master.m4a` ze 4:36), a střihač pro verzi bez hudby sáhl po odvozeném m4a.
+- Oprava: zvukař v kole 3 přegeneruje verzi bez hudby z aktuálního WAV.
+- Prevence: při přegenerování zvuku smazat nebo přegenerovat všechny odvozené soubory (m4a, spektrogramy) ve stejné složce; střihač vždy
+  masteruje ze souboru WAV, který dostal v úkolu, nikdy z jiného souboru ve složce (`strihac.md`).
+
 ### C038: Do commitu se dostal dočasný soubor místo nástroje (2026-11-01, V003, režisér)
 - Příznak: commit „render_html.cjs CRF 14…“ obsahoval jen `nastroje/.r.tmp`; nástroj se nevyměnil.
 - Příčina: `node --check` odmítl příponu `.tmp` a zastavil řetěz `&&`, ale `git add -A && git commit` byl na samostatném řádku, takže proběhl.

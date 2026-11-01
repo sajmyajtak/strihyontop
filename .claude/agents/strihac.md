@@ -32,3 +32,6 @@ naměřeno: rozlišení, fps, délka, LUFS, true peak
 rozhodnutí, která jsem musel udělat sám: …
 chyby během práce a jak jsem je vyřešil: …
 ```
+
+**Zvuk jen ze zadaného souboru (C039)**: masteruj vždy z WAV, který dostaneš v úkolu. Jiné soubory ve složce zvuku (m4a, starší verze) nepoužívej,
+mohou být zastaralé. Když WAV chybí, zeptej se režiséra.
