@@ -252,6 +252,38 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
     Pozn. 6 u hmotností: „Volitelná výbava může ovlivnit hmotnost, užitečné zatížení a nejvyšší rychlost, pokud ovlivní aerodynamiku vozu.“
   - Návrh anglického znění (překlad, čísla beze změny): „250 km/h“ · „0–100 km/h 5.7 s“ · „230 kW (313 hp)“ (pozn.: „k“ = koně DIN, anglicky BMW EU používá „hp“).
 
+## Technický test realismu (animátor, 2026-11-01)
+Cíl: co z rendrů BMW jde rozpohybovat tak, aby to působilo jako skutečnost (G7). Všechno v `media/projekty/003-bmw-rada7/test/`
+(scény `sceny/t*.html`, skripty `skripty/`, podklady `podklady/`, videa `t*.mp4`, pásy `*_pas.jpg`). Časy výpočtu: 1920×1080, 60 fps, `--sub 4`, 3 prohlížeče.
+
+| # | technika | verdikt | důkaz | výpočet |
+|---|---|---|---|---|
+| 1 | maska vozu BiRefNet + čisté pozadí + stín | **funguje** | `t1_maska_birefnet_200.jpg`, `t1_masky_prehled.jpg`, vrstvy v `materialy/masky/` | ~45 s na pohled (CPU) |
+| 2 | odlesk po laku | **s výhradou** | `t2b_odlesk_bok.mp4` (bok, dobré), `t2_odlesk.mp4` (3/4, slabé) | 4 s videa za 51–58 s |
+| 3 | rotace kola | **s výhradou** | `t3_kolo.mp4`, `t3_kolo_pas.jpg` | 4 s za 70 s (`--sub-rychle 8`) |
+
+**1. Maska vozu.** rembg nainstalován (`pip install rembg`, modely v `~/.rembg/`, přidat do `setup.sh`). Srovnání na g03 ve 200 %:
+`isnet-general-use` (2 s) má vnitřek čistý, ale měkkou hranu 6–8 px a světlý béžový lem u nárazníku; zpřesnění closed-form mattingem
+(pymatting) hranu na bílé proti béžové **roztřepilo** (zamítnuto); **`birefnet-general` (33 s, model 973 MB) má ostrou čistou hranu**
+na střeše, zrcátku, pneumatikách i černé střeše proti béžové, bez lemu. Barvy hrany čistí `estimate_foreground_ml`.
+Skript `test/skripty/masky.py` + `podlaha_stin.py` dělá pro každý pohled 3 vrstvy do `materialy/masky/`:
+`*_vuz.png` (RGBA), `*_pozadi.png` (studio bez vozu: stěna a podlaha se doplňují zvlášť podle čáry styku, pod vozem stínová podlaha,
+za vozem u stěny světlá), `*_stin.png` (kontaktní stín jako násobicí vrstva, pro vložení vozu na jiné pozadí).
+Složení vozu zpět na pozadí = originál (průměrná odchylka 0,12–0,28/255). Hotovo: g01, g03, g08, g09, g10, g11.
+Pozor: g05 (detail kola, vůz přes celý snímek) spadl na paměť (OOM 14 GB), vrstvy nemá a nepotřebuje. Spouštět **jeden pohled na proces**.
+
+**2. Odlesk po laku.** Maska laku = maska vozu × světlý a nebarevný pixel, bez malých ostrůvků (ráfky) a s ruční výjimkou SPZ,
+alfa vážená „tvarem“ (místní jas proti okolí), skládání `screen`. Na **boku g10** měkký svislý pruh po dveřích vypadá jako odraz softboxu:
+**funguje**. Na 3/4 záběru g03 je na bílém laku slabý a spíš „zesvětlí“ přední partie (bílá + světlo = bílá). Tmavá „vlajka“ (odraz černé desky)
+v pohybu působila jako rovná šedá čára přes blatník i dveře: **zamítnuto**. Pozor na easing: exponenciální `easeInOut` prohnal pruh přes vůz
+za 0,4 s; pro pomalý průjezd `hladka` (smootherstep), 2,5–3 s.
+
+**3. Rotace kola** (g05). Ráfek změřen fitem elipsy: střed (915,3; 953,5), poloměr 211 px (téměř kruh). Otáčí se jen kruh ráfku, pneumatika
+stojí a podle rychlosti se prolínají 3 předem rozmazané verze (rozmazání po obvodu jen tmavých pixelů pneu, blatník a podlaha se nepřenesou),
+ráfek má rozmazání kopiemi v kódu + podsnímky. **Rychlá rotace (≥ ~2 ot./s) je přesvědčivá.** Výhrada: **brzdový třmen je v ráfku a točí se s ním**,
+při pomalém valení je to vidět (u skutečného auta stojí). Logo na středu se točí (u pevných středů ve skutečnosti taky). Kolo se točí na stojícím autě:
+ve videu jen s pohybem okolí (kamera, rychlostní linky v UI) nebo jako detail na střih.
+
 ## Storyboard / časová osa
 (doplní kreativní ředitel)
 
