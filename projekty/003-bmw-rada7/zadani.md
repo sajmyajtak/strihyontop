@@ -214,6 +214,11 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   odlesk po laku na 18,0 (past 7) · A8 na 0,0 stačí přes šířku (76 %), scénu nezvětšovat · kostka interiéru: pitch −6° ano (víc palubní desky a dřeva) ·
   kurzor „grab“ jako sevřená ruka (macOS styl), ne otevřená dlaň · banding v černé: jemný šum ze spritu ano.
 
+- **Odpovědi režiséra k bloku B1** (2026-11-01): zaplavení 21,0–21,3 smí zůstat v minimální verzi, blok loga (B2) ho smí přestavět, hlavně ať knob
+  plynule navazuje na oblouk prstence · návrat lišty odložit na 13,83 (nepřekrývat list) · **zvuk se přizpůsobí obrazu**: časy SFX přesune režisér
+  podle skutečných časů v obraze (dosednutí „Performance“ 16,13, švih knobu 20,875, dopad pilulky 13,875, náraz knobu 15,5) po dokončení všech bloků;
+  bloky B2 a B3 ať skutečné časy událostí, které se liší od sloupce zvuku, zapíšou sem do zadání stejně.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -544,6 +549,28 @@ podklady z rendrů `scena/skripty/priprava.py` → `scena/podklady/`, klíčové
   číslice ostré na každém snímku, na dobách zaokrouhlené); knob stojí od 16,25 na x 1064 a dráha se dotvoří kolem něj; knob okraj 1 px + neutrální stín.
   (7) ukazatel na „Performance“ dosedne do 16,13 (obě hrany i výška), na 16,2 bez zdvojeného obrysu. (8) end card: vinětace předem ve float + jasový dither
   rozmazaný ~1 px (sd 0,5/255, semínko), bílý šum ±0,5 x264 crf 16 smaže (reziduum schodů 0,73 → 0,57), rozmazaný 0,69 → 0,31.
+
+### Výroba B1: pohyb 13,5–21,0 (animátor 2026-11-01)
+Kontrolní snímky s podsnímky `scena/kontrolni_b1/` (100 %, 480 px, `arch_480.jpg`), pásy sousedních snímků `kontrolni_b1/pasy/` (15,9–16,5 · 20,9–21,4 · 13,6–14,05 · 17,4–17,6).
+Časy nové části jsou v `CASY` (`jadro.js`): `uchop`, `smrstList`, `listModra`, `listaNavrat`, `rysky`, `karty`, `stazeni`, `letKnobu`, `knobCil`, `zaplaveni`.
+- **13,5–14,0 list → ukazatel (M1)**: kurzor přilétá 13,25 zprava zdola po oblouku (hover ×1,2), 13,5 úchop (stisk −15 % na 3 snímky + kroužek akcentu), list 0,98 a povolí 34 px dolů,
+  13,625–13,875 smrštění: horní hrana (táhne ji kurzor) ease-in a dojede dřív, boky a spodek pomaleji; interiér se 13,74–13,83 zavře do středu listu vlastní maskou,
+  bílá → `#1C69D4` až 13,835–13,875 (dřív by se barvila velká plocha), **13,875 dopad** do „Comfort“ (squash pilulky ±6 %, tlumený), lišta se vrací zdola 13,75–14,0, pod listem `g03` 0,96 → 1,0 a ztmavení 25 % → 0.
+  Obsah listu = `g13` s přiblížením na prošívání (`kresliObsahListu` ve `foto.js`), **blok interiéru ho smí nahradit**; tvar listu je `listB1` (`ui.js`).
+- **14,0–16,0 opraveno**: hranice den/noc se dřív počítala od začátku dráhy, ale knob startuje na „Comfort“, takže **na 14,0 byla noc skokem přes levých ~1 290 px**. Teď je hranice
+  vázaná na postup knobu od startu (`UI_STAV.postupNoc`): 14,0 mimo obraz vlevo, pravý světlomet přejede 15,25 (exponent 1,25), celé g04 15,5. Obsah lišty při proměně v dráhu
+  stojí na obrazovce a jen se odmaskuje (dřív jel s levým okrajem lišty → vodorovná šmouha textu na 16,267).
+- **16,25–16,5 (připomínka 16,333 vyřešena)**: levý konec lišty dojede ke knobu do 16,33, výška do 16,36, pravý konec se vytáhne pružinou do 16,5; pilulka „Performance“ se stáhne doleva do knobu do 16,34.
+  Na 16,333 už není nic vlevo od knobu ani modrá napravo.
+- **Rychloměr podle zvuku**: 0 v 16,3, **rysky 50 / 100 / 150 / 200 / 250 přesně v 16,5 · 16,75 · 17,0 · 17,1875 · 17,875** (Hermite + řazení 17,0–17,05 + ease-out s exponentem 3,72). Dráha 17,875 jednou modře blikne.
+- **17,5 výřez** na přední světlo: `NOC.g04v` byl 0,80× (menší než celek 17,0 0,883×, takže skok na místě), teď 1,12× nativního = 1,27× celku, příď x ≤ 994.
+- **Velká čísla = 3 karty** (`TEXTY.karty`, vzor počítadla s desetinnou tečkou): 250 vyroste přímo z číslic bubliny (číslice bubliny se od 17,875 skryjí, dřív se překrývaly „25250“), dopad 18,0;
+  5.7 a 230 přijedou zdola v masce a dorolují z nuly (hodnota na čase snímku), zámek 19,0 / 20,0; během držení roste prostrkání; odchody maskou nahoru 18,75 / 19,75 / 20,625.
+  Vedoucí číslice 5.7 se mění na snímcích 18,883 · 18,9 · 18,917 · 18,95 (zvuk 18,875 · 18,9 · 18,928 · 18,96 = v toleranci 1 snímku).
+- **20,5–21,0**: dráha, výplň a rysky se stáhnou do knobu (ease-in, knob se „nabije“ na 1,15), 20,75–21,0 knob letí po oblouku (smootherstep, nejrychlejší 20,875) do (960, 290), lišta skrytá od 20,75.
+  Záběr 20,0 se tlačí až do 21,3 (dřív stál 20,5–21,0). **Zaplavení 21,0–21,3** v minimální verzi (kruh studia z knobu, poloměr do 1 320 px, všechny 4 rohy kryté v 21,25), aby šlo zkontrolovat předání; blok loga ho smí doladit. Knob zůstává v (960, 290) do 21,25.
+- **Měření**: 15,983 průměr 0,6 (≤ 12 ✓) · 16,017 max 255, 7 778 px > 235 ✓ · 16,40 průměr 15,5, std 24,2 · YDIF 15,983 → 16,40 = 15,8. Výkon (C027): 1 s výřezu 18–19 `--sub 4` = 16 s, 16,5–17,5 `--sub 8` = 21 s (včetně startu prohlížečů).
+- **Pro zvukaře (posunuté nebo nové časy)**: dopad pilulky do lišty 13,875 (nové), knob narazí na konec dráhy noci 15,5 (= kopák), stažení dráhy 20,5–20,75, švih knobu nejrychlejší 20,875 (ve zvuku 20,95), ukazatel dosedá na „Performance“ už 16,13 (ve zvuku 16,25).
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
