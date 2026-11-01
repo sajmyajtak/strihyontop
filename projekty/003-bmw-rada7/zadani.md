@@ -5,7 +5,7 @@
 | Datum zadání | 2026-11-01 |
 | Platforma / formát | **16:9, 1920×1080, 60 fps** |
 | Délka | **25,0 s** (pokyn uživatele 2026-11-01) |
-| Stav | příprava |
+| Stav | **doručeno** (V003_v4, 2026-11-01), čeká na zpětnou vazbu |
 
 ## Zadání (doslova od uživatele)
 > není to špatný ale pted použij realný modely 3D od bmw který mají na stránkách a zkus udělat tu reklamu víc realičtnější tím co myslím je že at není to tak moc kreslený ale saas motion který je velice populárny ale použij realisticke modely aut který fakt vypadají jak v realitě
@@ -770,6 +770,7 @@ a provedení dropu 2 (tma → světla). Ověřit hned na klíčových snímcích
 | 1 | technika · wow · zadání | kontrola V003_v1 | **BLOKUJÍCÍ** (259 km/h), wow 7,5 / realismus 8 / energie 6,5 | mrtvé úseky 1–3,75 a 9–10, noc neodkrývá knob, šedý noční lak, duchové u rychlých pohybů, přechod do loga |
 | 2 | technika · wow · zadání | kontrola V003_v2 (259 pryč, noc pod knobem, noční lak +0,4 EV, duchové, energie úvodu; střihač přerenderoval 6,5 a 12,0) | wow 8 / realismus 8 / energie 7,5, technika OPRAVIT | celoplošné ztlumení ve 2 s, koláž ve 12,3–12,5, hranice noci předbíhá knob, malý drop 1 |
 | 3 | technika · wow · zadání | kontrola V003_v3 (noc ±20 px s knobem, světla úder 2,0, lounge nahoru, tvrdý střih 12,0; střihač v3b: drop 1 překmit a drift) | **SCHVÁLENO všemi 3**, wow 8,3 / realismus 8,5 / energie 8, všech 17 pravidel splněno | 0 závažných, 14 drobných → režisérská oprava v4 (list 10,1, ozvěny čísel 18,0, lounge 60 px, odchody textu, end card, stoupání) |
+| režisér | animátor ∥ zvukař → střihač → kreativní ředitel (ověření) | v4: list 10,1 hned s interiérem, čisté dopady čísel (C040), lounge 60 px nahoře, odchody textu, energie úvodu a end card, stoupání +2 dB, disclaimer #666666 (C041) | **wow 8,5 / realismus 8,6 / energie 8,3**, ověřeno | zbylá kosmetika: glint 5,75 slabý, ozvěny jednotek km/h a kW na 2–3 snímky |
 
 **Zvuk v1 (zvukař, 2026-11-01)**: 77 SFX podle storyboardu (sloupec zvuku + Změny po oponentuře) ze `projekty/003-bmw-rada7/sfx_udalosti.json` → `media/…/zvuk/sfx.wav|json`, `zvuk_v1.wav`,
 `zvuk_bez_hudby_v1.wav`, `sfx_log.txt`, `zvuk_v1_master.m4a`, `zvuk_bez_hudby_v1_stejny_zisk.m4a`, spektrogramy. `hudba.wav` ani časování beze změny. Příkaz:
@@ -816,10 +817,17 @@ C032, max RMS 50 ms: stoupání 14,0 / 14,5 / 15,0 = −15,9 / −14,7 / −13,0
 |---|---|---|---|
 | workflow příprava (7 agentů: analytik ×2, zvukař, animátor test, kreativní ředitel ×3) | 1 184 196 | 409 | 86,5 min |
 | workflow výroba (23 agentů: zvukař ×2, animátor ×10, kreativní ředitel ×4, střihač ×3, kritici ×6…) | 4 501 603 | 1 621 | 302 min |
+| workflow režisérská oprava v4 (animátor, zvukař, střihač, kreativní ředitel) | 554 762 | 272 | 54,4 min |
+| **celkem změřeno** | **6 240 561** | **2 302** | **~7,4 h** |
+| hlavní chat (režisér) | neměřeno | | |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
+| v1 | 2026-11-01 | V003_v1.mp4 (interní) | první střih, blokující 259 km/h, wow 7,5 / realismus 8 / energie 6,5 |
+| v2 | 2026-11-01 | V003_v2.mp4 (interní) | 259 pryč, noc pod knobem, noční lak, duchové; wow 8 / 8 / 7,5 |
+| v3 | 2026-11-01 | V003_v3.mp4 (interní) | světla úder 2,0, tvrdý střih 12,0, drop 1 překmit; schváleno všemi, wow 8,3 / 8,5 / 8 |
+| **v4** | 2026-11-01 | **V003_v4.mp4 → uživateli (SendUserFile)** + `_bez_hudby`, plakát 18,45 s, `popisek.txt` | cílené drobnosti, wow 8,5 / realismus 8,6 / energie 8,3 |
 
 ## Zpětná vazba (doslova)
 

@@ -15,6 +15,24 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### V003: BMW řada 7 „ONE CONTROL“ (2026-11-01, doručeno v4, čeká na zpětnou vazbu)
+- Zadání: projekty/003-bmw-rada7/zadani.md. 25 s, 16:9, 60 fps, luxusní sportovní hudba (nová nálada `luxsport`), bez VO, 7 motionů, skládací logo.
+  Kola: v1 7,5 / realismus 8 / energie 6,5 (blokující 259 km/h) → v2 8 / 8 / 7,5 → v3 8,3 / 8,5 / 8 (schváleno všemi) → režisérská oprava v4
+  **8,5 / 8,6 / 8,3**. ~6,24 mil. tokenů, ~7,4 h práce agentů.
+- **Fungovalo**: **skutečné rendry výrobce** místo kresby (konfigurátor v běžném prohlížeči: 14 pohledů, otočka 360° se světly zap/vyp
+  pixelově zarovnaná, interiér 360°). Realistické efekty jen ze skutečných stavů (rozsvícení světel = rozdíl zap − vyp, den → noc pod knobem,
+  krokování otočky jako klikání v konfigurátoru). Technický test realismu **před** konceptem (co funguje, co prozradí AI). SaaS UI (lišta, pilulka,
+  posuvník, karty, kurzor) jako spojovací jazyk jednoho konceptu. Drop 2 „tma → světla → karoserie“ = nejsilnější moment. Fakta doslova z bmw.cz.
+- **Nefungovalo / zdrželo**: noční rendry BMW jsou šedé („hliněný model“), lak musel dostat grade v masce; vymyšlené číslo z rolujících číslic
+  (259 km/h, blokující); duchové z podsnímků u rychlých UI prvků; koláž dvou perspektiv v interiéru (vyřešeno tvrdým střihem); zastaralé odvozené
+  zvukové soubory (C039); přesah textu a barvy tenkého textu po kódování (C041). Zvuk se musel po stavbě obrazu přesunout na skutečné časy.
+- **Pro příště**: (1) u produktů vždy nejdřív zdroj výrobce a test realismu; (2) čísla na obrazovce omezit cílem (nikdy nad fakt); (3) rychlé UI
+  rozmazávat v kódu podle rychlosti, ne kopiemi; (4) zvuk dolaďovat až podle skutečných časů obrazu (režisér přesune SFX); (5) energii u realistického
+  produktu nesou tvrdé střihy na doby, dotlačení a stavy světla, ne efekty přes vůz.
+- Nové nástroje a pravidla: `hudba.py` nálada `luxsport`, `sfx.py` (`ton_c`, prémiové UI zvuky), `render_html.cjs` CRF 14 + aq-mode 3, `setup.sh` + rembg,
+  pravidla G7 (realismus), G8 (SaaS motion), D7 (přímá manipulace), vkus uživatele V002. Chyby C035–C041.
+- **Zpětná vazba uživatele**: (čeká se)
+
 ### V002: Mercedes-Benz „FOLLOW THE STAR“ (2026-10-31, doručeno v4, zpětná vazba 2026-11-01)
 - Zadání: projekty/002-mercedes-racing/zadani.md. 30 s, 1920×1080, 60 fps, sportovní hudba (nová nálada `sportovni`), bez VO, 4 motiony z prompt-motion.
   Kola: v1 wow 7,8 / energie 7,5 → v2 8,4 / 7,5 → v3 8,25 / 8 → režisérská oprava v4 **8,4 / 8,1**. ~4,93 mil. tokenů, ~7,6 h práce agentů.
