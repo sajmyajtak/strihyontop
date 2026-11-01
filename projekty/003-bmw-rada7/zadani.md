@@ -790,6 +790,22 @@ zasahoval do ticha 15,73–16,0, teď −240). Proti v1b se mix liší jen v 1,8
 (−13,9 LUFS / −1,2 dBTP, zisk +0,29 dB), `zvuk_bez_hudby_v3_stejny_zisk.m4a` (stejný zisk +0,29 dB, dolní propust 19 kHz + strop −1,4 dBFS jen na úderu 16,0 (≤ 0,55 dB),
 −23,2 LUFS / −1,4 dBTP, posun 0 vzorků). Staré odvozeniny ze 4:36 přesunuty do `zvuk/zastarale_pred_v1b/`.
 
+**Zvuk v4 (zvukař, režisérská oprava po kole 3, 2026-11-01)**: nález „stoupání 14,5–15,25 tišší než exteriér“. Příkaz v3 beze změny + jediná volba navíc
+`--zisk-hudby "14.05:0,14.3:2,15.73:2,15.745:0"` (výstupy `sfx_v4.wav|json`, `zvuk_v4.wav`, `zvuk_bez_hudby_v4.wav`, log `sfx_v4_log.txt`; `sfx_udalosti.json` beze změny).
+**Odchylka od zadání režiséra** (rampa 14,0 → 15,5 na +2 dB): změřeno předem na mixu v3, lineární rampa nechá dobu 14,0–14,5 na −16,7 LUFS (exteriér −16,3)
+a okna M v 14,5 a 15,0 na −17,1 / −17,0. Proto rychlý náběh na +2 dB už mezi kopákem 14,0 a 14,3, pak držet. Začátek 14,05 kvůli zážehu 14,0: jeho úroveň `lu`
+se měří proti hudbě v 13,95–14,05, takže zůstane beze změny. Konec 15,745 leží v sestupu automatiky do ticha: 15,75 by kvůli převzorkování limiteru změnil 8 vzorků za 15,75 o 1 LSB.
+Výsledek: mix se proti v3 liší jen v 14,050–15,745 s (zbytek bit po bitu shodný), verze bez hudby jen v 15,11–15,72 (světla 15,25 drží `lu` −7 proti hudbě, tedy +1,8 dB).
+Ticho 15,73–16,0 má špičku SFX −240 dBFS, limiter ubírá nejvýš 0,21 dB, vrcholy efektů jsou 0,0 ms od událostí.
+Master `zvuk_v4_master.m4a` −13,9 LUFS / −1,4 dBTP (zisk +0,17 dB, posun 0). `zvuk_bez_hudby_v4_stejny_zisk.m4a` vznikl stejným postupem jako v3 (zisk +0,17 dB,
+dolní propust 19 kHz ×2, alimiter −1,4 dBFS) a má −23,2 LUFS / −1,4 dBTP. Pásma: sub 21 %, středy 36 %. Spektrogram `zvuk_v4_spektrogram_12.5-17.png`.
+Hlasitost M masteru po 0,25 s (v3 → v4), okno 400 ms končící v čase: 13,5 −16,6 → −16,7 · 13,75 −17,1 → −17,2 · 14,0 −16,1 → −16,2 · 14,25 −16,2 → −16,0 · 14,5 −17,5 → −16,0 ·
+14,75 −16,8 → −14,9 · 15,0 −18,1 → −16,2 · 15,25 −16,1 → −14,2 · 15,5 −14,7 → −12,9 · 15,75 −12,0 → −10,2 · 16,0 −15,9 → −14,3 · 16,25 −8,7 → −8,9 · 16,5 −8,5 → −8,7.
+Po dobách (0,5 s): 13,5 −16,4 · 14,0 −15,9 · 14,5 −15,1 · 15,0 −12,9, roste monotónně (v3: −16,2 · −17,0 · −17,0 · −14,8). Okno M končící v 15,0 (14,6–15,0) leží mezi kopáky,
+proto zůstává zub −1,3 dB proti 14,75. Odstranit by ho šlo jen zesílením přes +3 dB nebo pumpováním do rytmu, a pak by se stoupání přiblížilo dropu.
+C032, max RMS 50 ms: stoupání 14,0 / 14,5 / 15,0 = −15,9 / −14,7 / −13,0 (v3 −17,1 / −16,6 / −14,9), drop 2 −6,7 zůstává nejhlasitější
+(výkon −10,5, finále −9,6, jízda −14,0, drop 1 −11,6). Úsek stoupání 14,0–15,75 má −13,2 LUFS (v3 −14,9), exteriér 12–14 −16,2, drop 2 −7,8.
+
 ## Chyby během výroby
 
 ## Spotřeba tokenů
