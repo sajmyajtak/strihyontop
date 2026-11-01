@@ -683,6 +683,25 @@ Rychlé úseky (sub 8): `0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,7.3-8.0,8.1-8.45
   zaplavení z knobu (storyboard, past 12), časy čtvrtin a písmen loga (zvuk), CRF 16 v nástroji (bitrate je teď 8,6 Mbit/s).
 - **Pro zvukaře**: levý světlomet se odkryje 15,0 (= řazení), ztlumení studia 1,875–2,0 (případně tichý „zhasnutí“ dozvuk), knob 14,0–14,25 odjede doleva (nádech), let kurzoru od 7,3 a 9,25.
 
+### Opravy obrazu kolo 2 → v3 (animátor 2026-11-01)
+Podle nálezů kritiků kola 2 a závazných odpovědí režiséra ke kolu 2. Záloha v2b scény jen ve scratchpadu. Render `render/V003_obraz_v3.mp4`.
+- **Úvod 1,875–2,6**: celoplošné ztlumení −1 EV zrušeno. Na 2,000 úder: `zap/uhel_340` přes `vyp` za 2 snímky (celý rozdíl rendru BMW: denní svícení,
+  obrys ledvinek; moduly světlometů v denním rendru konfigurátoru skoro nesvítí) + nádech záře (screen, vrchol 2,1, pak trvale 0,22) + dotlačení ~1,04 → ~1,08
+  (kriticky tlumeně 0,3 s). Dotlačení na doby 2,5 / 3,0 / 3,5 prodloužena 0,3 → 0,35 s. Nadpis odchází maskou nahoru mocninou 2,2 přes celých 1,875–2,0.
+- **Drop 1 (odpověď 5)**: nádech 3,875–3,983 scéna i vůz 1,00 → 0,94 (kriticky tlumeně), rozšíření na 4,0 startuje z menší scény (D1 se přepočítá samo).
+- **Posuvník noci (odpověď 1)**: dráha přes celou šířku x 20–1900, primární je poloha knobu (monotónní kubika, klíče 15,0 levý a 15,25 pravý světlomet),
+  hranice = x knobu −20 → +20 px úměrně dráze, měkký okraj ±40 px se u krajů obrazu zúží k nule → 14,25 celý den, 15,5 celá noc, hranice nikdy před knobem ani za koncem dráhy.
+- **10,0 list**: modrá → bílá za 4 snímky v lineárním světle; interiér se otevírá až 10,25–10,45 maskou na čase snímku (ostrá hrana, list ≥ 85 %).
+- **12,0 (odpověď 4)**: přechod maskou podle siluety zrušen → **tvrdý střih na dobu 12,0 na g13** s dotlačením 1,00 → 1,035 (0,3 s) a pak do 1,05 v 13,0.
+- **„YOUR PRIVATE LOUNGE“ (odpověď 3)**: nahoře vlevo na stropu / zadním okně g13, #262626, 42 px, jemné světlé halo; 88 px se mezi okraj listu a opěrku hlavy nevejde.
+- **13,5–14,0**: interiér se zavře do středu 13,56–13,70, pak se smršťuje bílý tvar, 13,80–13,86 bílá → modrá (lineární světlo); lišta jede pod listem
+  (clip-path evenodd = vyříznutý tvar listu), přes list se už nekreslí.
+- **9,0–10,0**: 9,0 dotlačení 1,00 → 1,04 (0,25 s), nájezd 9,5 1,05 → 1,18 (celkem ~0,97× nativního).
+- **Švih 7,0**: g05 rozmazaný v kódu ve směru pohybu (rozmazX, mezera kopií ≤ 2 px). Logo: čtvrtiny v plné velikosti, jen dotočení + kuželová výseč 0,2 s (ne rostoucí kruh).
+- **Bublina**: 249 → 250 se odroluje 17,79–17,867 (poslední snímek s číslicemi bubliny), dřív v 17,75.
+- **Výkon**: výřez 16,5 o 120 px a záběr 20,0 o 55 px doleva (vůz x ≤ ~1005). Lišta 760 → 860 px, písmo 20/18 → 24/22 px, pilulka popisku 52 → 60 px / 29 px.
+- **Render**: rychlé úseky rozšířené o 6.45-6.75, 6.85-7.1, 9.95-10.3, 13.6-13.9, 18.7-18.9, 19.7-19.9, 21.55-21.9 (duchové při rychlých odchodech).
+
 ### Střih v2 (střihač 2026-11-01): nálezy kritiků 6,5 a 12,0 + export
 Opraveno ve scéně (`scena/b3.js`, záloha původního souboru jen ve scratchpadu), přerenderováno celé `render/V003_obraz_v2b.mp4` (490 s, stejný příkaz,
 rychlé úseky `6.45-6.75,6.85-7.1` a `11.95-12.6` místo `6.4-6.6,6.9-7.1` a `11.95-12.55`, i v `skripty/klicove.sh`). PSNR proti v2: změna jen 6,000–6,983 a 12,000–12,533, jinde beze změny.
