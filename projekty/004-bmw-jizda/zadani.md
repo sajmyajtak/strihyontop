@@ -472,6 +472,22 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
   2–6 kHz 8,2 · výšky 4,0 % (bez varování); RMS 50 ms: stoupání 16,0 −17,4 → 16,5 −15,2 → 17,0 −13,5 → 17,5 −10,4 · **drop 2 18,0 −7,9** · jízda 18,5–25,5 −12,4 až −13,8 ·
   logo 26,0 −9,4 · drop 1 4,0 −10,5 · 6,0–8,0 −13,9 až −15,6; nejhlasitější efekt proti hudbě −1,5 LU / 100 ms (4,15, beze změny). Mix se proti v2 liší jen v 6,0–7,8 s.
 
+## Oprava režiséra v4 (2026-11-01, bez agentů)
+- **Záběr 22,0–22,5**: L_0816 (tisk 8,16–8,76 = zakázané úseky 7,08–8,25 a A) vyřazen. Náhrada **B_1280** = tisk 12,80–13,40 (15 snímků, 1,2×), konec průletu
+  nad střechou před střihem zdroje 13,52: černé sklo, hrana střechy, silnice ubíhá v silném rozmazání. **Zrcadleno** (bez textu, SPZ a log), aby karta
+  vlevo nahoře ležela nad silnicí, ne nad vozem. Úsek 12,80–13,52 nebyl v rozpisu ani v zakázaných (B končil 12,80); ověřeno po snímcích po 0,04 s.
+  Navazuje na C_2232 (střecha shora) a D_3008 (průjezd v protisvětle). Prohledané a zamítnuté kandidáty: web 24,5–28 (kolo zblízka, pomalé, jiná kola),
+  web 31,6–33,4 (město, maska ledvinek z boku), tisk 34,6–37,56 (čelní příjezd), 51,44–52,3 (dron bez vozu), X_0448 0–27 (bez vozu).
+- **Karta 686**: růst 0,22 s, obsah 6,26–6,32, rolování 6,26–6,44, lišta 6,44, odchod 6,91 → „686“ čitelné od ~6,36 do 6,877 (~0,5 s, bylo ~0,38 s).
+- **Karta 21″**: odchod `odK` 0,15 → 0,10 (prázdný obdélník nejvýš 2 snímky).
+- **Zvuk v4** (`sfx_udalosti.json`, 93 událostí, stejný příkaz jako v1, výstupy `zvuk/sfx_v4.*`, `zvuk_v4.wav`, `zvuk_bez_hudby_v4.wav`, `zvuk_v4_master.m4a`,
+  `sfx_log_v4.txt`; starší verze přesunuty do `zvuk/predchozi/`, C039): detent 21″ 3,0 → 2,8 · 686: sklo_pop 6,19, tiky 6,265 / 6,327 (přenosy stovek
+  z funkce rolování), ding 6,38, detent 6,91 · 3.8 s shora: tiky 21,275 / 21,328 / 21,386 / 21,452 / 21,529 (přenosy 9→8 … 5→4), ding 21,64 (4→3) ·
+  nový `vzduch` 22,1 (lu −13, průlet nad střechou) · `ev_prujezd` 22,05 → **22,52** (skutečný průjezd D_3008 22,5–22,62, lu −5, doběh do 23,0) · ding 250 22,55 → 22,6.
+  Naměřeno: vrcholy 93/93 přesně (0,0 ms), master po AAC **−13,8 LUFS / −1,6 dBTP**, limiter mixu max 1,6 dB.
+- Render `render/V004_obraz_v4.mp4` (stejný příkaz jako v3, 824 s výpočtu), `vystup/V004_v4.mp4` + `_bez_hudby` + plakát (2,6 s), `kontrola.sh` bez nálezů
+  (žádné zamrzlé ani černé úseky, 1800 snímků).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
@@ -500,6 +516,10 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
+| v1 | 2026-11-01 | V004_v1.mp4 (interní) | první render, blokující bod na karoserii; wow 7,3 / jízda 7,5 / realismus 7,5 / energie 7 |
+| v2 | 2026-11-01 | V004_v2.mp4 (interní) | bod mimo vůz, bez opakování X_0448, svazek stop; blokující zrychlení zdola; 7,9 / 8 / 8 / 7,5 |
+| v3 | 2026-11-01 | V004_v3.mp4 (interní) | zrychlení shora, karty; KŘ schválil 8,2 / 8,5 / 8 / 8, kritik blokující L_0816 |
+| **v4** | 2026-11-01 | **V004_v4.mp4 → uživateli** + `_bez_hudby`, plakát 2,6 s (`V004_plakat.jpg`), `popisek.txt` | oprava režiséra: B_1280 místo L_0816, karta 686, odchod karty 21″, zvuk podle obrazu |
 
 ## Zpětná vazba (doslova)
 
