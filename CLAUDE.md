@@ -103,6 +103,7 @@ proto ji v reportu výslovně uvede jako „neměřeno“ a nehádá ji.
 - Remotion (React → video) jako alternativa, pokud ho zadání nebo prompt vyžaduje. Plugin Remotion / IT Reelsmaker si uživatel může zapnout.
 - `nastroje/hudba.py --nalada vazna|drza|luxusni --delka N --out x.wav [--bpm --drop --konec]`: vlastní hudba do pozadí (syntéza, bez licencí),
   + `x.json` s dobami, takty, dropem a koncem pro synchronizaci animace. Sám kontroluje pásma (telefon pod ~100 Hz nehraje).
+  Nálady: vazna, drza, luxusni, pohodova, sportovni, luxsport (`--zlom --drop2`), `--motor elektricky` = motiv elektromobilu místo V8.
 - `nastroje/sfx.py`: zvukové efekty syntézou ze seznamu událostí (JSON) → sfx.wav + sfx.json + mix; změřený vrchol přesně na čas události,
   hlasitost `lu` pod hudbou (okno 100 ms, K-vážení). `--automatika OD-DO:dB:dolů_ms:nahoru_ms` ztlumení hudby, `--ticho OD-DO` úsek bez efektů,
   `--limiter -1.5` sběrnicový limiter mixu pro hudbu s malou rezervou (V002), `--zisk-hudby T:dB,…[@Hz]` obálka zisku hudby (stoupání do dropu),

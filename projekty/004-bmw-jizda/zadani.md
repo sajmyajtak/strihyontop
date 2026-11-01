@@ -81,6 +81,12 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   slot 6,0–8,0: **J_5232 jen snímky 0–34** (do 53,72, kdy jsou ledvinky ještě nečitelné), **bez punch-inu**, zbytek do 8,0 doplnit čistým záběrem
   zezadu nebo shora (G_4088 / H_4508, bez čelního pohledu) · volant: dlaždice 4 začne v 14,77 · SPZ v tiskové stopáži nerozmazávat (skutečný materiál).
 
+- **Zvuk v1b (režisér, 2026-11-01)**: na nález zvukaře (motiv motoru v hudbě měl barvu V8, i7 je elektromobil) přidána do `hudba.py` volba
+  `--motor elektricky` (tón střídače, bez sudých harmonických a zapalování; výchozí chování všech nálad bit po bitu beze změny, ověřeno).
+  `hudba.wav` přegenerována s `--motor elektricky`, časování i `udalosti_nastroju` shodné. `zvuk_v1.wav` a `zvuk_bez_hudby_v1.wav` přegenerovány
+  stejným příkazem SFX (101 událostí, odchylka 0 ms), master −13,8 LUFS / −1,5 dBTP. Staré soubory ve `zvuk/zastarale_v8/` (C039).
+  Odpovědi zvukaři: tikání číslic a dosednutí podle návrhu, po renderu je režisér případně posune na skutečné časy · logo −3,7 LU nechat (C032).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
@@ -400,6 +406,29 @@ a `nahled.jpg` (první / střed / konec), přehled všech `_prehled_1–4.jpg`, 
 - **Poznámky pro animátora**: W vůz jede **doprava od kamery** (sledovací záběr, pozadí ubíhá doleva), směr švihu P2 doleva tedy sedí s pozadím, ne s vozem.
   C_2172 a G_4028 / G_4088 mají čitelnou SPZ i7 60 (M DI 285E, skutečná stopáž, ponecháno). Jas desek (YAVG): B_1100 135 (1,9 % pixelů ≥ 254,
   bílá kapota), D_2840 145, I_5080 112, W_960 113, G_4088 88, B_1220 69.
+
+## Zvuk v1 (zvukař, 2026-11-01)
+101 SFX podle sloupce zvuku storyboardu (+ Změny po oponentuře) v `projekty/004-bmw-jizda/sfx_udalosti.json` → `media/projekty/004-bmw-jizda/zvuk/`:
+`sfx.wav|json`, `sfx_log.txt`, **`zvuk_v1.wav`**, **`zvuk_bez_hudby_v1.wav`**, `zvuk_v1_master.m4a` (kontrola), spektrogramy. `hudba.wav` ani časování se nemění. Příkaz:
+`python3 -I nastroje/sfx.py --udalosti projekty/004-bmw-jizda/sfx_udalosti.json --delka 30 --out …/zvuk/sfx.wav --hudba …/hudba.wav --mix …/zvuk/zvuk_v1.wav
+--bez-hudby …/zvuk/zvuk_bez_hudby_v1.wav --automatika 3.94-3.99:-10:40:10 --automatika 17.75-17.99:-12:30:10 --automatika 18.0-18.04:-4:10:90
+--zisk-hudby "16.0:0,17.5:2.5,17.74:2.5,17.75:0" --zisk-hudby "17.98:0,17.99:1.5,18.45:1.5,18.95:0" --saturace 3.99-4.2:4 --saturace 17.99-18.45:6
+--saturace 25.99-26.2:4 --ticho 3.955-3.995 --ticho 17.76-17.995 --limiter -1.8`.
+- **Nové typy v `sfx.py` (jen přidané, stávající beze změny)**: elektrický pohon i7 bez spalovacího motoru: `ev_prujezd(_tesny/_tichy)` (Doppler tónu dvou motorů
+  + hukot pneumatik + vítr), `ev_najezd(_dlouhy)` (stoupající tón pohonu, vrchol na konci, pak utne), `ev_uder` (drop: náraz + závan + „výstřel“ tónu, vrchol na náběhu
+  ≈ 2 ms, rezerva ≥ 1,4 dB, C035), `pneu_hukot`, `ponor` (P4), `zaverka` (záblesky 3,5 / 3,75), `kuze` (stisk volantu 17,0), `sterk` (kamení 8,75), `ding` (dosednutí čísla).
+- **Rozhodnutí**: (1) nádech dropu 1 = krátké ztlumení hudby −10 dB 3,94–3,99 (švih), nájezd utne 3,95, efekty v 3,955–3,995 nic; (2) nádech dropu 2 −12 dB
+  17,75–17,99 podle storyboardu, nájezd utne 17,745; (3) stoupání: hudba 16,0 → 17,5 +2,5 dB; (4) drop 2: hudba +1,5 dB (náběh schovaný v nádechu) a pod úderem
+  krátce −4 dB (návrat 90 ms), aby byl úder slyšet (I3), měkké nasycení špiček na 4,0 / 18,0 / 26,0, limiter −1,8 dBFS; (5) tikání číslic na šestnáctinách / dvaatřicetinách
+  (686: 6,5625–7,1875, 500 kW: 19,125–19,5, 3.8 s: 21,3125–21,6875, 250 km/h: 22,0625–22,5) = **návrh**, animátor naváže změny číslic, nebo se SFX posunou;
+  (6) W (8,25 / 9,0): panorama podle střihače doprava (vůz jede od kamery doprava), časy beze změny; (7) mezi událostmi bez souvislého podkladu (ticho pod hudbou).
+- **Naměřeno**: vrcholy 101/101 přesně na událostech (0,0 ms, ve stopě odchylky jen tam, kde se překrývá sousední zvuk: 4,15 / 6,5625 / 8,0 / 8,25 / 17,0 / 18,1 / 18,25 / 22,6 / 26,0);
+  klíčové efekty proti hudbě (100 ms): drop 1 −1,9 LU, drop 2 −2,0 LU, logo −3,7 LU; žádný efekt hlasitější než hudba (max −1,5 LU / 100 ms, −2,9 LU / 400 ms).
+  Master po AAC **−13,8 LUFS / −1,4 dBTP**. Pásma masteru: sub 19,8 % · basy 31,3 % · **středy 36,6 %** · 2–6 kHz 8,1 % · výšky 4,2 %.
+  RMS 50 ms (max v půlsekundě, dB): jízda 4,5–12 −13,1 až −15,8 · salon −17 až −19 · **stoupání 16,0 −17,2 → 16,5 −15,1 → 17,0 −13,6 → 17,5 −10,7** · nádech 17,75 −20,9 ·
+  **drop 2 18,0 −7,9 (nejhlasitější)** · jízda 18,5–25,5 −10,2 až −13,7 · logo 26,0 −9,1 · drop 1 4,0 −10,4.
+- **Pro režiséra / spojení**: SFX po stavbě obrazu posunout na skutečné časy (karty, pilulky, tikání, průjezdy 8,25 / 22,8 podle polohy vozu). Verze bez hudby zůstává v úrovni
+  mixu efektů (−23 LUFS), master obrazu dělat ze `zvuk_v1.wav`.
 
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |

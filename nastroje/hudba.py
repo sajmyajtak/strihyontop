@@ -366,6 +366,19 @@ def impact(sila=1.0):
     return np.tanh(1.8 * (boom + telo + rana + zavoj)) * obalka(n, 0.0008) * sila
 
 
+MOTOR_ELEKTRICKY = False   # --motor elektricky (V004, i7 = elektromobil): tón střídače místo „V8“; výchozí False = zvuk beze změny
+
+
+def motor_elektricky(f, n):
+    """Elektrický pohon: čistý tón střídače (6. a 9. násobek otáček, lehké FM), měkký vzduch, žádné sudé harmonické ani zapalování."""
+    faze = 2 * np.pi * np.cumsum(f) / SR
+    y = np.zeros(n)
+    for k, a in ((3, 0.35), (6, 1.0), (9, 0.45), (12, 0.2)):
+        y += np.where(k * f < SR / 2.3, a * np.sin(k * faze + 0.3 * np.sin(faze * 0.5)), 0)
+    y += filtr(sum_(n), "bandpass", [1500, 5000]) * 0.08 * (f / f.max())   # vzduch kolem vozu
+    return np.tanh(1.2 * filtr(y, "lowpass", 6000)) * 0.55
+
+
 def motor(body, delka, pan_od=0.0, pan_do=0.0, hlasitost=None):
     """Syntetický motor (zvukový motiv): základní tón otáček s harmonickými, chrapot zapalování a sání.
     `body` = [(čas od začátku, Hz), …]: mezi body glissando (exponenciálně), dva body se stejným časem = skok (řazení).
@@ -375,6 +388,13 @@ def motor(body, delka, pan_od=0.0, pan_do=0.0, hlasitost=None):
     tb = np.array([b[0] for b in body])
     fb = np.log(np.array([b[1] for b in body], dtype=float))
     f = np.exp(np.interp(t, tb + np.arange(len(tb)) * 1e-6, fb))     # stejný čas = skok
+    if MOTOR_ELEKTRICKY:
+        y = motor_elektricky(f, n)
+        if hlasitost is None:
+            hlasitost = [(0, 0.15), (delka, 1.0)]
+        e = np.interp(t, [h[0] for h in hlasitost], [h[1] for h in hlasitost]) * obalka(n, 0.02)
+        uhel = (np.linspace(pan_od, pan_do, n) + 1) * np.pi / 4
+        return np.stack([y * e * np.cos(uhel), y * e * np.sin(uhel)]) * np.sqrt(2)
     faze = 2 * np.pi * np.cumsum(f) / SR
     y = np.zeros(n)
     for k in range(1, 18):
@@ -1523,8 +1543,12 @@ def main():
     ap.add_argument("--konec", type=float)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--zlom", type=float, help="jen sportovni a luxsport: začátek zlomu (breakdown), výchozí takt nejblíž středu mezi dropem a koncem")
+    ap.add_argument("--motor", choices=["spalovaci", "elektricky"], default="spalovaci",
+                    help="zvukový motiv motoru (sportovni, luxsport): elektricky = tón střídače pro elektromobily (V004)")
     ap.add_argument("--drop2", type=float, help="jen sportovni a luxsport: druhý drop, výchozí zlom + 2 takty (poslední takt před ním = stoupání)")
     a = ap.parse_args()
+    global MOTOR_ELEKTRICKY
+    MOTOR_ELEKTRICKY = a.motor == "elektricky"
     rng = np.random.default_rng(a.seed)
     bpm = a.bpm or NALADY[a.nalada]["bpm"]
     drop = a.drop if a.drop is not None else a.delka * 0.22
