@@ -228,6 +228,10 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   změny jen v okolí těchto časů. Odpovědi k B3: studio otočky o ~7/255 chladnější než galerie na střizích 4,0 a 8,0 nechat · výkon kostky (~24 s na 1 s) stačí ·
   švih 6,44–6,56 přidán do rychlých úseků renderu.
 
+- **Odchylky schválené režisérem (pro kritiky, kolo 1)**: na dropu 2 **16,0–16,5 je vůz uprostřed** (symetrický „obličej“ z tmy, požadavek kreativního
+  ředitele při schválení klíčových snímků); pravidlo „vůz vlevo, x ≤ 1000“ platí až od 16,5 (střihy výkonu). Verze bez hudby smí mít úroveň efektů (nenormalizovat).
+  Přepis řeči netřeba (bez voiceoveru). Noční lak: grade v masce karoserie **+0,4 EV a S-křivka už od 14,0** (lak musí číst jako bílý), viz odpovědi výše.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
