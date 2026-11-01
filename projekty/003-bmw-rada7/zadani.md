@@ -626,6 +626,19 @@ Nový modul `scena/b3.js` (časy v `CASY`: `tecka`, `linka`, `pilulka`, `puls2`,
 - **Výkon (C027)**: 1 s 6,4–7,4 = 19 s, 10,6–11,6 = 27 s (vč. startu), 2 s 10,6–12,6 = 51 s → ~24 s na 1 s (kostka WebGL), na hranici limitu.
 - **Pro plný render**: přidat rychlý úsek `6.4-6.6` (švih 6,44–6,56). **Pro zvukaře**: kurzor odjíždí 5,5 a 10,05 (případně tichý švih), lišta zajíždí 5,875 a vrací se 7,0, kostka bez nové SFX.
 
+### Celková kontrola pohybu a plný render v1 (animátor 2026-11-01)
+Kontrolní snímky na doby a po 0,25 s `media/…/render/doby_nahled/`, okolí dropu 2 `render/k16_nahled/`, render `render/V003_obraz_v1.mp4`
+(25,0 s, 1920×1080, 60 fps, zvuk = `hudba.wav` podle zadání úkolu, 361 s výpočtu), technická kontrola `media/kontrola/003-bmw-rada7/animator-v1/`.
+- **Nalezeno a opraveno (regrese z B3)**: `b3.js` přidával do `CASY` klíč `listaZpet: [7.0, 7.3]` a tím přepsal `listaZpet: [16.05, 16.28]` dropu 2.
+  Tmavá lišta se proto na 16,000 objevila skokem s textem a výplň posuvníku přes text přejela (16,0–16,03). Klíče B3 přejmenované na `listaPrycB3` / `listaZpetB3`
+  (nikde se nečtou, lištu 5,875–7,3 počítá `listaDY`), kontrola kolizí klíčů `jadro.js` × `b3.js`: žádné další. Teď na 16,000 jen světla na černé + výplň,
+  lišta se odkrývá od ukazatele 16,05–16,28. Naměřeno v MP4: 15,983 průměr 0,6 · 16,000 max 255, 7 964 px > 235.
+- **Nalezeno a opraveno**: ve stoupání 14,1–14,9 byl u levého okraje svislý pruh ~10 px `#060606` vedle nočního studia `#161616` (g04 se kreslil od x 0 rendru,
+  rámování g03 má vlevo 140 px doplněného studia). Levý sloupec g04 / g04_noc se teď protáhne přes −EXT…0 (`kresliStoupani`, `foto.js`). Kontrola okrajů všech snímků po 0,25 s: bez švu.
+- **Rychlé úseky**: podle Pořadí stavby a B3, ne podle starého příkazu: `0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,8.1-8.45,15.9-17.6,17.85-18.05,20.7-21.7`.
+- **Kontrola MP4**: −14,1 LUFS / −1,2 dBFS (jen hudba), bez zamrzlých ani černých úseků; skoky = plánované střihy a kroky otočky; 10,183 „probliknutí“ = otevírání interiéru
+  maskou ze středu listu (pás snímků), ne chyba. Logo na 22,000: modrá (0, 101, 176), šedá (111, 110, 110) = `#0066B1` / `#6F6F6F` ±4. Návaznosti 4,0 / 10,0 / 13,5 / 16,0 / 21,0 bez skoku, vždy nejvýš jeden text.
+
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
 - End card „THE NEW 7 SERIES“ + tlačítko „Configure yours“ (vlastní copy, CTA odkazuje na konfigurátor = koncept).

@@ -13,6 +13,13 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C036: Kolize klíčů časové osy mezi moduly scény (2026-11-01, V003, našel a opravil animátor)
+- Příznak: lišta se na 16,000 objevila skokem i s textem, protože blok B3 přes `Object.assign(CASY, …)` přepsal klíč `listaZpet` z jádra (16,05 → 7,0).
+  Regresní kontrola to nechytila, protože porovnávala jen čas po skončení přechodu.
+- Oprava: přejmenování klíčů (`listaPrycB3`, `listaZpetB3`).
+- Prevence: v `animator.md`: moduly, které rozšiřují společný objekt časů, používají prefix bloku a kontrolu kolize (klíč ještě nesmí existovat);
+  regrese hotových bloků se měří i **uvnitř** přechodů (např. 16,0 / 16,017 / 16,05), ne jen na jejich konci.
+
 ### C035: Vrchol nízkých úderů padal 7–12 ms za náběh zvuku (2026-11-01, V003, našel a opravil zvukař)
 - Příznak: změřený vrchol úderů dropů a loga 7–12 ms po náběhu; úder dropu 2 s `drive` měl vrchol rozmazaný o 10–70 ms a byl jen −9 LU pod hudbou.
 - Příčina: harmonické těla v sinové fázi dají první puls obálky až po periodě základu (1/110 Hz = 9 ms); nasycený průběh má špičky obálky na hranách.
