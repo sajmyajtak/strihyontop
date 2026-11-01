@@ -526,6 +526,15 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
   3.8 21,417 · 250 22,25), tiky 500 jen viditelné (19,17 / 19,22), + tik 21,35 a 22,163, detent 500 19,77, nádech hudby 21,88–22,0 −3 dB místo ztlumení
   během švihu, švih 22,0 +3 dB + nízký úder `fump`, vzduch +2 dB, průjezd +2 dB (−6 dBFS jako průlet 18,1).
 
+## Kolo 6 a oprava v4d (2026-11-01)
+- **Kolo 6** (2 agenti): KŘ **SCHVÁLENO wow 8,4 / jízda 8,8 / realismus 8,3 / energie 8,5** (odlesk působí jako přirozené světlo, stupňování zvuku k 250 funguje);
+  kritik **OPRAVIT**: karta 686 klid 28 snímků (první ustálený 386), ding 686 o 2 snímky dřív; drobné: popisek 500 / 3.8 přečnívá 1 snímek nad tvar,
+  tik 3.8 21,135 před viditelnými číslicemi, průjezd 22,52 málo vyčnívá nad zesílený vzduch. Regrese proti v4b žádná. Odlesk prošel u obou.
+- **Odpovědi režiséra**: platí přísné čtení „první ustálený snímek“; popisky 500 / 3.8 opravit stejně jako 686; ding tolerance ±1 snímek; kontrast průjezdu = zvuk, ne vkus.
+- **Oprava v4d (režisér)**: 686 roll 6,26–6,41 (ustálení ~6,39–6,40 → klid 30 snímků, ding 6,40 sedí); obsah karet 500 (19,15–19,21) a 3.8 (21,15–21,21) se odkrývá
+  s tvarem; rozostření odlesku plynule 14 → 0 px 22,1–22,2 (místo slábnutí, KŘ); zvuk v4d (84 událostí): tik 21,135 vypuštěn, vzduch vrchol 22,32, konec 22,46, lu −5
+  → krátké ztišení před průjezdem 22,52 (RMS 40 ms: 22,36–22,44 ≈ −12,4 dB → průjezd −9,3 dB).
+
 ## Chyby během výroby
 Zapsáno v `znalosti/chyby.md`: **C042** motiv V8 v hudbě elektromobilu (→ `--motor elektricky`) · **C043** animátor dvakrát nedodržel pokyn režiséra
 (opakovaný X_0448, zrychlení zdola) · **C044** náhradní záběr ze zakázaného úseku (L_0816) · **C045** zvuk nesledoval změny obrazu v opravném kole ·
@@ -541,7 +550,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | režisér: oprava v4 (záběr, karty, posuny SFX, render, master, kontrola) | neměřeno (hlavní chat) | – | – |
 | workflow kolo 4 (2 agenti: kritik, kreativní ředitel) | 275 046 | 99 | 11,3 min |
 | workflow kolo 5 (2 agenti: kritik, kreativní ředitel) | 311 587 | 114 | 11,8 min |
-| **součet pomocných agentů (24)** | **4 732 677** | **1 648** | **340 min** |
+| workflow kolo 6 (2 agenti: kritik, kreativní ředitel) | 243 323 | 94 | 11,9 min |
+| **součet pomocných agentů (26)** | **4 976 000** | **1 742** | **352 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
