@@ -66,6 +66,12 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   jen jako střih do 1 s nebo vůbec. SaaS motion graphics přes jízdu (test C) podle 4 předloh, barvy bmw.cz. Fakta: 500 kW (680 k) → anglicky
   „680 hp“ ne (převod k → hp), použít **500 kW**, **0–100 km/h in 3.8 s**, **250 km/h**, **686 km range (WLTP)**.
 
+- **Odpovědi režiséra ke konceptu „Bod, který nepustí vůz“** (2026-11-01): disclaimer **„Concept ad · not affiliated with BMW · Footage and renders © BMW AG ·
+  Driving scenes: BMW i7 60 xDrive“** ano (poctivé, jízda je jiná verze) · povinný údaj o spotřebě **ano**, malým písmem na end card doslova z konfigurátoru
+  („Energy consumption combined 18.6 kWh/100 km · CO₂ 0 g/km“) · páčka BOOST z M760e **ne** (funkce u této konfigurace neověřená), použít zálohu
+  (ruce na M volantu) · pilulky v salonu nikdy přes detail, který ukazujeme, ano · názvy výbavy **jen vlastní jména BMW** (BMW Iconic Glow,
+  BMW Panoramic Vision, CraftedClarity), popisné překlady z češtiny nepoužívat.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
