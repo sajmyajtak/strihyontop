@@ -676,6 +676,21 @@ Rychlé úseky (sub 8): `0-1.05,3.9-4.4,5.9-6.1,6.4-6.6,6.9-7.1,7.3-8.0,8.1-8.45
   zaplavení z knobu (storyboard, past 12), časy čtvrtin a písmen loga (zvuk), CRF 16 v nástroji (bitrate je teď 8,6 Mbit/s).
 - **Pro zvukaře**: levý světlomet se odkryje 15,0 (= řazení), ztlumení studia 1,875–2,0 (případně tichý „zhasnutí“ dozvuk), knob 14,0–14,25 odjede doleva (nádech), let kurzoru od 7,3 a 9,25.
 
+### Střih v2 (střihač 2026-11-01): nálezy kritiků 6,5 a 12,0 + export
+Opraveno ve scéně (`scena/b3.js`, záloha původního souboru jen ve scratchpadu), přerenderováno celé `render/V003_obraz_v2b.mp4` (490 s, stejný příkaz,
+rychlé úseky `6.45-6.75,6.85-7.1` a `11.95-12.6` místo `6.4-6.6,6.9-7.1` a `11.95-12.55`, i v `skripty/klicove.sh`). PSNR proti v2: změna jen 6,000–6,983 a 12,000–12,533, jinde beze změny.
+- **6,5 (závažná)**: švih na „g06“ (= týž záběr g05 posunutý) zrušen, místo něj **punch-in na náboj g05 1,00 → 1,25** (kriticky tlumeně 6,5–6,7, náboj na obrazovce stojí).
+  Kvůli G7 (≤ 1,3× nativního) je výchozí měřítko g05 sníženo 1,15 → **1,04** (konec 1,30); poloha match cutu 6,0 beze změny (náboj = kolo g03 na 5,983), kolo je na střihu ~1,5× větší místo ~1,7×.
+  Pokrytí obrazu ověřeno včetně švihu 7,0. Zvuk 6,5 (tichý švih) sedí i na punch-in.
+- **12,0 (drobná)**: g13 **nemá blízký B-sloupek** (dveře otevřené, pohled z boku), vzdálený sloupek je krátký, za opěrkou, a vpravo od něj je jen 1 120 px rendru (posun by nepokryl list).
+  Náběžná hrana masky proto = **levá silueta opěrky a opěradla předního sedadla** (lomená čára změřená ve 100 %, `G13_HRANA`), g13 vjíždí zprava 12,0–12,45 (kubický ease-out),
+  kostka odjíždí doleva 0,6× (paralaxa) a zbytek vlevo od siluety (zadní sedadla) odkryje odjezd kostky ease-in do 12,55. Rozmazání pohybem zkrácenou závěrkou přechodu
+  (`G13_ZAV` 0,15 → ≤ ~11 px při ~140 px/snímek), rozmazání v kódu (`rozmazX`) tu už nepoužito. Stín hrany 0,22 / 28 px.
+- **Export**: `vystup/V003_v2.mp4` (video stopa kopírovaná z renderu, zvuk `zvuk_v1.wav` přes MOV → `master_zvuk.sh`: −13,9 LUFS / −1,2 dBTP, zisk z −14,34),
+  `vystup/V003_v2_bez_hudby.mp4` (zvuk = `zvuk_bez_hudby_v1_stejny_zisk.m4a` beze změny, −23,2 LUFS / −2,0 dBTP: podle rozhodnutí „verze bez hudby v úrovni mixu efektů, nenormalizovat“),
+  plakát 18,45 s (noční vůz se světly + 250 km/h), `popisek.txt` (otázka přesunuta za disclaimer, před hashtagy, J3). Kontrola `media/kontrola/003-bmw-rada7/strih-v2/`.
+- Pozor (C-kandidát): mezikontejner MKV zaokrouhlí časy snímků na 1 ms (60 fps → kroky 16/17 ms, délka stopy 24,999 s). Pro spojení obrazu s PCM zvukem použít MOV.
+
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
 - End card „THE NEW 7 SERIES“ + tlačítko „Configure yours“ (vlastní copy, CTA odkazuje na konfigurátor = koncept).
