@@ -186,6 +186,11 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   ani nerozjede, s tím počítat · interiér (luxus 10–14 s) stavět z g12–g14 s 2,5D nájezdem, panorama z kostky jen jako možnost (otestuje animátor
   ve výrobě) · popisek „BMW Iconic Glow“ smí (název z bmw.cz, prvek je vidět v rendru) · výkon **bez koní**: 230 kW, 0–100 km/h in 5.7 s, 250 km/h.
 
+- **Odpovědi režiséra ke konceptu „ONE CONTROL“** (2026-11-01): délka „5,395 mm“ smí, jen když je doslova v technických údajích **740d xDrive Sedan**
+  na bmw.cz (jinak jen popisek bez čísla) · end card: skládací logo je hrdina, pod ním „THE NEW 7 SERIES“ (volný překlad „NOVÉ BMW ŘADY 7“) + „Configure yours“
+  + disclaimer, nic víc · vlastní anglická hesla smí (bez faktů), ale **méně textu**: nejvýš ~4–5 textových momentů za 25 s, energii nese pohyb ·
+  logo varianta A (21,0–22,0) platí · kolo ve výkonu vynechat je v pořádku · klíčové snímky obou dropů schválí kreativní ředitel dřív, než se staví zbytek.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
