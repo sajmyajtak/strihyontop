@@ -444,6 +444,21 @@ a `nahled.jpg` (první / střed / konec), přehled všech `_prehled_1–4.jpg`, 
 - **Pro režiséra / spojení**: SFX po stavbě obrazu posunout na skutečné časy (karty, pilulky, tikání, průjezdy 8,25 / 22,8 podle polohy vozu). Verze bez hudby zůstává v úrovni
   mixu efektů (−23 LUFS), master obrazu dělat ze `zvuk_v1.wav`.
 
+## Zvuk v2 (zvukař, kolo 1 oprav, 2026-11-01)
+Nález kritika: průjezd 22,8 neodpovídal obrazu (vůz v D_3008 opouští obraz doleva už 22,0–22,12). SFX posunuty na skutečné časy podle `scena/ui.js`
+(CASY, ease-out cubic rolování) a snímků `render/V004_obraz_v1.mp4` (výřezy karet po 1/60 s). Stejný příkaz jako v1, jen výstupy `sfx_v2.*`, `zvuk_v2.wav`,
+`zvuk_bez_hudby_v2.wav`, `zvuk_v2_master.m4a`, `sfx_log_v2.txt`, `spektrogram_v2.png`. Hudba i časování beze změny. 98 událostí (bylo 101).
+- **Průjezd T12**: 22,8 → **22,05** (od 21,9, panorama 0,2 → −0,9 doleva, `konec` 22,5 = kosinový doběh do střihu na W_900, jinak by končil tvrdě v 22,55).
+  Na W_900 (22,5–23,0, vůz klidně jede) žádný průjezd.
+- **Dosednutí čísel = první ostrý snímek**: 686 7,25 → 7,23 · 500 kW 19,6 → 19,58 · 3.8 s 21,75 → 21,68 · 250 km/h 22,6 → 22,55.
+- **Tikání číslic** už ne po šestnáctinách, ale na skutečných přenosech číslic (sloupec desítek, u 3.8 jednotek), rozestup ≥ 50 ms:
+  686 10× 6,56–7,10 · 500 7× 19,13–19,46 · 3.8 4× 21,28–21,59 · 250 6× 22,07–22,39 (první tři schová průjezd).
+- **Odchody karet** jednotně na začátek odchodu: 500 kW 19,875 → 19,76, nově tick 22,8 (odchod karty 250).
+- **C_2376 (20,5)**: příď vlevo, vůz jede doleva → panorama průjezdu otočeno na 0,5 → −0,5 (bylo zleva doprava).
+- **Naměřeno**: vrcholy 98/98 přesně (0,0 ms); master po AAC **−13,8 LUFS / −1,6 dBTP**; pásma sub 19,9 · basy 31,0 · **středy 36,7** · 2–6 kHz 8,2 · výšky 4,0 %;
+  RMS 50 ms: stoupání 16,0 −16,2 → 16,5 −15,4 → 17,0 −11,1 → 17,5 −9,9 · **drop 2 18,0 −8,2** · jízda 18,5–25,0 −10,9 až −13,8 · logo 26,0 −9,9 · drop 1 4,0 −10,6;
+  nejhlasitější efekt proti hudbě −1,5 LU / 100 ms. Mix se proti v1 liší jen v 6,56–7,7 a 19,1–23,3 s.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
