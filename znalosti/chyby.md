@@ -13,6 +13,13 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C035: Vrchol nízkých úderů padal 7–12 ms za náběh zvuku (2026-11-01, V003, našel a opravil zvukař)
+- Příznak: změřený vrchol úderů dropů a loga 7–12 ms po náběhu; úder dropu 2 s `drive` měl vrchol rozmazaný o 10–70 ms a byl jen −9 LU pod hudbou.
+- Příčina: harmonické těla v sinové fázi dají první puls obálky až po periodě základu (1/110 Hz = 9 ms); nasycený průběh má špičky obálky na hranách.
+- Oprava: `sfx.py` funkce `ton_c` (kosinová fáze, puls na konci náběhu) a úder jako nasycené tělo s omezenou obálkou + krátký transient navrch.
+  Teď 1,4–2,0 ms, drop 2 −3,0 LU proti hudbě.
+- Prevence: u klíčových úderů kontrolovat změřený vrchol proti náběhu zvuku, ne jen proti času události (zvukař).
+
 ### C034: Duhový lem na logu v dropu 2 a ztmavená barva značky na end card (2026-10-31, V002 kolo 3, našli všichni 3 kritici, opravil animátor v4)
 - Příznak: (a) prstenec a ramena hvězdy v 18,78–18,93 s v zelených a žlutých pásech (~40–50 px místo 6 px), přímo na logu v nejsilnějším momentu;
   (b) „STAR“ na end card #0072CC místo #0078D6.

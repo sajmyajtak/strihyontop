@@ -202,6 +202,12 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   · lišta smí během luxusu 10,0–13,75 zmizet (nahrazuje ji list z ukazatele), kritik na ní netrvá · zvukař: automatika −18 dB 3,875–4,0 a 15,75–16,0
   záměrně ztlumí poslední údery víru, vír a obrácený činel mají doznít před těmito časy.
 
+- **Synchronizace obrazu se zvukem v1 (pro animátora, režisér 2026-11-01)**: rysky rychloměru 50/100/150/200/250 se rozsvítí v **16,5 · 16,75 · 17,0 (řazení)
+  · 17,1875 · 17,875** (knob na 250): průběh knobu 0 → 150 km/h v 16,25–17,0, pak ease-out do 250 v 17,875. Rolující číslice tikají v **7,15–7,525**
+  (zámek 7,6), **18,875 · 18,9 · 18,928 · 18,96** (zámek 19,0) a **19,875 · 19,9 · 19,928 · 19,96** (zámek 20,0). Další tiché zvuky: stisk myši 3,875,
+  přepínač 16,25, zámky 7,6 / 9,0 / 17,875, třpyt 5,75. Když animátor zvolí jiný průběh, napíše skutečné časy do zadání a zvukař je přesune.
+  Verze bez hudby zůstává v úrovni mixu efektů (pro trendový zvuk v aplikaci), nenormalizovat na −14 LUFS.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
@@ -525,6 +531,21 @@ a provedení dropu 2 (tma → světla). Ověřit hned na klíčových snímcích
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
 | příprava | analytik ∥ zvukař → analytik ∥ animátor → kreativní ředitel → oponent → revize | rendry z konfigurátoru, fakta, logo ve vrstvách, hudba luxsport, 7 motionů, test realismu, koncept ONE CONTROL | oponent: realismus 8, energie 6,5, celkem 7,5 → revize 11 oprav | drop 2 tma → světla, výkon střih na každou dobu, noční grading, kostka interiéru, úvod v pohybu |
+
+**Zvuk v1 (zvukař, 2026-11-01)**: 77 SFX podle storyboardu (sloupec zvuku + Změny po oponentuře) ze `projekty/003-bmw-rada7/sfx_udalosti.json` → `media/…/zvuk/sfx.wav|json`, `zvuk_v1.wav`,
+`zvuk_bez_hudby_v1.wav`, `sfx_log.txt`, `zvuk_v1_master.m4a`, `zvuk_bez_hudby_v1_stejny_zisk.m4a`, spektrogramy. `hudba.wav` ani časování beze změny. Příkaz:
+`python3 -I nastroje/sfx.py --udalosti projekty/003-bmw-rada7/sfx_udalosti.json --delka 25 --out media/projekty/003-bmw-rada7/zvuk/sfx.wav --hudba media/projekty/003-bmw-rada7/hudba.wav
+--mix …/zvuk/zvuk_v1.wav --bez-hudby …/zvuk/zvuk_bez_hudby_v1.wav --automatika 3.875-3.99:-18:20:10 --automatika 15.75-15.99:-18:20:10 --zisk-hudby "15.98:0,15.99:1,16.45:1,16.9:0"
+--zisk-hudby "20.5:0,20.9:-1,25:-1" --saturace 15.99-16.45:6 --saturace 21.99-22.15:6 --ticho 3.975-3.996 --ticho 15.73-15.996 --limiter -1.8`.
+Rozhodnutí: (1) nové prémiové typy v `sfx.py` (detent, klik, hover, prepinac, sklo_pop, trpyt, svetla, tik_cislo, zamek, radeni_lux, zapaleni, klik_uder, svetla_uder,
+svih_mekky, tah_prstence, dosednuti, klik_kov, logo_lux; dolní propust 11 kHz, tóny v D moll jako hudba) + klíče `od` / `konec` (efekt nezačne / nedozní v tichu);
+(2) kroky otočky na **prvním snímku nového úhlu** (0,0667 · 0,1333 · 0,2 · 0,3167 · 0,45 · 0,5667 · 0,75 · 1,0 a 8,1333 · 8,2 · 8,25 · 8,3167 · 8,3833 · 8,45, past 2);
+(3) automatika nádechů končí návratem přesně v 4,000 / 16,000 (plné −18 dB do 3,99 / 15,99, návrat 10 ms); (4) drop 2 hudba +1 dB (náběh schovaný v tichu) a finále od 20,9 −1 dB,
+aby drop 2 byl nejhlasitější o ≥ 1 dB (C032), špičky úderů 16,0 a 22,0 měkce nasycené, limiter −1,8 dBFS (rezerva TP po AAC); (5) navíc oproti sloupci zvuku: tichý stisk myši 3,875
+v nádechu (−34 dBFS, utnutý 3,97), dosednutí ukazatele na „Performance“ 16,25, lock čísla 5,395 mm 7,6 a knobu na 250 17,875, zámek posledního kroku otočky 9,0;
+(6) **tiky rysek** rychloměru 16,5 · 16,75 · 17,1875 (+ řazení 17,0 a 250 na 17,875) = návrh, kdy knob míjí rysky 50/100/150/200: animátor je má na tyto časy navázat.
+Naměřeno: vrcholy 0,0 ms od událostí (ve stopě max 0,2 ms, překryté jen 4,1 a 16,25 dozvukem úderu), klíčové efekty 4,0 / 16,0 / 22,0 = −2,0 / −3,0 / −2,2 LU proti hudbě (100 ms),
+master po AAC −13,9 LUFS / −1,2 dBTP, pásma sub 21 % · středy 36 %, RMS 50 ms: stoupání −17,4 → −16,8 → −16,0 → −13,0, drop 2 −7,0 (finále −9,8, výkon −10,7, drop 1 −11,8, jízda −13,9).
 
 ## Chyby během výroby
 

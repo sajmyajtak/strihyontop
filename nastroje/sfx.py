@@ -18,7 +18,9 @@ udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…
   lu      = o kolik LU je efekt tišší než hudba v okně 100 ms (potřebuje --hudba), jinak uroven = špička v dBFS
   pan −1 … 1, volitelně "ton" (násobek výšky), "seed" (stejný seed = stejný zvuk), "strop" (max. špička v dBFS, výchozí −6),
           "drive" (dB, jemné tanh nasycení zvuku: sníží poměr špička / tělo, takže hlavní efekt je slyšet a strop ho neusekne),
-          "pan_do" (+ "pan_tau" s, výchozí 0,12): průjezd, panorama se kolem vrcholu přelije z `pan` do `pan_do`
+          "pan_do" (+ "pan_tau" s, výchozí 0,12): průjezd, panorama se kolem vrcholu přelije z `pan` do `pan_do`,
+          "konec" (s, V003): doznění se utne kosinovým doběhem 15 ms končícím v tomto čase (efekt nepřesáhne do nádechu / ticha),
+          "od" (s, V003): náběh zvuku začne až v tomto čase (kosinově 5 ms), např. švih za úderem nesmí začít v tichu před ním
   PODKLAD (typy v PODKLADY, např. "volnobeh"): {"cas": OD, "do": DO, "typ": "volnobeh", "lu": -8} = souvislý zvuk od–do,
           `lu` platí proti hudbě v celém úseku, vrchol se nezarovnává ani nekontroluje (V002 kolo 2: tělo háčku pod klonky).
           Jen výjimečně: I3 chce zvuk na událost, ne koberec. Doběh podkladu nechat skončit před nádechem / tichem.
@@ -26,7 +28,10 @@ udalosti.json: [{"cas": 0.625, "typ": "glp", "lu": -9, "pan": 0.0, "popis": "…
           rezervou (sportovní: −14 LUFS při špičce −1,5 dBFS), kde se efekt sečte s úderem; bez volby se chová jako dřív (V001 bit po bitu).
 Závodní zvuky (V002): rele, ting, odpal, doppler(_tichy/_dvojity), prujezd_gt, prujezd_daleko, vzduch, svih(_rotace), prulet,
   nasati(_dlouhe), pneu(_svist), kov_uder(_suchy), cink_el, fup, brzdy, jiskry, skrt, zatah, vzum(_trisk), tik, radeni, glitch,
-  svetelny_uder, sssink, vuff, klap_kov, fump, dopad_logo. Šum má srovnanou obálku (`rovny_sum`), průjezdy „svist“ v nejbližším bodě:
+  svetelny_uder, sssink, vuff, klap_kov, fump, dopad_logo.
+Prémiové UI a luxusní vůz (V003, dolní propust 11 kHz, tóny v D moll): detent, klik(_uchop), hover, prepinac, sklo_pop, trpyt,
+  svetla(_cervena), tik_cislo, zamek(_nizko), radeni_lux, radeni_bublina, zapaleni, klik_uder (drop 1), svetla_uder (drop 2),
+  svih_mekky(_kratky/_dlouhy), tah_prstence, dosednuti, klik_kov, logo_lux. Šum má srovnanou obálku (`rovny_sum`), průjezdy „svist“ v nejbližším bodě:
   změřený vrchol = navržený vrchol (rozptyl mezi seedy ≤ ~10 ms, zarovnání na událost pak přesně).
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
@@ -554,6 +559,209 @@ def volnobeh(rng, v=1.0, delka=3.0):
     return x * np.clip(t / 0.04, 0, 1) * np.clip((delka - t) / 0.25, 0, 1) ** 1.5
 
 
+# ---------- prémiové UI a luxusní vůz (V003): měkké, čisté, nic nad ~11 kHz (C030: AAC překmity), tóny v D moll jako hudba luxsport ----------
+D6 = 1174.66
+
+
+def ton_c(f0, f1, n, tau, t0=0.0015):
+    """Jako `ton`, ale kosinová fáze s pulsem v čase t0 (= konec náběhu obálky): harmonické součtu jsou tam ve fázi,
+    první puls obálky padne na náběh. Sinové harmonické dají puls až po periodě základu (u 110 Hz o 9 ms později)."""
+    f = f1 + (f0 - f1) * np.exp(-cas(n) / tau)
+    faze = 2 * np.pi * np.cumsum(f) / SR
+    return np.cos(faze - np.interp(t0, cas(n), faze))
+
+
+def _lux(x):
+    """Dolní propust 11 kHz (4 póly): prémiové zvuky bez ostrého „cvrkání“ a bez energie nad 18 kHz (C030)."""
+    return dolni(x, 11000, 4)
+
+
+def detent(rng, v=1.0):
+    """Aretace otočného ovladače (krok otočky 360°): 1,5 ms cvak 1,5–6 kHz + tlumené tělo ~900 Hz, 50 ms."""
+    n = int(0.05 * SR)
+    cv = sum_pasmo(rng, n, 1500 * v, 6000 * v) * obalka(n, 0.0005, 0.0018)
+    return _lux(cv + 0.55 * ton(950 * v, 820 * v, n, 0.01) * obalka(n, 0.0008, 0.007))
+
+
+def klik(rng, v=1.0, telo=1.0):
+    """Měkký klik kurzoru (trackpad): cvak 2–7 kHz + kulaté tělo 1,15 → 0,9 kHz a podklad 300 → 240 Hz (slyšet i z telefonu)."""
+    n = int(0.07 * SR)
+    cv = sum_pasmo(rng, n, 2000 * v, 7000) * obalka(n, 0.0006, 0.0022)
+    t1 = 0.5 * ton(1150 * v, 900 * v, n, 0.008) * obalka(n, 0.0009, 0.009)
+    t2 = 0.35 * telo * ton(300 * v, 240 * v, n, 0.01) * obalka(n, 0.0015, 0.014)
+    return _lux(cv + t1 + t2)
+
+
+def hover(rng, v=1.0):
+    """Tichý hover: sinusové „tk“ 2,3 kHz s měkkým náběhem 4 ms."""
+    n = int(0.06 * SR)
+    return _lux(np.sin(2 * np.pi * 2300 * v * cas(n)) * obalka(n, 0.004, 0.012) + 0.2 * sum_pasmo(rng, n, 3000, 8000) * obalka(n, 0.004, 0.003))
+
+
+def prepinac(rng, v=1.0):
+    """Přepnutí přepínače: dva kliky 22 ms po sobě (aretace ven a dovnitř), druhý hlavní (dává změřený vrchol)."""
+    a = klik(rng, 1.15 * v, 0.6)
+    k = int(0.022 * SR)
+    x = np.zeros(len(a) + k)
+    x[:len(a)] += 0.4 * a
+    x[k:] += a
+    return x
+
+
+def sklo_pop(rng, v=1.0):
+    """Skleněný vstup karty / pilulky: měkké „pop“ (500 → 1 000 Hz) a v jeho vrcholu krátké sklo D7 / A7 / D8 (doznění 70 ms)."""
+    n = int(0.3 * SR)
+    t = cas(n)
+    f = 500 * v + 500 * v * (1 - np.exp(-t / 0.008))
+    pop = np.sin(2 * np.pi * np.cumsum(f) / SR) * obalka(n, 0.006, 0.018)
+    sk = sum(a * np.sin(2 * np.pi * 2 * D6 * p * v * t + i) for i, (p, a) in enumerate([(1, 1), (1.5, 0.5), (2, 0.25)]))
+    return _lux(pop + 0.35 * sk * obalka(n, 0.006, 0.07))
+
+
+def trpyt(rng, v=1.0):
+    """Třpyt / glint: shluk skleněných tónů D7 E7 A7 D8 s měkkým náběhem 40 ms a dozněním 0,11 s + jemný vzduch 4–9 kHz."""
+    n = int(0.5 * SR)
+    t = cas(n)
+    x = sum(a * np.sin(2 * np.pi * f * v * t + rng.uniform(0, 6.28)) for f, a in [(2349, 1), (2637, 0.6), (3520, 0.7), (4699, 0.3)])
+    return _lux(x * spicka(n, 0.04, 0.015, 0.11) + 0.15 * sum_pasmo(rng, n, 4000, 9000) * spicka(n, 0.04, 0.01, 0.05))
+
+
+def svetla(rng, v=1.0, cervena=False):
+    """Probuzení světel: elektrický hum (pila 100 Hz jen 180–1 600 Hz) roste 0,12 s, ve vrcholu jemný „ping“ D6 + kvinta
+    (zadní červená světla o kvartu níž, A5), hum doznívá 0,18 s, ping 0,16 s."""
+    n = int(0.7 * SR)
+    t = cas(n)
+    p = 0.12
+    hum = 0.5 * pasmo(2 * ((100 * t) % 1) - 1, 180, 1600) * spicka(n, p, 0.05, 0.18)
+    f0 = D6 * v * (0.75 if cervena else 1.0)
+    k = int(p * SR)
+    m = n - k
+    tt = cas(m)
+    ping = (np.sin(2 * np.pi * f0 * tt) + 0.4 * np.sin(2 * np.pi * 1.5 * f0 * tt + 1) + 0.15 * np.sin(2 * np.pi * 3 * f0 * tt + 2)) * obalka(m, 0.002, 0.16)
+    x = hum.copy()
+    x[k:] += 0.7 * ping
+    return _lux(x)
+
+
+def tik_cislo(rng, v=1.0):
+    """Rolující číslice: velmi krátké tiché „tk“ (sinus 3,1 kHz 4 ms + cvak)."""
+    n = int(0.03 * SR)
+    return _lux(np.sin(2 * np.pi * 3100 * v * cas(n)) * obalka(n, 0.0006, 0.004) + 0.4 * sum_pasmo(rng, n, 2500, 8000) * obalka(n, 0.0004, 0.0012))
+
+
+def zamek(rng, v=1.0, nizko=0.0):
+    """Měkký „lock“ (číslo nebo knob zapadne): západka = dva kliky 8 ms po sobě (druhý hlavní) + tělo 420 → 330 Hz,
+    volitelně tupý náraz 140 → 70 Hz s harmonickými do ~560 Hz (`nizko` = jeho síla)."""
+    n = int(0.35 * SR)
+    k = int(0.008 * SR)
+    a = klik(rng, 0.85 * v, 1.4)
+    x = np.zeros(n)
+    x[:len(a)] += 0.35 * a
+    x[k:k + len(a)] += a
+    m = n - k
+    telo = 0.3 * ton(420 * v, 330 * v, m, 0.015) * obalka(m, 0.0015, 0.03)
+    if nizko:
+        d = sum(ton_c(j * 140 * v, j * 70 * v, m, 0.04) / j ** 0.8 for j in (1, 2, 3, 4)) * obalka(m, 0.0015, 0.09)
+        telo = telo + nizko * np.tanh(1.3 * d) / np.tanh(1.3)
+    x[k:] += telo
+    return _lux(x)
+
+
+def radeni_lux(rng, v=1.0, bublina=0.0):
+    """Řazení (luxusní, bez digitálního zapu): tlumený mechanický „klak“ (kov 780 Hz, krátký) + tělo 240 Hz + cvak;
+    `bublina` = přidaný klik bubliny rychloměru ve stejném vrcholu."""
+    n = int(0.25 * SR)
+    kl = kov(rng, n, 780 * v, 0.025, (1.0, 2.4, 4.1)) * obalka(n, 0.0008, 1.0)
+    telo = 0.7 * (ton(240 * v, 190 * v, n, 0.02) + 0.5 * ton(480 * v, 380 * v, n, 0.02)) * obalka(n, 0.0015, 0.025)
+    x = kl + telo + 0.6 * sum_pasmo(rng, n, 1500, 6000) * obalka(n, 0.0005, 0.002)
+    if bublina:
+        x = vrstva_v(x, bublina * klik(rng, 1.25 * v, 0.3), 0)
+    return _lux(x)
+
+
+def zapaleni(rng, v=1.0):
+    """Start motoru: zážeh „vrm“ (motor 95 → 160 → 125 Hz s harmonickými, pod 90 Hz oříznuto), náběh 25 ms, doznění 0,2 s."""
+    n = int(0.7 * SR)
+    t = cas(n)
+    f = 95 * v + 65 * v * np.exp(-((t - 0.06) / 0.07) ** 2) + 30 * v * (1 - np.exp(-t / 0.2))
+    m = horni(motor_ton(f, rng, harm=16, hrubost=0.25), 90, 2)
+    return _lux(rovny_sum(m, 0.004) * spicka(n, 0.025, 0.008, 0.2))
+
+
+def klik_uder(rng, v=1.0):
+    """Drop 1 (V003): klik kurzoru, který spustí střih: čistý klik + měkký tupý dopad 130 → 75 Hz s harmonickými + krátký závan."""
+    n = int(0.5 * SR)
+    x = np.zeros(n)
+    k = klik(rng, 0.95 * v, 1.5)
+    x[:len(k)] += k
+    d = sum(ton_c(j * 130 * v, j * 75 * v, n, 0.05) / j ** 0.8 for j in (1, 2, 3, 4)) * obalka(n, 0.0015, 0.12)
+    d = np.tanh(1.4 * d) / np.tanh(1.4) * (1 + 1.2 * np.exp(-cas(n) / 0.004))    # první puls silnější: vrchol na náběhu
+    return _lux(x + 0.8 * d + 0.3 * sum_pasmo(rng, n, 400, 3000) * obalka(n, 0.004, 0.05))
+
+
+def svetla_uder(rng, v=1.0, prechod=0.5):
+    """Drop 2 (V003): světla naskočí na černé + nízký náraz motoru. Hustý zvuk s vrcholem na náběhu:
+    (1) tělo = náraz 110 → 55 Hz s harmonickými do ~550 Hz (telefon slyší 2.–5.), „klonk“ stykače reflektorů (kov 330 Hz),
+    krátký zátah motoru 150 → 230 Hz a doznívající hum; celé tělo projde tanh, takže jeho obálka je ≤ ~1 (hlasité pod stropem);
+    (2) navrch transient `prechod` × (první puls nárazu v kosinové fázi + cvak, doznění 3 ms): změřený vrchol je na náběhu
+    s rezervou ~3 dB nad tělem. `drive` události nepoužívat (rozmazal by vrchol)."""
+    n = int(1.2 * SR)
+    t = cas(n)
+    zaklad = sum(ton_c(j * 110 * v, j * 55 * v, n, 0.07) / j ** 0.8 for j in (1, 2, 3, 4, 5))
+    nar = zaklad / (np.max(np.abs(zaklad)) + 1e-12) * obalka(n, 0.0015, 0.22)
+    klonk = 0.3 * kov(rng, n, 330 * v, 0.05, (1.0, 2.76, 5.4)) * obalka(n, 0.001, 1.0)
+    f = 150 * v + 80 * v * (1 - np.exp(-t / 0.25))
+    rev = 0.35 * horni(motor_ton(f, rng, harm=16, hrubost=0.3), 100) * np.where(t < 0.06, (t / 0.06) ** 2, np.exp(-(t - 0.06) / 0.25))
+    hum = 0.12 * pasmo(2 * ((100 * t) % 1) - 1, 180, 1500) * obalka(n, 0.01, 0.3)
+    telo = _lux(np.tanh(2.5 * (nar + klonk + rev + hum)) / np.tanh(2.5)) * np.exp(-t / 0.5)   # nasycení zesílí i konec: doznění zkrátit
+    trans = zaklad * obalka(n, 0.0015, 0.003)
+    trans = trans / (np.max(np.abs(trans)) + 1e-12) + 0.5 * sum_pasmo(rng, n, 1200, 7000) * obalka(n, 0.0008, 0.003)
+    return telo + prechod * _lux(trans)
+
+
+def svih_mekky(rng, v=1.0, delka=0.35):
+    """Měkký luxusní švih / whoosh: `svih` bez ostrých výšek (dolní propust 5 kHz)."""
+    return dolni(svih(rng, 0.8 * v, delka, 0.5), 5000)
+
+
+def tah_prstence(rng, v=1.0, delka=0.36):
+    """„Ink“ tón tahu prstence loga: sklenitý tón D6 + kvinta s jemným vibratem, crescendo po celou dobu tahu,
+    vrchol na konci (knob se rozplyne do prstence), pak doznění 80 ms."""
+    n = int(delka * SR) + int(0.3 * SR)
+    t = cas(n)
+    faze = 2 * np.pi * np.cumsum(D6 * v * (1 + 0.003 * np.sin(2 * np.pi * 5.5 * t))) / SR
+    x = np.sin(faze) + 0.45 * np.sin(1.5 * faze + 1) + 0.15 * np.sin(2 * faze + 2)
+    e = np.where(t < delka, (t / delka) ** 2.2, np.exp(-(t - delka) / 0.08))
+    return _lux(x * e + 0.1 * sum_pasmo(rng, n, 2000, 7000) * e)
+
+
+def dosednuti(rng, v=1.0):
+    """Měkké dosednutí dílu (čtvrtiny loga): plstěný dopad 220 → 160 Hz s 2. a 3. harmonickou + velmi jemný cvak."""
+    n = int(0.25 * SR)
+    x = (ton(220 * v, 160 * v, n, 0.025) + 0.45 * ton(440 * v, 320 * v, n, 0.025) + 0.2 * ton(660 * v, 480 * v, n, 0.025)) * obalka(n, 0.003, 0.05)
+    return _lux(x + 0.25 * sum_pasmo(rng, n, 1500, 5000) * obalka(n, 0.0008, 0.002))
+
+
+def klik_kov(rng, v=1.0):
+    """Jemný kovový klik (dosednutí písmene loga): 1 ms cvak + krátký kov 2,6 kHz (doznění 40 ms) + tělo 640 Hz."""
+    n = int(0.15 * SR)
+    x = 0.6 * kov(rng, n, 2600 * v, 0.04, (1.0, 2.32, 3.9)) * obalka(n, 0.0008, 1.0)
+    x += 0.6 * sum_pasmo(rng, n, 2000, 8000) * obalka(n, 0.0005, 0.0015) + 0.4 * ton(640 * v, 560 * v, n, 0.01) * obalka(n, 0.001, 0.01)
+    return _lux(x)
+
+
+def logo_lux(rng, v=1.0):
+    """Finální dopad loga (V003): kovový klik posledního písmene + tělo 147 → 98 Hz (D3 → G2) s harmonickými
+    + čistý zvon D6 (harmonické částečné tóny, doznění ~1,2 s, bez neharmonického „plechu“)."""
+    n = int(1.6 * SR)
+    t = cas(n)
+    telo = sum(ton_c(j * 147 * v, j * 98 * v, n, 0.05) / j ** 0.8 for j in (1, 2, 3, 4)) * obalka(n, 0.0015, 0.14)
+    zvon = sum(a * np.sin(2 * np.pi * D6 * v * p * t + rng.uniform(0, 6.28)) * np.exp(-t * p ** 0.6 / 0.55)
+               for p, a in [(1, 1), (2.0, 0.35), (3.01, 0.15), (4.2, 0.06)]) * obalka(n, 0.002, 10.0)
+    telo = np.tanh(1.3 * telo) / np.tanh(1.3) * (1 + 0.6 * np.exp(-t / 0.005))     # první puls silnější: vrchol na náběhu
+    return _lux(vrstva_v(telo + 0.4 * zvon, 0.8 * klik_kov(rng, 0.9 * v), 0))
+
+
 PODKLADY = {"volnobeh": volnobeh}                                        # souvislé zvuky (od–do), vrchol se nezarovnává
 
 
@@ -573,6 +781,13 @@ ZVUKY = {
     "skrt": lambda r, v: jiskry(r, v, 0.35), "zatah": zatah, "vzum": vzum, "vzum_trisk": lambda r, v: vzum(r, v, 1.4),
     "tik": tik, "radeni": radeni, "glitch": glitch, "svetelny_uder": svetelny_uder, "sssink": sssink, "vuff": vuff,
     "klap_kov": klap_kov, "fump": fump, "dopad_logo": dopad_logo,
+    # prémiové UI a luxusní vůz (V003)
+    "detent": detent, "klik": klik, "klik_uchop": lambda r, v: klik(r, 0.92 * v, 1.3), "hover": hover, "prepinac": prepinac,
+    "sklo_pop": sklo_pop, "trpyt": trpyt, "svetla": svetla, "svetla_cervena": lambda r, v: svetla(r, v, True),
+    "tik_cislo": tik_cislo, "zamek": zamek, "zamek_nizko": lambda r, v: zamek(r, v, 0.9), "radeni_lux": radeni_lux,
+    "radeni_bublina": lambda r, v: radeni_lux(r, v, 0.6), "zapaleni": zapaleni, "klik_uder": klik_uder, "svetla_uder": svetla_uder,
+    "svih_mekky": svih_mekky, "svih_mekky_kratky": lambda r, v: svih_mekky(r, v, 0.24), "svih_mekky_dlouhy": lambda r, v: svih_mekky(r, v, 0.5),
+    "tah_prstence": tah_prstence, "dosednuti": dosednuti, "klik_kov": klik_kov, "logo_lux": logo_lux,
 }
 
 
@@ -699,6 +914,14 @@ def stopa(udalosti, delka, hk=None):
         i = int(round(u["cas"] * SR)) - vx
         if i < 0:                                                        # zvuk by začal před 0 s: uříznout začátek
             x, i, vx = x[-i:], 0, vx + i
+        if "od" in u:                                                    # V003: zvuk se otevře kosinovým náběhem 5 ms začínajícím v `od` (s)
+            d = int(0.005 * SR)
+            w = np.clip((i + np.arange(len(x)) - int(round(u["od"] * SR))) / d, 0, 1)
+            x = x * (0.5 - 0.5 * np.cos(np.pi * w))
+        if "konec" in u:                                                 # V003: doznění utne kosinový doběh 15 ms končící v `konec` (s)
+            d = int(0.015 * SR)
+            w = np.clip((int(round(u["konec"] * SR)) - i - np.arange(len(x))) / d, 0, 1)
+            x = x * (0.5 - 0.5 * np.cos(np.pi * w))
         k = min(len(x), n - i)
         uhel = (u.get("pan", 0.0) + 1) * np.pi / 4
         if "pan_do" in u:                                                # průjezd: panorama se přelije z `pan` do `pan_do` kolem vrcholu
