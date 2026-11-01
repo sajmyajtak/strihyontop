@@ -13,7 +13,7 @@ Výchozí hodnoty pro každé video. Konkrétní zadání je vždy přebíjí.
 | CTA na konci | **podle zadání** |
 | Materiály | **Google Drive** (viz níže) |
 | Formát a délka | **16:9, 1920×1080, 60 fps, 25–35 s** podle zvoleného motionu (rozhodnutí 2026-10-31). Vždy **jedno video naráz** |
-| Styl | **energický, rychlý, živý, hodně efektů** (zpětná vazba V001: „ať to není bez duše“) |
+| Styl | **energický, rychlý, živý, hodně efektů** (V001: „ať to není bez duše“), **realistický, nic kresleného, SaaS motion** (V002: „ať to není tak moc kreslený“) |
 | Logo, podpis na end card | ? (zatím nedodáno) |
 | Zakázané nástroje | **Higgsfield nepoužívat** (rozhodnutí uživatele 2026-10-30) |
 

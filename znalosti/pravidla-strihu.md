@@ -6,6 +6,9 @@ Po každé referenci a po každém hotovém videu se doplňuje nebo upravuje.
 **Priorita při konfliktu:** pravidla ze zadání konkrétního videa > `znacka.md` > tento dokument.
 **Vkus uživatele (V001, 2026-10-31):** „potřebuju víc energetické, ať to není tak bez duši… rychlejší a více živější, ať má víc efektů.“
 To má přednost před obecnými zdroji (prompt-motion, reference). Kreativní ředitel a kritici hodnotí **energii a živost** jako hlavní kritérium.
+**Vkus uživatele (V002, 2026-11-01):** energie OK („není to špatný“), ale **nic kresleného**: produkty (auta…) **realisticky**, ze skutečných
+rendrů / fotek výrobce, tak aby nikdo nepoznal, že video dělala AI. Oblíbený styl: **SaaS motion** (čisté UI prvky, karty, plynulá kamera,
+kinetická typografie, produkt jako hrdina). Laťka: realismus + wow + energie.
 Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i výchozí zákazy (např. šmouhy v D2, záři v G2). Výjimku zapsat do zadání.
 
 **Zdroje:** `[R1]`–`[R5]` = rozbory v `reference/`, `[PM]` = prompt-motion.com (`prompt-motion/poznatky.md`),
@@ -105,6 +108,10 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   a otřes kamery na údery, částice z dopadu, glitch jako akcent, chromatický posun na švihu jsou povolené, **když sedí na dobu a vycházejí
   z děje**. Zakázané zůstává jen to, co nic nevyjadřuje: náhodné částice bez příčiny, generické gradienty, text v rozích, vzhled jako
   z šablony (`prompt-motion/poznatky.md` oddíl 4 je seznam rizik, ne zákazů). Vkus uživatele má přednost před střídmostí z prompt-motion. `[V001, PM]`
+- **G7** **Produkt realisticky, ne kreslený.** Auta, zařízení a jiné produkty stavět ze **skutečných rendrů nebo fotek výrobce** (konfigurátor,
+  web, materiály od uživatele), ne kreslit v kódu. Pohyb 2,5D: vyříznutí (maska), paralaxa vrstev, pomalá kamera, odlesk po laku jen v masce
+  karoserie, rotace kola z detailu, rozsvícení světel, kontaktní stín. Efekty nesmí prozradit AI (natažené okraje, plastový lesk, duhy, glitch na produktu).
+  Grafika (UI karty, typografie) smí být kreslená, produkt ne. `[V002]`
 
 ## H. Formát „natočená obrazovka“
 - **H1** Animaci přehrát na notebooku nebo monitoru a natočit telefonem v tmavé místnosti, barevné ambientní světlo ladí s paletou. Působí opravdově a „ne jako AI“. `[R1, R2, R5]`

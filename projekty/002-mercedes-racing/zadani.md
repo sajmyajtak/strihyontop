@@ -5,7 +5,7 @@
 | Datum zadání | 2026-10-31 |
 | Platforma / formát | **16:9, 1920×1080, 60 fps** |
 | Délka | **30,0 s** (rozsah uživatele 25–35 s, zvoleno podle motionu a hudby) |
-| Stav | **doručeno** (V002_v4, 2026-10-31), čeká na zpětnou vazbu |
+| Stav | **uzavřeno** (V002_v4 doručeno 2026-10-31, zpětná vazba 2026-11-01) |
 
 ## Zadání (doslova od uživatele)
 > okey hele není to špatný ale není to ono. potřebuju víc energetické at to není tak bez duši to video. tím myslím že at je to rychlejší a více zaživnější at má to více efektů. videa budeš dělat 16:9 a kolem 25-35 vteřin podle toho jaký si vybereš motion z strýnky. udělej jen vždy jedno video ale ted zkus s hudbou ale bez voiceover. udělej mi reklamu na https://www.mercedes-benz.cz/ maš tam i logo použij tam i barvy keteré jsou na stránkach a hudba bude sportovní a auto nebo ta reklama bude hlavně o závodění aut který má mercedes. motion at vybere hlavní agent a at jsou tam minimálně 3 ale můžeš použít i víc
@@ -346,5 +346,13 @@ jízda T3–T8 −14,3 až −15,4, finále −10,4 beze změny. Pásma 0–3,5 
 | **v4** | 2026-10-31 | **V002_v4.mp4 → uživateli (SendUserFile)**, + `_bez_hudby`, plakát 19,75 s, `popisek.txt` | duhový lem pryč, úder loga, barvy značky přesně, wow 8,4 / 8,1 |
 
 ## Zpětná vazba (doslova)
+2026-11-01:
+> není to špatný ale pted použij realný modely 3D od bmw který mají na stránkách a zkus udělat tu reklamu víc realičtnější tím co myslím je že at není to tak moc kreslený ale saas motion který je velice populárny ale použij realisticke modely aut který fakt vypadají jak v realitě
+>
+> [odkazy: bmw.cz, konfigurátor G70 (řada 7, 740d), 5 obrázků z konfigurátoru: předek, záď, 3/4 zepředu, detail kola ×2]
+>
+> a udělej s fakt dobrou realisticko ureklamu kterou jen tak člověk nerozwezná že to je dělany přes ai claude a aby byl wow efekt
+
+Výklad: V002 „není to špatný“, ale kresba v kódu působí kresleně. Další video: BMW, realistické vozy, SaaS motion (V003).
 
 ## Poučení

@@ -15,7 +15,7 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
-### V002: Mercedes-Benz „FOLLOW THE STAR“ (2026-10-31, doručeno v4, čeká na zpětnou vazbu)
+### V002: Mercedes-Benz „FOLLOW THE STAR“ (2026-10-31, doručeno v4, zpětná vazba 2026-11-01)
 - Zadání: projekty/002-mercedes-racing/zadani.md. 30 s, 1920×1080, 60 fps, sportovní hudba (nová nálada `sportovni`), bez VO, 4 motiony z prompt-motion.
   Kola: v1 wow 7,8 / energie 7,5 → v2 8,4 / 7,5 → v3 8,25 / 8 → režisérská oprava v4 **8,4 / 8,1**. ~4,93 mil. tokenů, ~7,6 h práce agentů.
 - **Fungovalo**: koncept stojí na geometrii loga (linie → prstenec → hvězda ze světla), opět nejsilnější typ nápadu (stejně jako V001).
@@ -31,7 +31,11 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 - Nové nástroje a pravidla: `render_html.cjs` (CDP, 3 vlákna, `--rychle`, `--od`), `sfx.py` (`--zisk-hudby`, `--saturace`, `--limiter`, PODKLADY),
   `hudba.py` nálada `sportovni`, `kontrola.sh` (pásy u všech skoků, přesný arch), `master_zvuk.sh` (latency, dolní propust), vzory workflow
   v `nastroje/workflow/`. Chyby C025–C034. Pravidla I3 (podklad, stavba hlasitosti).
-- **Zpětná vazba uživatele**: (čeká se)
+- **Zpětná vazba uživatele** (2026-11-01): „není to špatný, ale… ať to není tak moc kreslený… SaaS motion… realistické modely aut, který fakt vypadají
+  jak v realitě… realistickou reklamu, kterou člověk nerozezná, že je dělaná přes AI, a aby byl wow efekt.“
+- **Hlavní poučení**: energie už sedí („není to špatný“), ale **vozy kreslené v kódu působí kresleně**. U produktů (auta, zařízení) stavět na
+  **skutečných fotografiích / CGI rendrech výrobce**, ne na kresbě. Styl, který uživatel chce: **SaaS motion** (čisté UI karty, plynulá kamera,
+  kinetická typografie, produkt jako hrdina). Zapsáno do pravidel (vkus uživatele, G7).
 
 ### V001: Bageterie Boulevard „Logo byla celou dobu bageta“ (2026-10-31, doručeno, čeká na zpětnou vazbu)
 - Zadání: projekty/001-bb-chill/zadani.md. Výsledek: 25 s, 1080×1920, 60 fps, wow 6,9 → 7,3 → **8,1**, schváleno všemi 3 kritiky ve 3. kole.
