@@ -8,3 +8,7 @@ a úkoly podle zadání, zkontrolovat syntaxi a spustit `Workflow({ scriptPath }
   → střihač → 3 kritici (technika, wow + energie, zadání) → opravy, max. 3 kola. Schváleno = žádné blokující ani závažné nálezy, wow ≥ 8, energie ≥ 8,5.
 
 Zásady (C018, C021): agenti `effort: 'high'`, velké výstupy po částech, souběžně nanejvýš 2 agenti (4 CPU), u kontroly hashů dát agentovi konkrétní commit.
+
+**Optimalizace (pokyn uživatele 2026-11-01, „ať každý plní svou práci a není jich hodně“)**: viz CLAUDE.md, Režie. Vzory `priprava.js` a `vyroba.js`
+jsou z V002 (víc agentů); pro nová videa je slučovat podle toho pravidla: rozbor předloh dělá kreativní ředitel v konceptu, oponent rovnou reviduje,
+kritik technika + zadání je jeden agent, střih a spojení zvuku dělá animátor v posledním bloku nebo režisér, kontrola dalších kol jen opravených míst.

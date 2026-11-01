@@ -31,6 +31,16 @@ Režisér je zodpoví sám, nebo, když jde o věc uživatele, se zeptá uživat
 **Workflow agenti** (C018): `effort: 'high'` (ne max), velké výstupy (storyboard, scéna) psát **po částech** (kostra + malé Edit), jinak hrozí
 limit délky výstupu a desítky minut ticha. Ticho > 15 min → zkontrolovat poslední záznam agenta v `subagents/workflows/<run>/`.
 
+**Pokyn uživatele (2026-11-01): optimalizovat agenty, ať každý udělá svou práci celou a není jich hodně.** Sestava na jedno video (cíl ~10–12 agentů,
+V003 jich mělo 34 a 6,2 mil. tokenů):
+- **Režisér sám**: hudba z existující nálady (`hudba.py`), posuny SFX na skutečné časy, spojení obrazu a zvuku + master, drobné opravy, zápisy.
+- **Příprava (3–4)**: analytik (materiál, značka, fakta) → animátor test (jen když je nová technika) → kreativní ředitel (koncept + storyboard,
+  rozbor předloh) → oponent, který **rovnou zapracuje** svou oponenturu do storyboardu (žádný samostatný agent na revizi).
+- **Výroba (5–6)**: zvukař (SFX + mix, souběžně s obrazem, nová nálada jen když je potřeba) · animátor klíčové snímky → kreativní ředitel schválí →
+  animátor pohyb ve **2 blocích**, druhý blok rovnou dělá plný render a spojení se zvukem. Střihač jen když je natočený materiál k vystřihání.
+- **Kontrola (2 na kolo)**: kritik (technika + zadání v jednom) a kreativní ředitel (wow, realismus, energie). Opravy jeden animátor (+ zvukař
+  jen při nálezech ke zvuku). Cíl jsou 2 kola, třetí jen při závažných nálezech. Další kola kontrolují jen opravená místa.
+
 1. **Příjem**: založit `projekty/0xx-nazev/zadani.md` ze šablony. Pravidla uživatele **doslova**, mají nejvyšší prioritu.
    Materiály: podsložka projektu na Drive v „Střižna – materiály pro portfolio / 01 Projekty“ (postup v `znalosti/znacka.md`) →
    `nastroje/drive.sh` → `nastroje/materialy.py` → prohlédnout `_prehled.jpg` a varování (HDR, různé fps, otočení).
