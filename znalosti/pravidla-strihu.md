@@ -69,6 +69,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   (méně dělá „duchy“, C003). Statický text a UI zůstávají ostré a rozmazání nesmí tvar úplně smazat. `[R2, R3, PM]`
 - **D6** **Žádný pohyb bez příčiny**: každá animace vychází z prvku, který už je na obrazovce, nebo do něj vede. Nic se nepřesouvá skokem.
   Odcházející text zmizí dřív, než příchozí obsadí jeho místo. `[PM]`
+- **D7** **Přechod přímou manipulací**: když existují dva zarovnané snímky (den / noc, světla vyp / zap), druhý se odkrývá maskou vázanou na
+  ovládací prvek (posuvník, přepínač), ne prolínačkou. `[V003, PM]`
 
 ## E. Typografie a titulky
 - **E1** Slovo po slově **jen tam, kde text čte hlas** (titulky, háček). Slovo naskočí přesně s hlasem (`prepis.py --slova`, při nepřesnosti zarovnat po frázích).
@@ -112,6 +114,10 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   web, materiály od uživatele), ne kreslit v kódu. Pohyb 2,5D: vyříznutí (maska), paralaxa vrstev, pomalá kamera, odlesk po laku jen v masce
   karoserie, rotace kola z detailu, rozsvícení světel, kontaktní stín. Efekty nesmí prozradit AI (natažené okraje, plastový lesk, duhy, glitch na produktu).
   Grafika (UI karty, typografie) smí být kreslená, produkt ne. `[V002]`
+  Render zvětšovat nejvýš do nativního rozlišení (~1,3× u 2560 px ve 1080p). Otočku z 36 snímků po 10° nikdy pomalu (trhá), jen rychlý oblouk
+  s rozmazáním na úder. `[V003]`
+- **G8** **SaaS motion**: neutrální světlé pozadí, karty s 1px okrajem a měkkým dvouvrstvým stínem, jeden akcent jen na akci, kurzor změny
+  způsobuje a nikdy jen nepluje, nejvýš 1–2 skleněné prvky a nikdy přes produkt (detail `prompt-motion/poznatky.md` oddíl 11.1). `[V003, PM]`
 
 ## H. Formát „natočená obrazovka“
 - **H1** Animaci přehrát na notebooku nebo monitoru a natočit telefonem v tmavé místnosti, barevné ambientní světlo ladí s paletou. Působí opravdově a „ne jako AI“. `[R1, R2, R5]`

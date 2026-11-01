@@ -534,3 +534,69 @@ Nejdřív koncept jednou větou a storyboard po taktech. Po schválení stav bez
 **Rychlá verze** (když je zadání malé, podle blogu o launch videích), 6 řádků:
 produkt a slib jednou větou · 3–5 momentů v pořadí · vzhled (HEX, font, světlé/tmavé) · načasování (délka, BPM, změna na každou dobu) ·
 zakázané efekty (záře, částice, prolínačky, skákavý easing, text v rozích, „anything that looks like a template“) · konec (logo, CTA). K tomu vždy řádek „1080×1920 9:16“ a odkaz na `<stavba>` a `<kontrola>` výše.
+
+---
+
+## 11. SaaS motion [V003]
+
+Uživatel (V002 → V003): „SaaS motion, který je velice populární“ + realistický produkt. Rozbor 2026-11-01 pro BMW řady 7 (`projekty/003-bmw-rada7/zadani.md`,
+oddíl Zvolené motiony). Ukázková videa vybraných položek prohlédnutá po 12 snímcích (lokálně `media/prompt-motion/videa_v003/arch_*.jpg`).
+
+**Co to je**: styl launch videí softwarových firem (Apple keynote, Linear, Stripe, Screen Studio). Produkt je hrdina, kolem něj čisté UI prvky
+(karty, pilulky, přepínače, posuvníky, kurzor), které se **mění jeden v druhý**, kamera plynule přibližuje a typografie je krátká a sebevědomá.
+V katalogu je to největší skupina: štítek product-ui má 105 položek, launch / promo 94. Ve „Most liked“ jsou 3 ze 6 SaaS položky
+(Shape morphing 12 103 lajků, Photo print app, Landing page 3D scroll).
+
+**Lajky**: web je u položek neukazuje, blog cituje jen pár čísel. Nejpopulárnější SaaS vzory podle blogu a „Most liked“:
+`twoclipping-5cba86` (12 103) · `twoclipping-221cab` (nejlajkovanější launch video) · `twoclipping-d89be5` (6. v „Most liked“) · `twoclipping-6dd14e` (607).
+
+**Nejlepší položky pro SaaS motion s realistickým produktem** (podrobně v zadání V003, M1–M7):
+| položka | role | hlavní technika |
+|---|---|---|
+| [Shape morphing through UI states](https://prompt-motion.com/twoclipping-5cba86) | přechody | jeden prvek se mění přes stavy UI, dvě hrany ukazatele na dvou pružinách, kurzor řídí změny |
+| [Spotify product film](https://prompt-motion.com/brainextends-e19ac3) | ukázka produktu | zaoblená scéna, trvalá lišta jako spojka záběrů, identita hrdinského obrazu přes všechna předání, sbíhání do loga |
+| [Photo print app launch film](https://prompt-motion.com/twoclipping-221cab) | luxus, přechody | přesvícení posuvníkem mezi dvěma zarovnanými snímky, zaplavení tvarem přes rohy, clona ze 6 lamel, skutečné fotky + UI |
+| [White ball UI motion loop](https://prompt-motion.com/rossaxbt-94583b) | výkon, čísla | posuvník s bublinou, číslo z polohy knobu, karty na doby, jeden svět a jedna kamera |
+| [Frame by Frame launch video](https://prompt-motion.com/notdwd-7de38a) | UI řemeslo | záběry přijíždějí už v pohybu, kurzor jako postava (natočení, hover, stisk), skleněná karta vyskočí z prvku |
+| [Taxtello bookkeeping app film](https://prompt-motion.com/daniel-haida-8691d4) | prémiovost | kamera jako makro produktové natáčení, překmit < 2 %, glint jako drahý akcent, zdrženlivost |
+| [TypingMind logo reveal](https://prompt-motion.com/tdinh-me-815acb) | end card | logo se nejdřív poskládá (kontura → díly), teprve pak odhalí |
+| [Landing page 3D scroll](https://prompt-motion.com/twoclipping-d89be5) | (záloha) | 2,5D: díly stránky se zvednou a postaví k objektivu, mělká hloubka ostrosti; chce WebGL a GPU, u nás jen zjednodušeně |
+
+### 11.1 Průvodce stylem SaaS motion
+1. **Pozadí**: světlé, teplé nebo neutrální, jednolité (`#F6F6F6`, studio z rendrů `#E7E2DC`), případně velmi jemná vinětace. Tmavé jen jako záměrná
+   část (noc, výkon). Žádné tečkové mřížky, „AI fialová“ ani generické gradienty (`twoclipping-5cba86`, `brainextends-e19ac3`).
+2. **Karty**: bílé nebo světle šedé, rádius 16–32 px, okraj 1 px `#E6E6E6`, uvnitř velkorysé odsazení (24–40 px). Jedna karta = jedna informace.
+   Karta vzniká z prvku na obrazovce (klik, ukazatel, hrana produktu), nikdy z ničeho.
+3. **Sklo**: max. 1–2 skleněné prvky (lišta, posuvník), jako rozmazaný klon scény za kartou + 1 px světlý okraj nahoře. Žádné duhové hrany,
+   žádné sklo všude („no fake glassmorphism everywhere“, `daniel-haida-8691d4`), nikdy sklo přes produkt.
+4. **Stíny**: měkké a nízké (dvouvrstvé: kontaktní ostrý 0–2 px + široký 24–60 px, krytí 6–12 %). Stín se mění s výškou karty. Tvrdé stíny = PowerPoint.
+5. **Kurzor**: macOS šipka (černá s bílým okrajem), pohybuje se po oblouku, zpomaluje do cíle, natočí se ke směru, hover = zvětšení ×1,2–1,3,
+   stisk = −15 % na 2–3 snímky + kroužek akcentu. Kurzor **způsobuje** změny (klik, tažení, dlouhý stisk), nikdy jen nepluje (`notdwd-7de38a`, `twoclipping-221cab`).
+6. **Pružiny**: UI prvky překmit 2–3 % jednou, kamera, velké plochy a text kriticky tlumené. Ukazatele a knoflíky mají **dvě hrany na dvou pružinách**
+   (náběžná předběhne, prvek se natáhne). Pružiny v uzavřeném tvaru, hodnota s více cíli = součet pružin.
+7. **Rytmus**: 120 BPM, událost na každou dobu, nová myšlenka ~1 s, předání na úder. Drop = největší změna měřítka (karta → celý obraz).
+   Nikdy dvě vrstvy textu v jednom místě, odcházející zmizí dřív.
+8. **Kamera**: jeden svět, jedna kamera (posun + log zoom), přiblížení „screen studio“ na moment, který se právě děje, kurzor se škáluje s ní.
+   Záběry **přijíždějí už v pohybu** a odjíždějí zrychlením.
+9. **Typografie**: jedna geometrická groteska (u BMW Manrope místo BMW Type Next), čísla Light 300 velká, jednotky menší a šedé, popisky Medium 500,
+   nadpisy 2–4 slova, bez tečky. Text se odkrývá maskou zdola nebo roztažením **jako celek**, ne slovo po slově.
+10. **Barvy**: neutrály + **jeden akcent jen na akci** (aktivní ukazatel, výplň posuvníku, klik). Akcent nikdy jako plocha pozadí ani záplava.
+11. **Přechody**: jeden prvek nese děj (pilulka, ukazatel, hrdinský obraz), další scéna vzniká z předchozí: morf tvaru, match-position,
+    zaplavení tvarem přes rohy ~0,3 s, clona. Prolínačka celého obrazu nikdy.
+12. **Čísla**: rolující číslice (každá číslice ve vlastním sloupci 0–9), cílová hodnota přesně ověřená (C8), číslo vázané na fyzický prvek (knob, ukazatel).
+13. **Co dělá „wow“**: skutečný produkt v nečekaném měřítku (karta se rozroste přes celý obraz na drop), přímá manipulace (tažení mění skutečný obraz:
+    noc se odkryje pod knobem), dokonalé předání bez střihu, ticho a prostor před úderem, jeden drahý detail (glint, rozsvícení světel).
+14. **Co dělá „levnou šablonu“**: plovoucí karty bez důvodu, kurzor, který nic nedělá, sklo a záře všude, každé slovo zvlášť, skákavé pružiny,
+    stock ikony s různou tloušťkou čar, text v rozích, tečkové mřížky, vymyšlená čísla a „dashboard“ bez obsahu, stejný pohyb pro všechny prvky.
+
+### 11.2 Spojení s fotorealistickým produktem (G7)
+- **Produkt je fotka / render výrobce, UI je kód.** Prompty z katalogu pracují se skutečnými snímky (Photo print app: fotky i natočená stěna),
+  takže jejich techniky jdou použít beze změny, když se render jen maskuje, posouvá, škáluje a odkrývá. Nikdy ho nedeformovat ani nepřekreslovat.
+- **Přesvícení mezi dvěma zarovnanými snímky** (den / noc, světla vyp / zap) je nejsilnější „realistický“ efekt: vypadá jako skutečná změna
+  světla, protože to skutečné světlo je (render výrobce). Hranice odkrytí měkká a vázaná na ovládací prvek.
+- **UI k produktu linkou**: popisek s tenkou linkou (1 px `#BBBBBB`) a bodem na detailu vozu, linka se kreslí od bodu ke kartě.
+- **Stín pod produktem** z renderu (kontaktní stín je v rendru), UI karty mají vlastní stín, ale nikdy nevrhají stín na render.
+- **Měřítko**: render jen zmenšovat nebo zvětšovat do své nativní kvality (2560 px galerie = max ~1,3× v 1080p bez měkkosti).
+- **Otočka po 10° (36 snímků)** je při pomalém pohybu trhavá: buď rychle s rozmazáním mezi sousedními snímky, nebo jen krátký oblouk
+  synchronizovaný s úderem, nikdy pomalý plynulý turntable.
+- **AI znaky na produktu zakázané**: plastový lesk, duhy, glitch, chromatický posun, natažené okraje masky, „vystřižený“ lem (G7).

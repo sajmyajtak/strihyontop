@@ -54,7 +54,7 @@ Další upřesnění (2026-11-01, doslova):
 - **Výkon**: čísla (maximální rychlost, zrychlení 0–100, výkon) **jen doslova z bmw.cz / technických údajů konfigurátoru** pro tuto konfiguraci (740d),
   s odkazem. Když je nenajdeme, ukážeme výkon bez čísel.
 - **Styl**: SaaS motion jako jazyk rozhraní (karty, čísla, popisky), produkt realisticky (G7).
-- **Motiony z prompt-motion**: vybere analytik (**aspoň 5**: přechody, ukázka auta, luxus, výkon), zapíše sem.
+- **Motiony z prompt-motion**: vybral analytik (7 položek: přechody, ukázka auta, luxus, výkon, UI řemeslo, end card), viz oddíl **Zvolené motiony** níže.
 
 - **Odpovědi režiséra analytikovi** (2026-11-01):
   - Exteriér **jen v konfiguraci uživatele** (galerie g01–g14, otočka 360° se světly zap/vyp, rendry od uživatele). Fotky z bmw.cz v jiných lacích ne.
@@ -63,6 +63,123 @@ Další upřesnění (2026-11-01, doslova):
     **230 kW**; koně neuvádět (převod k → hp by byl náš). „Elektronicky omezeno“ neuvádět (na webu není).
   - Volitelné prvky (Theatre Screen, B&W, Light Carpet…) **neuvádět jako fakt**, v konfiguraci neověřeno.
   - End card **světlá** (studio #E7E2DC), logo Grey-Colour z bmw.cz, skládané z vrstev.
+
+### Zvolené motiony (analytik 2026-11-01)
+Zdroj: katalog `media/prompt-motion/polozky.json` (236 položek) + ukázková videa vybraných položek, prohlédnutá po 12 snímcích
+(lokálně `media/prompt-motion/videa_v003/arch_*.jpg`, necommituje se). Plné texty promptů do gitu nepíšu, jen odkazy a vlastní poznatky.
+**Lajky**: prompt-motion.com je u položek neukazuje (ověřeno na stránce položky i v datech). Známe jen čísla, která cituje blog,
+a pořadí v seznamu „Most liked prompts“ na stránce Customize. U ostatních píšu „neuvedeno“.
+Výběr: 1 přechody · 2 ukázka vozu · 3 luxus světlem · 4 výkon · 5 UI řemeslo (kurzor, sklo) · 6 luxus zdrženlivostí · 7 skládací logo.
+Všech 7 je kompatibilních s G7: UI a typografie se kreslí v kódu, **vůz je vždy jen render BMW** (maska, posun, měřítko, odkryvy, nikdy deformace).
+
+**M1 Přechody: [Shape morphing through UI states](https://prompt-motion.com/twoclipping-5cba86)** (@twoclipping, `twoclipping-5cba86`,
+**12 103 lajků** podle blogu = 2. nejlajkovanější položka galerie, 2. v „Most liked“; 1440², 120 BPM).
+- **Převzít**: **jeden prvek, nikdy střih**: modrá pilulka `#1C69D4` se bez přerušení mění (velikost, rádius, barva) a nese kapitoly.
+  Návrh: segmentový přepínač **Design / Comfort / Performance**, jehož ukazatel přejede na 4,0 / 10,0 / 16,0 (drop 1, zlom, drop 2) a po cestě se
+  promění v posuvník (M3) a v posuvník rychlosti (M4). **Obě hrany ukazatele na dvou různých pružinách** (náběžná předběhne a ukazatel se natáhne,
+  pak se srovná), stejný trik u knoflíku přepínače. Obsah, který se uvnitř tvaru mění, má **vlastní masku a časování** a mění se s krátkým rozmazáním.
+  Kurzor dělá skutečné kliky a tažení. Při tažení je hodnota přímo z polohy kurzoru, po puštění dojede pružinou. Kamera přiblíží tak, aby stav vyplnil obraz.
+- **Vyvarovat se**: 12 stavů je na 25 s moc → max. 4–5 stavů. Žádný skákavý easing, záře, gradienty na UI, nesourodé tahy ikon, mrtvý čas.
+  Čtverec → 16:9 (pilulka a karty vedle vozu, ne přes něj). `will-change` nikdy na prvcích, které kamera škáluje (rozmazaný text).
+
+**M2 Ukázka vozu: [Spotify product film](https://prompt-motion.com/brainextends-e19ac3)** (@brainextends, `brainextends-e19ac3`, lajky neuvedeno;
+**1920×1080, 60 fps, ~120 BPM, bez VO = přesně náš formát**).
+- **Převzít**: **produkt v zaoblené „scéně“** (stage ~80 % šířky, ~75 % výšky, rádius ~24–32 px), kolem ní studio. Render vozu je „hrdinský obraz“:
+  **jeho identita a poloha se drží přes všechny záběry** (match-position: další záběr začíná tam, kde vůz v předchozím skončil). Na drop 1 a 2 se scéna
+  **rozšíří přes celý obraz** (full-bleed) = wow, ve zlomu se zase zmenší do karty. **Trvalá lišta jako spojka záběrů** (u nich přehrávač, u nás
+  **lišta konfigurátoru**: miniatura vozu, „BMW 740d xDrive Sedan“, tenký ukazatel postupu podle kapitol), vizuálně podřízená vozu.
+  Myšlenka ~1 s, UI vstupuje s jemným perspektivním náklonem, který se srovná do čelního pohledu. Kriticky tlumené pružiny.
+  Odcházející titulek zmizí dřív, než příchozí obsadí jeho místo. Závěr: obrázky se **sbíhají do středu a ustoupí logu**, které vznikne
+  ze stejného místa (předání do M7). Kontrola: rychlá předání nadpisů, předání hrdinského obrazu, zoom, sbíhání, mezery wordmarku.
+- **Vyvarovat se**: zelený atmosférický gradient kolem scény (u nás studio `#E7E2DC` z rendrů nebo `#F6F6F6`), vymyšlené „artwork“ (u nás jen rendry),
+  přerostlé prezentační nadpisy, částice, odlesky objektivu, třes kamery, náhodné prolínačky celého obrazu, reset kamery.
+
+**M3 Luxus světlem + přechody zaplavením: [Photo print app launch film](https://prompt-motion.com/twoclipping-221cab)** (@twoclipping, `twoclipping-221cab`,
+podle blogu **nejlajkovanější launch video galerie** (912slovní prompt, přesné číslo blog neuvádí), 5. v „Most liked“; 1440², 120 BPM, drop + tichý zlom).
+- **Převzít**: (a) **přesvícení posuvníkem mezi dvěma zarovnanými snímky** (u nich den → zlatá hodinka) = u nás **přesně páry den/noc**
+  `g01`→`g02`, `g03`→`g04` a otočka `360_svetla_vyp`→`_zap` (pixelově zarovnané): kurzor táhne skleněný posuvník „Lights“, hranice odkrytí jde
+  s knobem (měkká svislá maska, ne prolínačka celého obrazu), světla vozu se „rozsvítí“ pod prstem. Ideální na stoupání 14,0–16,0.
+  (b) **Zaplavení tvarem**: černý tvar (např. silueta vozu nebo kruh z kola) zaplaví obraz **přes všechny 4 rohy za ~0,3 s** a smrští se do další scény
+  = přechod na drop 2 (16,0) do noční / výkonové části. (c) **Clona ze 6 lamel** (iris) jako přechod do interiéru na zlomu 10,0 (lamely se zavřou
+  nad exteriérem a otevřou do `g12`). (d) „Apple keynote, 2D, jeden souvislý záběr, každá scéna vzniká z předchozí“, kurzor řídí každou změnu
+  (klik, tažení, dlouhý stisk), kamera „screen studio“ přiblíží moment a kurzor se škáluje s ní. (e) Ukázka míchá **skutečné fotky a záběry** s UI,
+  přesně náš případ (rendry BMW + UI).
+- **Vyvarovat se**: liquid glass s `feDisplacementMap` a chromatickými hranami je na CPU drahý a duhové okraje prozrazují AI (G7): **sklo jen
+  zjednodušené** (rozmazaný klon scény za kartou + 1 px světlý okraj), nikdy přes vůz. Zákazy z promptu převzít: prolínačky, „blur-in“,
+  „developing“ jasu, 3D flipy, částice, záře, držení > 1 s. **Zúžení wordmarku (osa wdth) na BMW logo nepoužít** (logo se nedeformuje).
+  Zaplavení kratší než ~0,3 s nebo bez přesahu rohů = probliknutí (pasti z promptu).
+
+**M4 Výkon: [White ball UI motion loop](https://prompt-motion.com/rossaxbt-94583b)** (@rossaxbt, `rossaxbt-94583b`, lajky neuvedeno; **1920×1078 16:9, 120 BPM**).
+- **Převzít**: **posuvník s bublinou hodnoty nad knobem, číslo se počítá z polohy knobu** a bublina drží nad knobem až do cíle; modrá výplň dráhy
+  přilepená ke knobu, pod dráhou ryska po rysce, která se rozsvítí, když ji knob mine. U nás **0 → 250 km/h** na drop 2 (16,0–~17,5), cílová
+  hodnota přesně „250 km/h“, mezihodnoty jen jako rolující číslice v pohybu (stejně jako počítadlo na bmw.cz). Po dosažení cíle **3 karty, každá
+  na svou dobu**: „250 km/h“ · „0–100 km/h in 5.7 s“ · „230 kW“ (jen tato fakta, viz odpovědi režiséra). **Jeden svět, jedna kamera** (pozice +
+  log zoom), kamera sleduje prvek, který nese pohyb. Dopady přesné, krátký squash jen u UI prvku (ne u vozu). Každý kontakt = tichý UI zvuk.
+- **Vyvarovat se**: tmavé plátno s tečkovou mřížkou (šablonový dojem), klávesnice a „míček“ (dětské), teleport prvku mezi komponentami
+  (vždy ukázat cestu), rozmazaný text při pohybu kamery, víc než malý překmit. Rychlostní čísla nikdy vymyšlená (C8): žádné „0–200“, „top speed reached 100 %“.
+
+**M5 UI řemeslo (kurzor, sklo, nájezdy): [Frame by Frame launch video](https://prompt-motion.com/notdwd-7de38a)** (@notdwd, `notdwd-7de38a`, lajky neuvedeno;
+1080², Apple-keynote „bílá, jasně modrá, skleněná“ = nejbližší paleta k bmw.cz).
+- **Převzít**: **každý záběr přijíždí už v pohybu** (exponenciální ease-out, každý snímek ujede ~12–19 % zbývající dráhy) a odjíždí zrychlením
+  nebo náběhem rozmazání, nikdy střih na stojícím snímku. **Kurzor jako postava**: černá macOS šipka s bílým okrajem, při letu se natočí
+  ke směru, zpomaluje do cíle, při najetí na cíl se zvětší (u nich ×1,55, u nás ×1,2–1,3 kvůli eleganci), stisk = zmenšení o ~15 % na 2–3 snímky
+  + kroužek akcentu kolem cíle. **Matná skleněná karta vyskočí pružinou zpod prvku, na který kurzor klikl** (šířka krátce přestřelí ~2–3 % a usadí se).
+  Psaní textu ~1 znak za snímek s občasným zdržením a stále viditelným kurzorem. Rozmazání vždy podle rychlosti a směru.
+- **Vyvarovat se**: end card „zoom smear“ + zářící wordmark na černé (uživatel chce jednoduché skládací logo na světlé end card),
+  modrý „sky“ gradient s čárovou kresbou, záblesk při švihu, prolínačky s rozmazáním. Lineární rolování textu.
+
+**M6 Luxus zdrženlivostí (kamera produktu, glint): [Taxtello bookkeeping app film](https://prompt-motion.com/daniel-haida-8691d4)**
+(@daniel_haida, `daniel-haida-8691d4`, lajky neuvedeno; 1920×1080; ve V002 jsme z něj brali typografii, tady **prémiovost**).
+- **Převzít**: „točíme fyzický prémiový předmět“: **kamera jako makro produktové natáčení** (pomalé dotlačení 1,00 → 1,04, paralaxa, hloubka
+  ostrosti jen střídmě a jen na pozadí / UI, ne „rozmazaný render“). Easing `cubic-bezier(0.16, 1, 0.3, 1)`, překmit **pod ~2 %**, „ruthless restraint“:
+  sebevědomí z ticha a prostoru. **Drobný teplý záblesk (glint)** jako drahý akcent, který odhalí značku nebo detail = u nás **jeden světelný přejezd
+  po chromu masky ledvinek / liště** (jen v masce karoserie, G7) na zlomu 10,0 nebo těsně před end card. Přechody přes objekty (hrana karty /
+  detail vozu otevře další scénu). První 1,5 s už musí vypadat draze. Hesla 2–4 slova, bez tečky (E8). Kontrolní otázka z promptu převzít:
+  „působí akcent draze, nebo jako barevná záplava?“ → modrá `#1C69D4` jen na aktivním prvku.
+- **Vyvarovat se**: zlatá barva Taxtella (u nás neutrální bílé / teplé studiové světlo), „fake glassmorphism everywhere“, každé slovo animované zvlášť,
+  „cartoon springiness“, tmavé dashboardové plátno (u nás světlé studio jako web BMW; tmavé jen v noční / výkonové části).
+
+**M7 Skládací logo (end card 22,0–25,0): [TypingMind logo reveal](https://prompt-motion.com/tdinh-me-815acb)** (@tdinh_me, `tdinh-me-815acb`, lajky neuvedeno;
+1920×1080; prompt je jedna věta, cenný je princip z videa; v poznatcích 6.2 doporučený pro logo).
+- **Převzít**: **pomalý přechod, který logo nejdřív poskládá a teprve potom odhalí**: nejdřív kontura, pak do ní dosedají díly, nakonec hotová značka
+  a vedle ní text. U nás z 9 vrstev v `znacka/logo/vrstvy/` (stejný viewBox, cesty beze změny): **prstenec** se uzavře (tah po obvodu) →
+  **čtvrtiny** se dotočí kolem středu do svých pozic (rotace kolem středu loga je u kruhové značky přirozená, ne deformace) → **B, M, W** dosednou
+  po řadě → **poslední díl dosedne přesně na úder 22,0** (nebo celé složení 22,0–23,0 po dobách, viz otázky) → klid + dotlačení 2–4 % do 25,0,
+  pod logem CTA a disclaimer „Concept ad · not affiliated with BMW“. Měkký dopad (SFX) na každé dosednutí, nejsilnější na 22,0.
+- **Vyvarovat se**: low-poly trojúhelníky, barevné střepy a díly přilétající z náhodných směrů (vypadá jako částice), záře, odlesk přes logo,
+  jakékoli škálování v jedné ose / squash, jiné barvy než `#0066B1` + `#6F6F6F` (+ bílé čtvrtiny na tmavém), psací stroj u wordmarku.
+  „Jednoduché“ = max. 3 kroky skládání, žádné efekty navíc (pravidlo uživatele 8).
+
+**Záloha (nepočítám do 7)**: [Prompt Motion site promo](https://prompt-motion.com/antonio-kodheli-490109) (@antonio_kodheli) pro zásadu
+„postav to jen ze skutečného produktu a jeho webu, citace doslova, žádné vymyšlené funkce ani čísla“ (= naše C8 a rozhodnutí o faktech)
+a pro kurzor s halo akcentu a tah zvýrazňovače. [Food craving launch film](https://prompt-motion.com/ultimaxbt-2ddf1e) (zaplavení přes rohy)
+jsme použili ve V002, tady ho nahrazuje M3.
+
+**Doporučené mapování na časovou osu** (návrh pro kreativního ředitele, rozhodne on):
+| čas | hudba | motiony | co je vidět (návrh) |
+|---|---|---|---|
+| 0,0–4,0 | úvod | M6 + M2 + M5 | snímek 0 = hotový render `g01` ve scéně (stage), pomalé makro dotlačení, kurzor přilétá už v pohybu, lišta konfigurátoru vyjede |
+| 4,0 | drop 1 | M1 + M2 | klik na „Design“: ukazatel přeskočí s natažením, scéna se rozšíří přes celý obraz (full-bleed), match-position na `g03` |
+| 4,0–10,0 | exteriér | M2 + M1 + M5 | `g03` → `g11` → `g05` kolo → `g09`, každý záběr navazuje polohou vozu, karta s faktem na dobu, kurzor ukazuje detail linkou |
+| 10,0 | zlom | M3 (c) + M6 | clona ze 6 lamel přes exteriér, otevře se do interiéru `g12`, ukazatel na „Comfort“, jeden glint po dřevu / chromu |
+| 10,0–14,0 | luxus | M6 + M5 | interiér `g12` / `g13` / kostka, pomalá kamera, skleněné karty s krátkými hesly, klid, ale událost na každou dobu |
+| 14,0–16,0 | stoupání | M3 (a) | návrat na `g03`, kurzor táhne posuvník „Lights“, noc `g04` se odkrývá s knobem, světla se rozsvítí na 15,5 |
+| 16,0 | drop 2 | M3 (b) + M1 | tvar vozu zaplaví obraz přes rohy (~0,3 s) a smrští se do noční výkonové scény, ukazatel na „Performance“ |
+| 16,0–22,0 | výkon | M4 + M2 | posuvník 0 → **250 km/h** (bublina nad knobem), pak karty „0–100 km/h in 5.7 s“ a „230 kW“ po dobách, otočka 360° se světly |
+| 21,5–22,0 | nádech | M2 | rendry / karty se sbíhají do středu a ustoupí |
+| 22,0–25,0 | end card | M7 | skládací logo na úder 22,0, světlé studio, CTA + disclaimer, dotlačení 2–4 % |
+
+**Pasti pro animátora** (z vybraných promptů + materiálů): otočka 360° má jen 36 snímků po 10°, pomalý plynulý turntable bude trhavý
+(jen rychlý oblouk s rozmazáním mezi sousedy, nebo krátký výsek na úder) · render zvětšovat max. ~1,3× (2560 px v 1080p) · zaplavení přes
+všechny 4 rohy a ≥ 0,3 s · text uvnitř měnícího se tvaru má vlastní masku · `will-change` ne na škálovaných prvcích · sklo jen jako rozmazaný klon
+scény (ne `backdrop-filter: url()`, Chromium čte posunovou mapu špatně) · kurzor na posledním snímku odpovídá stavu end card (ne smyčka, video končí logem).
+Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
+
+- **Odpovědi režiséra k motionům** (2026-11-01): skládací logo varianta **A** (21,0–22,0 po dobách, poslední díl přesně na úder 22,0, pak klid a dotlačení,
+  max. 3 kroky) · vůz v zaoblené scéně jen v úvodu a ve zlomu, na drop 1 a drop 2 přes celý obraz · „Design / Comfort / Performance“ jako vlastní
+  kapitoly je v pořádku, jinak v UI jen fakta · přechod do interiéru raději **přes objekt** (karta / hrana dveří, klidnější a luxusnější), clona jen
+  když má kreativní ředitel silný důvod · otočka 360° jen jako rychlý oblouk s rozmazáním na úder, žádný pomalý turntable · ukázková videa motionů
+  v `media/prompt-motion/videa_v003/` ponechat jako vizuální reference.
 
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
