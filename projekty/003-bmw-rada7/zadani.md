@@ -241,6 +241,13 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   nájezd dropu 1 na 1,11 stačí · zaplavení dál z knobu (rým konceptu) · nové tiché SFX pro 1,875 (ztlumení studia), 14,0 (knob na začátek dráhy)
   a lety kurzoru netřeba, světlomet v 15,0 kryje zvuk řazení.
 
+- **Odpovědi režiséra ke kolu 2** (2026-11-01, závazné pro opravy v3): (1) hranice noci **svázat přímo s knobem (±20 px)**, nikdy nepředběhne knob ani konec
+  dráhy (když je potřeba, prodloužit dráhu) · (2) **celoplošné ztlumení 1,875–2,6 zrušit**; na 2,000 úder: celý rozdíl zap − vyp (denní svícení i hlavní
+  světlomety) naskočí za 2 snímky, smí se jen mírně ztlumit pozadí studia (ne vůz, ne lišta) · (3) „YOUR PRIVATE LOUNGE“ **přesunout nahoru na světlý strop**
+  podle storyboardu, text nikdy přes produkt · (4) přechod do g13 ve 12,0: když nejde čistá maska podle siluety, **tvrdý střih na dobu 12,0 s dotlačením**
+  (realismus má přednost před efektem) · (5) drop 1 větší úder podle kreativního ředitele (stažení 1,00 → 0,94 v nádechu, pak rozšíření) · přesah vozu
+  do x ≈ 1060–1120 ve výřezech 16,5 a 20,0 je přijatelný (UI vůz nepřekrývá).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
