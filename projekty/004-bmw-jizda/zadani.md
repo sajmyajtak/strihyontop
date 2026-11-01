@@ -459,6 +459,19 @@ Nález kritika: průjezd 22,8 neodpovídal obrazu (vůz v D_3008 opouští obraz
   RMS 50 ms: stoupání 16,0 −16,2 → 16,5 −15,4 → 17,0 −11,1 → 17,5 −9,9 · **drop 2 18,0 −8,2** · jízda 18,5–25,0 −10,9 až −13,8 · logo 26,0 −9,9 · drop 1 4,0 −10,6;
   nejhlasitější efekt proti hudbě −1,5 LU / 100 ms. Mix se proti v1 liší jen v 6,56–7,7 a 19,1–23,3 s.
 
+## Zvuk v3 (zvukař, kolo 2 oprav, 2026-11-01)
+Nález kritika: karta 686 zněla na časech z v1, ale obraz v2 ji má celou v J_5232 (6,0–7,0, `ui.js` U_karta686: linka 6,14 · karta 6,25 · roll 6,25–6,72 ·
+lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). Stejný příkaz jako v1/v2, výstupy `sfx_v3.*`, **`zvuk_v3.wav`**, **`zvuk_bez_hudby_v3.wav`**,
+`zvuk_v3_master.m4a`, `sfx_log_v3.txt`, `spektrogram_v3.png`, `spektrogram_bez_hudby_v3_5.8-8.2.png`. Hudba i časování beze změny. 94 událostí (bylo 98).
+- klik 6,0 → **6,14** (bod vyskočí 6,12, linka 6,14) · sklo_pop 6,5 → **6,25** · ding 7,23 → **6,72** (stovky dosednou na 6 + lišta), doznění utne do střihu 7,0 ·
+  detent 7,75 → **6,84** (odchod karty, o 2 dB silnější, aby vystoupil z doznění dingu, utne 7,0).
+- **Tikání 686** podle `polohySloupcu` (roll 6,25–6,72, sloupce dosedají zprava doleva): místo 10 tiků přes střih 5 tiků **6,309 / 6,394 / 6,461** (stovky 1→2, 3→4, 4→5)
+  **· 6,532** (jednotky dosednou) **· 6,626** (desítky dosednou), rozestup ≥ 50 ms od sklo_popu i dingu; po 6,72 už žádný tik.
+- **Nově 7,15 `ev_prujezd_tesny`** (náběh přesně na střihu 7,0, vrchol 7,15 = střed boku před kamerou, panorama −0,4 → 0,8, vůz jede doprava; doběhne 7,55, záď ujede ~7,6), −6 LU.
+- **Naměřeno**: vrcholy 94/94 přesně (0,0 ms, změněné události ve stopě ≤ 0,2 ms); master po AAC **−13,8 LUFS / −1,6 dBTP**; pásma sub 19,8 · basy 31,0 · **středy 36,7** ·
+  2–6 kHz 8,2 · výšky 4,0 % (bez varování); RMS 50 ms: stoupání 16,0 −17,4 → 16,5 −15,2 → 17,0 −13,5 → 17,5 −10,4 · **drop 2 18,0 −7,9** · jízda 18,5–25,5 −12,4 až −13,8 ·
+  logo 26,0 −9,4 · drop 1 4,0 −10,5 · 6,0–8,0 −13,9 až −15,6; nejhlasitější efekt proti hudbě −1,5 LU / 100 ms (4,15, beze změny). Mix se proti v2 liší jen v 6,0–7,8 s.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|

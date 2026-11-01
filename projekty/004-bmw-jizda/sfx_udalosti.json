@@ -114,112 +114,85 @@
   "popis": "T3 střih H 44,80: kamera přeskočí hřeben (vzduch)"
  },
  {
-  "cas": 6.0,
+  "cas": 6.14,
   "typ": "klik",
   "lu": -11,
   "strop": -16,
-  "popis": "T4 dron J: bod na silnici vedle vozu (klik)"
+  "popis": "T4 dron J_5232: bod za zádí vyskočí (pružina 6,12–6,3) a vyrazí linka 6,14 (v3: bylo 6,0, obraz v2)"
  },
  {
-  "cas": 6.5,
+  "cas": 6.25,
   "typ": "sklo_pop",
   "lu": -11,
   "strop": -16,
-  "popis": "T4 karta Electric range (WLTP) 686 km vstoupí"
+  "popis": "T4 karta Electric range (WLTP) 686 km vyroste 6,25 (U_karta686.karta, v3: bylo 6,5)"
  },
  {
-  "cas": 6.5635,
+  "cas": 6.3094,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.0,
   "strop": -28,
-  "popis": "T4 rolování číslic 686 (1/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T4 rolování 686 (1/5): stovky 1→2 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.6152,
+  "cas": 6.3941,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.01,
   "strop": -28,
-  "popis": "T4 rolování číslic 686 (2/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T4 rolování 686 (2/5): stovky 3→4 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.6708,
+  "cas": 6.4613,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.02,
   "strop": -28,
-  "popis": "T4 rolování číslic 686 (3/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T4 rolování 686 (3/5): stovky 4→5 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.7245,
+  "cas": 6.532,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.03,
   "strop": -28,
-  "popis": "T4 rolování číslic 686 (4/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T4 rolování 686 (4/5): jednotky dosednou na 6 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.7826,
+  "cas": 6.626,
   "typ": "tik_cislo",
   "lu": -16,
   "ton": 1.04,
   "strop": -28,
-  "popis": "T4 rolování číslic 686 (5/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
+  "popis": "T4 rolování 686 (5/5): desítky dosednou na 8 (ui.js polohySloupcu, roll 6,25–6,72, ease-out cubic), rozestup ≥ 50 ms od sklo_pop i dingu"
  },
  {
-  "cas": 6.8353,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.05,
-  "strop": -28,
-  "popis": "T4 rolování číslic 686 (6/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
- },
- {
-  "cas": 6.8898,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.06,
-  "strop": -28,
-  "popis": "T4 rolování číslic 686 (7/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
- },
- {
-  "cas": 6.9453,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.07,
-  "strop": -28,
-  "popis": "T4 rolování číslic 686 (8/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
- },
- {
-  "cas": 6.9981,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.08,
-  "strop": -28,
-  "popis": "T4 rolování číslic 686 (9/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
- },
- {
-  "cas": 7.0955,
-  "typ": "tik_cislo",
-  "lu": -16,
-  "ton": 1.09,
-  "strop": -28,
-  "popis": "T4 rolování číslic 686 (10/10): přenos číslice ve sloupci (ui.js, ease-out cubic), rozestup ≥ 50 ms"
- },
- {
-  "cas": 7.23,
+  "cas": 6.72,
   "typ": "ding",
   "lu": -9,
   "strop": -16,
-  "popis": "T4 686 dosedne (první ostrý snímek 7,233) + modrá lišta"
+  "popis": "T4 686 dosedne (stovky dosednou na 6 v 6,72) + modrá lišta 6,72 (v3: bylo 7,23); doznění utne kosinový doběh do střihu 7,0 (na W_1788 žádná karta)",
+  "konec": 7.0
  },
  {
-  "cas": 7.75,
+  "cas": 6.84,
   "typ": "detent",
-  "lu": -14,
-  "strop": -22,
-  "popis": "T4 karta odchází do linky a bodu (tick)"
+  "lu": -12,
+  "strop": -19,
+  "popis": "T4 karta 686 odchází do linky a bodu 6,84 (U_karta686.odchod, v3: bylo 7,75); o 2 dB silnější, aby vystoupil z doznění dingu, utne se ve střihu 7,0",
+  "konec": 7.0
+ },
+ {
+  "cas": 7.15,
+  "typ": "ev_prujezd_tesny",
+  "lu": -6,
+  "pan": -0.4,
+  "pan_do": 0.8,
+  "pan_tau": 0.12,
+  "od": 7.0,
+  "strop": -9,
+  "popis": "T4 střih W_1788 7,0: těsný průjezd bokem za sloupy, vůz jede doprava (zrcátko 7,0 vlevo → záď ujede vpravo ~7,6); náběh na střihu 7,0, vrchol 7,15 = střed boku před kamerou (v3, nález kritika kolo 2)"
  },
  {
   "cas": 8.0,
