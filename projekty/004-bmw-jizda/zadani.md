@@ -102,6 +102,61 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   Žádné přebarvování cizí jízdy na bílou (riziko nerealistického vzhledu a nesouladu ledvinek M70). Tmavě modrou M760e a dvoubarevnou 740 nepoužívat
   (na první pohled jiný vůz). Pokud musí být všude přesně Alpine White, je to otázka na uživatele.
 
+## Test realistické jízdy (animátor, 2026-11-01)
+Výřezy 1920×1080, 60 fps, BT.709 v `media/projekty/004-bmw-jizda/test/` (+ pásy snímků `*_pas.jpg`), skripty a scény tamtéž (`skripty/`, `t_b_jizda.html`, `t_c_saas.html`).
+
+| varianta | soubor | délka | výpočet | verdikt |
+|---|---|---|---|---|
+| A. skutečné záběry BMW (stříbrná i7 60, `press_PF0010152`) | `t_a_jizda.mp4` | 4,0 s, 7 střihů na doby | **21 s** (ffmpeg, `skripty/test_a.sh`) | **nejrealističtější, jasná rychlost**; jiná barva a maska ledvinek |
+| B. 2,5D sledovací záběr z rendru `uhel_090` (Alpine White M70) | `t_b_jizda.mp4` | 4,0 s | maska BiRefNet 67 s + podklady 5 s + render **107 s** (`--sub 4`, ≈ 27 s na 1 s) | pohyb čte jako jízda, ale **je to poznat jako koláž**; jen krátce |
+| C. SaaS karta přes jízdu (dron 31,0–34,6 s) | `t_c_saas.mp4` | 3,0 s | snímky 3 s + render **46 s** (≈ 15 s na 1 s) | **funguje**, čitelné, nic přes vůz |
+
+**A. Skutečné záběry** (detail: `t_a_jizda_pas.jpg`, `t_a_interpolace_srovnani.jpg`, `t_a_grade_varianty.jpg`, `t_a_grade_srovnani.jpg`)
+- Zdroj: tiskové video 1920×1080, 25 fps, H.264 ~2,6 Mb/s, bez textu po 4,48 s (první střih po titulní kartě), bez vodoznaku → ořez do 16:9 není potřeba.
+  Komprese je vidět jen v tmavých plochách (stín pod vozem), na 1080p přijatelné. Web bmw.cz má jen 720p (zvětšení 1,5×) → tisková videa mají přednost.
+- **Převod na 60 fps**: zrychlení **1,2×** (25 × 1,2 = 30 fps) + zdvojení snímků = **přesná kadence 2:2** (změřeno: každý zdrojový snímek přesně 2×).
+  Při 1,0× vychází nepravidelná kadence 2/3 (trhání při panorámování). Interpolace `minterpolate` (4 min výpočtu na 4 s) **trhá předek vozu na bloky**,
+  prolínání (`framerate`) dělá **dvojitá kola** → obojí nepoužívat. Zrychlení 1,2× je v rychlých záběrech nepoznatelné a rychlost přidá; čistá kadence vychází
+  jen při 1,2× (2:2) a 2,4× (1:1, 60 fps); 1,5× = 37,5 fps → opět nepravidelná (vizuálně netestováno). Pro zpomalení nic: 25 fps materiál zpomalit nejde bez interpolace.
+- **Nejlepší jízdní záběry** (zdroj s → výřez, kde není vidět čelní maska): 7,30 nízko u předního kola (bok, nejsilnější rychlost) · 22,25 střecha nad
+  silnicí · 40,30–41,5 záď zezadu shora (sledovací) · 23,75 nakloněný průjezd bokem · 44,95 průjezd střechou · 50,45–51,1 průjezd bokem s rozmazáním ·
+  31,0–34,6 dron nad vozem (vůz se vzdaluje do horské silnice, levá třetina volná pro UI). Střihy 0,5 / 1,0 s na doby 120 BPM drží energii (C7).
+- **Barevné sjednocení**: grade „high-key“ (`eq=saturation=0.7`, teplé výšky, křivka zvedající světla) posune stříbrnou **shora a zezadu skoro k Alpine White**,
+  sjednotí s teplými světlými rendry. Bokem a zepředu zůstane stříbrná metalíza + chromový rámeček ledvinek (náš M70 má černou M mřížku) → tyto úhly
+  krátce nebo vůbec. Černá skleněná střecha i7 60 sedí s konfigurací. Přebarvování v masce jsem netestoval (riziko nerealistického vzhledu, analytik nedoporučil).
+- Skripty: `skripty/test_a.sh VYSTUP RYCHLOST GRADE dup|mint|blend` (seznam záběrů `SHOTS`).
+
+**B. 2,5D sledovací záběr z rendru** (`t_b_jizda_pas.jpg`, podklady `podklady/`, skripty `skripty/masky.py`, `skripty/podklady_b2.py`)
+- Postup: `uhel_090` (svítí světla) vyříznutý BiRefNet (složení vs. originál 0,16/255), kola jako otáčivě rozmazané sprity (střed a poloměr změřeny
+  fitováním leštěného ráfku: přední 576/993, zadní 1873/995, pneu r≈146 px; spodek pneumatiky doplněn zrcadlem, jinak se zářez masky točí s kolem),
+  pozadí ze 3 vrstev tiskové fotky P90636154 (město = téměř stojí, zeleň + svodidlo 0,36×, silnice 1,05× rychlosti vozu), valení kol přesně podle dráhy,
+  nástup výkonu na dobu 2,0 (+30 % rychlosti, záď dosedne, otřes), pérování a otřes ze seedovaného šumu, odlesky ubíhající po laku jen v masce,
+  světlo prostředí (obloha shora, silnice zdola) násobením v masce, kontaktní stín ze studia + měkká elipsa, vinětace a zrno.
+- **Poctivě: působí to jako koláž**, i když pohyb sám o sobě jízdu čte. Prozrazuje to: (1) vůz má rovnoměrné studiové světlo, pozadí ostré slunce
+  (bez směru světla a tvrdého stínu na voze); (2) dokonale ostrý bok v ortografickém pohledu bez perspektivy sledovací kamery; (3) silnice je beztvará
+  šmouha (zrcadlená šikmá čára dělala „stříšky“, musela pryč), skyline jako kulisa; (4) kola jsou uvěřitelná, ale rozmazaný ráfek je tmavší než ve skutečných záběrech.
+  Kritik by B jako hlavní jízdu neschválil (kritérium 3 „žádná koláž“). Použitelné **jen na ≤ 1 s** jako rychlý střih mezi skutečnými záběry
+  (např. „náš“ vůz bokem na úderu), nebo s tmavým / nočním pozadím, kde se rozdíl světla schová.
+- Výkon: 27 s výpočtu na 1 s videa (`--sub 4`), canvas bez `filter: blur`, šmouhy předem v podkladech.
+
+**C. SaaS motion přes jízdu** (`t_c_saas_pas.jpg`)
+- Bílý bod s modrým středem vedle levé hrany vozu (sleduje vůz podle klíčových snímků změřených po 0,25 s, leží ve stínu, **nikdy na karoserii**) →
+  linka 1 px → karta (rádius 24, okraj 1 px `#E6E6E6`, dvouvrstvý stín) roste z konce linky pružinou 3 %, rolující číslice **0–100 km/h 3.8 s**
+  s modrou lištou (akcent `#1c69d4` jen na akci), kroužek na dokončení (1,5), na dobu 2,0 morf štítku maskou na **Top speed 250 km/h**, odchod
+  do linky a bodu (ease-in). Fakta doslova z konfigurátoru. Karta stojí (neplave s vozem), pohyb vozu nese linka.
+- Čitelnost: bílá karta na hnědém terénu výborná, text Manrope 300 / 500 v bezpečné zóně. Rolující číslice při rychlém přetočení na pár snímků
+  rozmazané (odpovídá odometru, po dosednutí ostré). Pozadí: snímky 30 fps s hranicí posunutou o 1/120 s, aby podsnímky závěrky nemíchaly dva snímky zdroje.
+
+**Doporučení (nejrealističtější jízda s vozem uživatele)**
+1. **Jízdu a rychlost nést skutečnými záběry stříbrné i7 60** (A) v úhlech, kde barva a maska splývají: shora / dron, zezadu, bokem v rozmazání,
+   detail kola, střecha. Vždy 1,2× + zdvojení snímků, grade „high-key“, střihy na doby 0,5–1,0 s. Čelní pohledy (chrom ledvinek) vynechat.
+2. **Vůz uživatele (Alpine White M70) ukazovat jen v rendrech konfigurátoru** tam, kde má stát nebo se představit (odhalení, rozsvícení světel,
+   detail kola 909 M, salon), ne jako jedoucí. 2,5D jízdu z rendru (B) nanejvýš jako ≤ 1s střih na úder.
+3. **SaaS vrstvy (C) přes skutečné jízdní záběry s volnou třetinou obrazu** (dron 31,0–34,6, záď 40,3, průjezd 44,95): bod + linka + karta, čísla
+   z konfigurátoru (3.8 s, 250 km/h, 680 hp / 500 kW, 686 km). Karta přes střih může zůstat jako spojka záběrů.
+4. Kombinace pro 30 s: skutečná jízda ≥ 40 % délky (kritérium 2) + rendry pro odhalení a salon + SaaS karty přes jízdu. Rozpor „jiná barva při jízdě“
+   je otázka na uživatele (viz Rozhodnutí režiséra).
+
 ## Režijní list
 - **Koncept jednou větou**: (doplní kreativní ředitel)
 
@@ -117,6 +172,7 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
 |---|---|---|---|
+| workflow podklady (2 agenti: analytik materiál, animátor test) | 446 446 | 214 | 61,6 min |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
