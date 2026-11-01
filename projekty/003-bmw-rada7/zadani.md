@@ -676,6 +676,8 @@ a provedení dropu 2 (tma → světla). Ověřit hned na klíčových snímcích
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
 | příprava | analytik ∥ zvukař → analytik ∥ animátor → kreativní ředitel → oponent → revize | rendry z konfigurátoru, fakta, logo ve vrstvách, hudba luxsport, 7 motionů, test realismu, koncept ONE CONTROL | oponent: realismus 8, energie 6,5, celkem 7,5 → revize 11 oprav | drop 2 tma → světla, výkon střih na každou dobu, noční grading, kostka interiéru, úvod v pohybu |
+| výroba | zvukař ∥ animátor (kostra a klíčové snímky → neschváleno 7,8 / realismus 7,5 / energie 7,5 → 8 oprav → bloky B1, B2, B3 → render) | SFX 77 → v1b 82 (režisér posunul na obraz), render v1 | – | kolize klíčů CASY (C036) |
+| 1 | technika · wow · zadání | kontrola V003_v1 | **BLOKUJÍCÍ** (259 km/h), wow 7,5 / realismus 8 / energie 6,5 | mrtvé úseky 1–3,75 a 9–10, noc neodkrývá knob, šedý noční lak, duchové u rychlých pohybů, přechod do loga |
 
 **Zvuk v1 (zvukař, 2026-11-01)**: 77 SFX podle storyboardu (sloupec zvuku + Změny po oponentuře) ze `projekty/003-bmw-rada7/sfx_udalosti.json` → `media/…/zvuk/sfx.wav|json`, `zvuk_v1.wav`,
 `zvuk_bez_hudby_v1.wav`, `sfx_log.txt`, `zvuk_v1_master.m4a`, `zvuk_bez_hudby_v1_stejny_zisk.m4a`, spektrogramy. `hudba.wav` ani časování beze změny. Příkaz:
