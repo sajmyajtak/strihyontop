@@ -96,6 +96,11 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   ochlazení studia i na tváři M70 ano (jedno studio) · bod u karty 686 km dát **před vůz do bezpečné zóny** (UI nikdy u okraje x > 1824) ·
   **stejný úsek záběru se ve videu nesmí opakovat** (X_0448 je buď v 7,0–8,0, nebo v 25,0–25,75, ne v obou; blok 2 to ověří a případně použije jiný čistý záběr).
 
+- **ROZHODNUTÍ REŽISÉRA k rozporu kritiků (kolo 1, závazné)**: rolující čísla smí cestou ukázat jen hodnoty **horší** než fakt, nikdy lepší:
+  rychlost a výkon rostou zdola (0 → 250 km/h, 0 → 500 kW), **zrychlení klesá shora** (9.9 → 3.8 s), dojezd roste zdola (0 → 686 km). Konečná hodnota přesně.
+  Kritik to nehlásí jako chybu. Dál platí: **stejný úsek záběru se nesmí opakovat** (X_0448 jen jednou, v kole 1 porušeno), bod nikdy na karoserii
+  a vždy v bezpečné zóně, číslice bez schodovitých ozvěn (C040: rozmazání v kódu, ne kopiemi).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
@@ -443,6 +448,8 @@ a `nahled.jpg` (první / střed / konec), přehled všech `_prehled_1–4.jpg`, 
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
 | příprava | analytik → animátor test → kreativní ředitel → oponent (revize) | materiál BMW, test jízdy, koncept „Bod, který nepustí vůz“ | oponent: původně jízda 7 / realismus 6 / energie 7,5 → po revizi odhad 9 / 9 / 9 | vyřazeny záběry s čelními chromovými ledvinkami (A 8,30, dron E), drop 2 silnější, ponor do střechy skutečnou kamerou |
+| výroba | zvukař ∥ střihač (32 záběrů) → animátor klíčové snímky (neschváleno 7,6) → blok 1 s opravami → blok 2 + render + zvuk | render v1, mix v1b (elektrický motiv, režisér) | – | – |
+| 1 | kritik · kreativní ředitel | kontrola V004_v1 | kritik **BLOKUJÍCÍ** (bod na karoserii 7,4–8,0), wow 7,3 / jízda 7,5 / realismus 7,5 / energie 7 | opakovaný záběr X_0448, ozvěny číslic (C040), slabý výbuch stop dropu 2, statický úvod 1,5–3,9 a end card, 250 km/h nad prázdnou silnicí, hrana rendru 10,5 |
 
 ## Chyby během výroby
 
