@@ -59,6 +59,13 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   **Rozpor**: žádný záběr jízdy v Alpine White / M70 neexistuje → otázka na uživatele (jízda stříbrné i7 z tiskového filmu vs. jen vůz uživatele
   v rendrech), odpověď sem.
 
+- **ROZHODNUTÍ UŽIVATELE (2026-11-01, odpověď „1“ na varianty 1/2/3)**: **varianta 1**: jízdu a rychlost nesou **skutečné záběry stříbrné i7 60**
+  z tiskového filmu press_PF0010152 (high-key grade, 1,2× se zdvojením snímků na 60 fps, převážně shora / zezadu / bokem v rozmazání / dron / u kola,
+  **bez čelních pohledů s chromovými ledvinkami**). **Vůz uživatele (Alpine White i7 M70)** v rendrech konfigurátoru: odhalení, rozsvícení světel
+  (pár vyp / zap), detail kola 909 M, předek s černou M maskou, salon (kostka 2000×2000, g12–g14, tmavá videa z kokpitu bmw.cz). 2,5D jízda z rendru
+  jen jako střih do 1 s nebo vůbec. SaaS motion graphics přes jízdu (test C) podle 4 předloh, barvy bmw.cz. Fakta: 500 kW (680 k) → anglicky
+  „680 hp“ ne (převod k → hp), použít **500 kW**, **0–100 km/h in 3.8 s**, **250 km/h**, **686 km range (WLTP)**.
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
