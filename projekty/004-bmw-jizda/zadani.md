@@ -87,6 +87,11 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   stejným příkazem SFX (101 událostí, odchylka 0 ms), master −13,8 LUFS / −1,5 dBTP. Staré soubory ve `zvuk/zastarale_v8/` (C039).
   Odpovědi zvukaři: tikání číslic a dosednutí podle návrhu, po renderu je režisér případně posune na skutečné časy · logo −3,7 LU nechat (C032).
 
+- **Odpovědi režiséra ke klíčovým snímkům** (2026-11-01, závazné pro bloky): začátek kostky 12,0 pohledem nahoru s −3 EV ano · slot 7,0–8,0: **ne X_0448**
+  (opakoval by se v 25,0), použít **G_4088 nebo H_4508** (záď / shora, bez čelního pohledu) podle odpovědi režiséra střihači · slot 22,0–23,0 D_3008 + W_900 ano ·
+  podržený poslední snímek volantu pod vinětací ano · karta 21″ / 909 M nad kapotou s linkou vedle přídě, vůz 77 % šířky ano · karty na stopáži
+  bez stínu ano (G8 stín platí pro UI na neutrálním pozadí, ne přes video).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Vůz jede**: aspoň 40 % délky videa je vůz v pohybu (jízda, průjezd, rychlost) a divák to na první pohled pozná. Rychlost je cítit.
