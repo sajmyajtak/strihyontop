@@ -5,7 +5,7 @@
 | Datum zadání | 2026-11-01 |
 | Platforma / formát | **16:9, 1920×1080, 60 fps** |
 | Délka | **30,0 s** |
-| Stav | příprava: koncept a storyboard hotové (kreativní ředitel), čeká na oponenturu |
+| Stav | výroba (koncept po oponentuře schválen režisérem) |
 
 ## Zadání (doslova od uživatele)
 > není to ono ja jsem chtěl asi vybereš realistické auto jak vypada že animuješ aby to vypadalo realstické při ukázce auta i rychlosti výkonu a ty obrazky byly jen dopnění materialu. Udělej to na bmw : https://www.bmw.cz/cs/index.html (+ parametry kampaně)
@@ -71,6 +71,11 @@ ale uživatel ho 2026-10-30 zakázal; jiný generátor není. Nabídnuto povolen
   („Energy consumption combined 18.6 kWh/100 km · CO₂ 0 g/km“) · páčka BOOST z M760e **ne** (funkce u této konfigurace neověřená), použít zálohu
   (ruce na M volantu) · pilulky v salonu nikdy přes detail, který ukazujeme, ano · názvy výbavy **jen vlastní jména BMW** (BMW Iconic Glow,
   BMW Panoramic Vision, CraftedClarity), popisné překlady z češtiny nepoužívat.
+
+- **Odpovědi režiséra k oponentuře** (2026-11-01): doplněk W (web i7 driving_dynamics 8,40–10,80, 720p) na 8,25–10,0 **smí**, rozhodne klíčový snímek 9,5
+  (žádné čelní chromové ledvinky, nesmí působit jako CGI; jinak záložní plán z pasti 14) · karty výkonu: **první úkol animátora v bloku 2** je změřit
+  polohu vozu po 0,25 s v G 40,90–42,05, C 22,32–23,52 a D 29,20–30,40 a po snímcích ověřit, že karta nikdy nevjede na vůz · záblesky jízdy na 3,5 a 3,75
+  jako předzvěst **ano**.
 
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 30,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
@@ -308,7 +313,7 @@ zvednutá světla, sytost 0,7 u stopáže / dorovnaný kontrast u rendru) a **st
 7. **Barvy tenkého textu** (C041) a loga (C034) změřit v hotovém MP4; logo bez RGB posunu a bez deformace.
 8. **Moduly scény** (C036): klíče časů s prefixem bloku (`A_`, `B_`), regrese i uvnitř přechodů (3,983 / 4,0 / 4,017, 17,983 / 18,0).
 9. **Záblesky na úder** (C028): 2 snímky, ověřit ve výřezu s podsnímky, ne staticky.
-10. **Výkon renderu** (C027): změřit 1 s výřezu (nejtěžší úsek 16–18 s mřížkou 9 videí a 23,5–25 s maskou písmen). Videa v dlaždicích připravit
+10. **Výkon renderu** (C027): změřit 1 s výřezu (nejtěžší úsek 16–18 s mřížkou 9 videí a 23,0–25 s maskou písmen). Videa v dlaždicích připravit
     předem jako sekvence snímků ve velikosti dlaždice (žádné dekódování 720p videa při seek).
 11. **Zvuk** (C035, C039): SFX posunout na skutečné časy obrazu po stavbě, klíčové údery 4,0 / 18,0 / 26,0 měřit vrcholem; drop 2 nejhlasitější;
     17,75–18,0 hudba opravdu ztichne (automatika). Odvozené soubory při přegenerování smazat.
@@ -331,9 +336,40 @@ zvednutá světla, sytost 0,7 u stopáže / dorovnaný kontrast u rendru) a **st
    (zvukař souběžně: SFX podle sloupce zvuku, pak posun na skutečné časy).
 5. Kontrola: kritik + kreativní ředitel (wow, realismus, energie), opravy jeden animátor.
 
+### Změny po oponentuře (nezávislý kreativní ředitel, 2026-11-01)
+Ověřeno na snímcích zdroje po 0,1–0,3 s (`press_PF0010152` 8,30 / 11,0–12,8 / 21,7–24,95 / 28,6–30,5 / 31,0–34,5 / 39,97–42,0 / 44,5–45,4 / 50,8–51,4 / 52,3–55,6,
+web i7 7,8–11,0), na rendrech `uhel_030 / 090 / 000` a měřením jasu (YAVG). **Skóre původního storyboardu**: vůz jede 7 · realismus 6 · energie 7,5 ·
+nápad 8,5 · řemeslo 7,5 → **celkem 7,4**. **Po revizi (odhad)**: vůz jede 9 · realismus 9 · energie 9 · nápad 8,5 · řemeslo 8,5 → **celkem 8,8**.
+Seřazeno podle dopadu na „wow“:
+1. **Drop 1 (4,0): kolo → kolo nahrazeno střihem póza na pózu studio → silnice.** A src 8,30 má leštěné aero kolo i7 60 (r ≈ 230 px, ne 146) a předek
+   i7 60 s hranou chromových ledvinek na x ≈ 560–830, výřez ho neschová. Po kartě „909 M“ by divák na nejsilnějším místě viděl jiná kola. Nově: profil M70
+   ve studiu (0,79 nativu, oba kola se roztočí) → I src 50,80 (stejný profil, zadní kolo změřeno na (1275, 665), r ≈ 115), vůz „vyjede ze studia“.
+2. **Dron E (31,0–34,55) vyřazen celý.** Na 31,80 / 32,20 / 33,35 / 33,80 jsou ledvinky s chromovým rámem a svislými lamelami zepředu čitelné, a to
+   v 3,6 s dropu 2 pod všemi třemi kartami výkonu. Odporuje rozhodnutí uživatele (varianta 1 „bez čelních pohledů s chromovými ledvinkami“).
+   Karty teď stojí na G (zezadu shora), C (střecha shora) a D (protisvětlo), vždy **na stejném místě vlevo nahoře** (jedno místo pro fakta).
+3. **Drop 2 je teď silnější než drop 1.** Nejprudší dvojice záběrů (F průlet těsně kolem kamery → G záď hned za ním) přesunuta z dropu 1 do dropu 2;
+   původně drop 2 začínal H 44,80, kde je vůz jen pruh u spodní hrany. Světelné stopy z bodu jsou **maska, která průlet odkryje** (od 18,12 bez grafiky
+   přes vůz), 18,0–19,0 čtyři střihy = nejhustší místo videa, 18,0 nejhlasitější.
+4. **P4 ponor do střechy skutečnou kamerou** (B 12,20–12,80 sama přelétá nad černým sklem) místo digitálního zoomu 2,4× na C 22,70 (porušoval
+   vlastní limit 1,15× a rozbil by 1080p zdroj na bloky).
+5. **Háček 2,0–4,0 dostal pohyb a jízdu**: celý profil místo detailu jednoho kola, obě kola se roztáčejí, záblesky skutečné jízdy na 3,5 a 3,75
+   (5 snímků, trailerový flash cut), takže skutečný pohyb je v obraze už před dropem (V003: „vůz musí jet“).
+6. **Rozpočet materiálu**: po vyřazení A a E zbývá jen ~13,3 s čistého zdroje = 11 s výstupu. Řešení: rozpis úseků (každý jednou), písmena „i7 M70“
+   o dobu dřív (23,0, opakování v masce povoleno), doplněk W (web i7, sledovací záběr podél skály, 8,25–10,0) s pravidlem náhrady, když na 100 %
+   vypadá měkce (past 14). D 28,60 (vůz jako tečka) už nenese „jízdu“ v 9,0, jen světelný most P3.
+7. **Jas render ↔ stopáž** změřen: rendry YAVG ~200, stopáž ~60–130. Kritérium „skok > 10 %“ by nesplnil žádný přechod; nově se měří rozmazané snímky švihu
+   (≤ 15 %) a rozdíl se schovává ve švihu / světle, ne vyrovnáním (ztmavené rendry = „hliněný model“ z V003).
+8. **Odpovědi režiséra zapracovány**: páčka BOOST z M760e pryč (střed mřížky a skok 17,0 = ruce na M volantu), pilulky jen vlastní jména BMW
+   („BMW Iconic Glow“, „CraftedClarity“, „BMW Individual Merino“, karta „21″ / 909 M“, popisná pilulka volantu zrušena), spotřeba na end card.
+9. **Předlohy čitelnější**: souravbhar871 teď i na end card (nadpis mění řez 300 → 700 a prostrkání na dobu 27,5, zrcadlí háček), adamdesgns jedním
+   místem pro fakta a morfem štítku 500 kW → 3.8 s → 250 km/h, motiondsgnr mřížka 16–17,5 beze změny, lukasersil stopy jako odkrytí + pásy písmen + clona.
+**Beze změny (funguje)**: snímek 0 s rozsvícením ledvinek z rozdílu zap − vyp, karta 686 km na dronu J s punch-inem, P3 záře → odraz slunce, salon
+jako deska s dlaždicemi, mřížka 3×3, nádech 17,75 jen s bodem, bod → clona → prstenec loga, disclaimer.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
+| příprava | analytik → animátor test → kreativní ředitel → oponent (revize) | materiál BMW, test jízdy, koncept „Bod, který nepustí vůz“ | oponent: původně jízda 7 / realismus 6 / energie 7,5 → po revizi odhad 9 / 9 / 9 | vyřazeny záběry s čelními chromovými ledvinkami (A 8,30, dron E), drop 2 silnější, ponor do střechy skutečnou kamerou |
 
 ## Chyby během výroby
 
@@ -341,6 +377,7 @@ zvednutá světla, sytost 0,7 u stopáže / dorovnaný kontrast u rendru) a **st
 | agent / úkol | tokeny | akce nástrojů | čas |
 |---|---|---|---|
 | workflow podklady (2 agenti: analytik materiál, animátor test) | 446 446 | 214 | 61,6 min |
+| workflow koncept (2 agenti: kreativní ředitel, oponent s revizí) | 451 382 | 110 | 31,4 min |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
