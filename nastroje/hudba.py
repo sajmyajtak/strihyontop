@@ -1,12 +1,14 @@
 """Generátor hudby do pozadí: syntéza v kódu, naše vlastní (bez licencí), přesně na doby pro animaci.
 
 Použití:
-  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni|pohodova|sportovni --delka 20 --out hudba.wav
-        [--bpm 120] [--drop 4.0] [--konec 17.5] [--seed 1] [--zlom 15.0 --drop2 18.75 (jen sportovni)]
+  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni|pohodova|sportovni|luxsport --delka 20 --out hudba.wav
+        [--bpm 120] [--drop 4.0] [--konec 17.5] [--seed 1] [--zlom 15.0 --drop2 18.75 (jen sportovni a luxsport)]
   --drop   čas nástupu plné části (zaokrouhlí se na celý takt), předtím úvod a stoupání
   --konec  čas finálního úderu (end card), zaokrouhlí se na dobu; potom už jen doznívá
   --zlom / --drop2  (sportovni) zlom = jen pad + filtr + průjezd motoru, poslední takt před drop2 = stoupání; v JSON i „zlom“, „stoupani“, „drop2“
-Výstup: WAV 48 kHz stereo, přibližně −13 až −14 LUFS (jednoprůchodový loudnorm; sportovni lineárně: zisk na −14 LUFS + limiter
+                    (luxsport, V003) luxusní sportovní: zlom = klavír, Rhodes, smyčce, tlumený kopák; stoupání = riser, vír, nájezd
+                    motoru s řazením; drop 2 = výkon (nejsilnější), konec = úder na logo a doznění
+Výstup: WAV 48 kHz stereo, přibližně −13 až −14 LUFS (jednoprůchodový loudnorm; sportovni a luxsport lineárně: zisk na −14 LUFS + limiter
 −1,5 dBFS s kompenzací zpoždění, aby zůstala stavba úvod < jízda < drop 2; přesnou hlasitost řeší nastroje/master_zvuk.sh)
 pro synchronizaci animace (hudba.json vedle WAV). `udalosti_nastroju`: časy po swingu pro každý nástroj
 (kopák, malý buben / tlesknutí, hi-hat, marimba s notou, kytara, basa, Rhodes…), `nastup` = skutečný začátek zvuku.
@@ -429,6 +431,9 @@ NALADY = {
     # Závodní driving electro (V002): a moll, i–VI–III–VII, počítáno OD DROPU (drop, zlom → drop 2 i konec přistanou na Am),
     # takty před dropem C–G = „nádech“ do toniky. Struktura: úvod, drop, plná jízda, zlom (pad + filtr + motor), stoupání, drop 2, finále.
     "sportovni": dict(bpm=128, akordy=[(57, [0, 3, 7]), (53, [0, 4, 7]), (48, [0, 4, 7]), (55, [0, 4, 7])]),  # Am F C G
+    # Luxusní sportovní (V003, reklama na prémiový vůz): d moll, jízda i–VI–iv–III v barvách m9/maj9 (Dm9 Bbmaj9 Gm9 Fmaj9),
+    # počítáno OD DROPU. Takt před dropem, dropem 2 a koncem = dominanta A7sus4 → A7(b9) (napětí → tónika). Zlom Fmaj9 Bbmaj9 (teplo).
+    "luxsport": dict(bpm=120, akordy=[(50, [0, 3, 7, 10, 14]), (46, [0, 4, 7, 11, 14]), (43, [0, 3, 7, 10, 14]), (41, [0, 4, 7, 11, 14])]),
 }
 
 # Marimbový motiv nálady „pohodova“ pro každý akord: (doba v taktu, MIDI). Tři tóny po třech šestnáctinách (0; 0,75; 1,5 doby),
@@ -1029,6 +1034,381 @@ def aranzuj_sportovni(delka, bpm, drop, konec, zlom=None, drop2=None):
                            doby=doby, takty=takty, udalosti=udalosti, udalosti_nastroju=udalosti_nastroju)
 
 
+# ---------- luxusní sportovní nálada (prémiový vůz: elegance + tah, V003) ----------
+def kick_hluboky(vel=1.0, tlumeny=False):
+    """Hluboký čistý kopák: pokles 150 → 46 Hz, kulaté tělo, jemný klik 2–6 kHz, mírná saturace (harmonické 90–250 Hz nesou
+    kopák i z telefonu). `tlumeny` = kratší a měkčí, bez kliku (zlom)."""
+    n = int(0.5 * SR)
+    t = cas(n)
+    f = 46 + 104 * np.exp(-t / 0.03)
+    y = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / (0.12 if tlumeny else 0.2))
+    k = filtr(sum_(n) * np.exp(-t / 0.002), "bandpass", [2000, 6000]) * (0.04 if tlumeny else 0.22)
+    y = np.tanh(1.9 * (y + k)) / np.tanh(1.9)
+    if tlumeny:
+        y = filtr(y, "lowpass", 900)
+    return y * obalka(n, 0.0006) * vel
+
+
+def pila_v(f, faze0=0.0):
+    """Pila s PolyBLEP pro proměnnou frekvenci (pole Hz po vzorcích, vibrato)."""
+    dt = f / SR
+    p = (faze0 + np.cumsum(dt)) % 1.0
+    y = 2 * p - 1
+    m = p < dt
+    x = p[m] / dt[m]
+    y[m] -= x + x - x * x - 1
+    m = p > 1 - dt
+    x = (p[m] - 1) / dt[m]
+    y[m] -= x * x + x + x + 1
+    return y
+
+
+def smycce(noty, dur, jas=2600, vel=1.0, utok=0.35):
+    """Smyčcová plocha legato: tři rozladěné pily na tón, vibrato 5,3 Hz (±6 centů, nastupuje během 0,6 s), každý kanál jiné
+    fáze = šířka. Highpass 140 Hz (dno patří base). Vrací stereo."""
+    n = int((dur + 1.0) * SR)
+    t = cas(n)
+    vib = 1 + 0.0035 * np.sin(2 * np.pi * 5.3 * t + rng.random() * 6.28) * np.clip(t / 0.6, 0, 1)
+    out = np.zeros((2, n))
+    for ch in range(2):
+        s = np.zeros(n)
+        for m in noty:
+            for d in (-9, 0, 8):
+                s += pila_v(mtof(m) * 2 ** ((d + rng.normal(0, 2)) / 1200) * vib, rng.random())
+        out[ch] = filtr(filtr(s / (len(noty) * 3), "lowpass", jas, 2), "highpass", 140, 2)
+    return out * obalka(n, utok, None, dur, 0.8) * vel
+
+
+def sklo(noty, dur=0.2, vel=1.0, dozneni=0.35):
+    """Sklenitý stab: FM zvon (modulátor 2:1, index rychle klesá = jasný úder, pak čistý tón) + neharmonický „skleněný“
+    alikvot 4,07×. Kanály rozladěné ±4 centy = šířka. Nic nad ~12 kHz (C030). Vrací stereo."""
+    n = int((dur + dozneni * 4) * SR)
+    t = cas(n)
+    out = np.zeros((2, n))
+    for ch, cent in enumerate((-4, 4)):
+        for m in noty:
+            f = mtof(m) * 2 ** (cent / 1200)
+            y = np.sin(2 * np.pi * f * t + 2.0 * np.exp(-t / 0.07) * np.sin(4 * np.pi * f * t))
+            if f * 4.07 < 12000:
+                y += 0.22 * np.sin(2 * np.pi * f * 4.07 * t + rng.random() * 6.28) * np.exp(-t / 0.09)
+            out[ch] += y
+    return out / len(noty) * obalka(n, 0.001, dozneni, dur + dozneni, 0.3) * vel
+
+
+LUX_DOM = [(45, [0, 5, 7, 10]), (45, [0, 4, 7, 10, 13])]                # A7sus4 (doby 1–2) → A7(b9) (doby 3–4)
+LUX_UVOD = [(46, [0, 4, 7, 11, 14]), (43, [0, 3, 7, 10, 14])]          # úvod: Bbmaj9 Gm9 (pak dominanta)
+LUX_ZLOM = [(41, [0, 4, 7, 11, 14]), (46, [0, 4, 7, 11, 14])]          # zlom (luxus a pohodlí): Fmaj9 Bbmaj9
+LUX_TONIKA = (50, [0, 3, 7, 14])                                       # konec: Dm(add9)
+# Klavírní melodie podle akordu: {kořen: [(doba, MIDI, délka v dobách)]}. Psaná ručně: „nejvyšší tón akordu“ je ve všech akordech
+# A5 (společný tón), melodie by stála na jednom tónu (spektrogram V003: bordun 879 Hz). Úvod živější, zlom zpěvný.
+LUX_KLAVIR_UVOD = {46: [(0, 77, 1.0), (1, 69, 0.5), (1.5, 72, 0.5), (2, 74, 1.0), (3, 72, 0.5), (3.5, 69, 0.5)],    # Bbmaj9: F5 A4 C5 D5 C5 A4
+                   43: [(0, 74, 1.0), (1, 70, 0.5), (1.5, 74, 0.5), (2, 77, 1.0), (3, 74, 0.5), (3.5, 70, 0.5)]}    # Gm9: D5 B4 D5 F5 D5 B4
+LUX_KLAVIR_ZLOM = {41: [(0, 76, 1.5), (1.5, 79, 0.5), (2, 81, 1.0), (3, 79, 0.5), (3.5, 76, 0.5)],                  # Fmaj9: E5 G5 A5 G5 E5
+                   46: [(0, 74, 1.5), (1.5, 77, 0.5), (2, 72, 1.0), (3, 74, 0.5), (3.5, 69, 0.5)]}                  # Bbmaj9: D5 F5 C5 D5 A4
+LUX_KLAVIR_DOM = [(0, 76, 1.0), (1, 74, 0.5), (1.5, 69, 0.5), (2, 73, 1.0), (3, 76, 0.5), (3.5, 79, 0.5)]           # A7sus4 → A7b9: E5 D5 A4 | C#5 E5 G5
+
+
+def aranzuj_luxsport(delka, bpm, drop, konec, zlom=None, drop2=None):
+    """Luxusní sportovní hudba (V003, prémiový vůz). Části (časy na takty, konec na dobu):
+    ÚVOD (klavírní motiv, smyčce, shaker; poslední takt: tlumený kopák, vír, riser, obrácený činel), DROP 1 (úder + činel),
+    JÍZDA (hluboký kopák, tlesknutí + malý buben na 2 a 4, sub basa, Rhodes, smyčcové spiccato, sklenité staby),
+    ZLOM (luxus a pohodlí: klavír, Rhodes, smyčce s otevíráním filtru, jen tlumený kopák), STOUPÁNÍ (riser, vír, kopák
+    na každou dobu, nájezd motoru s řazením), DROP 2 (nejsilnější: výkon, motor, basa se zrnem, staby na každé „a“),
+    KONEC (úder na logo, tónika smyčce + klavír + sklo, doznění). Výchozí zlom a drop 2 jako u `sportovni`."""
+    doba = 60 / bpm
+    takt = 4 * doba
+    drop = max(takt, round(drop / takt) * takt)
+    konec = max(drop + takt, round(konec / doba) * doba)
+    zlom = round(((drop + konec) / 2 if zlom is None else zlom) / takt) * takt
+    drop2 = zlom + 2 * takt if drop2 is None else round(drop2 / takt) * takt
+    if not (drop + takt <= zlom < drop2 and drop2 + takt <= konec + 1e-6):
+        raise SystemExit(f"luxsport: musí platit drop + takt ≤ zlom < drop2 ≤ konec − takt (drop {drop}, zlom {zlom}, drop2 {drop2}, konec {konec})")
+    stoupani_od = max(zlom, drop2 - takt)
+    akordy = NALADY["luxsport"]["akordy"]
+    mx = Mix(delka)
+    kicky = []
+    hraje = []
+    vel = lambda z=0.85: float(np.clip(rng.normal(z, 0.05), 0.4, 1))   # noqa: E731
+    jit = lambda: rng.normal(0, 0.003)                                   # noqa: E731
+    udalosti = [{"cas": round(drop, 4), "typ": "drop"}, {"cas": round(zlom, 4), "typ": "zlom"},
+                {"cas": round(stoupani_od, 4), "typ": "stoupani"}, {"cas": round(drop2, 4), "typ": "drop2"},
+                {"cas": round(konec, 4), "typ": "konec"}]
+
+    def zapis(nastroj, kdy, nastup=None, **info):
+        u = dict(cas=round(kdy, 5), **info)
+        if nastup is not None:
+            u["nastup"] = round(nastup, 5)
+        hraje.append((nastroj, u))
+
+    def cast(tt):
+        if tt < drop - 1e-6:
+            return "uvod"
+        if tt < zlom - 1e-6:
+            return "jizda"
+        if tt < stoupani_od - 1e-6:
+            return "zlom"
+        if tt < drop2 - 1e-6:
+            return "stoupani"
+        return "finale" if tt < konec - 1e-6 else "konec"
+
+    def akord_v(tt):
+        """(kořen, intervaly) akordu v čase tt podle části; takt před dropem, dropem 2 a koncem = dominanta."""
+        b = int(np.floor(tt / takt + 1e-9))
+        t0 = b * takt
+        if any(abs(t0 + takt - x) < 1e-6 for x in (drop, drop2)) or (t0 + takt >= konec - 1e-6 and t0 < konec - 1e-6):
+            return LUX_DOM[0 if tt - t0 < 2 * doba - 1e-6 else 1]
+        c = cast(tt)
+        if c == "uvod":
+            return LUX_UVOD[b % len(LUX_UVOD)]
+        if c == "zlom":
+            return LUX_ZLOM[(b - int(round(zlom / takt))) % len(LUX_ZLOM)]
+        if c == "konec":
+            return LUX_TONIKA
+        return akordy[(b - int(round(drop / takt))) % len(akordy)]
+
+    pred_koncem = lambda tt: tt < konec - 1e-6                         # noqa: E731
+
+    def kopak(tt, v=1.0, h=0.5, tlumeny=False):
+        mx.pridej("bici", tt, kick_hluboky(v, tlumeny), h)
+        kicky.append(tt)
+        zapis("kopak", tt, tt, **({"tlumeny": True} if tlumeny else {}))
+
+    def tlesk(tt, h=1.0):
+        mx.pridej("bici", tt, clap(), 0.6 * h)
+        mx.pridej("bici", tt, snare(0.3, 0.1, 185), 0.3 * h)
+        mx.pridej("fx", tt, clap(), 0.2 * h)                           # do dozvuku (šířka, „drahý“ prostor)
+        zapis("maly_buben_tlesknuti", tt, tt)
+
+    def uder_na(tt, sila, h=0.5):
+        mx.pridej("fx", tt, impact(sila), h)
+        mx.pridej("bici", tt, cinel(2.4, 0.8), 0.3)
+        zapis("uder", tt, tt)
+        zapis("cinel", tt, tt)
+
+    def motor_na(tt, body, dl, h, **info):
+        mx.pridej("motor", tt, motor(body, dl, info.pop("pan_od", 0.0), info.pop("pan_do", 0.0), info.pop("obalka", None)), h)
+        zapis("motor", tt, tt, **info)
+        for (a, f1), (b_, f2) in zip(body, body[1:]):
+            if abs(a - b_) < 1e-9 and f2 < f1:                         # skok dolů = přeřazení
+                zapis("motor_radeni", tt + a, tt + a)
+
+    def vir(od, do, h_od, h_do, deleni=4):
+        k = int(round((do - od) / (doba / deleni)))
+        for i in range(k):
+            tt = od + i * doba / deleni
+            mx.pridej("bici", tt, snare(0.2, 0.05), h_od + (h_do - h_od) * (i / max(k - 1, 1)) ** 2)
+            zapis("vir", tt, tt)
+
+    def klavir_motiv(t0, vzor, h, levou=True):
+        if levou:                                                       # levá ruka: akord (bez kvinty nahoře) na těžkou dobu
+            k, iv = akord_v(t0)
+            lh = akord(k, iv, 55)[:3]
+            for m in lh:
+                mx.pridej("melodie", t0 + jit(), klavir(m, 3 * doba, vel(0.5)), h * 0.5, pan=-0.15)
+        k0_ = akord_v(t0)[0]
+        melodie = LUX_KLAVIR_DOM if akord_v(t0) == LUX_DOM[0] else vzor.get(k0_, [(0, akord(*akord_v(t0), 74)[-1], 2.0)])
+        for d, m, dl in melodie:
+            tt = t0 + d * doba
+            if not pred_koncem(tt):
+                break
+            mx.pridej("melodie", tt + jit(), klavir(m, dl * doba, vel(0.75 if d % 1 == 0 else 0.6)), h, pan=0.1)
+            zapis("klavir", tt, nota=nota(m))
+
+    def rhodes_na(tt, dl, h, v=0.65):
+        k, iv = akord_v(tt)
+        noty = akord(k, iv, 64)
+        for m in noty:
+            mx.pridej("klavesy", tt + jit(), rhodes(m, dl * doba, vel(v)), h)
+        zapis("rhodes", tt, akord=[nota(m) for m in noty])
+
+    def smycce_na(t0, dl, jas, h, utok=0.35, f_od=None, f_do=None):
+        k, iv = akord_v(t0)
+        noty = akord(k, iv, 62)
+        x = smycce(noty + [basovy(k, 72)], dl, jas, 1.0, utok)        # horní hlas = kořen v C5–B5 (D5 Bb5 G5 F5 A5), ne bordun A5
+        if f_od:
+            x = filtr_prubeh(x, f_od, f_do)
+        mx.pridej("harmonie", t0, x, h)
+
+    def spiccato(t0, deleni, h, oktava=0, jas_od=2400, jas_do=2400):
+        """Smyčcové spiccato (tah): osminy (deleni=2) nebo šestnáctiny (4) z kořene, kvinty a oktávy akordu v rozsahu D3–D4."""
+        kroky = int(4 * deleni)
+        for s in range(kroky):
+            tt = t0 + s * doba / deleni
+            if not pred_koncem(tt):
+                break
+            k, iv = akord_v(tt)
+            kor = basovy(k, 50)
+            m = kor + (0, 12, 7, 12)[s % 4] + oktava
+            mx.pridej("smycce", tt, ostinato(m, doba / deleni * 0.8, vel(0.9 if s % deleni == 0 else 0.7)), h, pan=(-0.35, 0.35)[s % 2])
+            zapis("spiccato", tt, tt, nota=nota(m))
+
+    def basa_na(tt, m, dl, h, zrno=0.0):
+        mx.pridej("basa", tt, sub(m, dl * doba, vel(0.92)), h)
+        if zrno:                                                        # výkon: distorzovaná vrstva (harmonické do středů)
+            mx.pridej("basa", tt, basa_dist(m, dl * doba, vel(0.9), 1400), h * zrno)
+        zapis("basa", tt, tt, nota=nota(m))
+
+    def staby(t0, doby_, h):
+        for d in doby_:
+            tt = t0 + d * doba
+            if not pred_koncem(tt):
+                break
+            k, iv = akord_v(tt)
+            noty = akord(k, iv, 74)[-3:]                                 # poloha kolem D5: horní tón se mění (F5 G5 E5…), ne stále A5
+            mx.pridej("lead", tt, sklo(noty, 0.15, vel(0.85)), h, pan=0.0)
+            zapis("sklo", tt, tt, akord=[nota(m) for m in noty])
+
+    for b in range(int(np.ceil(konec / takt))):
+        t0 = b * takt
+        if t0 >= konec - 1e-6:
+            break
+        c = cast(t0)
+        k, _ = akord_v(t0)
+        kb = basovy(k, 33)
+        dl_t = min(takt, konec - t0)
+        posledni_pred_dropem = abs(t0 + takt - drop) < 1e-6
+
+        dvoji = akord_v(t0) != akord_v(t0 + 2 * doba)                   # takt se dvěma akordy (dominanta sus4 → b9)
+        pulky = [(t0, 2 * doba), (t0 + 2 * doba, dl_t - 2 * doba)] if dvoji and dl_t > 2 * doba + 1e-6 else [(t0, dl_t)]
+
+        if c == "uvod":                                                 # luxusní odhalení: klavír, smyčce, shaker, lusknutí
+            podil = (b + 1) / max(int(round(drop / takt)), 1)
+            klavir_motiv(t0, LUX_KLAVIR_UVOD, 0.55)
+            if b == 0:                                                  # háček v 0,0 s: sklenitý akord + měkký kopák (B6)
+                sk = akord(*akord_v(0), 74)[-3:]
+                mx.pridej("lead", 0, sklo(sk, 0.3, 0.9, 0.7), 0.45)
+                zapis("sklo", 0, 0, akord=[nota(m) for m in sk])
+                kopak(0, 0.7, 0.3, tlumeny=True)
+            for od, dl in pulky:
+                smycce_na(od, dl, 1200 + 1600 * podil, 0.42, 0.25 if b == 0 else 0.15)
+            basa_na(t0, kb, 1.75, 0.3)
+            basa_na(t0 + 2 * doba, basovy(akord_v(t0 + 2 * doba)[0], 33), 1.75, 0.3)
+            for s in range(16):
+                mx.pridej("bici", t0 + s * doba / 4 + jit(), shaker(), 0.1 * (1.5 if s % 4 == 2 else 1) * vel(), pan=0.35)
+            for d in (1, 3):
+                if not (posledni_pred_dropem and d == 3):
+                    mx.pridej("bici", t0 + d * doba, snap(), 0.3, pan=-0.2)
+                    zapis("lusknuti", t0 + d * doba, t0 + d * doba)
+            if posledni_pred_dropem:                                    # nádech do dropu 1
+                for d in range(4):
+                    kopak(t0 + d * doba, 0.6 + 0.1 * d, 0.22 + 0.06 * d, tlumeny=d < 2)
+                vir(t0 + 2 * doba, t0 + 3 * doba, 0.05, 0.16, 4)
+                vir(t0 + 3 * doba, drop, 0.18, 0.36, 8)
+                mx.pridej("fx", t0, stoupani(takt, 0.6), 0.4)
+                mx.pridej("fx", drop - 2 * doba, reverse_cinel(2 * doba), 0.5)
+                zapis("obraceny_cinel", drop - 2 * doba, drop - 2 * doba, vrchol=round(drop, 5))
+
+        elif c in ("jizda", "finale"):                                  # jízda (drop 1) a výkon (drop 2, nejsilnější)
+            fin = c == "finale"
+            if abs(t0 - drop) < 1e-6:
+                uder_na(drop, 0.7, 0.4)
+            if abs(t0 - drop2) < 1e-6:
+                uder_na(drop2, 1.0, 1.15)
+                mx.pridej("bici", drop2, kick_hluboky(1.0), 0.3)          # zdvojený kopák = nejsilnější úder
+                dj = min(4 * doba * 2, konec - drop2)                   # motor v plné jízdě: dvě přeřazení nahoru, pak ustoupí
+                motor_na(drop2, [(0, 230), (2 * doba, 300), (2 * doba, 215), (5 * doba, 290), (5 * doba, 210), (dj, 260)], dj, 0.3, druh="jizda",
+                         pan_od=-0.3, pan_do=0.3, obalka=[(0, 1.0), (0.6, 0.75), (2.5, 0.5), (dj, 0.0)])
+            for d in range(4):
+                if pred_koncem(t0 + d * doba):
+                    kopak(t0 + d * doba, 1.0, 0.55 if fin else 0.5)
+            for d in (1, 3):
+                if pred_koncem(t0 + d * doba):
+                    tlesk(t0 + d * doba, 1.15 if fin else 1.0)
+            for s in range(16):
+                tt = t0 + s * doba / 4
+                if not pred_koncem(tt):
+                    break
+                if s % 4 == 2:
+                    mx.pridej("bici", tt, hat(True), 0.4 * vel(), pan=0.25)
+                    zapis("hihat", tt, tt, otevreny=True)
+                elif s % 2 == 0 or fin:
+                    mx.pridej("bici", tt + jit(), hat(), (0.28 if s % 2 == 0 else 0.18) * vel(), pan=0.25)
+                    zapis("hihat", tt)
+            for d, m, dl in [(0, kb, 1.25), (1.5, kb, 0.4), (2.5, basovy(akord_v(t0 + 2.5 * doba)[0], 33) + 7, 0.75), (3.5, kb + 12, 0.4)]:
+                if pred_koncem(t0 + d * doba):
+                    basa_na(t0 + d * doba, m, dl, 0.55, 0.35 if fin else 0.0)
+            for d, dl, v in [(0, 1.4, 0.7), (2.5, 0.9, 0.6)]:
+                if pred_koncem(t0 + d * doba):
+                    rhodes_na(t0 + d * doba, dl, 0.32, v)
+            for od, dl in pulky:
+                smycce_na(od, dl, 3400 if fin else 2600, 0.42 if fin else 0.36, 0.08)
+            spiccato(t0, 4 if fin else 2, 0.32 if fin else 0.28, oktava=12 if fin else 0)
+            staby(t0, (0.5, 1.5, 2.5, 3.5) if fin else (1.5, 3.5), 0.45 if fin else 0.35)
+            if abs(t0 + takt - zlom) < 1e-6:                            # do zlomu: obrácený činel (bez víru, klidně)
+                mx.pridej("fx", zlom - 2 * doba, reverse_cinel(2 * doba), 0.32)
+                zapis("obraceny_cinel", zlom - 2 * doba, zlom - 2 * doba, vrchol=round(zlom, 5))
+            if konec <= t0 + takt + 1e-6 and konec - t0 >= 2 * doba - 1e-6:
+                vir(konec - doba, konec, 0.12, 0.42, 8)                 # do konce (logo): vír + obrácený činel
+                mx.pridej("fx", konec - 2 * doba, reverse_cinel(2 * doba), 0.45)
+                zapis("obraceny_cinel", konec - 2 * doba, konec - 2 * doba, vrchol=round(konec, 5))
+
+        elif c == "zlom":                                               # luxus a pohodlí: klavír, Rhodes, smyčce, tlumený kopák
+            if abs(t0 - zlom) < 1e-6:
+                mx.pridej("bici", zlom, cinel(2.4, 0.9), 0.18)
+                zapis("cinel", zlom, zlom)
+            celkem = stoupani_od - zlom
+            p0, p1 = (t0 - zlom) / celkem, (t0 + dl_t - zlom) / celkem
+            klavir_motiv(t0, LUX_KLAVIR_ZLOM, 0.6)
+            rhodes_na(t0, 3.8, 0.26, 0.55)
+            smycce_na(t0, dl_t, 6000, 0.5, 0.4 if p0 == 0 else 0.1, 700 * 3 ** p0, 700 * 3 ** p1)   # filtr se otevírá 700 → 2100 Hz
+            kopak(t0, 0.8, 0.32, tlumeny=True)
+            kopak(t0 + 2.5 * doba, 0.65, 0.24, tlumeny=True)
+            for d in (1, 3):
+                mx.pridej("bici", t0 + d * doba, snap(), 0.22, pan=-0.2)
+                zapis("lusknuti", t0 + d * doba, t0 + d * doba)
+            for s in range(16):
+                mx.pridej("bici", t0 + s * doba / 4 + jit(), shaker(), 0.09 * (1.5 if s % 4 == 2 else 1) * vel(), pan=0.35)
+            basa_na(t0, kb, 3.4, 0.42)
+            basa_na(t0 + 3.5 * doba, kb + 12, 0.45, 0.25)
+
+        elif c == "stoupani":                                           # stoupání do dropu 2: riser, vír, nájezd motoru s řazením
+            for d in range(4):                                          # každá doba hlasitější než předchozí (C032)
+                kopak(t0 + d * doba, 0.75 + 0.08 * d, 0.3 + 0.09 * d)
+            for d in (1, 3):
+                tlesk(t0 + d * doba, 0.45 + 0.2 * d)
+            vir(t0, t0 + 2 * doba, 0.04, 0.14, 2)
+            vir(t0 + 2 * doba, t0 + 3 * doba, 0.16, 0.28, 4)
+            vir(t0 + 3 * doba, drop2, 0.3, 0.5, 8)
+            for i, (od, dl) in enumerate(pulky):
+                smycce_na(od, dl, 6000, 0.38 + 0.08 * i, 0.05, 900 * 2.5 ** i, 900 * 2.5 ** (i + 1))
+            spiccato(t0, 4, 0.3)
+            for s in range(8):                                          # pedál dominanty v osminách, sílí
+                basa_na(t0 + s * doba / 2, kb + (12 if s % 2 else 0), 0.4, 0.3 + 0.035 * s)
+            mx.pridej("fx", t0, stoupani(takt), 0.5)
+            mx.pridej("fx", drop2 - 2 * doba, reverse_cinel(2 * doba), 0.55)
+            zapis("obraceny_cinel", drop2 - 2 * doba, drop2 - 2 * doba, vrchol=round(drop2, 5))
+            motor_na(t0, [(0, 90), (doba, 180), (doba, 130), (2 * doba, 230), (2 * doba, 170), (takt, 310)], takt, 0.34,   # řazení na doby
+                     druh="najezd", obalka=[(0, 0.25), (takt, 1.0)], vrchol=round(drop2, 5))
+
+    # Konec (skládací logo): úder, kopák, tlesknutí, tónika Dm(add9) ve smyčcích, klavíru, Rhodes a skle, sub basa; doznívá.
+    zbyva = max(delka - konec, 1.0)
+    k0, iv0 = LUX_TONIKA
+    uder_na(konec, 0.75, 0.4)
+    kopak(konec, 0.9, 0.5)
+    mx.pridej("bici", konec, clap(), 0.5)
+    zapis("maly_buben_tlesknuti", konec, konec, jen_tlesknuti=True)
+    ton = akord(k0, iv0, 62)
+    mx.pridej("harmonie", konec, smycce(ton + [basovy(k0, 72)], zbyva, 2600, 1.0, 0.03), 0.45)
+    for m in akord(k0, iv0, 76) + [basovy(k0, 33) + 12]:
+        mx.pridej("melodie", konec + jit(), klavir(m, zbyva, 0.75), 0.45, pan=0.1)
+    zapis("klavir", konec, konec, akord=[nota(m) for m in akord(k0, iv0, 76)])
+    for m in akord(k0, iv0, 64):
+        mx.pridej("klavesy", konec + jit(), rhodes(m, zbyva, 0.6), 0.25)
+    sk = akord(k0, iv0, 74)[-3:]
+    mx.pridej("lead", konec, sklo(sk, 0.3, 0.95, 0.8), 0.5)
+    zapis("sklo", konec, konec, akord=[nota(m) for m in sk])
+    basa_na(konec, basovy(k0, 33), zbyva * 0.5 / doba, 0.5)
+
+    udalosti_nastroju = {}
+    for n_, u in sorted(hraje, key=lambda x: x[1]["cas"]):
+        udalosti_nastroju.setdefault(n_, []).append(u)
+    doby = [round(i * doba, 4) for i in range(int(delka / doba) + 1)]
+    takty = [round(i * takt, 4) for i in range(int(delka / takt) + 1)]
+    return mx, kicky, dict(bpm=bpm, doba=round(doba, 5), takt=round(takt, 5), drop=round(drop, 4), zlom=round(zlom, 4),
+                           stoupani=round(stoupani_od, 4), drop2=round(drop2, 4), konec=round(konec, 4), delka=delka,
+                           doby=doby, takty=takty, udalosti=udalosti, udalosti_nastroju=udalosti_nastroju)
+
+
 NASTAVENI_MIXU = {
     # bus: (hlasitost, dozvuk-send, sidechain)
     "vazna": dict(bici=(0.8, 0.12, False), basa=(0.7, 0.0, True), harmonie=(1.1, 0.35, True), melodie=(1.1, 0.45, False), fx=(0.5, 0.8, False), rt60=3.2),
@@ -1041,6 +1421,11 @@ NASTAVENI_MIXU = {
     # sportovní: výrazné „pumpování“ basy, arpeggia a stabů od kopáku (sidechain 0,6), suché bicí, motor bez dozvuku skoro nasucho
     "sportovni": dict(bici=(0.85, 0.04, False), basa=(0.3, 0.0, True), arp=(1.6, 0.22, True), lead=(1.4, 0.25, True),
                       harmonie=(1.4, 0.35, True), motor=(0.9, 0.12, False), fx=(0.5, 0.45, False), rt60=1.4, sidechain=0.6),
+    # luxusní sportovní: delší „drahý“ prostor (rt60 2,2), mírné pumpování (0,4) basy, smyčců a Rhodes, Rhodes s tremolem v osminách (4 Hz)
+    # (klavír je aditivní bez normalizace, proto melodie jen 0,3)
+    "luxsport": dict(bici=(0.85, 0.06, False), basa=(0.5, 0.0, True), klavesy=(0.6, 0.3, True), melodie=(0.3, 0.35, False),
+                     harmonie=(2.5, 0.4, True), smycce=(2.0, 0.25, True), lead=(1.8, 0.45, False), motor=(0.85, 0.12, False),
+                     fx=(0.7, 0.5, False), rt60=2.2, sidechain=0.4, tremolo=4.0, vysky_db=3, prezence=(1500, 4500, 5)),
 }
 
 
@@ -1137,8 +1522,8 @@ def main():
     ap.add_argument("--drop", type=float)
     ap.add_argument("--konec", type=float)
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--zlom", type=float, help="jen sportovni: začátek zlomu (breakdown), výchozí takt nejblíž středu mezi dropem a koncem")
-    ap.add_argument("--drop2", type=float, help="jen sportovni: druhý drop, výchozí zlom + 2 takty (poslední takt před ním = stoupání)")
+    ap.add_argument("--zlom", type=float, help="jen sportovni a luxsport: začátek zlomu (breakdown), výchozí takt nejblíž středu mezi dropem a koncem")
+    ap.add_argument("--drop2", type=float, help="jen sportovni a luxsport: druhý drop, výchozí zlom + 2 takty (poslední takt před ním = stoupání)")
     a = ap.parse_args()
     rng = np.random.default_rng(a.seed)
     bpm = a.bpm or NALADY[a.nalada]["bpm"]
@@ -1146,11 +1531,13 @@ def main():
     konec = a.konec if a.konec is not None else a.delka - 2.5
     if a.nalada == "sportovni":
         mx, kicky, info = aranzuj_sportovni(a.delka, bpm, drop, konec, a.zlom, a.drop2)
+    elif a.nalada == "luxsport":
+        mx, kicky, info = aranzuj_luxsport(a.delka, bpm, drop, konec, a.zlom, a.drop2)
     else:
         mx, kicky, info = aranzuj(a.nalada, a.delka, bpm, drop, konec)
     cesta = Path(a.out)
     cesta.parent.mkdir(parents=True, exist_ok=True)
-    uloz(mixuj(mx, kicky, a.nalada), a.delka, cesta, linearni=a.nalada == "sportovni")
+    uloz(mixuj(mx, kicky, a.nalada), a.delka, cesta, linearni=a.nalada in ("sportovni", "luxsport"))
     info["pasma"], info["oktavy_db"] = kontrola_pasem(cesta)
     cesta.with_suffix(".json").write_text(json.dumps(info, ensure_ascii=False, indent=1))
     print(f"{cesta}: {a.nalada}, {bpm} BPM, drop {info['drop']} s, konec {info['konec']} s, délka {a.delka} s")
