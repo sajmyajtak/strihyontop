@@ -465,6 +465,7 @@ Nález kritika: průjezd 22,8 neodpovídal obrazu (vůz v D_3008 opouští obraz
 | příprava | analytik → animátor test → kreativní ředitel → oponent (revize) | materiál BMW, test jízdy, koncept „Bod, který nepustí vůz“ | oponent: původně jízda 7 / realismus 6 / energie 7,5 → po revizi odhad 9 / 9 / 9 | vyřazeny záběry s čelními chromovými ledvinkami (A 8,30, dron E), drop 2 silnější, ponor do střechy skutečnou kamerou |
 | výroba | zvukař ∥ střihač (32 záběrů) → animátor klíčové snímky (neschváleno 7,6) → blok 1 s opravami → blok 2 + render + zvuk | render v1, mix v1b (elektrický motiv, režisér) | – | – |
 | 1 | kritik · kreativní ředitel | kontrola V004_v1 | kritik **BLOKUJÍCÍ** (bod na karoserii 7,4–8,0), wow 7,3 / jízda 7,5 / realismus 7,5 / energie 7 | opakovaný záběr X_0448, ozvěny číslic (C040), slabý výbuch stop dropu 2, statický úvod 1,5–3,9 a end card, 250 km/h nad prázdnou silnicí, hrana rendru 10,5 |
+| 2 | kritik · kreativní ředitel | kontrola V004_v2 (bod mimo karoserii, X_0448 jen jednou, číslice bez ozvěn, drop 2 svazek stop, úvod se záblesky jízdy) | wow 7,9 / jízda 8 / realismus 8 / energie 7,5, **BLOKUJÍCÍ: zrychlení roluje zdola (0,0 → 3,8), proti pokynu režiséra G9** | 250 km/h na už viděném záběru, statická end card, karta 686 krátká, prázdné obdélníky při odchodu karet |
 
 ## Chyby během výroby
 
