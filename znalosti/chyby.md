@@ -13,6 +13,18 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C041: Barva tenkého textu se po kódování posunula (2026-11-01, V003 v4, našel kritik zadání, opravil animátor)
+- Příznak: disclaimer #666666 (18 px) na teplém studiu #E7E2DC vycházel v MP4 jako (103, 99, 96); zdrojové PNG přesně 102/102/102.
+- Příčina: YUV 4:2:0 sdílí barevnou složku pro 2×2 pixely, tenké písmo převezme chromu z okolního teplého pozadí.
+- Oprava: mírně studenější zdrojová barva (rgb 98,105,110), v MP4 pak token ±2. Kompenzace se ladí na plném renderu, ne na výřezu (kodér má jiný kontext).
+- Prevence: v `animator.md`: barvy tenkého textu (≤ 20 px) na barevném pozadí měřit v hotovém MP4 a případně kompenzovat ve zdroji.
+
+### C040: Schodovité ozvěny čísla při dopadu ze špatně změřeného výchozího bodu (2026-11-01, V003 kola 1–3, opravil animátor v4)
+- Příznak: velké „250“ při letu z bubliny 17,93–17,95 ve dvou oddělených kopiích, kritici to brali jako laciný / AI znak.
+- Příčina: výchozí bod letu se počítal z rozměru DOM bubliny, která se v 17,935 skryje (offsetWidth 0), takže bod skočil o ~45 px. Nebyla to jen závěrka.
+- Oprava: výchozí bod změřen jednou při zobrazené bublině; rozmazání pohybem v kódu souvisle (SVG blur podle rychlosti), ne kopiemi.
+- Prevence: v `animator.md`: rozměry pro výpočet pohybu měřit jednou nebo z pevného stavu, nikdy z prvku, který se během pohybu skrývá.
+
 ### C039: Verze bez hudby vznikla ze zastaralého odvozeného souboru (2026-11-01, V003 kolo 2, našel kritik zadání)
 - Příznak: `V003_v2_bez_hudby.mp4` měla efekty z doby před posunem na skutečné časy obrazu (švih 20,95 místo 20,875, chybí 24,0 / 5,875 / 15,5).
   Hlavní verze byla v pořádku (ověřeno korelací s novým mixem, 0,998–0,9996).

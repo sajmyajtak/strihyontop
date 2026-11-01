@@ -248,6 +248,9 @@ Průvodce stylem SaaS motion: `znalosti/prompt-motion/poznatky.md` oddíl 11.
   (realismus má přednost před efektem) · (5) drop 1 větší úder podle kreativního ředitele (stažení 1,00 → 0,94 v nádechu, pak rozšíření) · přesah vozu
   do x ≈ 1060–1120 ve výřezech 16,5 a 20,0 je přijatelný (UI vůz nepřekrývá).
 
+- **Odpovědi režiséra k opravě v4** (2026-11-01): hlubší nádech 3,875–3,983 (~0,90) je v pořádku, drop 1 zůstává bit po bitu · kompenzace barvy disclaimeru
+  ve zdroji schválena (C041) · lounge x 172–600 (před opěrkou) stačí · oprava ozvěn rozšířená na 18,87 / 19,87 je správná (stejná funkce, C040).
+
 ## Akceptační kritéria pro kritika
 1. 1920×1080, 60 fps, 25,0 s ± 0,1 s, H.264 + AAC, BT.709; −14 LUFS ±1, true peak ≤ −1 dBTP (po AAC)
 2. **Realismus**: vůz je ve všech záběrech skutečný render BMW (ne kresba), bez artefaktů masky (lem, schody, „vystřižený“ okraj), bez natažených
