@@ -530,6 +530,20 @@ podklady z rendrů `scena/skripty/priprava.py` → `scena/podklady/`, klíčové
 - **Síla dropů** (snímky z MP4, `kontrolni/100`): drop 1 3,95 → 4,35 YDIF 38,7, změna expozice 1,06 EV · drop 2 15,983 → 16,40 YDIF 18,2, **2,0 EV**,
   jas 0,9 → 18,0, kontrast (std) 8 → 33 · 15,983 průměr 0,9 (≤ 12 ✓) · 16,017 max 255, 5 905 px > 235 (✓), karoserie 0 %.
   YDIF (průměrný absolutní rozdíl jasu) u odhalení z tmy do noční scény nemůže přerůst změnu na světlé scéně: drop 2 je silnější v expozici a kontrastu, ne v YDIF (otázka pro režiséra).
+- **Oprava klíčových snímků po řediteli (7,8, animátor 2026-11-01)**, výstup `scena/kontrolni_v2/` (100 %, 480 px, `vyrezy_100.jpg`, `mrizka/`):
+  (1) noční grade v2 `scena/skripty/noc_grade.py` (priprava.py už `_noc.png` nepíše): karoserie −0,4 EV (EV v hodnotách obrazu, jak měří kritik), g04 příď ±0 → záď −1,2 EV,
+  g02 radiálně od ledvinek −0,8 EV, spodních 20 % −1 EV, jasné odlesky ztlumené méně; studio nad linií podlahy #060606 + halo světlometů z rendru, pod ní podlaha
+  z rendru (22/255) v elipse světla před přídí, k okraji plynule do #060606 (okraj rendru přesně #060606), kontaktní stín z masky stínu. Naměřeno: kapota 64,
+  g04c příď 68 / záď 33, podlaha 100 px před nárazníkem 21,3 (16,40 i 17,02), mezi pneumatikami 1,0. Odlesk 18,0–18,75 = pás +15 % screen v masce laku
+  `g04_lak.png` (bílý lak z denního g03, váha na ramenní linii a kapotu, SPZ a ráfky mimo), ostré jádro ~110 px, smootherstep zezadu dopředu (ověřeno rozdílem: +32/255).
+  (2) tma 15,75–15,85 exponenciální ease-out, kurzor pryč do 15,85; průměr 15,85 / 15,90 / 15,983 = 0,6. (3) 16,0–16,5 `NOC.g02s` souměrně: střed ledvinek x 960,
+  vůz y ~80–804 (67 % výšky), dotlačení kolem středu vozu; bublina (od y 810) vozu nekoliduje. (4) 17,0 `NOC.g04c` = celek ×1,38 (0,883× nativního), příď x ≤ 987,
+  záď ~300 px mimo obraz (při ×1,38 a přídi ≤ 1000 to jinak nejde), pneumatiky y ~840; 18,0 zůstává menší záběr pod „250“. (5) drop 1: exponenciální ease-out k = 7
+  s předsunutím o půl snímku (start 3,9917), 4,05 = 55 %, 4,15 = 89 %, dosed 4,35 bez překmitu; okraje scény na spojitém čase (rozmaže je závěrka), vůz 4,0–4,15
+  na čase snímku (ostrý). (6) bublina plné krytí, celá do 16,33 (usazení, bez překmitu); hodnota i poloha bubliny na čase snímku (žádné duchy z podsnímků,
+  číslice ostré na každém snímku, na dobách zaokrouhlené); knob stojí od 16,25 na x 1064 a dráha se dotvoří kolem něj; knob okraj 1 px + neutrální stín.
+  (7) ukazatel na „Performance“ dosedne do 16,13 (obě hrany i výška), na 16,2 bez zdvojeného obrysu. (8) end card: vinětace předem ve float + jasový dither
+  rozmazaný ~1 px (sd 0,5/255, semínko), bílý šum ±0,5 x264 crf 16 smaže (reziduum schodů 0,73 → 0,57), rozmazaný 0,69 → 0,31.
 
 ### Otevřené otázky kreativního ředitele (rozhodne režisér)
 - ~~„5,395 mm“~~ vyřešeno: délka 5 395 mm je pro 740d potvrzená v technických údajích (Režijní list), zůstává jako kóta 7,0–8,0.
