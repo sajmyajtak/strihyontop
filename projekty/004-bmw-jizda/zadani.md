@@ -535,6 +535,14 @@ lišta 6,72 · odchod 6,84) a v 7,0–8,0 je W_1788 (těsný průjezd bokem). St
   s tvarem; rozostření odlesku plynule 14 → 0 px 22,1–22,2 (místo slábnutí, KŘ); zvuk v4d (84 událostí): tik 21,135 vypuštěn, vzduch vrchol 22,32, konec 22,46, lu −5
   → krátké ztišení před průjezdem 22,52 (RMS 40 ms: 22,36–22,44 ≈ −12,4 dB → průjezd −9,3 dB).
 
+## Kolo 7 a doručení (2026-11-02)
+- **Kolo 7** (1 agent, kritik, jen opravená místa v4d + regrese proti v4c): **SCHVÁLENO**, regrese žádná. Drobné: karta 686 se v 386 přerastruje o 0,4 px
+  (při prahu pohybu < 0,5 px je první ustálený 384 → klid 30 snímků, ding 6,40 přesně); průjezd 22,52 +3 dB nad ztišením před ním, +1,6 dB nad vrcholem vzduchu;
+  686 se odkrývá až po tvaru (3 snímky prázdný tvar při nástupu).
+- **Rozhodnutí režiséra**: „ustálený snímek“ = pohyb číslic < 0,5 px (stejně jako u 3.8 v kole 6, zapsáno do G9); kontrast průjezdu nad ztišením stačí;
+  nástup 686 nechat (G9 omezuje prázdný obdélník jen při odchodu). Další kolo by podle laťky nic nepřidalo → **doručit v4d**.
+- Konečné hodnocení: KŘ (kolo 6) **wow 8,4 / jízda 8,8 / realismus 8,3 / energie 8,5**, kritik (kolo 7) SCHVÁLENO.
+
 ## Chyby během výroby
 Zapsáno v `znalosti/chyby.md`: **C042** motiv V8 v hudbě elektromobilu (→ `--motor elektricky`) · **C043** animátor dvakrát nedodržel pokyn režiséra
 (opakovaný X_0448, zrychlení zdola) · **C044** náhradní záběr ze zakázaného úseku (L_0816) · **C045** zvuk nesledoval změny obrazu v opravném kole ·
@@ -551,7 +559,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | workflow kolo 4 (2 agenti: kritik, kreativní ředitel) | 275 046 | 99 | 11,3 min |
 | workflow kolo 5 (2 agenti: kritik, kreativní ředitel) | 311 587 | 114 | 11,8 min |
 | workflow kolo 6 (2 agenti: kritik, kreativní ředitel) | 243 323 | 94 | 11,9 min |
-| **součet pomocných agentů (26)** | **4 976 000** | **1 742** | **352 min** |
+| workflow kolo 7 (1 agent: kritik) | 178 666 | 76 | 17,6 min |
+| **součet pomocných agentů (27)** | **5 154 666** | **1 818** | **369,5 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
@@ -559,7 +568,10 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | v1 | 2026-11-01 | V004_v1.mp4 (interní) | první render, blokující bod na karoserii; wow 7,3 / jízda 7,5 / realismus 7,5 / energie 7 |
 | v2 | 2026-11-01 | V004_v2.mp4 (interní) | bod mimo vůz, bez opakování X_0448, svazek stop; blokující zrychlení zdola; 7,9 / 8 / 8 / 7,5 |
 | v3 | 2026-11-01 | V004_v3.mp4 (interní) | zrychlení shora, karty; KŘ schválil 8,2 / 8,5 / 8 / 8, kritik blokující L_0816 |
-| **v4** | 2026-11-01 | **V004_v4.mp4 → uživateli** + `_bez_hudby`, plakát 2,6 s (`V004_plakat.jpg`), `popisek.txt` | oprava režiséra: B_1280 místo L_0816, karta 686, odchod karty 21″, zvuk podle obrazu |
+| v4 | 2026-11-01 | V004_v4.mp4 (interní) | oprava režiséra: B_1280 místo L_0816, karta 686, odchod karty 21″, zvuk podle obrazu; KŘ 8,3 / 8,7 / 8,2 / 8,2, kritik OPRAVIT (G9 u všech karet) |
+| v4b | 2026-11-01 | V004_v4b.mp4 (interní) | G9 u všech karet, švih do 22,0, dingy; KŘ 8,3 / 8,8 / 8,0 / 8,4, oba: skvrna po masce odlesku |
+| v4c | 2026-11-01 | V004_v4c.mp4 (interní) | odlesk rozostřením, dingy na ustálení, nádech hudby; KŘ 8,4 / 8,8 / 8,3 / 8,5, kritik OPRAVIT (686 o 2 snímky) |
+| **v4d** | 2026-11-02 | **V004_v4d.mp4 → uživateli** + `_bez_hudby`, plakát 2,6 s (`V004_plakat.jpg`), `popisek.txt` | 686 klid 30 snímků, odkrytí obsahu karet, kontrast průjezdu; kritik SCHVÁLENO |
 
 ## Zpětná vazba (doslova)
 

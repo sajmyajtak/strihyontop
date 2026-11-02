@@ -121,7 +121,7 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **G9** **Rolující čísla** smí cestou ukázat jen hodnoty **horší** než fakt (rychlost a výkon rostou zdola, čas zrychlení klesá shora),
   nikdy lepší (V003: „259 km/h“, V004: „3.7 s“). Konečná hodnota přesně podle zdroje. Hotová hodnota stojí čitelně **≥ 0,5 s** (u všech karet,
   rolování radši krátké a dřív), při odchodu karty zůstane **plně krycí** prázdný obdélník nejvýš 2 snímky (následné stažení do bodu se nepočítá) (C046).
-  Zvuk „ding“ patří na **první ustálený snímek** hotové hodnoty (konec rolování, číslice už bez pohybu); když koliduje s jiným zvukem, posouvá se
+  Zvuk „ding“ patří na **první ustálený snímek** hotové hodnoty (konec rolování, pohyb číslic < 0,5 px); když koliduje s jiným zvukem, posouvá se
   ten druhý, ne ding (C047). Tiky jen na přenosy, které jsou na obrazovce vidět. `[V003, V004]`
 - **G8** **SaaS motion**: neutrální světlé pozadí, karty s 1px okrajem a měkkým dvouvrstvým stínem, jeden akcent jen na akci, kurzor změny
   způsobuje a nikdy jen nepluje, nejvýš 1–2 skleněné prvky a nikdy přes produkt (detail `prompt-motion/poznatky.md` oddíl 11.1). `[V003, PM]`
