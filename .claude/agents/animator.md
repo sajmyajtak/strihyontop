@@ -9,7 +9,8 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 
 ## Před prací přečti
 - zadání projektu `projekty/0xx-*/zadani.md` a režijní list od režiséra (koncept, storyboard, zvolený prompt nebo šablona)
-- `znalosti/pravidla-strihu.md` (hlavně E, F, G), `znalosti/znacka.md`
+- **`znalosti/strih-vzor.md`** (závazný vzor střihu: stavíš podle **partitury** ze storyboardu, jeden hrdina + jeden doplněk, proměny místo střihů)
+- `znalosti/pravidla-strihu.md` (hlavně D8–D12, E, F, G, H5), `znalosti/znacka.md`
 - `znalosti/prompt-motion/poznatky.md` (metoda, zakázané efekty, kvalitní prompty). **Oddíl 10 je naše hlavní kostra zadání**, režijní list z ní vychází.
 - vybraný prompt z prompt-motion (plný text v `media/prompt-motion/polozky.json` podle slugu) a jeho pasti
 - `znalosti/chyby.md`: známé chyby a jak jim předejít
@@ -18,6 +19,11 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 1. Pracuj v `media/projekty/0xx-nazev/`. Začni kopií `nastroje/vzory/scena.html`: easing (`easeOut`, `easeIn`, `pruzina` s výchozím překmitem 3 %, `usazeni` bez překmitu),
    `kf()` klíčové snímky, `nahoda(seed)`, `kamera(x, y, logZoom)`, `rozmazani(el, vx, vy)`, `?mrizka` = bezpečné zóny. Všechny časy patří do `CASY`, texty do `TEXTY`.
 2. Všechno je funkce času uvnitř `window.seek(t)`. Žádné CSS animace, `setTimeout`, `requestAnimationFrame` ani `Math.random` bez pevného seedu.
+   **Střih (strih-vzor.md)**: každý prvek má v partituře příchod / klid / odchod / spojku; výchozí příchod = z rozostření (Gauss + zblednutí 0,1–0,25 s),
+   odchod = do rozostření 0,05–0,2 s a kratší než příchod, nejlépe proměnou v další prvek (natažení do pilulky, smrštění do tečky, morf do loga).
+   V grafické vrstvě žádný tvrdý střih; mezi světy přechody ze zásobníku D11, každý jen jednou. Semínko na snímku 0 → logo → návrat do loga (D10).
+   Helpery `rozIn` / `rozOut` / `odometr` / `tah` / `wipePruhy` / `clonaKruh` / `explozeTecky` / maketa natočené obrazovky: když ve `vzory/scena.html`
+   chybí, přidej je při prvním použití (ověřené na výřezu) a nahlas režisérovi.
 3. Pohyb: příchod ease-out, odchod ease-in, UI pružina s malým překmitem, nic lineárně. Rozmazání podle rychlosti a směru u rychlých pohybů.
 4. Fonty načítat lokálně nebo z Google Fonts. Před renderem ověř, že se načetly (renderer čeká na `document.fonts.ready`).
 5. **Nejdřív kontrolní snímky**: `node nastroje/render_html.cjs --html … --dur N --nahled doby --bpm 120` (snímek na každou dobu) nebo `--nahled 0.5`,

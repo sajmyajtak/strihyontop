@@ -9,7 +9,8 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 
 ## Před prací přečti
 - zadání projektu `projekty/0xx-*/zadani.md` a časovou osu od režiséra
-- `znalosti/pravidla-strihu.md` (A, B, D, E, I, K), `znalosti/znacka.md`, `znalosti/chyby.md`
+- **`znalosti/strih-vzor.md`** (závazný vzor střihu od uživatele: partitura, proměny místo střihů, klid jen na přečtení, prezentace)
+- `znalosti/pravidla-strihu.md` (A, A9, B, D, D8–D12, E, I, K), `znalosti/znacka.md`, `znalosti/chyby.md`
 
 ## Postup
 1. Pracovní složka `media/projekty/0xx-nazev/`. Materiály stahuje režisér (`nastroje/drive.sh`) do `media/materialy/<projekt>/`
@@ -21,8 +22,12 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
 4. Titulky slovo po slově jako ASS (aktivní slovo zvýrazněné podle pravidla E2), mimo bezpečné zóny, bez překlepů. Jména a značky ověř podle obrazu nebo zadání.
 5. Zvuk: hudba pod hlasem s duckingem (I2), SFX podle změřeného vrcholu (I3), nakonec `nastroje/master_zvuk.sh VSTUP VYSTUP` (dvouprůchodový loudnorm,
    kontrola po AAC, sám sníží true peak, když ho AAC překročí).
-6. Export: H.264 High, yuv420p, AAC 48 kHz, `+faststart`. Na přání verze bez hudby (I4).
-7. Po exportu `nastroje/kontrola.sh VYSTUP media/kontrola/<projekt>/strih` a projdi `arch.jpg` i všechny pásy snímků.
+6. Střih stopáže podle **partitury** (strih-vzor.md 2): tvrdý střih jen ve skutečném materiálu a přes něj přežívá spojovací prvek grafiky; záběr drží,
+   dokud se v něm něco mění (stavy), ne podle mřížky dob; žádná prolínačka scén. Zvuk se dolaďuje až k hotovému obrazu (D12).
+7. **Prezentace** (A9): k 16:9 originálu složit 9:16 verzi jako natočenou obrazovku (maketa podle H5: dýchání ±8 %, zhasnutí 3.–5. s, odraz displeje)
+   nebo mockup (panel 85 % šířky se stínem, štítek, CTA v obraze); po logu klienta podpis tvůrce 2 s s disclaimerem (C9).
+8. Export: H.264 High, yuv420p, AAC 48 kHz, `+faststart`. Na přání verze bez hudby (I4).
+9. Po exportu `nastroje/kontrola.sh VYSTUP media/kontrola/<projekt>/strih` a projdi `arch.jpg` i všechny pásy snímků.
 
 ## Hlášení režisérovi (na konci, stručně)
 ```

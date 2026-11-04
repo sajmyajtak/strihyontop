@@ -6,7 +6,8 @@ všechno zapisuju a **každé další video stavím na všem, co jsem se naučil
 
 ## Na začátku každé session
 1. `bash nastroje/setup.sh` (yt-dlp, faster-whisper; ffmpeg, Node a Playwright jsou v systému)
-2. Přečíst `znalosti/pravidla-strihu.md`, `znalosti/znacka.md`, `znalosti/pouceni.md`, `znalosti/chyby.md` a `znalosti/prompt-motion/poznatky.md`.
+2. Přečíst **`znalosti/strih-vzor.md`** (závazný vzor střihu od uživatele, 2026-11-04), `znalosti/pravidla-strihu.md`, `znalosti/znacka.md`,
+   `znalosti/pouceni.md`, `znalosti/chyby.md` a `znalosti/prompt-motion/poznatky.md`.
 3. Pokud běží rozpracovaný projekt, přečíst jeho `projekty/0xx-*/zadani.md`.
 
 ## Když přijde předloha (odkaz nebo video)
@@ -27,7 +28,8 @@ Podřízení agenti (`.claude/agents/`): **analytik** (předlohy, výběr prompt
 **Pokyn uživatele (2026-10-30): na každý úkol vlastní agent a ostatní agenti se ptají hlavně hlavního agenta.**
 Tvorba videa běží jako **Workflow** (orchestrace více agentů). Každý agent vrací vedle výsledku i `OTÁZKY PRO REŽISÉRA`.
 Režisér je zodpoví sám, nebo, když jde o věc uživatele, se zeptá uživatele. Agenti se uživatele nikdy neptají přímo.
-**Laťka: „aby si řekl wow“.** Kreativní ředitel hodnotí koncept i hotové video 1–10. Pod 8 se video vylepšuje (v rámci max. 3 kol).
+**Laťka: „aby si řekl wow“.** Kreativní ředitel hodnotí koncept i hotové video 1–10 (energie 3×, **střih podle vzoru uživatele 3×**). Pod 8 se video vylepšuje (v rámci max. 3 kol).
+**Pokyn uživatele (2026-11-04): „zaměř se víc na střih a editaci… adaptuj se na tyhle střihy… nauč agenty, ať to umí.“** → `znalosti/strih-vzor.md` je závazný pro všechny.
 **Workflow agenti** (C018): `effort: 'high'` (ne max), velké výstupy (storyboard, scéna) psát **po částech** (kostra + malé Edit), jinak hrozí
 limit délky výstupu a desítky minut ticha. Ticho > 15 min → zkontrolovat poslední záznam agenta v `subagents/workflows/<run>/`.
 
@@ -47,7 +49,8 @@ V003 jich mělo 34 a 6,2 mil. tokenů):
    Když chybí něco, bez čeho video nejde (materiál, text, logo), zeptat se hned a jednou souhrnně. Ostatní rozhodnout sám a zapsat proč.
    **Web značky, který blokuje automatický přístup (403), se nikdy neobchází** (C024): oznámit uživateli, požádat o screenshot nebo soubory na Drive.
 2. **Režijní list** (do `zadani.md`): koncept jednou větou, prompt nebo šablona z prompt-motion (vyberu sám, nebo ten od uživatele),
-   použitá pravidla, storyboard po dobách nebo větách, akceptační kritéria pro kritika.
+   použitá pravidla, **storyboard jako střihová partitura** (`znalosti/strih-vzor.md` 2: stavy hrdiny, věta na scénu, příchod / klid / odchod / spojka),
+   akceptační kritéria pro kritika včetně kontrolního seznamu střihu (`strih-vzor.md` 6). Zvuk se skládá až k hotovému obrazu (D12).
 3. **Delegace**: animátor / střihač dostanou přesný úkol (co přečíst, kam uložit, kritéria). Nezávislé části běží paralelně.
 4. **Kontrola**: po každém renderu **kritik**. Dostane zadání a výstup, **ne** zdůvodnění autora.
 5. **Smyčka oprav**: drobné chyby opraví režisér rovnou, ostatní vrátí autorovi s nálezy kritika → znovu kritik.

@@ -11,9 +11,13 @@ rendrů / fotek výrobce, tak aby nikdo nepoznal, že video dělala AI. Oblíben
 kinetická typografie, produkt jako hrdina). Laťka: realismus + wow + energie.
 **Vkus uživatele (V003, 2026-11-01):** u aut **vůz musí jet** (pohyb, rychlost, jízdní záběry), statické rendry posouvané kamerou nestačí
 („není to ono“). Rendry a fotky jsou jen doplněk; hlavní materiál je skutečný pohyb. Kritici hodnotí, jestli divák vidí jízdu.
+**Vkus uživatele (V004, 2026-11-04):** „takhle není to špatný, ale zaměř se víc na ten **střih a editaci**… adaptuj se na tyhle střihy“ + 3 předlohy
+(R6, R7, R4 znovu). Střihem myslí **kvalitu přechodů**, ne počet střihů: jeden hrdina na obrazovce, stavy místo záběrů, proměny místo tvrdých střihů,
+vše z rozostření do rozostření, hlas nebo věta řídí střih, prezentace jako natočená obrazovka / mockup, podpis tvůrce na konci.
+**Závazný výklad je v `strih-vzor.md`** (při rozporu má přednost před tímto dokumentem).
 Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i výchozí zákazy (např. šmouhy v D2, záři v G2). Výjimku zapsat do zadání.
 
-**Zdroje:** `[R1]`–`[R5]` = rozbory v `reference/`, `[PM]` = prompt-motion.com (`prompt-motion/poznatky.md`),
+**Zdroje:** `[R1]`–`[R7]` = rozbory v `reference/` (R4, R6, R7 = předlohy střihu od uživatele, viz `strih-vzor.md`), `[PM]` = prompt-motion.com (`prompt-motion/poznatky.md`),
 `[V001]…` = poučení z našich videí (`pouceni.md`), `[obecné]` = profesní praxe, kterou zatím nepotvrdila reference ani zpětná vazba.
 
 ---
@@ -31,6 +35,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   a obraz je svisle vyvážený, bez prázdné poloviny (spodních ~400 px pro UI se nepočítá). Drobné změny (mezera 2 px, posun 4 px) na telefonu
   nikdo nevidí: stupňování musí být vidět na zmenšenině 270 px. `[V001 kontrola 1]`
 - **A7** Předlohu 16:9 nebo 1:1 pro 9:16 **přeskládat, ne oříznout**: řady pod sebe, kamera svisle, souřadnice přepočítat. 81 % katalogu prompt-motion je 16:9. `[PM]`
+- **A9** **Prezentace hotového videa**: animace 16:9 / 16:10 se pro reels nepřeskládává, ale ukazuje (a) jako **natočená obrazovka** (notebook natočený telefonem
+  na výšku, H5) nebo (b) v **mockupu** (panel se stínem 85 % šířky, štítek, CTA v obraze; dvojice panelů před/po). Dodává se 16:9 originál + 9:16 prezentace. `[R6, R7]`
 
 ## B. Háček (první 1–3 s)
 - **B1** Háček **v první sekundě**, obrazem i textem, ne až po úvodu. `[R2, R3, R4]`
@@ -55,17 +61,24 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **C5** Logo / showreel: krátká smyčka, ve videu zopakovaná 2–3×. `[R5]`
 - **C6** Konec = **end card** (logo, podpis, @jméno, CTA). Drží **1,5–3 s**, ve smyčce stačí 1–1,5 s, s jemným pohybem (dotlačení 2–4 %), nikdy zamrzlý obraz.
   Dlouhý podpis (~10 s, R3) jen u konceptů, kde end card nese text nebo manifest. `[R1, R3, R4, PM]`
+- **C9** **Podpis tvůrce**: u portfoliových videí po logu klienta: logo do rozostření → 0,2 s ticho → boom + bílý záblesk → end card tvůrce **2 s**
+  + disclaimer v obraze („Spec ad · not affiliated with …“); kamera i na end card dýchá. `[R6, R1]`
 - **C7** **Energie (vkus uživatele, V001)**: událost na **každou dobu**, nová myšlenka nebo scéna každých **~1–1,5 s**, aspoň jeden
   „úder“ (impakt, švih, záblesk, změna měřítka) na takt. Tempo hudby u energických zadání 120–140 BPM. Zpomalení jen jako krátký
   kontrast před dropem (max ~0,5 s). `[V001 zpětná vazba uživatele, R2, PM]`
+  **Upřesnění (V004, R6, R7)**: událost = **změna stavu hrdiny** (každých ~0,6 s), ne nový prvek navíc; energie z proměn, ne z počtu střihů a prvků (`strih-vzor.md` 1–2).
 - **C8** **Fakta a čísla nevymýšlet** (procenta, jména zákazníků, výsledky). Čísla jen ověřená od uživatele, jinak zjevně ukázková. Texty značky citovat doslova. `[PM]`
 
 ## D. Střih, rytmus, přechody
-- **D1** **Hlas řídí střih**: každá vizuální změna sedí na slovo nebo přízvuk, bez hlasu na dobu hudby. `[R2, R4, PM]`
+- **D1** **Hlas řídí střih**: každá vizuální změna sedí na slovo nebo přízvuk; **obraz předbíhá slovo o 0,1–0,35 s**, nikdy nezaostává; pauzy hlasu vyplňuje
+  souvislý pohyb. Bez hlasu totéž pro **větu na obrazovce** (claim / titulek na scénu); doby hudby jsou až druhé v pořadí. `[R2, R4, R6, PM]`
 - **D2** Přechody tak, že **další scéna vzniká z předchozí** (sdílený prvek, morf, zaplavení barvou, match cut, zoom skrz objekt),
   a k tomu **energické přechody na doby**: švihy s rozmazáním, světelné šmouhy, záblesky na úder, rychlé zoomy. Smí být **víckrát za video**,
   když sedí na rytmus (V001: střídmost působila „bez duše“). Nikdy líná prolínačka celých scén bez důvodu. `[R1, R2, R3, PM, V001]`
-- **D3** Tvrdé střihy jen tam, kde dávají rytmus: kroky návodu (~4 s na krok), výčty. `[R2]`
+  **Výchozí příchod a odchod** prvků (text, karta, logo): **z rozostření do ostrosti 0,1–0,25 s, odchod do rozostření + zblednutí 0,05–0,2 s**, odchod kratší
+  než příchod a nejlépe proměnou v další prvek; ostré naskočení maskou jen s důvodem. `[R6, R7]`
+- **D3** Tvrdé střihy jen tam, kde dávají rytmus: kroky návodu (~4 s na krok), výčty, skutečná stopáž (jízda); v grafické vrstvě **žádné**
+  a přes střih stopáže přežívá spojovací prvek (bod, linka). `[R2, R6, R7]`
 - **D4** Krátké video stavět jako **smyčku**: poslední snímek navazuje na první včetně polohy a rychlosti prvků. `[R3, R5, PM]`
 - **D5** Rozmazání pohybem: (1) v kódu podle rychlosti a směru (svislý švih = svislá šmouha), (2) render s podsnímky **4 u běžného pohybu, 6–8 u rychlých přechodů**
   (méně dělá „duchy“, C003). Statický text a UI zůstávají ostré a rozmazání nesmí tvar úplně smazat. `[R2, R3, PM]`
@@ -73,12 +86,24 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   Odcházející text zmizí dřív, než příchozí obsadí jeho místo. `[PM]`
 - **D7** **Přechod přímou manipulací**: když existují dva zarovnané snímky (den / noc, světla vyp / zap), druhý se odkrývá maskou vázanou na
   ovládací prvek (posuvník, přepínač), ne prolínačkou. `[V003, PM]`
+- **D8** **Rozpočet prvků**: na obrazovce 1 hrdina + nejvýš 1 doplněk; hrdina drží 2–5 s a mění **stavy** (každých ~0,6 s), ne záběry.
+  Mřížky, koláže a „všechno najednou“ jen se zdůvodněním v zadání. `[R6, R7]`
+- **D9** **Střihová partitura před stavbou**: ke každému prvku příchod / typ / klid / odchod / typ / spojka s dalším / slovo hlasu (`strih-vzor.md` 2).
+  Prvek bez spojky do videa nepatří. Klid: slovo ≤ 0,33 s, řádek ≤ 0,6 s, karta ≤ 1,2 s; kritik partituru kontroluje po snímcích. `[R6, R7]`
+- **D10** **Semínko a spojovací hmota značky**: tvar v barvě značky (tah, tečka, kruh, plocha) je na snímku 0, kreslí z něj logo, vrací se během videa
+  (UI, rámeček klíčového slova, pozadí explozí) a na konci se přemorfuje zpět do loga. Nikdy nezmizí, jen se mění. `[R6, R7]`
+- **D11** **Přechody mezi světy, každý jiný, žádný dvakrát**: let, wipe pruhy v barvách značky (0,35 s plné barvy, konec = konec věty), zoom skrz objekt + rozostření,
+  exploze tečky do plochy, kruhová clona ze středu, inverze plochy, morf do loga, záblesk + boom před end card. `[R6, R7]`
+- **D12** **Rytmus z obrazu, zvuk podle něj**: pořadí stavby = partitura → obraz → zvuk. Střih se nestaví na mřížku BPM; hudba a SFX se doladí k proměnám. `[R6, R7, C045]`
 
 ## E. Typografie a titulky
 - **E1** Slovo po slově **jen tam, kde text čte hlas** (titulky, háček). Slovo naskočí přesně s hlasem (`prepis.py --slova`, při nepřesnosti zarovnat po frázích).
   **Nadpisy a hesla bez hlasu se hýbou jako jeden navržený objekt** (maska, roztažení, morf). `[R2, R4, PM]`
+  Claim bez hlasu: slova naskakují **z rozostření** v rytmu řeči; názvy a tvrzení v barvě značky smí **po znacích s pádem na linku** (0,4 s na řádek).
+  Na obrazovce nikdy víc než 1 řádek textu naráz (kromě end card). `[R6, R7]`
 - **E2** Klíčové slovo zvýraznit barvou, řezem nebo velikostí. Štítek jen jako **navržený** prvek: zaoblená pilulka, která přijede pružinou (R4),
-  nebo tah zvýrazňovače přes frázi. **Nikdy ostrý obdélník přesně za písmeny** (vypadá jako označený text). `[R2, R3, R4, PM]`
+  nebo tah zvýrazňovače přes frázi, nebo **rámeček, který nakreslí tah** (podtržení → hrana → uzavření ~0,35 s, slovo uvnitř z rozostření; rámeček může být
+  semínkem loga, D10). **Nikdy ostrý obdélník přesně za písmeny** (vypadá jako označený text). `[R2, R3, R4, R6, PM]`
 - **E3** Tučné, výrazné bezpatkové písmo, VERZÁLKY pro důraz („COLLECTION“, „HELL YES“). `[R2, R3]`
 - **E4** Jedna rodina písma, max. 2 řezy + případně ruční písmo. Font musí mít českou diakritiku (latin-ext). `[R2, R4, PM]`
 - **E5** **Ručně psané anotace** (šipky, kroužky, „like it“, „Forever“) dodají lidský dojem. `[R3]`
@@ -122,7 +147,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
   nikdy lepší (V003: „259 km/h“, V004: „3.7 s“). Konečná hodnota přesně podle zdroje. Hotová hodnota stojí čitelně **≥ 0,5 s** (u všech karet,
   rolování radši krátké a dřív), při odchodu karty zůstane **plně krycí** prázdný obdélník nejvýš 2 snímky (následné stažení do bodu se nepočítá) (C046).
   Zvuk „ding“ patří na **první ustálený snímek** hotové hodnoty (konec rolování, pohyb číslic < 0,5 px); když koliduje s jiným zvukem, posouvá se
-  ten druhý, ne ding (C047). Tiky jen na přenosy, které jsou na obrazovce vidět. `[V003, V004]`
+  ten druhý, ne ding (C047). Tiky jen na přenosy, které jsou na obrazovce vidět. **Jedno skutečné číslo na video** (R6: 2 912; V004 mělo 4 za 8 s),
+  rolování zdola 0,7 s s odometrickým rozmazáním, klid ≥ 1 s, odchod zblednutím. `[V003, V004, R6]`
 - **G8** **SaaS motion**: neutrální světlé pozadí, karty s 1px okrajem a měkkým dvouvrstvým stínem, jeden akcent jen na akci, kurzor změny
   způsobuje a nikdy jen nepluje, nejvýš 1–2 skleněné prvky a nikdy přes produkt (detail `prompt-motion/poznatky.md` oddíl 11.1). `[V003, PM]`
 
@@ -131,6 +157,9 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **H2** Pomalý ruční nájezd kamery, na začátku ruka zmáčkne klávesu (start). `[R1]`
 - **H3** Ukázat software / časovou osu / prompt = důkaz řemesla. `[R2, R5]`
 - **H4** Já sám natáčet neumím: buď natočí uživatel podle těchto pravidel, nebo to digitálně nasimuluju (maketa notebooku, perspektiva, odlesky, ambient). `[obecné]`
+- **H5** **Parametry natočené obrazovky** (změřeno v R6): animace v okně přehrávače (Dock a menu bar vidět), displej 68–89 % šířky snímku; snímek 0 ruka na klávese,
+  první obsah do 0,6 s; kamera 0–2,5 s natočení, 0–7 s nájezd ~+30 %, dál dýchání ±8 % s periodou ~8 s, nikdy zamrzlý snímek; místnost plynule zhasne během
+  3.–5. s (jas stěny 67 → 11); barevný wipe obarví místnost. Totéž platí pro digitální maketu (H4). `[R6]`
 
 ## I. Zvuk
 - **I1** Hlas: krátké věty, sebevědomý, rychlý. Pauzy a přeřeky vystřihnout. `[R2, R4]`
@@ -150,9 +179,13 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **I7** Mix hudby musí znít i z **telefonu**: sub (20–60 Hz) max ~30 % energie, středy (250 Hz–2 kHz) ≥ 30 %, basa s vyššími harmonickými.
   `hudba.py` to hlídá a varuje. `[R5, C012]`
 - **I8** Zatím **bez voiceoveru**. Hlas později přes ElevenLabs. Jazyk videí je **angličtina**. `[uživatel 2026-10-30]`
+- **I9** **Zvuk u videí s hlasem (vzor uživatele R6, R4, R1)**: hlas nese všechno; hudba ≤ −25 LUFS nebo žádná, SFX tiché a jen na stavové změny (~1 za s),
+  jediný hlasitý úder (boom + záblesk) na podpis tvůrce v tichu po hlase. I3 („drop nejhlasitější“) platí jen pro videa bez hlasu; i tam se zvuk dělá až podle
+  hotového obrazu (D12) a hlasitost roste jen k jednomu dropu. `[R6, R7]`
 
 ## J. CTA, popisek, publikace
-- **J1** CTA s **klíčovým slovem**: „Comment PROMPT“, „comment KATANA“, „DM me UGOKI“ (automatická DM). `[R1, R2, R4]`
+- **J1** CTA s **klíčovým slovem**: „Comment PROMPT“, „comment KATANA“, „DM me UGOKI“ (automatická DM); nejsilnější je **staticky v obraze** po celou dobu
+  (R7: „Follow and comment “Quokka”“, 3 600 komentářů, poměr k lajkům 0,88). `[R1, R2, R4, R7]`
 - **J2** Pro služby: „Need one? Open for commissions“. `[R5]`
 - **J3** Popisek končí **otázkou** pro komentáře („What do you think?“). `[R3]`
 - **J4** 3–5 relevantních hashtagů, ne desítky. `[R1, R4, R5]`
@@ -173,4 +206,6 @@ Technický podklad: `nastroje/kontrola.sh VIDEO media/kontrola/<projekt>/kolo<n>
 - [ ] Žádný AI poznávací znak bez zdůvodnění v zadání (G6)
 - [ ] Čísla a fakta ověřená (C8)
 - [ ] End card + CTA (C6, J1)
+- [ ] **Střih podle vzoru uživatele** (`strih-vzor.md` 6): 1 hrdina + 1 doplněk, 0 tvrdých střihů v grafice, partitura sedí po snímcích, příchod z rozostření /
+  odchod kratší a proměnou, klid jen na přečtení, obraz předbíhá slovo, přechody se neopakují, jedno číslo, zvuk podle obrazu, podpis tvůrce (D8–D12, C9, I9)
 - [ ] Splněna všechna pravidla ze zadání videa
