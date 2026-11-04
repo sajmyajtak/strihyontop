@@ -7,5 +7,6 @@
 | [R3](R3-save-reminders-koncept.md) | Koncept „Save Reminders“ pro IG | @mosycreate | 4:3, 39 s | nápad + názor + emoční zvrat (148 tis. lajků) |
 | [R4](R4-easing-edukace.md) | Easing, proč animace vypadá roboticky | @ugoki.ai | 9:16, 49 s, 60 fps | pravidla pohybu, titulky slovo po slově |
 | [R5](R5-phantom-logo.md) | Logo animace PHANTOM | @kxjouanim | 9:16, 11 s | neonové logo, smyčka, „POV“ text, zakázky |
+| [R6](R6-packeta-zbox.md) | Packeta Z-BOX, spec reklama na natočené obrazovce | @davidxsipos | 9:16, 22 s, 60 fps | partitura střihu: 1 hrdina + 1 doplněk, vše z rozostření do rozostření, VO řídí střih (obraz předbíhá slovo), 0 střihů, end card tvůrce |
 
 Nová reference: `nastroje/analyzuj.sh ODKAZ R6-nazev` → rozbor do `R6-nazev.md` podle vzoru R1 → zmenšený náhled do `nahledy/` → řádek sem → nová pravidla do `../pravidla-strihu.md`.
