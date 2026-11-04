@@ -112,12 +112,23 @@ def prehled(polozky, nahledy, cil):
         radky.append(radek)
     if not radky:
         return
-    out = Image.new("RGB", (DLAZDICE * 6, sum(r.height for r in radky)), (0, 0, 0))
-    y = 0
+    # JPEG má limit 65 535 px na výšku → při mnoha souborech rozdělit na _prehled.jpg, _prehled_2.jpg, … (V005: 220 položek)
+    MAX_VYSKA = 60000
+    casti, aktualni, vyska = [], [], 0
     for r in radky:
-        out.paste(r, (0, y))
-        y += r.height
-    out.save(cil, quality=85)
+        if aktualni and vyska + r.height > MAX_VYSKA:
+            casti.append(aktualni)
+            aktualni, vyska = [], 0
+        aktualni.append(r)
+        vyska += r.height
+    casti.append(aktualni)
+    for i, cast in enumerate(casti):
+        out = Image.new("RGB", (DLAZDICE * 6, sum(r.height for r in cast)), (0, 0, 0))
+        y = 0
+        for r in cast:
+            out.paste(r, (0, y))
+            y += r.height
+        out.save(cil if i == 0 else cil.with_name(f"{cil.stem}_{i + 1}{cil.suffix}"), quality=85)
 
 
 def main():

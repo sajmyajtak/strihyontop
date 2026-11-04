@@ -13,6 +13,12 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C049: `materialy.py` spadl na přehledu při 220 souborech (2026-11-04, V005, opravil analytik)
+- Příznak: `_prehled.jpg` se neuložil, výška archu přesáhla limit formátu JPEG (65 535 px).
+- Příčina: všechny řádky náhledů se lepily do jednoho obrázku bez ohledu na počet souborů.
+- Oprava: přehled se dělí na `_prehled.jpg`, `_prehled_2.jpg`, … po max. 60 000 px.
+- Prevence: v nástroji; u velkých složek prohlédnout všechny díly přehledu.
+
 ### C048: Lokální retuš stopáže udělala viditelnou skvrnu (2026-11-01, V004 v4b, režisér, našli kritik i kreativní ředitel)
 - Příznak: ztlumení hvězdy odlesku v B_1280 (kruhová maska −1,3 EV, r 190 px) přesahovalo ze skla na světlý písek: tmavá kulatá skvrna ~200–250 px
   jela s hranou střechy 22,10–22,27, působila jako špína na objektivu. Druhý pokus (ztlumit jen světlé tóny) udělal z hvězdy tmavou díru s prstencem,
