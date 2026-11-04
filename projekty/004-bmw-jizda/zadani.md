@@ -574,5 +574,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | **v4d** | 2026-11-02 | **V004_v4d.mp4 → uživateli** + `_bez_hudby`, plakát 2,6 s (`V004_plakat.jpg`), `popisek.txt` | 686 klid 30 snímků, odkrytí obsahu karet, kontrast průjezdu; kritik SCHVÁLENO |
 
 ## Zpětná vazba (doslova)
+2026-11-04, k V004_v4d: „noooo hele takhle není to špatný ale zkus se zaměřít víc na ten střih a editaci videa pošlu ti další reels jak bych si
+představoval moje videa a celkově jejich prezentaci. Nic negeneruj jen si je přečti a adaptuj se n atokýhle střihy.“
++ 3 odkazy na Instagram reels (rozbory R6–R8 v `znalosti/reference/`). Pokyn: **nic negenerovat**, jen nastudovat a přizpůsobit střih.
 
 ## Poučení
