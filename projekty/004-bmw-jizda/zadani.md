@@ -560,7 +560,8 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 | workflow kolo 5 (2 agenti: kritik, kreativní ředitel) | 311 587 | 114 | 11,8 min |
 | workflow kolo 6 (2 agenti: kritik, kreativní ředitel) | 243 323 | 94 | 11,9 min |
 | workflow kolo 7 (1 agent: kritik) | 178 666 | 76 | 17,6 min |
-| **součet pomocných agentů (27)** | **5 154 666** | **1 818** | **369,5 min** |
+| studie střihu po zpětné vazbě 2026-11-04 (3 analytici: R6, R7, R4 doplněk) | 562 282 | 165 | 42,0 min |
+| **součet pomocných agentů (30)** | **5 716 948** | **1 983** | **411,5 min** |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
