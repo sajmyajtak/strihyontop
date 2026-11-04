@@ -59,7 +59,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **C3** Promo nástroje / služby: háček → tvrzení → důkaz → **před/po srovnání** → kroky návodu → CTA. `[R2]`
 - **C4** Koncept / case study: běžná situace → „But what if…“ → řešení → **emoční zvrat** → podpis. `[R3]`
 - **C5** Logo / showreel: krátká smyčka, ve videu zopakovaná 2–3×. `[R5]`
-- **C6** Konec = **end card** (logo, podpis, @jméno, CTA). Drží **1,5–3 s**, ve smyčce stačí 1–1,5 s, s jemným pohybem (dotlačení 2–4 %), nikdy zamrzlý obraz.
+- **C6** Konec = **end card** (logo, podpis, @jméno, CTA). Drží **1,5–3 s**, ve smyčce stačí 1–1,5 s, s jemným pohybem (dotlačení 2–4 %), nikdy zamrzlý obraz
+  (výjimka [R4]: CTA karta smyčky smí stát ≈ 1,4 s, když divák čte klíčové slovo, a smyčka se uzavře švihem 0,3 s do snímku 0).
   Dlouhý podpis (~10 s, R3) jen u konceptů, kde end card nese text nebo manifest. `[R1, R3, R4, PM]`
 - **C9** **Podpis tvůrce**: u portfoliových videí po logu klienta: logo do rozostření → 0,2 s ticho → boom + bílý záblesk → end card tvůrce **2 s**
   + disclaimer v obraze („Spec ad · not affiliated with …“); kamera i na end card dýchá. `[R6, R1]`
@@ -95,9 +96,15 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **D11** **Přechody mezi světy, každý jiný, žádný dvakrát**: let, wipe pruhy v barvách značky (0,35 s plné barvy, konec = konec věty), zoom skrz objekt + rozostření,
   exploze tečky do plochy, kruhová clona ze středu, inverze plochy, morf do loga, záblesk + boom před end card. `[R6, R7]`
 - **D12** **Rytmus z obrazu, zvuk podle něj**: pořadí stavby = partitura → obraz → zvuk. Střih se nestaví na mřížku BPM; hudba a SFX se doladí k proměnám. `[R6, R7, C045]`
+- **D13** **Kotva a výměna obsahu**: hlavní rámec (karta, okno, telefon) zůstane po většinu videa (R4: 78 %); scény = výměna obsahu uvnitř (vymazat 1 snímek →
+  přeznačit štítek → nový objekt → stopa, odstupy 0,1–0,15 s); nový svět = morf rámce, ne střih celého obrazu. `[R4, R6]`
+- **D14** **Kaskáda, nikdy naráz**: prvky jedné scény přicházejí po jednom v odstupu 4–9 snímků v pořadí příčina → následek; dva nové prvky v jednom snímku
+  jen jako záměrná pointa. `[R4]`
+- **D15** **Předveď, pak zopakuj pomaleji**: klíčový pohyb jednou v reálné rychlosti a hned znovu zpomaleně s popiskem („4× slower“), stopa se kreslí živě. `[R4]`
 
 ## E. Typografie a titulky
-- **E1** Slovo po slově **jen tam, kde text čte hlas** (titulky, háček). Slovo naskočí přesně s hlasem (`prepis.py --slova`, při nepřesnosti zarovnat po frázích).
+- **E1** Slovo po slově **jen tam, kde text čte hlas** (titulky, háček). Štítek slova je hotový **0–0,10 s před** hlasem, nikdy po (`prepis.py --slova`,
+  časy ověřit obálkou hlasu); náběh 2 snímky, řádek 1–5 slov (≤ 22 znaků), pilulka se přelije na nové slovo, předchozí zbělá, drží přes pauzu (`strih-vzor.md` 4).
   **Nadpisy a hesla bez hlasu se hýbou jako jeden navržený objekt** (maska, roztažení, morf). `[R2, R4, PM]`
   Claim bez hlasu: slova naskakují **z rozostření** v rytmu řeči; názvy a tvrzení v barvě značky smí **po znacích s pádem na linku** (0,4 s na řádek).
   Na obrazovce nikdy víc než 1 řádek textu naráz (kromě end card). `[R6, R7]`
@@ -121,7 +128,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 - **F6** Zadání pro animace v kódu vždy obsahuje: *„Entrances: ease out. Exits: ease in. Interface: spring, slight overshoot. Nothing linear.
   Springs are closed-form, tiny overshoot. Every frame is a pure function of time. Blur follows speed and direction.“* `[R4, PM]`
 - **F7** **Jeden jazyk kamery**: jeden svět, jedna kamera (posun + zoom v logaritmické škále). Nikdy dva pohyby kamery naráz, nikdy zoom tam a hned zpátky.
-  Kamera se mezi scénami neresetuje. Pomalé dotlačení během scény (1,00 → 1,04) drží obraz živý. `[PM]`
+  Kamera se mezi scénami neresetuje. Pomalé dotlačení během scény (1,00 → 1,04) drží obraz živý **jen tam, kde se v rámu nic nehýbe**; když pracuje objekt,
+  kamera stojí (R4: 48 s statické kamery bez mrtvého snímku). `[PM, R4]`
 
 ## G. Barvy a vzhled
 - **G1** Omezená paleta: **neutrální pozadí + 1–2 akcenty** (max 3 barvy + černá/bílá). `[R2, R4, R5, PM]`
@@ -185,7 +193,8 @@ Předloha, kterou uživatel výslovně pošle k danému videu, smí přebít i v
 
 ## J. CTA, popisek, publikace
 - **J1** CTA s **klíčovým slovem**: „Comment PROMPT“, „comment KATANA“, „DM me UGOKI“ (automatická DM); nejsilnější je **staticky v obraze** po celou dobu
-  (R7: „Follow and comment “Quokka”“, 3 600 komentářů, poměr k lajkům 0,88). `[R1, R2, R4, R7]`
+  (R7: „Follow and comment “Quokka”“, 3 600 komentářů, poměr k lajkům 0,88); u delších videí jako **sekvence** pointa → zámek → maketa DM → klíčové slovo
+  psané živě → obří klíčové slovo (R4, 42,5–48,1 s). `[R1, R2, R4, R7]`
 - **J2** Pro služby: „Need one? Open for commissions“. `[R5]`
 - **J3** Popisek končí **otázkou** pro komentáře („What do you think?“). `[R3]`
 - **J4** 3–5 relevantních hashtagů, ne desítky. `[R1, R4, R5]`

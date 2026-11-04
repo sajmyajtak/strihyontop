@@ -11,7 +11,7 @@ Ne víc střihů, ale **kvalitu přechodů a vedení pozornosti**. V004 dělalo 
 mřížka 3×3, 3–5 prvků naráz, efekty na doby). Všechny jeho předlohy mají **0 tvrdých střihů**, na obrazovce **jednu věc**, a každá změna
 má **příčinu** (slovo hlasu, nebo předchozí prvek, který se v tu další proměňuje). Energie vzniká z **pohybu a proměn**, ne z množství.
 
-## 1. Deset zásad střihu (co musí každé video splnit)
+## 1. Zásady střihu (co musí každé video splnit)
 1. **Jeden hrdina + nejvýš jeden doplněk.** Na obrazovce je v každém okamžiku jeden hlavní objekt (logo, telefon, mapa, produkt, karta) a nejvýš
    jedna doplňková věc (číslo, notifikace, popisek). Nikdy mřížka, koláž ani „všechno najednou“. `[R6: 36 prvků, nikdy víc než 2 naráz; R7: 1 řádek textu]`
 2. **Stavy místo záběrů.** Hrdina drží **2–5 s** a prochází stavy (telefon: pole → výsledky → karty → souhrn → potvrzení = 5 s, 5 stavů).
@@ -37,6 +37,17 @@ má **příčinu** (slovo hlasu, nebo předchozí prvek, který se v tu další 
 10. **Prezentace = natočená obrazovka nebo mockup, konec = podpis tvůrce.** Animace 16:9 / 16:10 se ukazuje na notebooku natočeném telefonem
     na výšku (R6) nebo v mockupu s panelem, štítkem a CTA v obraze (R7). Po logu klienta: logo do rozostření → 0,2 s ticho → boom + bílý záblesk →
     **end card tvůrce 2 s** + disclaimer v obraze („Spec ad · not affiliated with …“). `[R6, R7, R1]`
+
+11. **Kotva a výměna obsahu.** Hlavní rámec (karta, okno, telefon, deska) zůstane na obrazovce po většinu videa (R4: karta grafu 38 s = 78 % videa,
+    R6: telefon 5 s). Scény = výměna obsahu uvnitř (vymazat 1 snímek → přeznačit štítek → nový objekt → stopa, odstupy 0,1–0,15 s); nový svět = morf rámce
+    (rozměr, poloha), ne střih celého obrazu. `[R4, R6]`
+12. **Kaskáda, nikdy naráz.** Prvky jedné scény přicházejí po jednom v odstupu **4–9 snímků** (0,07–0,15 s) v pořadí příčina → následek (rámec → popisek →
+    objekt → stopa). Dva nové prvky v jednom snímku jen jako záměrná pointa (R4: 1× z ~60 událostí). `[R4]`
+13. **Předveď, pak zopakuj pomaleji.** Klíčový pohyb jednou v reálné rychlosti a hned znovu zpomaleně s popiskem v rohu („4× slower“: 0,13 s → 0,85 s),
+    stopa nebo graf se při tom kreslí živě. U produktů: rozsvícení světel, dosednutí karty, otočka. `[R4]`
+14. **Kamera stojí, když pracuje objekt.** Dotlačení a drift jen tam, kde se v rámu nic nehýbe (R4: 48 s statické kamery, žádný mrtvý snímek);
+    u natočené obrazovky dýchá skutečná ruka, ne digitální kamera. CTA karta na konci smyčky smí stát ≈ 1,4 s (divák čte klíčové slovo), smyčka se
+    uzavře švihem (0,3 s) do snímku 0. `[R4, R6]`
 
 ## 2. Střihová partitura (povinná součást storyboardu)
 Storyboard se píše jako **stavy hrdiny**, ne jako seznam záběrů. Ke každému prvku tabulka (časy na 2 desetinná místa):
@@ -66,14 +77,23 @@ rolování čísla 0,7 s · nájezd kamery 0,2–0,85 s · wipe 0,9 s (z toho 0,
 - Jedno písmo, 2 řezy, na obrazovce **nikdy víc než 1 řádek** textu naráz (kromě end card). Velikosti z R6: číslo 21 % výšky displeje, claim 16 %, logo 12 %.
 - Claim bez hlasu: **slova naskakují z rozostření** (ne po písmenech kurzorem); názvy a tvrzení v barvě značky smí **po znacích s pádem na linku**
   (0,4 s na řádek). Klíčové slovo zvýraznit **rámečkem, který nakreslí tah** (podtržení → hrana → uzavření ~0,35 s), nikdy obdélníkem za písmeny.
-- Titulky slovo po slově s hlasem (R4): aktivní slovo má podklad v barvě značky, ostatní bílá, spodní třetina (podrobnosti v `reference/R4-easing-edukace.md`,
-  oddíl „Střihová partitura“).
+- **Titulky slovo po slově s hlasem (R4, změřeno na 21 slovech)**: štítek slova je hotový **0–0,10 s před** hlasem (medián 2 snímky), nikdy po; náběh 2 snímky
+  (bledé + 10 px zprava → plné); řádek se přecentruje, pilulka se přelije na nové slovo a předchozí zbělá; řádek 1–5 slov (medián 3, ≤ 22 znaků), výměna řádku
+  tvrdě s 1–2 prázdnými snímky na hranici věty; pilulka drží na posledním slově přes pauzu; interpunkce uvnitř pilulky. 9:16: písmo ≈ 80 px tučné, pilulka ≈ 93 px,
+  střed 73 % výšky; 16:9: písmo 64–72 px, střed ≈ 86 % výšky nad bezpečnou zónou. Časy slov z `prepis.py --slova` ověřit obálkou hlasu (Whisper ±0,1 s).
+  Podrobnosti v `reference/R4-easing-edukace.md`, oddíl „Střihová partitura (doplněk 2026-11-04)“.
+- **Barva = význam** (R4): jeden akcent pro vše aktivní a správné (aktivní slovo, hodnota, stopa, klíčové slovo), šedá pro „špatně / neaktivní“; kategorie = bílá
+  pilulka s černým textem, hodnota = tmavá pilulka s barevnou tečkou.
+- **CTA jako sekvence** (R4): pointa → zámek (co je za ním) → maketa DM → klíčové slovo psané živě (1 znak / 3 snímky) → odpověď → obří klíčové slovo (≈ 60 % šířky);
+  klíčové slovo je na konci vidět 3× naráz a zůstává do konce.
 - **Jedno číslo na video**: skutečné, roluje zdola 0,7 s jen horšími hodnotami, odometrické rozmazání, klid ≥ 1 s, odchod zblednutím.
 
 ## 5. Co se změnilo proti dosavadní praxi (V001–V004)
 | dřív | teď |
 |---|---|
 | storyboard po taktech, událost na každou dobu | storyboard po **stavech hrdiny**, událost = změna stavu každých ~0,6 s, bez metronomu |
+| nový svět každý takt, všechno v něm naráz | kotva drží většinu videa, obsah se mění uvnitř; prvky přicházejí kaskádou po 4–9 snímcích |
+| kamera pořád dotlačuje (F7) | kamera stojí, když pracuje objekt; dýchá jen skutečná ruka v natočené obrazovce |
 | 3–5 prvků naráz, mřížky, 4 fakta za 8 s | 1 hrdina + 1 doplněk, jedno číslo |
 | karty a UI naskakují ostře maskou, odchod „do bodu“ ~0,25 s | příchod z rozostření, odchod do rozostření kratší než příchod |
 | tvrdé střihy na čtvrtdoby, švihy | proměny; tvrdý střih jen ve skutečné stopáži a i přes něj přežívá spojovací prvek |
@@ -90,7 +110,9 @@ rolování čísla 0,7 s · nájezd kamery 0,2–0,85 s · wipe 0,9 s (z toho 0,
 - [ ] obraz předbíhá slovo / větu o 0,1–0,35 s, nikdy nezaostává; pauzy vyplněné pohybem
 - [ ] přechody mezi světy: každý jiný, žádný dvakrát; semínko na snímku 0 a návrat do loga na konci
 - [ ] zvuk podle obrazu: SFX jen na proměny, hudba pod hlasem (≤ −25 LUFS) nebo doladěná k proměnám; boom + záblesk jen na podpis
-- [ ] prezentace: natočená obrazovka nebo mockup; end card tvůrce 2 s s disclaimerem, kamera dýchá i na end card
+- [ ] prezentace: natočená obrazovka nebo mockup; end card tvůrce 2 s s disclaimerem, kamera dýchá i na end card (výjimka: CTA smyčky smí stát ≈ 1,4 s)
+- [ ] kotva: hlavní rámec drží, scény se mění uvnitř; prvky scény přicházejí kaskádou 4–9 snímků, ne naráz (dva v jednom snímku jen jako pointa)
+- [ ] titulky s hlasem: štítek 0–0,1 s před slovem, nikdy po; 1 řádek ≤ 5 slov; pilulka drží přes pauzu
 
 ## 7. Nástroje k doplnění při příštím videu (animátor, na pokyn režiséra)
 `nastroje/vzory/scena.html`: `rozIn(t, t0, d)` / `rozOut(t, t0, d)` (Gauss + zblednutí), `odometr()` se svislým rozmazáním (vyšší řády se ustálí první),

@@ -32,7 +32,8 @@ Nejsi autor videa a nevěř tomu, co autor o videu tvrdí. Posuzuj jen to, co je
 - **Střih podle vzoru uživatele** (`strih-vzor.md` 6, D8–D12): na archu po 0,25 s spočítej prvky v každém snímku (max. 1 hrdina + 1 doplněk); tvrdé střihy
   v grafické vrstvě = nález; partituru ze zadání porovnej po snímcích (příchody z rozostření 0,1–0,25 s, odchody kratší a proměnou, klid: slovo ≤ 0,33 s,
   řádek ≤ 0,6 s, karta ≤ 1,2 s, hrdina 2–5 s, číslo ≥ 0,5 s a jen jedno); obraz předbíhá slovo / větu o 0,1–0,35 s; přechody mezi světy se neopakují;
-  semínko na snímku 0 a návrat do loga; podpis tvůrce 2 s s disclaimerem; kamera nikde zamrzlá.
+  semínko na snímku 0 a návrat do loga; podpis tvůrce 2 s s disclaimerem; kamera nikde zamrzlá (kromě CTA smyčky ≈ 1,4 s); kotva drží a prvky scény
+  přicházejí kaskádou 4–9 snímků (D13, D14); titulky s hlasem: štítek 0–0,1 s před slovem, nikdy po.
 - **Smyčka a začátek**: snímek 0 je hotový obraz (B6), hranice smyčky snímek po snímku (D4).
 - **Fakta**: čísla a jména na obrazovce odpovídají zadání (C8).
 - **Zadání**: je splněno každé pravidlo uživatele? Délka, formát, text, CTA, značka (barvy, logo, fonty ze `znalosti/znacka.md`).

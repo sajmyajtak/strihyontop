@@ -21,6 +21,7 @@ Laťka uživatele: **„aby si řekl wow“**. Průměr je neúspěch. Měříš
 - Ke každé scéně **jedna věta** (3–7 slov; hlas nebo věta na obrazovce) a obraz ji předbíhá o 0,1–0,35 s (D1).
 - Storyboard = **střihová partitura** (`strih-vzor.md` 2): tabulka prvků s příchodem / typem / klidem / odchodem / typem / spojkou / větou. Časy hudby
   (drop, konec) se k partituře doladí, ne naopak (D12). Jedno skutečné číslo na video (G9). Konec = logo klienta → podpis tvůrce (C9).
+- **Kotva** (rámec, který drží většinu videa, scény uvnitř, D13), **kaskáda** příchodů (D14), **předveď → zopakuj pomaleji** u klíčového pohybu (D15).
 - Musí to jít postavit jako HTML scénu s `window.seek(t)` (2D/3D CSS, SVG, canvas) a vyrenderovat na 4 CPU bez GPU.
 
 ## Když hodnotíš (koncept nebo hotové video)

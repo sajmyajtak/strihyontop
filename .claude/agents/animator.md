@@ -22,6 +22,7 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
    **Střih (strih-vzor.md)**: každý prvek má v partituře příchod / klid / odchod / spojku; výchozí příchod = z rozostření (Gauss + zblednutí 0,1–0,25 s),
    odchod = do rozostření 0,05–0,2 s a kratší než příchod, nejlépe proměnou v další prvek (natažení do pilulky, smrštění do tečky, morf do loga).
    V grafické vrstvě žádný tvrdý střih; mezi světy přechody ze zásobníku D11, každý jen jednou. Semínko na snímku 0 → logo → návrat do loga (D10).
+   Kotva drží, obsah se mění uvnitř (D13); prvky scény kaskádou po 4–9 snímcích, nikdy naráz (D14); kamera stojí, když pracuje objekt (F7).
    Helpery `rozIn` / `rozOut` / `odometr` / `tah` / `wipePruhy` / `clonaKruh` / `explozeTecky` / maketa natočené obrazovky: když ve `vzory/scena.html`
    chybí, přidej je při prvním použití (ověřené na výřezu) a nahlas režisérovi.
 3. Pohyb: příchod ease-out, odchod ease-in, UI pružina s malým překmitem, nic lineárně. Rozmazání podle rychlosti a směru u rychlých pohybů.
