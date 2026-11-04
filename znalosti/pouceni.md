@@ -15,6 +15,21 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### 2026-11-04: Zpětná vazba k V004 a střihový vzor uživatele (R6, R7, R4 znovu)
+- **Zpětná vazba (doslova)**: „noooo hele takhle není to špatný ale zkus se zaměřít víc na ten střih a editaci videa pošlu ti další reels jak bych si
+  představoval moje videa a celkově jejich prezentaci. Nic negeneruj jen si je přečti a adaptuj se n atokýhle střihy.“ → „okey tak to jsem rád. nauč agenty ať to umí“.
+- **Předlohy**: R6 Packeta Z-BOX (@davidxsipos, 22 s, 0 střihů, hlas, natočená obrazovka, end card tvůrce), R7 AE vs. Gemini (@shhradddhaa.ai, 9,5 s, mockup
+  se dvěma panely, CTA v obraze, 3 600 komentářů), R4 Ugoki easing (poslal podruhé: titulky slovo po slově, jeden souvislý svět, hlas řídí střih).
+- **Hlavní poučení**: „střihem a editací“ uživatel myslí **kvalitu přechodů a vedení pozornosti**, ne počet střihů. V004 dělalo energii kvantitou
+  (25 střihů, 4 karty, mřížka, 3–5 prvků naráz); všechny jeho předlohy mají 0 tvrdých střihů, jednoho hrdinu na obrazovce, každou změnu s příčinou
+  (slovo hlasu nebo předchozí prvek) a prezentaci jako natočenou obrazovku / mockup s podpisem tvůrce.
+- **Co se změnilo**: nový závazný dokument `znalosti/strih-vzor.md` (10 zásad, partitura, kamera, typografie, kontrolní seznam); pravidla D8–D12
+  (rozpočet prvků, partitura, semínko, zásobník přechodů, zvuk podle obrazu), C9 (podpis tvůrce), A9 (prezentace), H5 (parametry natočené obrazovky),
+  I9 (zvuk u videí s hlasem), upřesnění C7, D1, D2, D3, E1, E2, G9, J1, K; instrukce všech šesti agentů a CLAUDE.md (storyboard = partitura,
+  kreativní ředitel hodnotí střih 3×). Rozbory jsou v `reference/R6…`, `R7…`, `R4…` (doplněk).
+- **Otevřené otázky pro uživatele** (nerozhodnuto, zapsáno v reportu): voiceover (předlohy ho mají, zadání dosud ne), formát doručení (16:9 + 9:16 prezentace?),
+  jméno a logo na podpisu tvůrce, kdo točí natočenou obrazovku (uživatel, nebo digitální maketa).
+
 ### V004: BMW i7 M70 „Bod, který nepustí vůz“ (2026-11-02, doručeno v4d, čeká na zpětnou vazbu)
 - Zadání: projekty/004-bmw-jizda/zadani.md. 30 s, 16:9, 60 fps, `luxsport` s `--motor elektricky`, bez VO, vůz musí jet, 4 předlohy prompt-motion.
   Varianta 1 (rozhodnutí uživatele): jízda = skutečná stopáž BMW (stříbrná i7 60, bez čelních pohledů s chromovými ledvinkami), vůz uživatele

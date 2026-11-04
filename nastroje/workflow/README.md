@@ -17,3 +17,7 @@ kritik technika + zadání je jeden agent, střih a spojení zvuku dělá animá
   animátor blok 1 → blok 2 + render + zvuk → kolo kontroly (kritik ∥ kreativní ředitel) → opravy animátor ∥ zvukař, max. 3 kola.
   **Pozor (C045)**: v opravném kole zvukař souběžně s animátorem pracoval se starým obrazem. Příště: opravy obrazu → posuny SFX režisér (nebo zvukař
   až po obrazu, se seznamem změn časů od animátora). Rozhodnutí režiséra dávat do úkolu opravy jako číslovaná závazná kritéria (C043).
+
+**Střihový vzor (2026-11-04, `znalosti/strih-vzor.md`)**: do přípravy patří fáze **partitura** (kreativní ředitel: stavy hrdiny, věta na scénu, příchod /
+klid / odchod / spojka), oponent ji reviduje podle kontrolního seznamu střihu. Výroba: partitura → obraz → zvuk (zvukař až k hotovému obrazu, D12).
+Kontrola: kritik dostává partituru a porovnává ji po snímcích; kreativní ředitel hodnotí střih 3×. Střihač navíc skládá 9:16 prezentaci (A9).

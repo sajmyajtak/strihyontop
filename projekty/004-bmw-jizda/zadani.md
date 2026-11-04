@@ -576,6 +576,9 @@ opraveny v kolech 1–2 podle stávajících pravidel (G7, G8, C040).
 ## Zpětná vazba (doslova)
 2026-11-04, k V004_v4d: „noooo hele takhle není to špatný ale zkus se zaměřít víc na ten střih a editaci videa pošlu ti další reels jak bych si
 představoval moje videa a celkově jejich prezentaci. Nic negeneruj jen si je přečti a adaptuj se n atokýhle střihy.“
-+ 3 odkazy na Instagram reels (rozbory R6–R8 v `znalosti/reference/`). Pokyn: **nic negenerovat**, jen nastudovat a přizpůsobit střih.
++ 3 odkazy na Instagram reels: R6 Packeta Z-BOX, R7 AE vs. Gemini, R4 Ugoki (poslal podruhé). Pokyn: **nic negenerovat**, jen nastudovat a přizpůsobit střih.
+Pak (tentýž den): „okey tak to jsem rád. nauč agenty ať to umí“ → `znalosti/strih-vzor.md`, pravidla D8–D12, instrukce agentů (viz `pouceni.md` 2026-11-04).
+Kritika V004 podle předloh (z rozborů): energie kvantitou (25 střihů, 4 karty za 8 s, mřížka 3×3, 3–5 prvků naráz, metronom 120 BPM) místo kvality
+přechodů; chybí hlas / věta na scénu, podpis tvůrce, prezentace jako natočená obrazovka. Záporně hlavně T9 (mřížka) a T10–T12 (střihy po čtvrtdobách).
 
 ## Poučení
