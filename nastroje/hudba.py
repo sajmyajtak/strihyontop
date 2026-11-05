@@ -1,8 +1,12 @@
 """Generátor hudby do pozadí: syntéza v kódu, naše vlastní (bez licencí), přesně na doby pro animaci.
 
 Použití:
-  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni|pohodova|sportovni|luxsport --delka 20 --out hudba.wav
+  python3 -I nastroje/hudba.py --nalada vazna|drza|luxusni|pohodova|sportovni|luxsport|hora --delka 20 --out hudba.wav
         [--bpm 120] [--drop 4.0] [--konec 17.5] [--seed 1] [--zlom 15.0 --drop2 18.75 (jen sportovni a luxsport)]
+        [--vrchol 13.87 --body plocha=2.6,kadence=20.78,… (jen hora)]
+  hora (V005)  bez bicích a bez dropu: jediný tón klavíru, plocha, swell, nádech, VRCHOL (plocha o oktávu výš + melodie),
+               kadence, „sklo“ (dolní propust 2 kHz), tiché logo, fade, ticho do podpisu (`--konec` = začátek ticha), pad pod
+               podpisem. Uloží se lineárně: vrchol = −16 LUFS, žádný loudnorm ani limiter (stavba hlasitosti zůstane).
   --drop   čas nástupu plné části (zaokrouhlí se na celý takt), předtím úvod a stoupání
   --konec  čas finálního úderu (end card), zaokrouhlí se na dobu; potom už jen doznívá
   --zlom / --drop2  (sportovni) zlom = jen pad + filtr + průjezd motoru, poslední takt před drop2 = stoupání; v JSON i „zlom“, „stoupani“, „drop2“
@@ -454,6 +458,9 @@ NALADY = {
     # Luxusní sportovní (V003, reklama na prémiový vůz): d moll, jízda i–VI–iv–III v barvách m9/maj9 (Dm9 Bbmaj9 Gm9 Fmaj9),
     # počítáno OD DROPU. Takt před dropem, dropem 2 a koncem = dominanta A7sus4 → A7(b9) (napětí → tónika). Zlom Fmaj9 Bbmaj9 (teplo).
     "luxsport": dict(bpm=120, akordy=[(50, [0, 3, 7, 10, 14]), (46, [0, 4, 7, 11, 14]), (43, [0, 3, 7, 10, 14]), (41, [0, 4, 7, 11, 14])]),
+    # Na vrcholu hory (V005, Porsche): F dur, bez bicích a bez dropu, vrchol místo dropu; akordy a časy viz HORA_AK / HORA_BODY.
+    # bpm=None = volně (doba = (kadence − vrchol) / 8), `--bpm` ji přepíše.
+    "hora": dict(bpm=None, tonina=5, akordy=[(53, [0, 4, 7, 11, 14]), (50, [0, 3, 7, 10, 14]), (46, [0, 4, 7, 11, 14]), (43, [0, 3, 7, 10, 14])]),
 }
 
 # Marimbový motiv nálady „pohodova“ pro každý akord: (doba v taktu, MIDI). Tři tóny po třech šestnáctinách (0; 0,75; 1,5 doby),
@@ -1429,6 +1436,225 @@ def aranzuj_luxsport(delka, bpm, drop, konec, zlom=None, drop2=None):
                            doby=doby, takty=takty, udalosti=udalosti, udalosti_nastroju=udalosti_nastroju)
 
 
+# ---------- nálada „hora“ (V005, Porsche 718 Spyder RS): na vrcholu hory, velmi drahá a klidná ----------
+# Bez bicích a bez dropu: jediný tón klavíru (háček) → nástup plochy → pomalé stoupání (swell, akcent) → nádech → VRCHOL
+# (plocha o oktávu výš + melodie klavíru) → kadence do tóniky → „uvnitř skla“ (dolní propust) → tiché logo → fade → ticho →
+# (úder patří SFX na podpis) → tichý pad pod podpisem. Akordy F dur v barvách maj9 / m9 / add9 (odvozeno z `luxusni`).
+# Časy proměn se berou z obrazu (D12), ne z mřížky: `HORA_BODY` = výchozí body V005, přepíše je `--body`.
+# Mřížka dob jen pro melodii: doba = (kadence − vrchol) / 8 (V005: 69,5 BPM, doby pak padnou i na 6,96 a 27,69).
+HORA_BODY = dict(plocha=2.60, svet2=4.22, akcent=7.99, swell_od=9.86, swell_do=10.76, fotka=12.05, nadech=13.62,
+                 vrchol_do=17.60, navrat=19.98, kadence=20.78, sklo_od=20.72, sklo_do=21.02, sklo_ven=22.44, erb=23.58,
+                 fade=27.40, podpis=27.85)
+HORA_LUFS_VRCHOL = -16.0                     # hlasitost vrcholu (vrchol … vrchol_do), zbytek podle obálky níže
+# Měkké nasycení špiček (4× převzorkování): pily ploch mají velký poměr špička / hlasitost (−5,8 dBFS při −19,9 LUFS = 14 dB).
+# Master na −14 LUFS by pak nešel lineárně (loudnorm přepne do dynamického režimu a srovná stavbu: háček hlasitější než vrchol).
+# Pod kolenem beze změny, nad ním tanh ke stropu; zasáhne jen špičky ve vrcholu (~0,2 s vzorků nad kolenem).
+HORA_KOLENO, HORA_STROP = -13.0, -8.5
+# Akordy (kořen MIDI, intervaly); F dur: I Fmaj9, vi Dm9, IV Bbmaj9, ii Gm9, V C9sus4 / C9
+HORA_AK = dict(I=(53, [0, 4, 7, 11, 14]), vi=(50, [0, 3, 7, 10, 14]), IV=(46, [0, 4, 7, 11, 14]), ii=(43, [0, 3, 7, 10, 14]),
+               Vsus=(48, [0, 5, 7, 10, 14]), V=(48, [0, 4, 10, 14]), Iadd9=(53, [0, 4, 7, 14]), IVF=(46, [0, 4, 11, 14]))
+
+
+def hora_basa(m, dur, utok=0.8, vel=1.0, uvolneni=1.2):
+    """Měkká basa se swellem: sinus + 2. a 3. harmonická (telefon), pomalý náběh, dlouhé uvolnění."""
+    n = int((dur + uvolneni + 0.1) * SR)
+    t = cas(n)
+    f = mtof(m)
+    y = np.sin(2 * np.pi * f * t) + 0.45 * np.sin(4 * np.pi * f * t) + 0.25 * np.sin(6 * np.pi * f * t)
+    e = np.clip(t / utok, 0, 1) ** 1.5 * np.clip(1 - (t - dur) / uvolneni, 0, 1) ** 2
+    return np.tanh(1.6 * y * e) / np.tanh(1.6) * vel
+
+
+def hora_vitr(dur, vel=1.0):
+    """Vzduch nahoře na hoře: šum 1,5–7 kHz s pomalými poryvy (0,07–0,2 Hz), velmi tichý. Vrací stereo (kanály nezávislé)."""
+    n = int(dur * SR)
+    t = cas(n)
+    out = np.zeros((2, n))
+    for ch in range(2):
+        s = filtr(filtr(rng.standard_normal(n), "highpass", 1500, 2), "lowpass", 7000, 2)
+        por = 0.6 + 0.4 * np.sin(2 * np.pi * 0.07 * t + rng.random() * 6.28) * np.sin(2 * np.pi * 0.19 * t + rng.random() * 6.28)
+        out[ch] = s * por
+    return out * np.clip(t / 1.5, 0, 1) * np.clip((dur - t) / 1.5, 0, 1) * vel
+
+
+def aranzuj_hora(delka, bpm, vrchol, konec, body):
+    """Nálada „hora“. `vrchol` = otevření výhledu, `konec` = začátek ticha před podpisem (fade končí tady), `body` = časy proměn."""
+    b = dict(HORA_BODY, **body)
+    doba = (b["kadence"] - vrchol) / 8 if not bpm else 60 / bpm
+    bpm = round(60 / doba, 2)
+    mx = Mix(delka)
+    hraje = []
+
+    def zapis(nastroj, kdy, **info):
+        hraje.append((nastroj, dict(cas=round(kdy, 5), nastup=round(kdy, 5), **info)))
+
+    def d(k):                                                            # čas k-té doby od vrcholu
+        return vrchol + k * doba
+
+    # Akordy: (od, akord, střed voicingu plochy, hlasitost plochy, basa ano/ne, náběh plochy)
+    plan = [(b["plocha"], "I", 57, 0.80, True, 1.0), (b["svet2"], "vi", 57, 0.85, True, 0.8),
+            (b["akcent"], "IV", 57, 0.95, True, 0.25), (b["swell_od"], "ii", 58, 1.00, True, 0.6),
+            (b["fotka"], "Vsus", 58, 1.00, True, 0.6),
+            (vrchol, "IV", 69, 1.15, True, 0.28), (d(2), "I", 69, 1.10, True, 0.6), (d(4), "vi", 67, 1.0, True, 0.6),
+            (d(5.75), "ii", 64, 0.92, True, 0.6), (b["navrat"], "Vsus", 62, 0.90, True, 0.4),
+            (b["kadence"] - doba / 2, "V", 62, 0.85, True, 0.2), (b["kadence"], "I", 62, 0.95, True, 0.3),
+            (b["erb"], "IVF", 62, 0.80, True, 0.9), (b["kadence"] + 6 * doba, "Iadd9", 62, 0.75, True, 0.9)]
+    for i, (od, ak, stred, vel, s_basou, utok) in enumerate(plan):
+        do = plan[i + 1][0] if i + 1 < len(plan) else konec
+        k, iv = HORA_AK[ak]
+        noty = akord(k, iv, stred)
+        dur = do - od
+        mx.pridej("harmonie", od, plocha(noty, dur, 1800 if od < vrchol else 3400, 0.5 * vel, utok))
+        telo = sorted({akord(k, [0], 50)[0], akord(k, [7], 52)[0]})              # tělo: kořen a kvinta kolem D3 (125–250 Hz pro telefon)
+        mx.pridej("harmonie", od, plocha(telo, dur, 1200, 0.32 * vel, utok))
+        zapis("akord", od, akord=ak, noty=[nota(m) for m in noty])
+        if od >= b["swell_od"] - 1e-6:                                   # smyčce od swellu: barva nahoře (o oktávu výš od vrcholu)
+            hore = noty[-3:] if od < vrchol else [m + 12 for m in noty[-2:]] + [noty[-3]]
+            mx.pridej("smycce", od, smycce(hore, dur, 4500 if od >= vrchol else 3200, 0.45 * vel, max(utok, 0.35)))
+        if s_basou:
+            m = basovy(41 if ak == "IVF" else k, 33)                          # Bbmaj9/F: basa drží F (prodleva tóniky v logu)
+            mx.pridej("basa", od, hora_basa(m, dur, 0.5 if od >= vrchol else 1.0, 0.55 * vel), 1.0)
+            zapis("basa", od, nota=nota(m))
+
+    # Klavír: jediný tón na 0,00, pak řídké tóny na proměny; od vrcholu melodie (4 fráze po 2 dobách), přistane na kadenci.
+    tony = [(0.0, 69, 2.4, 0.55), (b["svet2"], 76, 2.0, 0.30), (b["akcent"], 74, 1.6, 0.32), (b["swell_od"], 70, 1.8, 0.32),
+            (b["fotka"], 79, 1.4, 0.28)]
+    melodie = [(0, 81, 1.0), (1, 79, 0.5), (1.5, 77, 0.5), (2, 76, 1.0), (3, 72, 0.5), (3.5, 74, 0.5),
+               (4, 77, 1.5), (5.5, 76, 0.5), (6, 74, 1.0), (7, 72, 0.5), (7.5, 70, 0.5), (8, 69, 2.5)]
+    tony += [(d(k), m, dl * doba, 0.62 if k < 4 else 0.55 if k < 8 else 0.5) for k, m, dl in melodie]
+    tony += [(b["sklo_ven"] + 0.07, 72, 1.5, 0.36), (b["erb"], 77, 1.6, 0.40), (d(8 + 5), 76, 1.2, 0.33), (d(8 + 6), 69, 1.6, 0.36)]
+    for kdy, m, dl, v in tony:
+        if kdy < konec:
+            mx.pridej("melodie", kdy, filtr(klavir(m, dl, v), "lowpass", 2800 if kdy == 0 else 6500, 2), 1.0, pan=0.12)   # háček tlumený
+            zapis("klavir", kdy, nota=nota(m))
+
+    # Měkký „tep“ na vrcholu: taiko tlumené na 900 Hz, −20 dB proti ploše (sotva slyšet), každé 2 doby od vrcholu + 2 doby.
+    for k in (2, 4, 6):
+        if d(k) < b["navrat"]:
+            mx.pridej("bici", d(k), filtr(taiko(70, 45), "lowpass", 900, 2) * 0.1, 1.0)
+            zapis("tep", d(k))
+
+    # Vzduch na hoře (od plochy do fade) + tichý pad pod podpisem (samostatná sběrnice, nedotkne se ho ticho před ním).
+    mx.pridej("vitr", b["plocha"], hora_vitr(konec - b["plocha"], 0.1))
+    zbyva = delka - b["podpis"]
+    k, iv = HORA_AK["Iadd9"]
+    pad = akord(k, iv, 69)
+    mx.pridej("podpis", b["podpis"], plocha(pad, zbyva, 2200, 0.45, 0.5))
+    mx.pridej("podpis", b["podpis"], hora_basa(basovy(k, 33), zbyva, 0.6, 0.3), 1.0)
+    zapis("podpis_pad", b["podpis"], noty=[nota(m) for m in pad])
+
+    udalosti_nastroju = {}
+    for n_, u in sorted(hraje, key=lambda x: x[1]["cas"]):
+        udalosti_nastroju.setdefault(n_, []).append(u)
+    udalosti = [{"cas": round(t, 4), "typ": typ} for typ, t in
+                [("hora_ton", 0.0), ("plocha", b["plocha"]), ("akcent", b["akcent"]), ("swell", b["swell_od"]), ("nadech", b["nadech"]),
+                 ("vrchol", vrchol), ("vrchol_do", b["vrchol_do"]), ("kadence", b["kadence"]), ("sklo", b["sklo_od"]),
+                 ("sklo_ven", b["sklo_ven"]), ("fade", b["fade"]), ("konec", konec), ("podpis", b["podpis"])]]
+    doby = [round(vrchol + i * doba, 4) for i in range(-int(vrchol / doba), int((delka - vrchol) / doba) + 1)]
+    return mx, [], dict(nalada="hora", bpm=bpm, bpm_volne=True, doba=round(doba, 5), drop=None, vrchol=round(vrchol, 4),
+                        konec=round(konec, 4), delka=delka, body={k_: round(v_, 4) for k_, v_ in b.items()}, doby=doby,
+                        udalosti=udalosti, udalosti_nastroju=udalosti_nastroju)
+
+
+def hora_obalka(n, vrchol, konec, b):
+    """Zisk hudby po mixu (lineárně, po dozvuku): stavba hlasitosti, nádech, swell, decrescendo, fade a ticho."""
+    t = cas(n)
+    body = [(0, 3.0), (b["plocha"], -1.0), (b["svet2"], 0.0), (b["akcent"], 1.0), (b["swell_od"], 1.0), (b["swell_do"], 3.0),
+            (b["swell_do"] + 0.8, 1.5), (b["fotka"], 1.5), (b["nadech"] - 0.01, 2.5), (b["nadech"] + 0.25, -5.8), (vrchol - 0.005, -5.8),
+            (vrchol + 0.005, 0.0),
+            (b["vrchol_do"], 0.0), (b["navrat"], -0.5), (b["kadence"], 0.0), (b["sklo_ven"], 3.0), (b["sklo_ven"] + 0.4, 3.0),
+            (b["fade"], 1.0)]
+    db = np.interp(t, [p[0] for p in body], [p[1] for p in body])
+    g = 10 ** (db / 20)
+    f = np.clip((t - b["fade"]) / max(konec - b["fade"], 1e-3), 0, 1)
+    return g * (0.5 + 0.5 * np.cos(np.pi * f)) * (t < konec)          # kosinový fade do nuly, od `konec` přesně nula (ticho)
+
+
+def hora_sklo(x, b, f_nizko=2000.0, f_vysoko=20000.0, blok=128):
+    """„Uvnitř skla“: dolní propust 4 póly, mezní kmitočet klesne sklo_od → sklo_do na f_nizko, drží, v sklo_ven − 0,24 → sklo_ven
+    se otevře. Zpracuje se jen úsek kolem (zbytek beze změny), napojení kosinovým prolnutím 40 ms tam, kde je filtr otevřený."""
+    a, z = int((b["sklo_od"] - 0.3) * SR), int((b["sklo_ven"] + 0.3) * SR)
+    seg = x[:, a:z]
+    tt = cas(seg.shape[1]) + a / SR
+    lf = np.interp(tt, [b["sklo_od"], b["sklo_do"], b["sklo_ven"] - 0.24, b["sklo_ven"]],
+                   [np.log(f_vysoko), np.log(f_nizko), np.log(f_nizko), np.log(f_vysoko)])
+    out = np.zeros_like(seg)
+    zi = None
+    for i in range(0, seg.shape[1], blok):
+        sos = signal.butter(4, min(np.exp(lf[i]) / (SR / 2), 0.95), output="sos")
+        if zi is None:
+            zi = np.zeros((sos.shape[0], 2, 2))
+        out[:, i:i + blok], zi = signal.sosfilt(sos, seg[:, i:i + blok], axis=-1, zi=zi)
+    w = np.clip(np.minimum((tt - tt[0]) / 0.04, (tt[-1] - tt) / 0.04), 0, 1)
+    w = 0.5 - 0.5 * np.cos(np.pi * w)
+    y = x.copy()
+    y[:, a:z] = seg * (1 - w) + out * w
+    return y
+
+
+def lufs_useku(x, od, do):
+    """Hlasitost (LUFS, K-vážení BS.1770, bez hradlování) stereo úseku od–do s."""
+    k = signal.lfilter([1.53512485958697, -2.69169618940638, 1.19839281085285], [1, -1.69065929318241, 0.73248077421585], x, axis=-1)
+    k = signal.lfilter([1, -2, 1], [1, -1.99004745483398, 0.99007225036621], k, axis=-1)
+    s = k[:, int(od * SR):int(do * SR)]
+    return -0.691 + 10 * np.log10(np.sum(np.mean(s ** 2, axis=1)) + 1e-12)
+
+
+def mixuj_hora(mx, info):
+    """Mix nálady hora: sběrnice + dozvuk rt60 3,3 s (předzpoždění 30 ms), obálka hlasitosti, „sklo“, ticho; pad podpisu zvlášť."""
+    nast = NASTAVENI_MIXU["hora"]
+    b, vrchol, konec = info["body"], info["vrchol"], info["konec"]
+
+    def sbernice(jmena):
+        suchy = np.zeros((2, mx.n))
+        send = np.zeros((2, mx.n))
+        for bus, x in mx.busy.items():
+            if bus in jmena:
+                g, s, _ = nast.get(bus, (0.7, 0.2, False))
+                suchy += x * g
+                send += x * g * s
+        return suchy + dozvuk(send, nast["rt60"], nast["predelay"], 6000) * 0.9
+
+    hlavni = sbernice([k for k in mx.busy if k != "podpis"])
+    hlavni = hora_sklo(hlavni * hora_obalka(mx.n, vrchol, konec, b), b)
+    t = cas(mx.n)
+    podpis = sbernice(["podpis"]) * np.clip((t - b["podpis"]) / 0.02, 0, 1)
+    out = filtr(hlavni + podpis, "highpass", 38, 2)
+    od, do, db = nast["prezence"]
+    sos = signal.butter(2, [od / (SR / 2), do / (SR / 2)], btype="bandpass", output="sos")
+    out = out + (10 ** (db / 20) - 1) * signal.sosfiltfilt(sos, out, axis=-1)
+    out = out + (10 ** (nast["vysky_db"] / 20) - 1) * filtr(out, "highpass", 2500, 2)
+    out[:, (t >= konec) & (t < b["podpis"])] = 0.0                      # ticho: přesně nula (i dozvuk, filtry)
+    return out
+
+
+def uloz_hora(out, info, cesta):
+    """Lineárně (žádný loudnorm, žádný limiter): zisk tak, aby vrchol (vrchol … vrchol_do) měl HORA_LUFS_VRCHOL. Konec 0,6 s fade."""
+    from scipy.io import wavfile
+    delka, b = info["delka"], info["body"]
+    n = int(delka * SR)
+    out = out[:, :n].copy()
+    f = int(0.6 * SR)
+    out[:, -f:] *= (0.5 + 0.5 * np.cos(np.linspace(0, np.pi, f)))
+    zisk = 10 ** ((HORA_LUFS_VRCHOL - lufs_useku(out, info["vrchol"], b["vrchol_do"])) / 20)
+    out *= zisk
+    k_, L_ = 10 ** (HORA_KOLENO / 20), 10 ** (HORA_STROP / 20)
+    x4 = signal.resample_poly(out, 4, 1, axis=1)
+    a4 = np.abs(x4)
+    x4 = np.where(a4 > k_, np.sign(x4) * (k_ + (L_ - k_) * np.tanh((a4 - k_) / (L_ - k_))), x4)
+    out = signal.resample_poly(x4, 1, 4, axis=1)[:, :n]
+    out[:, int(info["konec"] * SR):int(b["podpis"] * SR)] = 0.0          # ticho zůstane přesně nula i po převzorkování
+    spicka = np.max(np.abs(out))
+    assert spicka < 10 ** (-1.5 / 20), f"hora: špička {20 * np.log10(spicka):.1f} dBFS nad −1,5 dBFS"
+    wavfile.write(cesta, SR, np.round(out.T * 32767).astype(np.int16))
+    info["mereni"] = dict(spicka_dbfs=round(float(20 * np.log10(spicka)), 2), **{
+        f"lufs_{k}": round(float(lufs_useku(out, od, do)), 1) for k, od, do in
+        [("hacek", 0.0, b["plocha"]), ("jizda", b["plocha"], b["nadech"]), ("vrchol", info["vrchol"], b["vrchol_do"]),
+         ("navrat", b["vrchol_do"], b["sklo_ven"]), ("logo", b["sklo_ven"], b["fade"]), ("podpis", b["podpis"] + 0.2, delka)]})
+    ticho = out[:, int(info["konec"] * SR):int(b["podpis"] * SR)]
+    info["mereni"]["ticho_spicka"] = float(np.max(np.abs(ticho))) if ticho.size else None
+
+
 NASTAVENI_MIXU = {
     # bus: (hlasitost, dozvuk-send, sidechain)
     "vazna": dict(bici=(0.8, 0.12, False), basa=(0.7, 0.0, True), harmonie=(1.1, 0.35, True), melodie=(1.1, 0.45, False), fx=(0.5, 0.8, False), rt60=3.2),
@@ -1446,6 +1672,10 @@ NASTAVENI_MIXU = {
     "luxsport": dict(bici=(0.85, 0.06, False), basa=(0.5, 0.0, True), klavesy=(0.6, 0.3, True), melodie=(0.3, 0.35, False),
                      harmonie=(2.5, 0.4, True), smycce=(2.0, 0.25, True), lead=(1.8, 0.45, False), motor=(0.85, 0.12, False),
                      fx=(0.7, 0.5, False), rt60=2.2, sidechain=0.4, tremolo=4.0, vysky_db=3, prezence=(1500, 4500, 5)),
+    # hora (V005): bez sidechainu a bez bicích, dlouhý prostor (rt60 3,3 s, předzpoždění 30 ms), klavír a smyčce víc do dozvuku
+    "hora": dict(harmonie=(1.0, 0.45, False), smycce=(0.9, 0.5, False), basa=(0.6, 0.05, False), melodie=(0.8, 0.5, False),
+                 bici=(0.6, 0.2, False), vitr=(1.0, 0.1, False), podpis=(1.0, 0.55, False), rt60=3.3, predelay=0.03,
+                 vysky_db=6, prezence=(1200, 3500, 6)),
 }
 
 
@@ -1546,7 +1776,22 @@ def main():
     ap.add_argument("--motor", choices=["spalovaci", "elektricky"], default="spalovaci",
                     help="zvukový motiv motoru (sportovni, luxsport): elektricky = tón střídače pro elektromobily (V004)")
     ap.add_argument("--drop2", type=float, help="jen sportovni a luxsport: druhý drop, výchozí zlom + 2 takty (poslední takt před ním = stoupání)")
+    ap.add_argument("--vrchol", type=float, help="jen hora: otevření výhledu (místo dropu), výchozí 13,87")
+    ap.add_argument("--body", default="", help="jen hora: časy proměn „jmeno=cas,…“ (klíče HORA_BODY), výchozí V005")
     a = ap.parse_args()
+    if a.nalada == "hora":                                              # V005: samostatná cesta, ostatní nálady beze změny
+        rng = np.random.default_rng(a.seed)
+        body = {k: float(v) for k, v in (x.split("=") for x in a.body.split(",") if x)}
+        mx, _, info = aranzuj_hora(a.delka, a.bpm, a.vrchol if a.vrchol is not None else 13.87,
+                                   a.konec if a.konec is not None else a.delka - 2.35, body)
+        cesta = Path(a.out)
+        cesta.parent.mkdir(parents=True, exist_ok=True)
+        uloz_hora(mixuj_hora(mx, info), info, cesta)
+        info["pasma"], info["oktavy_db"] = kontrola_pasem(cesta)
+        cesta.with_suffix(".json").write_text(json.dumps(info, ensure_ascii=False, indent=1))
+        print(f"{cesta}: hora, {info['bpm']} BPM (volně), vrchol {info['vrchol']} s, konec {info['konec']} s, délka {a.delka} s")
+        print("měření:", json.dumps(info["mereni"], ensure_ascii=False))
+        return
     global MOTOR_ELEKTRICKY
     MOTOR_ELEKTRICKY = a.motor == "elektricky"
     rng = np.random.default_rng(a.seed)

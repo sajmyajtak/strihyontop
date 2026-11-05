@@ -1,0 +1,272 @@
+[
+ {
+  "cas": 0.2,
+  "typ": "sklo_pop",
+  "lu": -11,
+  "strop": -20,
+  "popis": "S0 pilulka vyroste z červené linky (TAH/ROST 0,20–0,32, začátek růstu) [partitura #3]",
+  "ton": 1.19
+ },
+ {
+  "cas": 2.58,
+  "typ": "hover",
+  "lu": -14,
+  "strop": -24,
+  "popis": "S0→S1 pilulka se smrští do kompaktní 84×84 (2,58–2,70) těsně po střihu T1 do POV [#4]"
+ },
+ {
+  "cas": 4.22,
+  "typ": "ponor",
+  "lu": -12,
+  "strop": -20,
+  "popis": "T2 nájezd skrz erb na volantu (4,05–4,30), vrchol = první snímek W4 z rozostření (4,22) [#5, #7]"
+ },
+ {
+  "cas": 5.86,
+  "typ": "detent",
+  "lu": -13,
+  "strop": -19,
+  "popis": "S2 tečka barvy Vanadium se objeví v pilulce (ROZ-IN 5,86) [#9]"
+ },
+ {
+  "cas": 6.61,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -22,
+  "popis": "S2 vzorky laku vyjíždějí z tečky (6,60–6,72), 1. ze 3 tiků rozvinutí [#11]",
+  "ton": 0.9
+ },
+ {
+  "cas": 6.665,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -22,
+  "popis": "S2 vzorky laku vyjíždějí, 2. tik rozvinutí [#11]",
+  "ton": 1.0
+ },
+ {
+  "cas": 6.72,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -17,
+  "popis": "S2 klik: podtrh přejede pod Guards Red (6,72–6,80; 3. „tik“ = výběr) [#11]"
+ },
+ {
+  "cas": 7.08,
+  "typ": "sken",
+  "lu": -10,
+  "strop": -18,
+  "popis": "S2 skenovací linka 1 přejede vůz šedá → Guards Red (6,96–7,21), vrchol uprostřed přejezdu [#12]"
+ },
+ {
+  "cas": 7.99,
+  "typ": "sklo_pop",
+  "lu": -10,
+  "strop": -18,
+  "popis": "T3 EXPL: tečka Guards Red exploduje do plné červené plochy (7,99–8,02) [#14]",
+  "ton": 0.94
+ },
+ {
+  "cas": 8.32,
+  "typ": "klik",
+  "lu": -12,
+  "strop": -17,
+  "popis": "S2b scroll: podtrh skočí pod Black, vůz přepne v 1 snímku [#16]",
+  "ton": 1.0
+ },
+ {
+  "cas": 8.52,
+  "typ": "klik",
+  "lu": -12,
+  "strop": -17,
+  "popis": "S2b scroll: podtrh pod Shark Blue [#16]",
+  "ton": 1.12
+ },
+ {
+  "cas": 8.72,
+  "typ": "klik",
+  "lu": -12,
+  "strop": -17,
+  "popis": "S2b scroll: podtrh pod Ruby Star Neo [#16]",
+  "ton": 1.26
+ },
+ {
+  "cas": 8.92,
+  "typ": "klik",
+  "lu": -12,
+  "strop": -17,
+  "popis": "S2b scroll: podtrh pod GT Silver [#16]",
+  "ton": 1.335
+ },
+ {
+  "cas": 9.66,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -17,
+  "popis": "S2b podtrh pod Gentian Blue (vzorky 9,56–9,66) = příčina linky 2 [#19]"
+ },
+ {
+  "cas": 10.31,
+  "typ": "sken_dlouhy",
+  "lu": -10,
+  "strop": -18,
+  "popis": "S2b skenovací linka 2 pomalu 9,86–10,76 (stříbrná → Gentian Blue), vrchol uprostřed přejezdu [#20]"
+ },
+ {
+  "cas": 10.98,
+  "typ": "svih_mekky_kratky",
+  "lu": -13,
+  "strop": -21,
+  "popis": "T4 CLONA z pravého zadního kola (10,92–11,02, 6 snímků), vrchol uprostřed otevírání [#15]"
+ },
+ {
+  "cas": 11.2,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -17,
+  "popis": "S3 podtrh pod Satin Neodyme (vzorky kol 11,12–11,20) [#23]"
+ },
+ {
+  "cas": 11.27,
+  "typ": "klik_kov",
+  "lu": -13,
+  "strop": -21,
+  "popis": "S3 proměna ráfku z náboje (11,24–11,54); posunuto o 30 ms za klik 11,20 (rozestup ≥ 50 ms, C047) [#24]",
+  "ton": 0.85
+ },
+ {
+  "cas": 12.0,
+  "typ": "svih_mekky_kratky",
+  "lu": -13,
+  "strop": -21,
+  "popis": "T5 LET svisle: M8 odletí nahoru, fotka přijede zdola (11,95–12,05), vrchol uprostřed [#22, #26]",
+  "ton": 1.1
+ },
+ {
+  "cas": 13.02,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -17,
+  "popis": "S4 podtrh pod Arctic (vzorky interiéru 12,90–13,02) [#28]"
+ },
+ {
+  "cas": 13.3,
+  "typ": "sken_svisly",
+  "lu": -10,
+  "strop": -18,
+  "popis": "S4 skenovací linka 3 shora dolů přes sedadla 13,12–13,47 (karmín → Arctic), vrchol uprostřed [#29]"
+ },
+ {
+  "cas": 13.77,
+  "typ": "svih_mekky",
+  "lu": -11,
+  "strop": -19,
+  "popis": "T6 WIPE pruhy v šedých porsche.cz (13,62–14,02), vrchol = plné krytí #191f22 (13,77–13,87); hudba v nádechu [#26]",
+  "ton": 0.9
+ },
+ {
+  "cas": 15.5,
+  "typ": "sklo_pop",
+  "lu": -14,
+  "strop": -24,
+  "popis": "S5 karta čísla: pilulka vyroste na 420×200 (MORF 15,40–15,60) [#34]",
+  "ton": 0.84
+ },
+ {
+  "cas": 15.67,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -21,
+  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 0→1 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
+  "ton": 0.9
+ },
+ {
+  "cas": 15.73,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -21,
+  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 1→2 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
+  "ton": 0.9400000000000001
+ },
+ {
+  "cas": 15.804,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -21,
+  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 2→3 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
+  "ton": 0.98
+ },
+ {
+  "cas": 15.911,
+  "typ": "tik_cislo",
+  "lu": -16,
+  "strop": -21,
+  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 3→4 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
+  "ton": 1.02
+ },
+ {
+  "cas": 16.32,
+  "typ": "ding",
+  "lu": -10,
+  "strop": -18,
+  "popis": "S5 číslo 500 dosedne: první ustálený snímek hotové hodnoty (C047, ding se neposouvá) [#36]",
+  "ton": 0.794
+ },
+ {
+  "cas": 17.97,
+  "typ": "prujezd_mekky",
+  "lu": -9,
+  "strop": -16,
+  "popis": "T8 W11 vůz projíždí vlevo kolem kamery (zdroj 365,00–365,40 → 17,67–18,00), nejbližší bod těsně před střihem v pohybu 18,00 (W6)",
+  "pan": 0.3,
+  "pan_do": -0.8,
+  "pan_tau": 0.15
+ },
+ {
+  "cas": 19.8,
+  "typ": "klik",
+  "lu": -11,
+  "strop": -17,
+  "popis": "S6 podtrh pod Vanadium (vzorky 19,66–19,78) = příčina návratu [#40]"
+ },
+ {
+  "cas": 20.46,
+  "typ": "sken_navrat",
+  "lu": -10,
+  "strop": -18,
+  "popis": "S6 skenovací linka 4 zprava doleva 19,98–20,78 odkryje originál (šedá); vrchol v 60 % přejezdu, pásmo klesá [#41]"
+ },
+ {
+  "cas": 20.82,
+  "typ": "svih_mekky_dlouhy",
+  "lu": -13,
+  "strop": -21,
+  "popis": "T9 MORF rámce: pilulka vyroste na celý obraz (20,72–21,02, kriticky tlumené = nejrychlejší na začátku); hudba se zavírá do 2 kHz [#43]",
+  "ton": 0.85
+ },
+ {
+  "cas": 21.83,
+  "typ": "prujezd_za_sklem",
+  "lu": -8,
+  "strop": -16,
+  "popis": "T9 skutečný šedý vůz projede za sklem (21,40–22,25, zdroj 282,16–283,20), nejbližší bod ≈ střed; tlumeně jako hudba [#43]",
+  "pan": 0.5,
+  "pan_do": -0.8,
+  "pan_tau": 0.2
+ },
+ {
+  "cas": 23.58,
+  "typ": "tah_prstence",
+  "lu": -9,
+  "strop": -18,
+  "popis": "S7 TAH erbu: podtrh nakreslí obrys štítu (23,18–23,58), vrchol na dokončení obrysu = výplň erbu [#46]",
+  "ton": 1.189
+ },
+ {
+  "cas": 27.85,
+  "typ": "boom_podpis",
+  "popis": "S7→podpis: BOOM + bílý záblesk (27,85, 2 snímky) po tichu 27,65–27,85; jediný hlasitý úder videa (I9) [#51]",
+  "uroven": -8.0,
+  "drive": 4
+ }
+]

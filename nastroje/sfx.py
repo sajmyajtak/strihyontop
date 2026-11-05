@@ -36,6 +36,9 @@ Prémiové UI a luxusní vůz (V003, dolní propust 11 kHz, tóny v D moll): det
 Elektrický vůz (V004, BMW i7, žádný spalovací motor): ev_prujezd(_tesny/_tichy) (Doppler tónu pohonu + pneumatiky + vítr),
   ev_najezd(_dlouhy) (stoupající tón pohonu, vrchol na konci), ev_uder (drop: náraz + závan + „výstřel“ tónu pohonu),
   pneu_hukot, ponor (klesající závan + tupý tón na konci), zaverka (flash cut), kuze (stisk volantu), sterk (kamení), ding (číslo dosedne).
+Na vrcholu hory (V005, Porsche 718, tóny F dur jako hudba „hora“): sken (skenovací linka 0,3 s), sken_dlouhy (0,9 s), sken_svisly (0,35 s),
+  sken_navrat (0,8 s, pásmo dolů), prujezd_mekky (vzduch + pneu, motor tiše), prujezd_za_sklem (totéž za dolní propustí 1,2 kHz),
+  boom_podpis (jediný hlasitý úder videa: plný, ne agresivní, vrchol na náběhu).
 Výstup: sfx.wav (48 kHz stereo) + sfx.json (čas, typ, změřený vrchol samotného zvuku i v hotové stopě, odchylka v ms,
 úroveň, hlasitost efektu proti hudbě v okně 400 ms). Typy zvuků: viz ZVUKY.
 """
@@ -902,6 +905,49 @@ def ding(rng, v=1.0):
     return _lux(x)
 
 
+# ---------- na vrcholu hory (V005, Porsche 718): tóny F dur jako hudba „hora“, měkké, nic nad ~11 kHz (C030) ----------
+F6 = 1396.91
+
+
+def sken(rng, v=1.0, delka=0.3, vrchol_podil=0.5, smer=1.0):
+    """Skenovací linka přejede vůz („shimmer“ skla): shluk skleněných tónů F6 A6 C7 E7 s pomalým chvěním + vzduch, jehož pásmo
+    putuje nahoru (`smer` 1) nebo dolů (−1, návrat), obálka ∧ s vrcholem v `vrchol_podil` délky, doznění 0,12 s."""
+    n = int((delka + 0.4) * SR)
+    t = cas(n)
+    p = delka * vrchol_podil
+    x = sum(a * np.sin(2 * np.pi * F6 * v * r * t * (1 + 0.004 * np.sin(2 * np.pi * 6.5 * t + i)) + rng.uniform(0, 6.28))
+            for i, (r, a) in enumerate([(1, 1), (1.26, 0.7), (1.498, 0.55), (1.888, 0.3)]))
+    s = rng.standard_normal(n)
+    w = np.clip(t / delka, 0, 1) if smer > 0 else 1 - np.clip(t / delka, 0, 1)
+    vzd = (1 - w) * rovny_sum(pasmo(s, 1200, 3000)) + w * rovny_sum(pasmo(s, 3000, 8000))
+    e = np.where(t < p, (t / max(p, 1e-4)) ** 1.6, np.exp(-(t - p) / max(0.12, (delka - p) / 2.5)))
+    return _lux((0.6 * x + 0.35 * vzd) * e)
+
+
+def prujezd_mekky(rng, v=1.0, delka=1.4, lp=6000):
+    """Tichý průjezd kolem kamery (V005: šum vzduchu a pneumatik, motor jen tiše vespod, ne naplno): Doppler, vrchol v nejbližším bodě."""
+    n = int(delka * SR)
+    return dolni(doppler_jizda(rng, n, delka / 2, 150 * v, 60, 5.0, 300, 3000, 0.8, 0.5), lp)
+
+
+def boom_podpis(rng, v=1.0):
+    """Jediný hlasitý úder videa (podpis tvůrce, V005): plný, ne agresivní. Tělo 72 → 41 Hz s harmonickými do ~450 Hz (telefon),
+    tlumený tlakový závan 150–1 500 Hz, měkký „vzduch“ bloomu (záblesk) 2–6 kHz; první puls v kosinové fázi = vrchol na náběhu,
+    doznění ~1,8 s (pod podpisem)."""
+    n = int(2.2 * SR)
+    t = cas(n)
+    zaklad = sum(ton_c(j * 72 * v, j * 41 * v, n, 0.09) / j ** 0.9 for j in (1, 2, 3, 4, 5, 6))
+    telo = np.tanh(1.6 * zaklad / (np.max(np.abs(zaklad)) + 1e-12)) / np.tanh(1.6) * obalka(n, 0.002, 0.45)
+    k = int(0.6 * SR)                                                    # šumové vrstvy jen 0,6 s (spicka by na 2,2 s přetekla)
+    sum_ = np.zeros(n)
+    sum_[:k] = (0.35 * rovny_sum(sum_pasmo(rng, k, 150, 1500)) * spicka(k, 0.003, 0.0015, 0.09)
+                + 0.1 * rovny_sum(sum_pasmo(rng, k, 2000, 6000)) * spicka(k, 0.004, 0.0015, 0.15))
+    trans = zaklad * obalka(n, 0.0015, 0.004)                             # první puls (kosinová fáze) = změřený vrchol na náběhu
+    trans = trans / (np.max(np.abs(trans)) + 1e-12) + 0.4 * sum_pasmo(rng, n, 1000, 5000) * obalka(n, 0.0008, 0.003)
+    telo = telo * (1 + 0.8 * np.exp(-t / 0.012))                          # tělo nejsilnější hned na náběhu (vrchol na záblesku, ne o 30 ms později)
+    return _lux(telo + sum_) + 0.45 * _lux(trans)                      # malý transient: plné tělo, ne „prásk“
+
+
 PODKLADY = {"volnobeh": volnobeh}                                        # souvislé zvuky (od–do), vrchol se nezarovnává
 
 
@@ -933,6 +979,10 @@ ZVUKY = {
     "ev_prujezd_tichy": lambda r, v: ev_prujezd(r, v, 1.2, 560, 50, 8.0, 0.4, 0.5),
     "ev_najezd": ev_najezd, "ev_najezd_dlouhy": lambda r, v: ev_najezd(r, v, 1.7, 200, 1000), "ev_uder": ev_uder,
     "pneu_hukot": pneu_hukot, "ponor": ponor, "zaverka": zaverka, "kuze": kuze, "sterk": sterk, "ding": ding,
+    # na vrcholu hory (V005, Porsche 718)
+    "sken": sken, "sken_dlouhy": lambda r, v: sken(r, v, 0.9, 0.5), "sken_svisly": lambda r, v: sken(r, 0.89 * v, 0.35, 0.5),
+    "sken_navrat": lambda r, v: sken(r, 0.84 * v, 0.8, 0.6, -1.0), "prujezd_mekky": prujezd_mekky,
+    "prujezd_za_sklem": lambda r, v: prujezd_mekky(r, 0.9 * v, 1.2, 1200), "boom_podpis": boom_podpis,
 }
 
 
