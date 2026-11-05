@@ -439,6 +439,17 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
 5. **Kola v bronzu ve W11 a W6**: kde má kolo ≥ 40 px (W11 konec 364,6–365,4, W6 19,5–19,98 výstupu), kotvy kol ano; menší se neřeší.
 6. Nástroje a skripty commituje režisér průběžně (`prebarvi.py` s novými volbami je v gitu).
 
+## Odpovědi režiséra na otázky kreativního ředitele k bloku A (2026-11-05, závazné pro animátora B)
+1. **Kotva v POV**: souhlas s návrhem KŘ. Na 3,15–3,23 se pilulka smrští do semínka a to odejde rozostřením (ROZ-OUT 0,08 s), POV 3,23–4,20 je bez UI. Na 4,22 (první snímek W4)
+   se semínko znovu nakreslí (0,08 s) a z něj vyroste pilulka pro větu 2 stejným tahem jako 0,08–0,32 = rým s háčkem. Výjimka z D10 (semínko na ~1 s zmizí) je zdůvodněná:
+   v POV není klidná plocha a pilulka na ruce řidiče je horší vada. Přesun semínka do nebe ne (pohyb bez příčiny, D6).
+2. **Střih kaňon → POV 3,233**: maskovat průchodem rozostřením (oprava 5 KŘ: σ 0 → 16 px ease-in / 16 → 0 ease-out, +0,2 EV ve vrcholu, hranice na výstupním snímku C050) = schváleno,
+   nový typ přechodu ROZ. Kaňon zůstává.
+3. **Pásy a výšivka Weissach RS na F1** zůstávají červené (pásy jsou samostatná volba konfigurátoru, výšivku nejde konfigurovat). Kritérium „po 13,47 nikde čitelný karmín“ platí
+   pro Race-Tex / kůži sedáků, ne pro pásy.
+4. Postup: animátor B dělá opravy 1–10 KŘ souběžně s blokem B; opravené desky (W4, W7 U2, M8, F1) a snímky 3,10–4,30 a 7,95–8,06 zkontroluje kolo 1 kontroly na 100 %.
+   GT Silver: když ani po opravě 1 nebude nárazník na 100 % čistý, místo stříbrné **Black** (A1), jak navrhl KŘ.
+
 ## Odpovědi režiséra zvukaři (2026-11-05)
 (1) Boom nechat (RMS +4 dB nad vrcholem, +0,6 LU v okně 100 ms). (2) Tiky odometru přepočítá režisér z funkce rolování ve scéně po renderu bloku B, ding na první ustálený
 snímek 500 (C045, C047). (3) Kliky podtrhu na dosednutí v obraze, průjezdy na nejbližší bod vozu, švihy CLONA / LET / WIPE / MORF na střed pohybu: posune režisér po renderu.
