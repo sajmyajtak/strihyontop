@@ -13,6 +13,14 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C052: Kontrolní master dynamické hudby rozbil stavbu hlasitosti (2026-11-05, V005, našel a opravil zvukař)
+- Příznak: po `master_zvuk.sh` byl háček (−10,3) hlasitější než vrchol (−12,4) a boom o 3,8 LU tišší než hudba.
+- Příčina: poměr špička / hlasitost mixu 17 dB (plochy s velkými špičkami, boom s ostrým transientem) → +6 dB na −14 LUFS lineárně nešlo, loudnorm přešel do dynamického režimu.
+  Na samotných efektech (verze bez hudby) navíc smyčka nástroje nezkonvergovala (snižuje jen cíl I, ne TP).
+- Oprava: měkké nasycení špiček ploch se stropem −8,5 dBFS (4× převzorkování) v `uloz_hora`, boom s tělem na náběhu; master pak lineárně (−13,8 LUFS / −1,9 dBTP), stavba zůstala.
+- Prevence: u dynamické hudby ověřit `TP_mixu + (−14 − I_mixu) ≤ −1,5` ještě před masterem a stavbu měřit i na dekódovaném masteru (`zvukar.md`); nástroj `master_zvuk.sh`
+  doplnit o snížení TP při opakovaném pokusu (úkol režiséra).
+
 ### C051: Dvě masky BiRefNet souběžně = nedostatek paměti (2026-11-05, V005, režisér)
 - Příznak: úloha masek režiséra skončila `Killed` (rc 137); dmesg: „Memory cgroup out of memory“ u dvou procesů python3 (7,4 GB a 6,5 GB RSS).
 - Příčina: BiRefNet (rembg, CPU) bere 6,5–7,4 GB RAM na proces; kontejner má 16 GB, animátor si souběžně pustil vlastní BiRefNet na fotku F1.

@@ -428,6 +428,12 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Odpovědi režiséra zvukaři (2026-11-05)
+(1) Boom nechat (RMS +4 dB nad vrcholem, +0,6 LU v okně 100 ms). (2) Tiky odometru přepočítá režisér z funkce rolování ve scéně po renderu bloku B, ding na první ustálený
+snímek 500 (C045, C047). (3) Kliky podtrhu na dosednutí v obraze, průjezdy na nejbližší bod vozu, švihy CLONA / LET / WIPE / MORF na střed pohybu: posune režisér po renderu.
+(4) sklo_pop 15,50 (růst karty čísla) nechat. (5) Tempo volně 69,5 BPM nechat. (6) `master_zvuk.sh` se samotnými efekty: verze bez hudby zůstává nenormalizovaná (jako V004);
+oprava nástroje (snížit i TP loudnormu o přesah) zapsána jako C052, udělá ji režisér mimo výrobu.
+
 ## Test techniky (animátor, 2026-11-04 → 2026-11-05 po restartu kontejneru)
 **Výstup**: `media/projekty/005-porsche/test/test_technika_v2.mp4` (1920×1080, 60 fps, 3,60 s = 216 snímků; v1 `test_technika.mp4` pro srovnání), varianty T8
 `t8_strih.mp4` / `t8_most.mp4` / `t8_wipe.mp4`, scéna `test_technika_v2.html`, kontroly `test/kontrola/v2/` (pás `pas_v2.jpg`, klíčové snímky 100 %
