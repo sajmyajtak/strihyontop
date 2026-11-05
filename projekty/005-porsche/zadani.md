@@ -470,6 +470,12 @@ obou záběrů (viděno u všech 3 variant T8). Oprava: desku i úsek vybírat z
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
 |---|---|---|---|
+| příprava: analytik (web, konfigurátor, stopáž) | neměřeno (notifikace ztracena restartem kontejneru) | – | 41,6 min |
+| příprava: kreativní ředitel (koncept + partitura) | neměřeno (restart) | – | 22,4 min |
+| příprava: oponent (revize partitury) | neměřeno (restart) | – | 21,5 min |
+| příprava: animátor test, 1. běh (přerušen restartem) | neměřeno (restart) | – | 32,2 min |
+| příprava: animátor test, pokračování po restartu | 203 477 | 87 | 23,5 min |
+| režisér: masky BiRefNet na pozadí (skript, ne agent) | 0 | – | ~2,2 h CPU |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |

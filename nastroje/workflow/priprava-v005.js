@@ -102,6 +102,13 @@ if (technika) {
   te = sber('animátor test', await agent(`${CTX}
 
 ## Tvůj úkol: TEST NOVÉ TECHNIKY (animátor), nic víc
+**POKRAČOVÁNÍ PO RESTARTU KONTEJNERU (2026-11-05)**: tentýž test už jednou běžel a uprostřed se přerušil restartem kontejneru. V ${M}/test/ už leží:
+src/ (209 zdrojových snímků W4, W6, W7, W11, M7…), maska_birefnet/ (58 masek: W11 14, W4 1, W6 24, W7 19), maska_isnet/ (2), lut/ (24), lut_out/ (171 přebarvených),
+desky/ (75), kontrola/ (mřížky _grid_*, _lut_*), nahled_nahled/, maska_log.txt, render_log.txt a skripty nastroje/skripty_test_maska.py, nastroje/skripty_test_lut.py.
+Nejdřív si je prohlédni a NAVAŽ: hotové masky a LUTy nepřepočítávej, dopočítej jen chybějící. Dlouhé výpočty pouštěj po částech (kontejner se může znovu
+restartovat): po každé dávce zapiš stav do ${M}/test/STAV.md (co je hotové, co zbývá). Model BiRefNet je v /root/.rembg/models/birefnet-general/.
+Pomocné skripty patří do ${M}/test/_skript/ (ne do nastroje/, C038); na konci přesuň nastroje/skripty_test_*.py tam, nebo z nich udělej čistý nástroj
+nastroje/prebarvi.py (jen když je ověřený) a ohlas režisérovi.
 Partitura v ${P} vyžaduje techniku, kterou jsme ještě nedělali: „${technika}“. Otestuj ji na 2–4 s výřezu (1920×1080, 60 fps) do ${M}/test/:
 skutečný materiál z ${M}/materialy/, kostra nastroje/vzory/scena.html + nastroje/render_html.cjs, pás snímků + 3 klíčové snímky v plném rozlišení,
 čas výpočtu na 1 s. Posuď poctivě: působí to realisticky (nepozná se zásah), nebo jako koláž / AI? Co funguje, co ne, doporučení (parametry, masky, grade).
