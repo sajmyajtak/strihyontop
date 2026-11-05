@@ -20,7 +20,10 @@ Příkazy:
        --chroma-k 0.6          kolik původní odchylky chromy (odlesky krajiny) zůstane
        --lmax 93               horní mez L laku (80 u průjezdů přes nebe: směs s nebem v rozmazu se nemění)
        --l-hladke 0           σ px: posun jasu z rozostřeného L (světlé laky se strmou LUT nezesílí šum zdroje; GT Silver 3)
-       --detail 1.0           s --l-hladke: kolik jemné textury jasu zůstane (0,6 = ztlumit šum na světlém laku)
+       --detail 1.0           s --l-hladke / --l-guided: kolik jemné textury jasu zůstane (0,6 = ztlumit šum na světlém laku)
+       --l-guided 6,0.01      hladký L hranu zachovávajícím guided filtrem (r px, eps) místo Gausse (GT Silver: šum zdroje se nezesílí)
+       --l-baze 14            báze L jen z pixelů laku (σ px), LUT posune bázi, textura projde se sklonem --detail (nezesílí odrazy silnice)
+       --l-strop 82           měkké koleno výstupního L (světlý lak nesplyne s nebem)
        --tma 12,26             černé díly / karbon / pneu (L < 12 beze změny, plná váha od 26)
        --uzavreni 5            morfologické uzavření masky v px (díry a „písek“ v masce rozmazu)
        --peri-k 0.5            peří = max(2, k × posun těžiště masky mezi snímky) (sledovací záběr: auto stojí v obraze → menší k)
@@ -74,12 +77,32 @@ def vaha_laku(L, A, B, tma=(12, 26), Lmax=93):
     chroma = np.sqrt(A * A + B * B)   # černé díly (L < tma[0]) a sytě barevné (světla, třmeny, pruh) zůstávají; Lmax = směs s nebem
     return np.clip((L - tma[0]) / (tma[1] - tma[0]), 0, 1) * np.clip((Lmax - L) / 5, 0, 1) * np.clip((22 - chroma) / 8, 0, 1)
 
-def aplikuj(x, tab, c, w, chroma_k=0.6, chroma_blur=2.5, chroma_s=1.0, l_hladke=0.0, detail=1.0):
+def guided(I, r, eps):
+    """Guided filter (He 2010) s vodítkem = vstup, box r px; I v 0–1. Hladí plochy, drží hrany (odlesky, spáry karoserie)."""
+    from scipy.ndimage import uniform_filter
+    k = 2 * int(r) + 1
+    m = uniform_filter(I, k); v = uniform_filter(I * I, k) - m * m
+    a = v / (v + eps); b = m - a * m
+    return uniform_filter(a, k) * I + uniform_filter(b, k)
+
+def koleno(L, strop, sirka=8.0):
+    """Měkké koleno: pod (strop − šířka) beze změny, nad ním se L plynule blíží stropu (víko světlého laku nesplyne s nebem)."""
+    k0 = strop - sirka
+    return np.where(L <= k0, L, k0 + sirka * (1 - np.exp(-(L - k0) / sirka)))
+
+def aplikuj(x, tab, c, w, chroma_k=0.6, chroma_blur=2.5, chroma_s=1.0, l_hladke=0.0, detail=1.0, l_guided=None, l_strop=None, l_baze=0.0):
     L, A, B = x[..., 0], x[..., 1], x[..., 2]
     # l_hladke > 0: posun L i barva se čtou z rozostřeného L (σ px), jemná textura projde se sklonem 1 → LUT se strmou křivkou (světlé laky)
     # nezesílí šum a kompresní bloky zdroje (V005: GT Silver vypadal „špinavě“)
-    Lr = gaussian_filter(L, l_hladke) if l_hladke > 0 else L
+    # l_guided (r, eps): místo Gausse hranu zachovávající guided filter (V005 oprava KŘ: GT Silver „otlučený plech“ = zesílený šum zdroje)
+    # l_baze σ: báze jen z pixelů laku (normalizovaný Gauss vážený w, bez halo u černých dílů); textura L − báze projde se sklonem `detail`
+    # → strmá LUT světlého laku posune jas plochy, ale nezesílí skvrny odrazů silnice (V005 GT Silver, oprava KŘ 1)
+    if l_baze > 0:
+        ww = np.clip(w, 1e-3, 1); Lr = gaussian_filter(L * ww, l_baze) / np.maximum(gaussian_filter(ww, l_baze), 1e-3)
+    elif l_guided: Lr = guided(L / 100.0, l_guided[0], l_guided[1]) * 100.0
+    else: Lr = gaussian_filter(L, l_hladke) if l_hladke > 0 else L
     outL = np.clip(Lr + (L - Lr) * detail + np.interp(Lr, c, tab[:, 3] - tab[:, 0]), 0, 100)   # detail < 1 ztlumí jemnou texturu (šum zdroje) uvnitř laku
+    if l_strop: outL = koleno(outL, l_strop)
     outA = np.interp(Lr, c, tab[:, 4]) + (A - np.interp(Lr, c, tab[:, 1])) * chroma_k
     outB = np.interp(Lr, c, tab[:, 5]) + (B - np.interp(Lr, c, tab[:, 2])) * chroma_k
     if chroma_blur > 0:
@@ -187,7 +210,8 @@ def sekvence(a):
                 spz_prev = spz
                 d = 4; z = np.zeros_like(w); z[max(0, spz[1] - d):spz[3] + d, max(0, spz[0] - d):spz[2] + d] = 1
                 w = w * (1 - gaussian_filter(z, 1.5))
-        y = aplikuj(x, tab, cen, w, a.chroma_k, chroma_s=a.chroma_s, l_hladke=a.l_hladke, detail=a.detail)
+        y = aplikuj(x, tab, cen, w, a.chroma_k, chroma_s=a.chroma_s, l_hladke=a.l_hladke, detail=a.detail,
+                    l_guided=[float(v) for v in a.l_guided.split(',')] if a.l_guided else None, l_strop=a.l_strop, l_baze=a.l_baze)
         out = S.copy(); out[Y0:Y1, X0:X1] = np.clip(color.lab2rgb(y) * 255 + 0.5, 0, 255).astype(np.uint8)
         Image.fromarray(out).save(os.path.join(a.out, f'{n:05d}.png'))
         sel = w > 0.5
@@ -339,6 +363,8 @@ if __name__ == '__main__':
     p.add_argument('--chroma-s', type=float, default=0.8); p.add_argument('--chroma-k', type=float, default=0.6)
     p.add_argument('--lmax', type=float, default=93); p.add_argument('--tma', default='12,26')
     p.add_argument('--l-hladke', type=float, default=0.0); p.add_argument('--detail', type=float, default=1.0)
+    p.add_argument('--l-guided', help='r,eps: guided filter L (r px, eps pro L 0–1), např. 6,0.01'); p.add_argument('--l-strop', type=float, help='měkké koleno výstupního L (např. 82)')
+    p.add_argument('--l-baze', type=float, default=0.0, help='σ px: báze L jen z laku (normalizovaný Gauss), textura se sklonem --detail')
     p.add_argument('--peri-k', type=float, default=0.5); p.add_argument('--vnitrni', type=float, default=0.0)
     p.add_argument('--uzavreni', type=int, default=5); p.add_argument('--peri-hrany', action='store_true')
     p.add_argument('--spz', default='auto', choices=['auto', 'ne'])
