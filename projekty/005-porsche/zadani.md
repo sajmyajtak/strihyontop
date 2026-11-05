@@ -639,6 +639,7 @@ Kola bronz ve W11 / W6 zatím nejsou (vyžádá si kotvy kol jako W4; vůz vět�
 | příprava: animátor test, 1. běh (přerušen restartem) | neměřeno (restart) | – | 32,2 min |
 | příprava: animátor test, pokračování po restartu | 203 477 | 87 | 23,5 min |
 | režisér: masky BiRefNet na pozadí (skript, ne agent) | 0 | – | ~2,2 h CPU |
+| výroba běh 1 (zvukař, animátor A, KŘ blok A, animátor B přerušen limitem využití 5 h) | 1 157 970 | 476 | 97,8 min |
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
