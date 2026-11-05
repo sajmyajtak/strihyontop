@@ -428,6 +428,17 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Odpovědi režiséra animátorovi A (2026-11-05, platí pro animátora B a opravy)
+1. **M7**: kaňon 2,60–3,23 + POV od zdroje 7,44 (3,23–4,20) se střihem ve stopáži a přežívající kompaktní pilulkou = přijato (D3: střih ve skutečné stopáži s přežívajícím
+   spojovacím prvkem je povolen). Partituru nepřepisovat, jen zapsat jako T1b; zvuk na střih nic.
+2. **X1**: vůz menší než 40 px (tečka) se **nepřebarvuje**, divák barvu nerozliší (pravidlo tabulky stavů „pokud ≥ 40 px“ platí i pro lak); přebarvit jen snímky s maskou 37–63.
+3. OpenCV je v `nastroje/setup.sh` (commit 2026-11-05).
+4. **W4 Guards Red** (režisér prohlédl realismus_W4_G1.jpg): lak působí věrohodně, ALE **červená na horním rámu čelního skla** (originál černý) a posunutá výluka kola
+   v 5256–5263 (červený nádech na pneu, šedá skvrna na blatníku) jsou vady, které kritik najde. Opravit výlukou rámu skla (kotvy po 6 snímcích, homografie z karoserie) a kotvou kola
+   v 5256–5263; když ani potom na 100 % výřezu neprojde, pro W4 cesta B. Rozhoduje verdikt kreativního ředitele bloku A.
+5. **Kola v bronzu ve W11 a W6**: kde má kolo ≥ 40 px (W11 konec 364,6–365,4, W6 19,5–19,98 výstupu), kotvy kol ano; menší se neřeší.
+6. Nástroje a skripty commituje režisér průběžně (`prebarvi.py` s novými volbami je v gitu).
+
 ## Odpovědi režiséra zvukaři (2026-11-05)
 (1) Boom nechat (RMS +4 dB nad vrcholem, +0,6 LU v okně 100 ms). (2) Tiky odometru přepočítá režisér z funkce rolování ve scéně po renderu bloku B, ding na první ustálený
 snímek 500 (C045, C047). (3) Kliky podtrhu na dosednutí v obraze, průjezdy na nejbližší bod vozu, švihy CLONA / LET / WIPE / MORF na střed pohybu: posune režisér po renderu.
@@ -514,6 +525,86 @@ K-vážená hlasitost 100 ms: boom −7,9 LUFS proti nejhlasitějšímu místu h
 na prvním ustáleném snímku. (2) Průjezdy 17,97 a 21,83 posunout na skutečný nejbližší bod vozu v obraze. (3) Kliky podtrhu jsou na časech ze sloupce SFX (6,72 · 9,66 · 11,20 ·
 13,02 · 19,80); kdyby podtrh v obraze **dosedal** až na konci pohybu (např. 6,80), posunout na dosednutí. (4) Švihy (CLONA 10,98, LET 12,00, WIPE 13,77, MORF 20,82) jsou na středu
 pohybu = nejvíc rozmazání; po renderu ověřit. (5) Hudbu kvůli posunům SFX neměnit; když se posune vrchol nebo kadence, přegenerovat s `--vrchol` / `--body`.
+
+## Výroba: blok A (animátor, 2026-11-05)
+**Co je hotové a kde**
+- `nastroje/prebarvi.py` (nový ověřený nástroj z `test/_skript/test_lut.py`): `lut` (LUT 1H → cíl z pixelově zarovnaných rendrů, Lab, 64 binů; ověřeno: LUT bitově shodné s testem),
+  `sekvence` (přebarvení v masce karoserie: medián masky 3 snímky, eroze 1 px, peří = max(2, k × posun), `--vnitrni` = peří uvnitř karoserie, výluky / `--jen-v`,
+  výpočet jen ve výřezu bboxu; měří blikání proti zdroji a ΔE proti rendru), `sleduj` (výluky SPZ / světel / skla / kol / kapoty zadané na kotevních snímcích
+  se sledují homografií z optického toku celé karoserie, mezi kotvami se prolnou), `propaguj` (oprava masky, kde BiRefNet selže), `nahled`. **Potřebuje OpenCV**
+  (`pip install opencv-python-headless`, doplnit do `nastroje/setup.sh`).
+- Projektové skripty `media/projekty/005-porsche/_skript/`: `desky.py` (desky orig + jednotný grade, `graduj` pro přebarvené varianty), `rozostreni.py`
+  (předpočítané Gauss / vodorovné rozmazání pro T1, T2), `f1.py` (fotka F1 ve 3 vrstvách × 2 interiéry), `data_desky.py` (→ `scena/data_desky.js`),
+  `w7_laky.sh`, `w7_sleduj.py`, `m8.sh`, `prebarvi_b.sh` (X1 / W11 / W6 pro blok B), `mrizka.py` (výřez s mřížkou pro zadávání kotev).
+- Desky: `desky/<kód>/orig/NNNNN.jpg` všech 8 úseků (W1 78, M7 48, W4 114, W7 90, M8 31, X1 64, W11 60, W6 133; index = snímek zdroje 25 fps, ověřeno pixelově
+  proti `src/` masek), přebarvené varianty `desky/<kód>/<lak>/` (+ `_png` bez gradu), LUT `desky/lut/`, kotvy `desky/kotvy.json`, výluky `desky/vyluky_sled.json`.
+- Grade (Past 4): jedna křivka pro všechno (stíny +3 %: y = x + 0,03·(1−x)³, výšky beze změny), moodcut navíc gama 0,93 (střední jas +≈5 %, walkaround L 38–40 ×
+  moodcut 24–28); fotka F1 chroma × 0,88, b* −2 + stejná křivka; zrno 3 dlaždice se seedem (overlay 6 %) na stopáži i fotce. Přebarvené varianty dostávají stejný grade,
+  takže mimo masku je rozdíl proti orig 0.
+- Scéna `media/projekty/005-porsche/scena/scena.html` (blok A hotový, moduly `A_`, kontrola kolize klíčů `pridejCasy`; blok B přidá `B_`): async `seek` dočítá jen desky,
+  které čas potřebuje (mezipaměť ≤ 90 desek), C050 (`casDesky`), semínko, pilulka s tečkou / vzorky / podtrhem, věty po slovech z rozostření, 3 skenovací linky,
+  LET (T1), ZOOM skrz erb 7× (T2), EXPL (T3), CLONA (T4), ráfek z náboje, LET svislý (T5), F1 2,5D, WIPE (T6, rozmazání pohybem analyticky po řádcích), X1 pod wipe.
+
+**Přebarvení: měření (kritéria: blikání < 2 %, ΔE < 12, bez lemu, SPZ / světla / sklo / pneu beze změny)**
+| záběr | lak | snímky zdroje | blikání max / medián | ΔE medián / max | peří | verdikt |
+|---|---|---|---|---|---|---|
+| W4 | G1 Guards Red | 5237–5270 | 0,75 / 0,20 % | 8,5 / 9,4 | 2–7,5 px | projde s výhradou (viz nedostatky) |
+| W7 | G1 | 7085–7095 | 5,6 / 1,0 % (7085–7090 vůz uříznutý, malá plocha laku) | 6,8 / 21,7 (tamtéž) | 2–5,6 | projde |
+| W7 | A1 Black | 7093–7101 | 1,8 / 0,5 % | 4,0 / 4,3 | 3–7 | projde |
+| W7 | D7 Shark Blue | 7099–7107 | 0,3 / 0,2 % | 11,5 / 12,0 | 3–7 | projde (na hraně ΔE) |
+| W7 | N2 Ruby Star Neo | 7105–7113 | 0,2 / 0,1 % | 6,4 / 6,6 | 2–5 | projde |
+| W7 | U2 GT Silver (`--l-hladke 4 --detail 0,55`) | 7111–7168 | 0,67 / 0,12 % | 7,5 / 9,0 | 2–4,9 | projde (jemná tmavá textura na nárazníku) |
+| W7 | 1A Gentian Blue | 7139–7174 | 0,91 / 0,21 % | 2,8 / 2,9 | 2–3,1 | projde |
+| M8 | 1A (`--tma 6,14`: blatník ve stínu L ≈ 17) | 216–246 | 2,3 / 0,5 % (stín, rozmaz) | 9,2 / 10,5 | 2 | projde (blikání max těsně nad 2 %) |
+| M8 | ráfek 348 Satin Neodyme (jen elipsa ráfku) | 216–246 | 1,9 / 0,5 % | 2,3 / 4,2 | 2 | projde, rotační rozmazání zůstává |
+| F1 | lak 1A, ráfek 348, 53 → 51 | fotka | – | lak L 15 a 6,5 b −21 (render 1A v2: 9,7 / 2,5 / −16,4); interiér → L 68 a −3,4 b −3,5 (render 51: 66 / −5,8 / −2,1) | – | projde |
+
+**Pilulka: změřené šířky (Barlow 500, 48 px) a levá hrana** (pravá hrana 1824; věta = 56 + text, popisek s tečkou = 91 + text, vzorek + 26 px)
+| obsah | text px | šířka | levá hrana |
+|---|---|---|---|
+| Still deciding? Keep driving. | 577,7 | 634 | 1190 |
+| Configure it. On the road. | 521,9 | 578 | 1246 |
+| ● Vanadium Grey Metallic (+ 4 vzorky při odchodu) | 482,3 | 573 (677) | 1251 (1147) |
+| ● Guards Red | 238,5 | 330 | 1494 |
+| 4 vzorky + ● Try them all. | 255,3 | 450 | 1374 |
+| ● GT Silver Metallic (+ 3 vzorky) | 355,8 | 447 (525) | 1377 (1299) |
+| ● Gentian Blue Metallic | 436,1 | 527 | 1297 |
+| ● Satin Neodyme | 317,2 | 408 | 1416 |
+| ● Carmine inside. (+ 2 vzorky) | 322,8 | 414 (466) | 1410 (1358) |
+| ● Or Arctic. | 197,3 | 288 | 1536 |
+| kompaktní (● + podtrh) | – | 84 | 1740 |
+| (blok B) Kept the one you're driving. | 565,6 | 622 | 1202 |
+
+**Výkon**: výřez 12,95–13,95 (F1 3 vrstvy + sklo + linka + wipe, `--sub 4 --sub-rychle 8`) = 49 s výpočtu na 1 s (CPU sdílený s výpočtem masek);
+přechody s `--sub 8 --sub-rychle 16`: 0,4 s ≈ 35–37 s. Odhad bloku A (13,9 s) ≈ 12–15 min.
+Plný render: `--sub 4 --sub-rychle 16 --rychle 2.40-2.75,4.00-4.40,6.88-7.31,7.95-8.10,9.78-9.90,10.70-11.06,11.20-11.56,11.90-12.20,13.00-13.60,13.60-14.05`.
+
+**Odchylky od partitury a proč**
+1. **M7 není celý POV**: zdroj 6,68–7,40 je přední sledovací záběr v kaňonu (vůz přijíždí), POV ruce na volantu začíná až na 7,44 (střih ve zdroji, snímek 186).
+   Rozpis jsem nezměnil (jiný POV bez textu v povolených úsecích není): **2,60–3,23 kaňon, 3,23–4,20 POV**, na 3,233 je ve stopáži střih bez proměny
+   (kompaktní pilulka ho přežije, snímek přesně na hranici, C050). Otázka pro režiséra.
+2. **M8 o 0,10 s dřív**: zdroj 8,64–9,88 → výstup **10,92–11,95** (bylo 11,02–12,05), aby v otevírající se CLONĚ už běžel pohyb, ne zamrzlý snímek;
+   11,95–12,05 drží poslední snímek během odletu nahoru (rozmazaný, sotva vidět). Proměna ráfku, popisek a odlet beze změny časů.
+3. **EXPL 7,975–8,05**, plná plocha na výstupních snímcích 8,000 a 8,017 (partitura 7,99–8,02; jinak závěrka rozpůlí plochu, C028).
+4. **Střed CLONY** = pravé zadní kolo W7 změřené na zdroji 286,9: (1182, 600), ne (1250, 800). **Ráfek M8**: náboj (883, 650), elipsa ráfku 50 × 285 px (kolo uprostřed, ne vlevo dole).
+5. **LET svislý** = jeden S-pohyb 11,95–12,15 (M8 nahoru, F1 přímo pod ním, dosedne 12,15).
+6. **Řady vzorků** zleva doprava, tečka vpravo = aktuální stav: lak [GT Silver, Shark, Gentian, Guards Red | ● Vanadium] · scroll [GT Silver, Ruby, Shark, Black | ● Guards Red],
+   podtrh skáče zprava doleva · [Guards Red, Shark, Gentian | ● GT Silver] · kola [Satin černá, Satin Neodyme | ● stříbrná] · interiér [Black, Arctic | ● Carmine].
+   Tečka přebírá novou barvu po smrštění řady (6,88 · 9,78 · 11,30 · 13,12; partitura u Gentian 9,98), ve scrollu ve stejném snímku jako vůz.
+7. **Věty 1 a 2 bez tečky** (tečka = stav konfigurace; kompaktní pilulka v POV tečku má, 2,62–4,36), od 5,86 tečka stále. Podtrh v klidu = 24 px pod tečkou / pod začátkem věty,
+   semínko 0,08–0,20 se natáhne na šířku pilulky, 0,32–0,44 se stáhne do podtrhu.
+8. **Wipe**: pruhy 4 / 40 / 110 px (3 / 26 / 70 se v rozmazání pohybem ztratily), příjezd ease-out, odjezd ease-in (pruhy čitelné, když hrana zpomalí); rozmazání pohybem analyticky.
+9. **Pilulka po „Or Arctic.“** se smrští 13,83–13,93 (bylo 13,77–13,87), aby text při odchodu nebyl oříznutý.
+10. **F1**: kamera 1,015 → 1,065 (rezerva na posun vrstev), krajina +18 px, vůz −6 px, sedadlo řidiče −12 px (paralaxa 24 / 6 px), linka 3 jede přes rozsah sedadel 241–1080 px.
+11. **Linky 1 a 2** jezdí mezi hranami masky vozu ±14 px v aktuálním snímku (sledují jedoucí vůz).
+
+**Kontrola (media/kontrola/005-porsche/blokA/)**: `kontrolni_nahled/` (56 časů z tabulky Kontrolní snímky do 13,87, arch `nahled.jpg`), výřezy s podsnímky
+`vyrez_2.40.mp4` (T1) · `vyrez_4.00.mp4` (T2) · `vyrez_7.95.mp4` (T3 EXPL) · `vyrez_10.88.mp4` (T4 + ráfek) · `vyrez_12.95-13.95.mp4` (F1 + linka 3 + wipe, měření výkonu) ·
+`vyrez_13.55.mp4` (T6), pásy `pas/pas_T1…T6.jpg`, 100% realismus `realismus_W4_G1.jpg`, `realismus_W7_A1.jpg`, `realismus_W7_U2_1A.jpg`, `realismus_M8.jpg`.
+
+**Pro blok B připraveno**: desky orig X1 / W11 / W6, LUT, `_skript/prebarvi_b.sh X1|W11|W6` (parametry z testu; W6 výluky z testu převedené na indexy zdroje 7011–7034,
+6952–7010 bez výluk, vůz malý), `scena.html` s kontrolou kolize klíčů `B_`. **X1: vůz je vidět už od snímku ≈ 10 (tečka ~10–30 px), masky jsou jen 37–63** → rozšířit.
+Kola bronz ve W11 / W6 zatím nejsou (vyžádá si kotvy kol jako W4; vůz většinou < 40 px).
 
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
