@@ -8,6 +8,7 @@ Příkazy:
   sleduj DESKA kotvy.json KLÍČ OD DO vyluky.json
        polygony zadané na kotevních snímcích (kotvy.json: {KLÍČ: {"index": [{"nazev", "body": [x, y, …]}]}}) se sledují optickým
        tokem (OpenCV LK + podobnostní transformace RANSAC) po snímcích; mezi kotvami se oba směry prolnou → vyluky.json[KLÍČ] (poly_abs)
+  propaguj DESKA DOBRY OD DO   maska z dobrého snímku přenesená homografií na OD–DO (když BiRefNet selže u uříznutého vozu)
   nahled DESKA OUT_DIR vyluky.json KLÍČ i1,i2,… [x0,y0,x1,y1]   kontrolní snímky s obrysy výluk
   lut  RENDER_ZDROJ RENDER_CIL lut.json
        maska laku = kde se rendry liší; uloží i lut_maska.png (kontrola).
@@ -240,6 +241,24 @@ def sleduj(deska, kotvy_f, klic, od, do_, out_f):
         if M is None: return pts
         Q = (np.hstack([P, np.ones((len(P), 1), np.float32)]) @ M.T)
         return Q.ravel().tolist()
+    globalni = os.environ.get('SLEDUJ', 'H') == 'H'     # H = jedna homografie z bodů celé karoserie (stabilnější: sklo a řidič se hýbou jinak), jinak po oblastech
+    Hcache = {}
+    def krokH(pts, a, b):
+        if (a, b) not in Hcache:
+            ga, ma = nacti(a); gb, _ = nacti(b)
+            roi = cv2.erode(ma, np.ones((9, 9), np.uint8))
+            f = cv2.goodFeaturesToTrack(ga, 600, 0.005, 6, mask=roi)
+            M = None
+            if f is not None and len(f) >= 12:
+                f2, st, _ = cv2.calcOpticalFlowPyrLK(ga, gb, f, None, winSize=(25, 25), maxLevel=4)
+                ok = st.ravel() == 1
+                if ok.sum() >= 12: M, _ = cv2.findHomography(f[ok], f2[ok], cv2.RANSAC, 2.5)
+            Hcache[(a, b)] = M
+        M = Hcache[(a, b)]
+        if M is None: return pts
+        P = np.array(pts, np.float32).reshape(-1, 1, 2)
+        return cv2.perspectiveTransform(P, M).ravel().tolist()
+    if globalni: krok = krokH
     vysl = {}                                          # nazev → {n: [směr_od_kotvy, body]}
     for k in ks:
         for obl in kotvy[str(k)]:
@@ -267,6 +286,27 @@ def sleduj(deska, kotvy_f, klic, od, do_, out_f):
     vse[klic] = res; json.dump(vse, open(out_f, 'w'), indent=0)
     print('sledováno', klic, len(res), 'oblastí', od, '–', do_, '→', out_f)
 
+def propaguj(deska, dobry, cil_od, cil_do):
+    """Oprava masky tam, kde BiRefNet selže (vůz uříznutý okrajem obrazu): maska dobrého snímku se po snímcích přenese
+    homografií z optického toku bodů uvnitř masky (vůz je tuhý). Původní masky se zálohují do maska_birefnet/."""
+    import cv2, shutil
+    zal = os.path.join(deska, 'maska_birefnet'); os.makedirs(zal, exist_ok=True)
+    smer = -1 if cil_do < dobry else 1
+    rng = range(dobry + smer, (cil_od if smer < 0 else cil_do) + smer, smer)
+    m = cv2.imread(os.path.join(deska, 'maska', f'{dobry:05d}.png'), 0); n0 = dobry
+    for n in rng:
+        ga = cv2.cvtColor(cv2.imread(os.path.join(deska, 'src', f'{n0:05d}.png')), cv2.COLOR_BGR2GRAY)
+        gb = cv2.cvtColor(cv2.imread(os.path.join(deska, 'src', f'{n:05d}.png')), cv2.COLOR_BGR2GRAY)
+        f = cv2.goodFeaturesToTrack(ga, 600, 0.005, 6, mask=cv2.erode(m, np.ones((9, 9), np.uint8)))
+        f2, st, _ = cv2.calcOpticalFlowPyrLK(ga, gb, f, None, winSize=(25, 25), maxLevel=4)
+        ok = st.ravel() == 1
+        M, _ = cv2.findHomography(f[ok], f2[ok], cv2.RANSAC, 2.5)
+        m = cv2.warpPerspective(m, M, (m.shape[1], m.shape[0]), flags=cv2.INTER_LINEAR)
+        dst = os.path.join(deska, 'maska', f'{n:05d}.png')
+        if os.path.exists(dst) and not os.path.exists(os.path.join(zal, f'{n:05d}.png')): shutil.copy(dst, zal)
+        cv2.imwrite(dst, m); n0 = n
+        print('maska', n, 'z', dobry, 'bodů', int(ok.sum()), flush=True)
+
 def nahled(deska, out_dir, vyluky_f, klic, indexy, krop=None):
     """Kontrolní obrázek: výluky (zeleně) přes snímek zdroje."""
     reg = json.load(open(vyluky_f)).get(klic, [])
@@ -280,6 +320,8 @@ def nahled(deska, out_dir, vyluky_f, klic, indexy, krop=None):
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'sleduj':
         sleduj(sys.argv[2], sys.argv[3], sys.argv[4], int(sys.argv[5]), int(sys.argv[6]), sys.argv[7]); sys.exit()
+    if len(sys.argv) > 1 and sys.argv[1] == 'propaguj':
+        propaguj(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), int(sys.argv[5])); sys.exit()
     if len(sys.argv) > 1 and sys.argv[1] == 'nahled':
         nahled(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], [int(v) for v in sys.argv[6].split(',')],
                tuple(int(v) for v in sys.argv[7].split(',')) if len(sys.argv) > 7 else None); sys.exit()
