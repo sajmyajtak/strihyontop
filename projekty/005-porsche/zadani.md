@@ -461,11 +461,66 @@ obou záběrů (viděno u všech 3 variant T8). Oprava: desku i úsek vybírat z
 **Změny časů (C045)**: věta 8 slova 20,72 · 20,87 · 21,02 · 21,17 · 21,32 (bylo 20,92 + 0,15) · T8 průjezd-wipe 17,67–18,10 → střih 18,00 (W11 do zdroje 365,40, W6 od 278,08) — návrh, čeká na rozhodnutí.
 **Nezpracováno v tomto testu**: W7 (masky 19/25, LUT G1 jen 5 snímků), W4 jen 1 snímek, M8 kola, X1. Patří do přípravy desek.
 
+## Zvuk v1 (zvukař, 2026-11-05; k partituře + „Rozhodnutí režiséra po testu techniky“, obraz ještě není hotový → časy SFX posune režisér, C045)
+**Výstupy** (`media/projekty/005-porsche/`): `hudba.wav` + `hudba.json` (30,0 s), `zvuk/sfx_v1.wav|json`, **`zvuk/zvuk_v1.wav`**, **`zvuk/zvuk_bez_hudby_v1.wav`**
+(jen efekty v úrovni mixu, nenormalizovaná, jako V004), `zvuk/zvuk_v1_master.m4a` (kontrolní master), `zvuk/spektrogram_v1.png`, logy `zvuk/hudba_log_v1.txt`,
+`zvuk/sfx_log_v1.txt`, stavba hlasitosti `zvuk/stavba_v1_mix.txt` a `zvuk/stavba_v1_master.txt`. Seznam událostí `projekty/005-porsche/sfx_udalosti.json` (v gitu, 35 událostí, u každé `popis` = na co v obraze sedí).
+**Příkazy**:
+`python3 -I nastroje/hudba.py --nalada hora --delka 30 --vrchol 13.87 --konec 27.65 --out media/projekty/005-porsche/hudba.wav` ·
+`python3 -I nastroje/sfx.py --udalosti projekty/005-porsche/sfx_udalosti.json --delka 30 --out …/zvuk/sfx_v1.wav --hudba …/hudba.wav --mix …/zvuk/zvuk_v1.wav --bez-hudby …/zvuk/zvuk_bez_hudby_v1.wav --ticho 27.65-27.84` ·
+`nastroje/master_zvuk.sh …/zvuk/zvuk_v1.wav …/zvuk/zvuk_v1_master.m4a`.
+
+**Nálada `hora`** (nová v `nastroje/hudba.py`, samostatná cesta `aranzuj_hora` / `mixuj_hora` / `uloz_hora`; časy proměn `HORA_BODY`, přepisuje `--body jmeno=cas,…`):
+F dur, akordy z `luxusni` v barvách maj9 / m9 / add9, **bez bicích a bez dropu**. Tempo volně: doba = (kadence − vrchol) / 8 = 0,864 s (**69,5 BPM**), doby pak padnou
+i na 6,96 a 27,69. Nástroje: plocha (rozladěné pily + tělo kořen/kvinta kolem D3), smyčce od swellu, tlumený klavír, měkká basa se swellem (sinus + 2.–3. harmonická),
+„vzduch na hoře“ (šum 1,5–7 kHz s poryvy, velmi tiše), dozvuk rt60 3,3 s, předzpoždění 30 ms; měkký „tep“ (taiko pod 900 Hz, −20 dB) jen 15,60 · 17,32 · 19,05.
+Průběh: **0,00** jediný tón klavíru A4 (háček) · **2,60** plocha Fmaj9 · 4,22 Dm9 · 6,96 beze změny · **7,99** Bbmaj9 s měkkým akcentem (náběh 0,25 s, ne úder) ·
+**9,86–10,76** Gm9 + swell **+2,0 dB** (změřeno) · 12,05 C9sus4 · **13,62 nádech −6,0 dB** (změřeno 13,40–13,60 → 13,75–13,86) · **13,87 VRCHOL** Bbmaj9 o oktávu výš,
+melodie klavíru A5 G5 F5 | E5 C5 D5 | F5 E5 | D5 C5 Bb4 → **A4 na kadenci** · 15,60 Fmaj9/A · 17,32 Dm9 · 18,84 Gm9 · 19,98 C9sus4 → 20,35 C9 → **20,78 Fmaj9 (kadence do tóniky)** ·
+**20,72–21,02 dolní propust → 2 kHz** (uvnitř skla; energie nad 2,5 kHz −13 dB proti okolí), 22,20–22,44 se otevře · 23,58 Bbmaj9/F (prodleva F v base, erb) · 25,96 Fadd9 ·
+decrescendo · **fade 27,40–27,65** · **ticho 27,65–27,85 = digitální nula** (i dozvuk) · 27,85–30,00 tichý pad Fadd9 pod podpisem (náběh 0,5 s, fade 0,6 s na konci).
+Uloženo lineárně: vrchol 13,87–17,60 = **−16,0 LUFS**, háček −25,4 (jeden doznívající tón), jízda −23,2, návrat −18,7, logo −19,7, podpis −28,0; integrálně −19,9 LUFS.
+Měkké nasycení špiček (koleno −13, strop −8,5 dBFS, 4× převzorkování) jen na špičkách ploch ve vrcholu: bez něj by master nešel lineárně (viz chyby).
+Pásma hudby: sub 5,4 · basy 37,9 · **středy 49,3** · horní středy 6,9 · výšky 0,5 %; oktávy 250 Hz–8 kHz bez skoku > 9 dB (nejvíc 4 → 8 kHz −7,4) → **bez VAROVÁNÍ (I7)**.
+`hudba.json`: `bpm` 69,46 (`bpm_volne`), `doba`, `doby` (mřížka od vrcholu), `vrchol`, `konec`, `body` (všechny časy), `udalosti`, `udalosti_nastroju` (klavir, akord, basa, tep, podpis_pad).
+**Ostatní nálady beze změny**: vazna, drza, luxusni, pohodova, sportovni, luxsport (+ `--motor elektricky`) vyrenderovány před a po změně (25 s, drop 7,5, konec 22,5): WAV i JSON **bit po bitu stejné** (sha256).
+Hora je deterministická (2 rendery, stejný hash). `nastroje/sfx.py` jen přidané typy: výstup V004 (`projekty/004-bmw-jizda/sfx_udalosti.json`) před a po změně bit po bitu stejný.
+
+**SFX** (tiché, jen na stavy, 35 událostí / 30 s; nové typy v `sfx.py`: `sken` 0,3 s, `sken_dlouhy` 0,9 s, `sken_svisly`, `sken_navrat` (pásmo dolů), `prujezd_mekky`
+(vzduch + pneumatiky, motor tiše), `prujezd_za_sklem` (za dolní propustí 1,2 kHz), `boom_podpis`; tóny F dur jako hudba):
+0,20 sklo_pop pilulka · 2,58 hover kompaktní pilulka · 4,22 ponor nájezd skrz erb (vrchol = první snímek W4) · 5,86 detent tečka · 6,61 / 6,665 tiky rozvinutí vzorků + 6,72 klik
+podtrhu (= „3 tiky“, rozestup 55 ms) · 7,08 sken (střed linky 1) · 7,99 sklo_pop EXPL · 8,32 · 8,52 · 8,72 · 8,92 kliky scrollu (výšky 1 · 1,12 · 1,26 · 1,335) · 9,66 klik ·
+10,31 sken_dlouhy (střed linky 2) · 10,98 měkký švih CLONA · 11,20 klik · 11,27 klik_kov ráfek (posunut 30 ms za klik, C047) · 12,00 švih LET svisle · 13,02 klik ·
+13,30 sken_svisly (sedadla) · 13,77 švih WIPE (plné krytí, hudba v nádechu) · 15,50 sklo_pop karta čísla · **15,67 · 15,73 · 15,804 · 15,911 tiky přenosů stovek** ·
+**16,32 ding** (první ustálený snímek 500) · 17,97 prujezd_mekky (W11 vůz projíždí vlevo, nejbližší bod před střihem 18,00) · 19,80 klik · 20,46 sken_navrat (60 % linky 4) ·
+20,82 švih MORF rámce · 21,83 prujezd_za_sklem · 23,58 tah erbu (F6) · **27,85 boom_podpis**.
+Změřené vrcholy: **odchylka 0,0 ms u všech 35** (ve stopě nejvýš 6,8 ms u CLONY, kde se překrývá s dozvukem), v tichu 27,65–27,84 žádný efekt (−240 dBFS).
+Efekty proti hudbě v okně 100 ms −22,9 až −8,0 LU (vše pod hudbou); jediná výjimka je boom (hudba v tu chvíli ztichlá, varování `sfx.py` je záměrné).
+
+**Mix a master**: `zvuk_v1.wav` 48 kHz stereo 24 bit, špička −8,0 dBFS (boom), −20,1 LUFS; master **lineárně +6,1 dB → −13,8 LUFS, −1,9 dBTP po AAC** (1. pokus, loudnorm v lineárním režimu,
+stavba se nemění). Pásma mixu: sub 6,5 · **středy 47,8 %** (master stejně).
+**Stavba hlasitosti (C032)**, master, LUFS po úsecích: háček −19,2 · 2,6–4,6 −20,7 · 4,6–6,6 −18,4 · 6,6–8,6 −17,7 · 8,6–10,6 −17,2 · 10,6–12,6 −14,9 · 12,6–13,6 −15,1 ·
+**vrchol 13,87–15,87 −9,7** · 15,87–17,6 −10,4 · 17,6–19,6 −12,2 · 19,6–21,6 −12,3 · 21,6–23,6 −13,0 · 23,6–25,6 −13,6 · 25,6–27,4 −15,3 → stoupá k vrcholu, pak decrescendo.
+RMS 50 ms max: háček −14,9 · jízda −16,3 · **vrchol −12,0** · návrat −13,2 · logo −14,5 · **boom −8,0 dB = nejhlasitější místo videa (+4,0 dB nad vrcholem)**;
+K-vážená hlasitost 100 ms: boom −7,9 LUFS proti nejhlasitějšímu místu hudby −8,4 (+0,6 LU). Po 0,5 s v `zvuk/stavba_v1_master.txt`.
+
+**Pro režiséra (C045)**: (1) tiky odometru jsou **odhad** z ease-out cubic 000 → 500 za 0,70 s (přenosy stovek 0→1…3→4); po scéně je přepočítat z funkce rolování, ding 16,32 nechat
+na prvním ustáleném snímku. (2) Průjezdy 17,97 a 21,83 posunout na skutečný nejbližší bod vozu v obraze. (3) Kliky podtrhu jsou na časech ze sloupce SFX (6,72 · 9,66 · 11,20 ·
+13,02 · 19,80); kdyby podtrh v obraze **dosedal** až na konci pohybu (např. 6,80), posunout na dosednutí. (4) Švihy (CLONA 10,98, LET 12,00, WIPE 13,77, MORF 20,82) jsou na středu
+pohybu = nejvíc rozmazání; po renderu ověřit. (5) Hudbu kvůli posunům SFX neměnit; když se posune vrchol nebo kadence, přegenerovat s `--vrchol` / `--body`.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
 
 ## Chyby během výroby
+- (zvukař, zvuk v1) **Kontrolní master přepnul loudnorm do dynamického režimu a srovnal stavbu**: první mix měl poměr špička / hlasitost 17 dB (pily ploch −5,8 dBFS
+  při −19,9 LUFS + boom s ostrým transientem −3 dBFS); na −14 LUFS bylo třeba +6 dB, lineárně to nešlo, loudnorm přešel do dynamického režimu → háček (−10,3) hlasitější
+  než vrchol (−12,4) a boom o 3,8 LU tišší než hudba. Oprava: `uloz_hora` měkce nasytí špičky ploch (strop −8,5 dBFS), `boom_podpis` má tělo nejsilnější na náběhu
+  a malý transient, boom −8 dBFS → master lineárně (+6,1 dB), stavba beze změny. **Prevence (návrh C052)**: u dynamické hudby (tichý úvod, vrchol) ověřit, že
+  `TP_mixu + (−14 − I_mixu) ≤ −1,5`, jinak master nejde lineárně; stavbu RMS měřit i na dekódovaném masteru, ne jen na mixu.
+- (zvukař) `master_zvuk.sh` na samotných efektech (`zvuk_bez_hudby_v1.wav`, −28 LUFS, jediný boom) nezkonvergoval (4 pokusy −17,9 → −18,4 LUFS, TP −0,9 dBTP): smyčka snižuje jen
+  cíl I, loudnorm v dynamickém režimu ale drží TP na −1 před AAC. Verze bez hudby zůstává podle V004 nenormalizovaná v úrovni mixu (odvozený m4a smazán, C039).
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
