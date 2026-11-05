@@ -27,6 +27,8 @@ Příkazy:
        --tma 12,26             černé díly / karbon / pneu (L < 12 beze změny, plná váha od 26)
        --uzavreni 5            morfologické uzavření masky v px (díry a „písek“ v masce rozmazu)
        --peri-k 0.5            peří = max(2, k × posun těžiště masky mezi snímky) (sledovací záběr: auto stojí v obraze → menší k)
+       --peri-min 2           nejmenší peří hrany masky (px)
+       --cerna 12,6           černé díly: kde L < 12 a C < 6 v originále, beze změny (M8 sání)
        --vnitrni 0             eroze masky o (vnitrni × peří) px před rozostřením = peří uvnitř karoserie (bez barevné záře za hranou)
        --peri-hrany            peří měřit i z hran bboxu, když vůz naráží na okraj obrazu (těžiště pak stojí)
        --spz auto              výluka SPZ prahováním po snímcích (světlý obdélník s nízkou chromou, poměr stran 2,5–6,5)
@@ -128,7 +130,9 @@ def oblasti(shape, bbox, regiony, i, rozmaz=3):
         if t == 'ellipse_abs':
             cx, cy, rx, ry = kf_abs(r['kf'], i); d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=255)
         elif t == 'poly_abs':
-            p = kf_abs(r['kf'], i); d.polygon([(p[k], p[k + 1]) for k in range(0, len(p), 2)], fill=255)
+            p = kf_abs(r['kf'], i)
+            for dy in range(0, int(r.get('nahoru', 0)) + 1, 2):                      # 'nahoru': N = polygon protažený o N px nahoru (rám nad sklem)
+                d.polygon([(p[k], p[k + 1] - dy) for k in range(0, len(p), 2)], fill=255)
         elif t == 'rect_abs':
             d.rectangle(kf_abs(r['kf'], i), fill=255)
         elif t == 'rect':
@@ -188,7 +192,7 @@ def sekvence(a):
         if prev is None and log and 'posun' in log[-1]: posun = log[-1]['posun']
         prev = (c, bbox)
         if n < od or n > do_: continue
-        peri = max(2.0, a.peri_k * posun)
+        peri = max(a.peri_min, a.peri_k * posun)
         # výřez = bbox + okraj (peří, chroma blur)
         okr = int(3 * peri + 16)
         X0, Y0, X1, Y1 = max(0, bbox[0] - okr), max(0, bbox[1] - okr), min(Ww, bbox[2] + okr + 1), min(Hh, bbox[3] + okr + 1)
@@ -199,8 +203,22 @@ def sekvence(a):
         src = Image.open(os.path.join(srcd, f'{n:05d}.png')).convert('RGB'); S = np.asarray(src)
         x = lab(S[Y0:Y1, X0:X1])
         w = vaha_laku(x[..., 0], x[..., 1], x[..., 2], tma, a.lmax) * mk
+        if a.cerna:                                                                                   # černé díly (sání, mřížky): L < L0 a C < C0 beze změny
+            l0, c0 = (float(v) for v in a.cerna.split(','))
+            cer = ((x[..., 0] < l0) & (np.hypot(x[..., 1], x[..., 2]) < c0)).astype(np.float32)
+            w = w * (1 - np.clip(gaussian_filter(cer, 1.0) * 1.5, 0, 1))
         bb_rel = (bbox[0] - X0, bbox[1] - Y0, bbox[2] - X0, bbox[3] - Y0)
-        if reg: w = w * (1 - oblasti(mk.shape, bb_rel, [dict(r, kf={k: posun_kf(v, X0, Y0, r['typ']) for k, v in r['kf'].items()}) if 'kf' in r else r for r in reg], n))
+        rel = lambda rr: [dict(r, kf={k: posun_kf(v, X0, Y0, r['typ']) for k, v in r['kf'].items()}) if 'kf' in r else r for r in rr]
+        reg_n = [r for r in reg if 'tmave' not in r]; reg_t = [r for r in reg if 'tmave' in r]
+        if reg_n: w = w * (1 - oblasti(mk.shape, bb_rel, rel(reg_n), n))
+        for r in reg_t:                                                                           # 'tmave': dL = v oblasti vyloučit jen pixely tmavší než okolní lak − dL
+            R = oblasti(mk.shape, bb_rel, rel([r]), n, rozmaz=1)                               # (odhalený karbon kapoty; lakované okraje víka se přebarví)
+            Rb = R > 0.5
+            okoli = np.asarray(Image.fromarray((Rb * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(51)), dtype=bool) & ~Rb & (w > 0.5)
+            if okoli.sum() < 50: w = w * (1 - R); continue
+            Lref = float(np.median(x[..., 0][okoli]))
+            cond = gaussian_filter(np.clip((Lref - r['tmave'] - x[..., 0]) / 6 + 0.5, 0, 1), 1.5)
+            w = w * (1 - R * cond)
         if jen: w = w * oblasti(mk.shape, bb_rel, [dict(r, kf={k: posun_kf(v, X0, Y0, r['typ']) for k, v in r['kf'].items()}) if 'kf' in r else r for r in jen], n, rozmaz=a.jen_rozmaz)
         spz = None
         if a.spz == 'auto':
@@ -365,6 +383,7 @@ if __name__ == '__main__':
     p.add_argument('--l-hladke', type=float, default=0.0); p.add_argument('--detail', type=float, default=1.0)
     p.add_argument('--l-guided', help='r,eps: guided filter L (r px, eps pro L 0–1), např. 6,0.01'); p.add_argument('--l-strop', type=float, help='měkké koleno výstupního L (např. 82)')
     p.add_argument('--l-baze', type=float, default=0.0, help='σ px: báze L jen z laku (normalizovaný Gauss), textura se sklonem --detail')
+    p.add_argument('--peri-min', type=float, default=2.0); p.add_argument('--cerna', help='L0,C0: černé díly (L < L0 a C < C0) beze změny')
     p.add_argument('--peri-k', type=float, default=0.5); p.add_argument('--vnitrni', type=float, default=0.0)
     p.add_argument('--uzavreni', type=int, default=5); p.add_argument('--peri-hrany', action='store_true')
     p.add_argument('--spz', default='auto', choices=['auto', 'ne'])
