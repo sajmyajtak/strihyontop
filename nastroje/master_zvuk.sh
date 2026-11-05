@@ -12,9 +12,9 @@ hodnota() { python3 -I -c "import json,sys; print(json.loads(sys.stdin.read())[s
 # 2. průchod: lineární normalizace podle změřených hodnot, pak měření po zakódování do AAC (kodek přidá mezivzorkové špičky).
 # Když true peak přeteče: nejdřív ubrat hlasitost o přesah (nejvýš do tolerance cíl −1 LU), teprve pak jemný limiter
 # s převzorkováním a pomalým uvolněním (rychlé uvolnění zkresluje basy a AAC pak špičky ještě zvětší, viz C011).
-CIL_I=$I; LIMITER=""
+CIL_I=$I; CIL_TP=$TP; LIMITER=""
 for pokus in 1 2 3 4; do
-  AF="loudnorm=I=$CIL_I:TP=$TP:LRA=11:measured_I=$(hodnota input_i):measured_TP=$(hodnota input_tp):measured_LRA=$(hodnota input_lra):measured_thresh=$(hodnota input_thresh):offset=$(hodnota target_offset):linear=true$LIMITER,aresample=48000"
+  AF="loudnorm=I=$CIL_I:TP=$CIL_TP:LRA=11:measured_I=$(hodnota input_i):measured_TP=$(hodnota input_tp):measured_LRA=$(hodnota input_lra):measured_thresh=$(hodnota input_thresh):offset=$(hodnota target_offset):linear=true$LIMITER,aresample=48000"
   if ffprobe -v error -select_streams v -show_entries stream=index -of csv=p=0 "$IN" | grep -q .; then
     ffmpeg -hide_banner -loglevel error -y -i "$IN" -af "$AF" -c:v copy -c:a aac -b:a 256k -movflags +faststart "$OUT"
   else
@@ -25,6 +25,8 @@ for pokus in 1 2 3 4; do
   PO_TP=$(grep -E "^\s+Peak:" <<<"$PO" | tail -1 | awk '{print $2}')
   echo "pokus $pokus (cíl $CIL_I LUFS${LIMITER:+, limiter}): po AAC I=$PO_I LUFS, TP=$PO_TP dBTP"
   if python3 -c "import sys; sys.exit(0 if float('$PO_TP') <= float('$TP') else 1)"; then break; fi
+  # C052: v dynamickém režimu drží loudnorm TP už před AAC na cíli, AAC pak přidá překmit → snížit i cíl TP o přesah (nejvýš o 3 dB)
+  CIL_TP=$(python3 -c "print(round(max(float('$TP') - 3, float('$CIL_TP') - (float('$PO_TP') - float('$TP')) - 0.1), 2))")
   NOVY=$(python3 -c "print(round(float('$CIL_I') - (float('$PO_TP') - float('$TP')) - 0.1, 2))")
   if python3 -c "import sys; sys.exit(0 if float('$NOVY') >= float('$I') - 1 else 1)"; then
     CIL_I=$NOVY

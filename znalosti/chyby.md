@@ -19,7 +19,7 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
   Na samotných efektech (verze bez hudby) navíc smyčka nástroje nezkonvergovala (snižuje jen cíl I, ne TP).
 - Oprava: měkké nasycení špiček ploch se stropem −8,5 dBFS (4× převzorkování) v `uloz_hora`, boom s tělem na náběhu; master pak lineárně (−13,8 LUFS / −1,9 dBTP), stavba zůstala.
 - Prevence: u dynamické hudby ověřit `TP_mixu + (−14 − I_mixu) ≤ −1,5` ještě před masterem a stavbu měřit i na dekódovaném masteru (`zvukar.md`); nástroj `master_zvuk.sh`
-  doplnit o snížení TP při opakovaném pokusu (úkol režiséra).
+  doplněn o snížení cíle TP při opakovaném pokusu (2026-11-05, režisér; stopa efektů V005: −1,3 dBTP ve 2. pokusu, master plného mixu beze změny, ověřeno hashem).
 
 ### C051: Dvě masky BiRefNet souběžně = nedostatek paměti (2026-11-05, V005, režisér)
 - Příznak: úloha masek režiséra skončila `Killed` (rc 137); dmesg: „Memory cgroup out of memory“ u dvou procesů python3 (7,4 GB a 6,5 GB RSS).
