@@ -80,6 +80,23 @@ const rozmazani = (el, vx, vy, sila = 0.012) => {
   el.style.filter = sx + sy > 0.3 ? 'url(#smer)' : 'none';
 };
 
+// Desky stopáže (PNG sekvence, 25 fps × 1,2 = 30 fps): index snímku z času ZAOKROUHLENÉHO na výstupní snímek (V005 test, ověřeno).
+// Bez zaokrouhlení padá výměna desky přesně na čas výstupního snímku a závěrka (podsnímky ±1/240 s) zprůměruje dva zdrojové snímky,
+// na střihu ve stopáži vznikne prolnutý snímek obou záběrů. Stejně kvantovaným časem vybírat i úsek (záběr), grafika běží dál ve spojitém t.
+const casDesky = (t, fpsVystup = 60) => Math.round(t * fpsVystup + 1e-6) / fpsVystup;
+const snimekDesky = (t, od, fpsDesky = 30, fpsVystup = 60) => Math.max(0, Math.floor((casDesky(t, fpsVystup) - od) * fpsDesky + 1e-6));
+
+// Rozostření desky bez ctx.filter (výkon): prolne dvě nejbližší předpočítané úrovně σ (soubory klic_b3, klic_b9 …) (V005 test, ověřeno).
+// Při kreslení se zvětšením s je efektivní rozostření σ · s (nájezd 1 → 5 s σ 9 = 45 px).
+const kresliRozostreni = (ctx, obr, klic, urovne, sigma, alfa = 1) => {
+  let lo = 0, hi = 0;
+  for (const u of urovne) if (u <= sigma) lo = u;
+  for (const u of [...urovne].reverse()) if (u >= sigma) hi = u;
+  ctx.globalAlpha = alfa; ctx.drawImage(obr[lo ? `${klic}_b${lo}` : klic], 0, 0);
+  if (hi !== lo) { ctx.globalAlpha = alfa * usek(sigma, lo, hi); ctx.drawImage(obr[`${klic}_b${hi}`], 0, 0); }
+  ctx.globalAlpha = 1;
+};
+
 const $ = (id) => document.getElementById(id);
 if (location.search.includes('mrizka')) $('mrizka').style.display = 'block';
 

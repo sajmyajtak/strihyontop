@@ -13,6 +13,12 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C050: Na střihu ve stopáži vznikl prolnutý snímek obou záběrů (2026-11-05, V005 test, našel animátor)
+- Příznak: v testu T8 byl na hranici dvou záběrů stopáže jeden snímek, kde se prolínaly oba záběry (dvojexpozice).
+- Příčina: výměna desky 30 fps padala přesně na čas výstupního snímku; podsnímky závěrky (vystředěné kolem času snímku) tak zprůměrovaly snímky obou záběrů.
+- Oprava: deska i úsek se vybírají z času zaokrouhleného na výstupní snímek (`casDesky` / `snimekDesky` v `nastroje/vzory/scena.html`).
+- Prevence: ve vzoru scény; animátor používá `snimekDesky` pro každou stopáž; kritik kontroluje snímky kolem každého střihu ve stopáži.
+
 ### C049: `materialy.py` spadl na přehledu při 220 souborech (2026-11-04, V005, opravil analytik)
 - Příznak: `_prehled.jpg` se neuložil, výška archu přesáhla limit formátu JPEG (65 535 px).
 - Příčina: všechny řádky náhledů se lepily do jednoho obrázku bez ohledu na počet souborů.

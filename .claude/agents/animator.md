@@ -33,6 +33,7 @@ Uživateli se neptáš. Co chybí, nahlásíš režisérovi jako blokující pro
    (8 podsnímků jen v rychlých úsecích, zbytek 4). Renderuje se ve 3 prohlížečích najednou (`--vlakna 3`, výchozí). Výřez: `--od 3.7 --dur 4.25`.
    Čas závisí na scéně: změř 1 s výřezu a vynásob (V002: složitá scéna ~35 s výpočtu na 1 s videa při `--sub 4`).
    Výkon scény: žádný `filter: blur` / `ctx.filter` na velké vrstvy ani na mnoho malých prvků v každém podsnímku, záře jako předem rozmazané sprity.
+   Stopáž (C050): desku a úsek vybírat přes `snimekDesky` / `casDesky` (čas zaokrouhlený na výstupní snímek), jinak závěrka prolne dva záběry na střihu.
    Měření (C040): rozměry pro výpočet pohybu brát jednou / z pevného stavu, nikdy z prvku, který se během pohybu skrývá (offsetWidth 0).
    Tenký text (C041): barvy textu ≤ 20 px na barevném pozadí měřit v hotovém MP4 (4:2:0 posune odstín), případně kompenzovat ve zdroji.
    Moduly scény (C036): klíče společných časů (CASY) s prefixem bloku a kontrolou kolize; regresi měřit i uvnitř přechodů, ne jen po nich.

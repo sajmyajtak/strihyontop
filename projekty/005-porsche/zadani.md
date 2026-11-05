@@ -417,6 +417,50 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
    (zvukař souběžně: nálada `hora` + SFX podle sloupce výše, pak posun na skutečné časy).
 5. Kontrola: kritik (technika + zadání + partitura po snímcích + stav vozu + pilulka vs. vůz) a kreativní ředitel (wow, realismus, energie, střih, pohoda); opravy jeden animátor.
 
+## Rozhodnutí režiséra po testu techniky (2026-11-05)
+- **Cesta A schválena** (přebarvení skutečné stopáže LUTem v masce). Režisér prohlédl 100% výřezy (klic_v2_1.40, W6_spz_v2, pas_v2): odlesky krajiny v laku drží, SPZ, světla,
+  mřížky a kola nedotčené, návrat = originál. Odstín změřen v Lab: test Gentian Blue hue 292°, C 26,8 · render konfigurátoru 1A hue 289°, C 29,8 → fialový nádech má i originální lak, věrné.
+  **Podmínka**: W4, W7 (scroll 4 laků), M8 (kola) a X1 (malý vůz) projdou stejnými kritérii při přípravě desek; když některý záběr neprojde, pro něj cesta B (rendry), ostatní A.
+- **T8 = střih v pohybu na zdroji 365,40** (výstup 18,00): W11 363,00–365,40, W6 od 278,08; pilulka přežívá. PRŮJEZD-WIPE se nedělá (šev přes nebe = vložený wipe).
+- **Věta 8 začíná s MORF rámce**: slova 20,72 · 20,87 · 21,02 · 21,17 · 21,32 (C045: změna časů → zvuk).
+- **Nájezd skrz erb 7×** (erb vyplní obraz). Render `--sub-rychle 16` v úsecích MORF a ZOOM.
+- **Masky BiRefNet pro všechny úseky počítá režisér na pozadí** (`media/projekty/005-porsche/_skript/desky_masky.py`, log `desky_masky.log`): `desky/<kód>/src/NNNNN.png`
+  (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
+  57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
+
+## Test techniky (animátor, 2026-11-04 → 2026-11-05 po restartu kontejneru)
+**Výstup**: `media/projekty/005-porsche/test/test_technika_v2.mp4` (1920×1080, 60 fps, 3,60 s = 216 snímků; v1 `test_technika.mp4` pro srovnání), varianty T8
+`t8_strih.mp4` / `t8_most.mp4` / `t8_wipe.mp4`, scéna `test_technika_v2.html`, kontroly `test/kontrola/v2/` (pás `pas_v2.jpg`, klíčové snímky 100 %
+`klic_v2_0.50.png` nájezd skrz erb · `klic_v2_1.40.png` návrat linkou · `klic_v2_2.55.png` MORF, srovnání `t8_srovnani.jpg`, `W6_spz_v2.jpg`, `W11_okraj_AB.jpg`, `morf_v2.jpg`),
+stav a pořadí dávek `test/STAV.md`, skripty `test/_skript/` (`test_lut.py`, `test_maska.py`; z `nastroje/` přesunuty, C038).
+**Výřez**: 0,00–0,70 POV M7 (moodcut 8,08–8,60) + ZOOM skrz erb → W4 · 0,70–1,07 W11 (365,00–365,40, Gentian Blue) + vzorky v pilulce · T8 · 1,07–1,13 W6a (278,04–)
+· [testovací skok] 1,13–3,60 W6 280,44–283,40: návrat 1A → originál linkou (280,45–281,41), MORF rámce (282,0), sklo + průjezd za sklem.
+**Čas výpočtu**: render 16 s na 1 s videa (`--sub 4`, `--sub-rychle 8`), 23 s na 1 s se `--sub-rychle 16` v rychlých úsecích (nutné pro MORF); celé video odhad 30 s × 16–23 s ≈ 8–12 min.
+BiRefNet 25–32 s na snímek (CPU), LUT 2–3 s na snímek. Masky celé stavby (W4 od 209,0, W7, M8, X1, W11, W6 do 281,41 ≈ 330 snímků zdroje) ≈ 2,5–3 h → po dávkách se zápisem do STAV.md.
+
+| technika | výsledek | měření | verdikt |
+|---|---|---|---|
+| **A: LUT v masce, W6 280,5–281,4 (návrat)** | lak vypadá jako lak, odlesky a stíny ve tvaru, SPZ, světla, sklo, pneu beze změny (v1 měla výluku SPZ o 60 px výš → modrá SPZ a ostrý šedý pruh na nárazníku, opraveno) | peří 2,0–5,3 px (posun 6–10,6 px/snímek zdroje) · blikání max ΔL 0,91 % (< 2 %) · ΔE proti rendru 1A **8,2** (v1 13,9, nad limitem) · **rozdíl proti originálu po návratu = 0** (max 0, 0 px mimo UI, 4 snímky 1,95–2,40 na PNG) | **projde** |
+| **A: W11 rozmazaný průjezd 365,0–365,5** | v1 přesycená elektrická modrá (chroma 37 proti 22 v rendru) + modrý „opar“ v rozmazu střechy přes nebe + zrnitý okraj masky = vypadalo jako AI; v2 (chroma × 0,65, horní mez L 80 pro směs s nebem, uzavření masky 9 px, peří podle hran u okraje obrazu) věrohodná tmavá metalíza | ΔE 6,9 · peří 2–40 px · blikání relativně ke zdroji max 4,8 % (nad 2 %, ale v rozmazu neviditelné) · **snímky 365,44 a 365,48 BiRefNet nenajde** (maska 5 578 a 1 612 px) → vůz by na 2 snímky zešedl | **projde jen do 365,40**; mírně fialový nádech (a* 9 proti 5) |
+| **(1) PRŮJEZD-WIPE T8** | **neprojde**: vůz ve W11 přijíždí zdálky a odjíždí vlevo dole, nikdy nekryje nebe ani pravou polovinu → kumulativní maska odkryje jen pás silnice; v1 to dořešila „závěsem“ za zadní hranou = svislý šev přes nebe po celou dobu průjezdu (čte se jako vložený wipe). Náhradní W2 / W9 mají průjezd stejně nízko | `t8_srovnani.jpg` (3 varianty) | nahradit **střihem v pohybu** (viz doporučení) |
+| **(2) MORF rámce + sklo** | pilulka roste na celý obraz, uvnitř skutečně rozostřená deska (σ 6 = 12 px) + 72 %, šedý vůz projíždí za sklem jako rozmazaný stín; věta 8 se po slovech přelévá z pravého zarovnání do středu 48 → 72 px | bez rozmazání podle rychlosti se letící slovo rozpadlo na 8 kopií podsnímků (100 px/snímek); opraveno rozmazáním textu podle rychlosti + 16 podsnímků | **projde** |
+| **(3) vzorky v pilulce** | řada 5 koleček z tečky 0,12 s, podtrh pod vybraný 0,08 s, smrštění 0,08 s, čitelné jako „klik“ v konfigurátoru; text uvnitř skla (v1 přetékal mimo pilulku, opraveno ořezem) | – | **projde**; barvy vzorků zatím odhad, změřit z rendrů |
+| **(4) nájezd skrz erb (POV)** | v1: jen 2,6×, erb se prolínal přes ostrou W4 = dvojexpozice. v2: nájezd do stopáže 1 → 5 (mocnina 2,5), kotva erbu → (960, 900), σ desky 0 → 9 (efektivně 45 px), W4 přichází z σ 24 se zvětšením 1,25 → 1 a prolnutí jen mezi dvěma rozostřenými deskami (0,48–0,52) | erb vyplní ≈ 40 % obrazu, zbytek tmavý náboj volantu | **projde** jako jeden nepřerušený nájezd; erb nepřekreslen |
+
+**Realismus celkem**: W6 návrat a MORF působí jako skutečná reklama (zásah se nepozná). W11 průjezd v pohybu projde, ve stopce je vidět mírně fialová modrá. Jako koláž působila jen
+v1 (wipe se švem, přesycená modrá, zrnitý okraj masky).
+**Nová obecná chyba (návrh C050)**: výměna desky 30 fps padá přesně na čas výstupního snímku, takže závěrka zprůměruje dva zdrojové snímky a na střihu ve stopáži vznikne 1 prolnutý snímek
+obou záběrů (viděno u všech 3 variant T8). Oprava: desku i úsek vybírat z času zaokrouhleného na výstupní snímek (`casDesky` / `snimekDesky`, nově ve `nastroje/vzory/scena.html`).
+**Doporučení pro stavbu**:
+1. **T8 = střih v pohybu na zdroji 365,40** (poslední snímek s největším pokrytím rozmazanou karoserií), W11 363,00–365,40, W6 od 278,08 (= 18,00 výstupu); pilulka ho přežije. Varianta „most“
+   (rozmazaný vůz z W11 1 snímek přes W6) nic nepřidá a hrozí koláží. Nebo KŘ zvolí jiný typ přechodu, protože „střih ve stopáži“ už je T7.
+2. LUT: `CHROMA_S` 0,65 (rozmaz) až 0,8 (ostrý vůz), `LMAX` 80 u průjezdů přes nebe, `UZAVRENI` 5–9 px, `PERI_HRANY=1`; výluky SPZ změřit po snímcích (prahováním), ne odhadem.
+3. Nájezd skrz erb zvětšit na 7×, aby erb vyplnil obraz (partitura „erb vyplní obraz“). Nad 5× je zdroj už jen rozmazaná skvrna, takže to nevadí.
+4. Věta 8 začíná s MORF (20,72), ne 20,92 (jinak prázdná pilulka 14 snímků, C046, a přelití není vidět, protože MORF je z 90 % hotový).
+5. Render: `--sub-rychle 16` v úsecích MORF a ZOOM; text v MORF rozmazávat podle rychlosti.
+**Změny časů (C045)**: věta 8 slova 20,72 · 20,87 · 21,02 · 21,17 · 21,32 (bylo 20,92 + 0,15) · T8 průjezd-wipe 17,67–18,10 → střih 18,00 (W11 do zdroje 365,40, W6 od 278,08) — návrh, čeká na rozhodnutí.
+**Nezpracováno v tomto testu**: W7 (masky 19/25, LUT G1 jen 5 snímků), W4 jen 1 snímek, M8 kola, X1. Patří do přípravy desek.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
