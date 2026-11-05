@@ -13,6 +13,12 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C051: Dvě masky BiRefNet souběžně = nedostatek paměti (2026-11-05, V005, režisér)
+- Příznak: úloha masek režiséra skončila `Killed` (rc 137); dmesg: „Memory cgroup out of memory“ u dvou procesů python3 (7,4 GB a 6,5 GB RSS).
+- Příčina: BiRefNet (rembg, CPU) bere 6,5–7,4 GB RAM na proces; kontejner má 16 GB, animátor si souběžně pustil vlastní BiRefNet na fotku F1.
+- Oprava: úloha masek se spouští ve smyčce, která počká, až neběží jiný BiRefNet, a po zabití naváže (hotové masky přeskakuje, zápis atomicky).
+- Prevence: v jednu chvíli jen jeden BiRefNet; v zadání agentů uvést, kdo masky počítá; skripty masek obnovitelné (přeskočit hotové, atomický zápis).
+
 ### C050: Na střihu ve stopáži vznikl prolnutý snímek obou záběrů (2026-11-05, V005 test, našel animátor)
 - Příznak: v testu T8 byl na hranici dvou záběrů stopáže jeden snímek, kde se prolínaly oba záběry (dvojexpozice).
 - Příčina: výměna desky 30 fps padala přesně na čas výstupního snímku; podsnímky závěrky (vystředěné kolem času snímku) tak zprůměrovaly snímky obou záběrů.
