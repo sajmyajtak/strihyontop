@@ -753,6 +753,36 @@ rozvinutí pilulky 12,17 / 14,14 / 18,17 (bylo 12,00 / 14,02 / 18,08; slova beze
 Mix −19,8 LUFS / −8,0 dBFS → C052: −8,0 + (−14 + 19,8) = **−2,2 ≤ −1,5** → master lineárně +6,05 dB: **−13,8 LUFS, −1,9 dBTP po AAC** (1. pokus), posun zvuku proti mixu 0 vzorků, boom v masteru vrchol 27,851 (bílá 27,85).
 Pásma masteru: sub 6,3 · basy 38,7 · **středy 47,8** · horní středy 6,7 · výšky 0,5 %. Stavba (RMS 50 ms max, dekódovaný master): háček −14,9 · jízda −16,4 · **vrchol −12,1** · návrat −13,3 · logo −14,5 · ticho −72 · **boom −8,4 (+3,7 dB nad vrcholem)** · podpis −13,8; stoupání 9,5 → 13,5 s z −18 na −14 dB, stavba stejná jako v1.
 
+## Opravy v3 (animátor, 2026-11-07; nálezy kola 2 kritik + KŘ, „Rozhodnutí režiséra ke kolu kontroly 2“)
+**Pozor (proces)**: animátor v3 běžel ve **dvou souběžných větvích** (jeden přepis agenta, dvě větve). Rozdělení přes `STAV_VYROBY.md`: větev „W6“ = jen W6 sklo + světla (priorita 3),
+větev „hlavní“ = vše ostatní, scéna, render, master. Souběh jednou přepsal `desky/vyluky_sled.json` (ztracený klíč W4f) → klíče W4 v3 leží zvlášť v `desky/vyluky_w4v3.json`.
+
+| # | nález (priorita režiséra) | stav | jak |
+|---|---|---|---|
+| 1 | logo stojí 26,30–27,43 (C043) | hotovo | celá skupina (erb, název, claim, WLTP, obrys) `dych = 1 + 0,03 · (t − 23,60) / 3,83` lineárně 23,60–27,43 a stejnou rychlostí do konce ROZ-OUT 27,65, střed (960, 540). freezedetect `n=0,0005` (d 0,2 / 0,5 / 1 s) na výřezu 22,4–27,7 i v hotovém MP4: v 23,60–27,43 **nic** (d 0,3 hlásí jen 22,92–23,60 = tah obrysu před začátkem růstu a 28,88–29,55 podpis; kontrola.sh d 1 s: žádný zamrzlý úsek) |
+| 2a | W11 9075 šedý (16,000–16,017) | hotovo | v2 běh měl v časovém mediánu masku 9074 z jiného záběru (později smazanou) → 0 px laku. 9075 přepočten se stejnými parametry W11v2: rozdíl proti orig v bboxu vozu 23,1 úrovně (9076: 23,0) |
+| 2b | X1 skok šedá → modrá | hotovo | přebarvení rozšířeno na zdroj **15–43** (dřív 44–63; vůz v 15–43 má 12–48 px): `desky/X1z` (src z mosaic, ověřeno pixelově proti src masek), maska X1c 44 přenesená zpět sledováním šablony vozu (měřítko 0,93–0,99/snímek, shoda 0,94–0,99), `prebarvi.py --min-px 60` (nová volba), parametry jako X1 44–63. Gentian platí od prvního viditelného snímku vozu |
+| 3 | W6 sklo + světlomety | hotovo (větev „W6“) | výluky W6v3_lak z ručních kotev po 4–8 snímcích (`_skript/w6v3_vyluky.py`, kotvy `kotvy.json['W6v3']`): čelní sklo celé až k A-sloupku (6942–6998 ručně, dál sledované), světlo P + boční odrazka, světlo L do 6998 = jádro plně + lem 'tmave 14/obe'; přepočet `_skript/w6v3.sh` (1A 6942–7035, ráfky 6960–7035, SPZ z originálu). Blikání laku max 1,91 %, ΔE 7,8; mimo sklo / světla rozdíl proti v2 medián 0. 100 % kontrola `media/kontrola/005-porsche/v3-w6/` (každý 5. snímek), zálohy `desky/W6/_*_v3pred` |
+| 4 | W4 šedá skvrna na kapotě (KŘ) | hotovo | víko je karbon s odrazem nebe (výluka „kapota“ ho nechávala šedé) → nový typ oblasti `plny` v `prebarvi.py` (v oblasti přebarvit i tmavé a nízkou chromu; barevný erb a černé otvory NACA zůstávají) + `--chroma-min 22`; polygon kapoty × 1,22, výluky skla / světel platí dál. Výluka pravého světlometu znovu (ruční kotvy 5243 / 5255 / 5266, sledováno, klíč W4sv): stará ujížděla a nechávala šedý klín vedle světla. Měření 5237–5270: blikání max 0,38 %, ΔE medián 8,1 (max 9,1). Zálohy `desky/W4/_G1_v2`, `_G1_png_v2` |
+| 5 | T8 holý střih 17,667 | hotovo | **LET vodorovně** 17,617–17,717 (6 snímků, kubIO, střed na 17,667): obraz odjede doleva po směru jízdy vozu ve W11, W6 přijede zprava; rozmazání pohybem analyticky po výstupních snímcích (2 průchody × 8 posunutých kopií = 64 vzorků, ≤ 480 px ve špičce), deska W11 drží 9124, W6 6942 |
+| 6 | ODOMETR rozmazání kopiemi (C040) + odchod karty | hotovo | sloupec číslic (bílé na černé) svislý Gauss σ = dráha válce za závěrku / 3 (strop 0,5 výšky číslice) – sloupec se roztáhne vodorovně 8×, izotropní blur, smrští zpět; do karty režimem `screen`. Hodnoty a časy válce beze změny. Číslo + PS ROZ-OUT 17,40–17,47 (dřív 17,42–17,52), karta zpět 17,47–17,60 (dřív 17,45–17,60), úsek 17,38–17,75 rendrován s 16 podsnímky |
+| 7 | T2 erb | hotovo | nájezd 6× (beze změny), rozostření vrcholu σ 20 → **30** (nové desky M7 b30), jas vrcholu +0,2 → **+0,3 EV**. Průměrný jas posledního snímku před střihem 67,3 → 69,3 (W4 101,4): skok zůstává menší jen o 2 úrovně (erb je tmavý volant), víc by chtělo jiný typ přechodu |
+| 8a | prázdná pilulka 4 snímky | hotovo | „Black“ 9,32 → **9,285**; rozvinutí věty 5b 13,12–13,20 → **13,187–13,287** (slovo 13,22 beze změny); rozvinutí popisku Vanadium 20,10–20,22 → **20,187–20,287** (text 20,22 beze změny) → nejvýš 2 snímky bez textu |
+| 8b | linka 4 přes pilulku | hotovo | všechny skenovací linky se během přejezdu kreslí s výřezem pilulky / rámce (evenodd clip) → pod UI přerušené |
+| 8c | WIPE hrana | hotovo | náběžná i odjíždějící hrana plná #d5001c 3 px (100 %), pruhy rozmazané jen 1/12 závěrky |
+| 8d | tečka Gentian / Black neviditelná | hotovo | tmavé vzorky (jas < 70) mají lem 1,5 px #f6f6f8 @ 72 % |
+| 8e | GT Silver víko vypálené | hotovo | U2 7093–7100 `--l-strop 76` (bylo 82, ≈ −0,3 EV ve světlech), záloha `desky/W7/_U2_v4`, `_skript/w7_laky.sh e` |
+| 8f | linka 4 → podtrh věty 8 (skok 20,867) | hotovo | návrat všech linek do podtrhu kubIO místo exponenciálního easeIn (ten byl na posledním snímku teprve ve 41 % cesty) |
+| 8g | podtrh → TAH erbu (prázdné 23,27–23,35) | hotovo | obrys se kreslí od 23,30 hned (kvadratický ease-out místo kubIO) a ve špičce štítu stojí bod 3 px |
+
+**Změny časů (C045, pro zvukaře)**: **T8 = LET 17,617–17,717** (největší rychlost / švih na 17,667; místo holého střihu) · číslo 500 zbledne 17,40–17,47 (bylo 17,42–17,52), karta zpět 17,47–17,60 (bylo 17,45–17,60) ·
+popisek „Black“ 9,285 (bylo 9,32) · rozvinutí pilulky 13,187 a 20,187 (bylo 13,12 a 20,10; slova beze změny) · TAH obrysu erbu začíná viditelně hned 23,30 (časy beze změny) · logo roste 23,60–27,65 (bez události). Ostatní beze změny.
+**Nové / upravené nástroje**: `nastroje/prebarvi.py` (`--min-px`, oblast `plny` + `--chroma-min`), `_skript/x1_zpet.py`, `_skript/opravy_a.sh W4v3`, `_skript/w7_laky.sh e`, `_skript/rozostreni.py` (M7 b30), `desky/kotvy_w4v3.json`, `desky/vyluky_w4v3.json`.
+**Render v3**: `media/projekty/005-porsche/render/V005_obraz_v3.mp4` (1800 snímků, 1076 s výpočtu, jeden průchod 0–30 s, `--sub 4 --sub-rychle 16`, rychlé úseky 2,40–2,75 · 3,10–3,35 · 4,00–4,40 · 6,88–7,31 · 7,95–8,10 ·
+9,78–9,90 · 10,70–11,06 · 11,20–11,56 · 11,90–12,20 · 13,00–14,05 · 15,38–15,62 · **17,38–17,75** · 19,88–20,00 · 20,60–21,10 · 23,15–23,62 · 27,80–28,08). Desky W6 = v3 větve „W6“.
+**Výstupy**: `vystup/V005_v3.mp4` (zvuk `zvuk/zvuk_v2.wav`, zvuk v3 zatím není → `master_zvuk.sh`: −13,8 LUFS / −1,9 dBTP), `V005_v3_bez_hudby.mp4` (`zvuk_bez_hudby_v2.wav`, nenormalizovaná), plakát `V005_v3_plakat.jpg` (20,45).
+Kontrola `media/kontrola/005-porsche/v3-animator/` (kontrola_log.txt, arch.jpg, ks_nahled/, odo/ pásy: odometr, T8, T2, wipe; 100% výřezy v3_*.png). YDIF přes T2 39,5 (v2 40,8), T8 rozložené do 6 snímků (max 17,2; v2 holý střih 29,2).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
@@ -781,6 +811,12 @@ Pásma masteru: sub 6,3 · basy 38,7 · **středy 47,8** · horní středy 6,7 �
 - (animátor v2) **Sledované výluky kol W6c ujely** (optický tok bral karoserii, kolo se vůči ní posouvá/otáčí) → modré pneu 18,5–18,8. Oprava: kotvy kol ručně po 9 snímcích (6967 / 6976 / 6985). **Prevence**: kola kotvit hustěji než karoserii a kontrolovat výluky náhledem `prebarvi.py nahled` na každém 5.–10. snímku.
 - (animátor v2) **Výluka SPZ v režimu `tmave/obe` modrala značku** v rozmazaných snímcích W6 → SPZ vrácena z originálu polygonem (`_skript/spz_orig.py`). **Prevence**: SPZ vždy plnou výlukou (ne podle jasu).
 - (animátor v2) Komentář `//` vložený doprostřed řádku pole klíčových snímků zakomentoval zbytek řádku → stránka bez `window.seek` (timeout rendereru). **Prevence**: po úpravě scény `node --check` na skriptech scény.
+
+- (animátor v3) **Dvě souběžné větve téhož agenta** (jeden přepis, dvě větve) pracovaly na stejném úkolu: duplicitní oprava W11 9075 a přepsaný klíč W4f ve `vyluky_sled.json` (zápis load → dump celého souboru). Vyřešeno dohodou v `STAV_VYROBY.md` (větev W6 jen W6, hlavní vše ostatní) a vlastním souborem výluk `vyluky_w4v3.json`. **Prevence**: sdílené JSON (výluky, kotvy) zapisovat po klíčích do samostatných souborů nebo se zámkem; agent si na startu ověří, že úkol neběží dvakrát (přepis / STAV_VYROBY.md).
+- (animátor v3) **W11 9075 nepřebarvený**: první snímek úseku bral v časovém mediánu masku 9074 z jiného záběru (BiRefNet ji spočítal a pak byla smazána) → 0 px laku. **Prevence**: po smazání / změně masek přepočítat i sousední snímky; v logu `sekvence` hlídat `malo_laku` / `prazdne` na prvním a posledním snímku.
+- (animátor v3) **X1 přebarvení začínalo uprostřed záběru** (maska až od 44, vůz viditelný od ~15): pravidlo „< 40 px se nepřebarvuje“ vytvořilo viditelný skok barvy. **Prevence**: stav hrdiny se přebarvuje od prvního snímku, kdy je vůz vidět (i malý), jinak skok uprostřed záběru.
+- (animátor v3) **Komentář `//` uprostřed řádku znovu** (WIPE): `node --check` na skriptech scény ho chytil před renderem (prevence z v2 funguje).
+- (animátor v3) **Čekací smyčka na text v STAV_VYROBY.md** se spustila na vlastní poznámce, která hledaný text citovala. **Prevence**: čekat na soubor / exit kód, ne na volný text.
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
