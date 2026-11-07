@@ -819,6 +819,29 @@ Podtrh pod Vanadium 19,867: poloha změřena v v3, nejvíc pod vzorkem 1191–11
 C052: −8,0 + (−14 + 20,1) = **−1,9 ≤ −1,5** → master lineárně +6,04 dB: **−13,8 LUFS, −1,9 dBTP po AAC** (1. pokus, měřeno na `V005_v3.mp4`), posun zvuku proti mixu 0 vzorků, boom v masteru 27,851, ticho 27,66–27,84 v masteru špička −99,7 dBFS.
 Pásma masteru: sub 6,5 · basy 38,5 · **středy 47,8** · horní středy 6,7 · výšky 0,4 %. Stavba (RMS 50 ms max, dekódovaný master): háček −14,9 · jízda −16,4 · **vrchol −12,2** · návrat −13,5 · logo −14,6 · ticho −123 · **boom −8,3 (+3,9 dB nad vrcholem, nejhlasitější místo)** · podpis −13,9.
 
+## Opravy v4 (animátor, 2026-11-07; „Rozhodnutí režiséra po kole 3“, závěrečná lokální oprava; po přerušení limitem dokončil navazující animátor)
+| # | bod režiséra | stav | jak |
+|---|---|---|---|
+| 1 | W6 řidič a kokpit 19,07–20,30 (zdroj 6985–7035) | hotovo | nové výluky `desky/vyluky_w6v4.json['W6v4_lak']`: `kokpit` (hlava řidiče, opěrky, roll-bar za čelním sklem) + `rameno` zrcátka, ruční kotvy `desky/kotvy_w6v4.json` po 4–6 snímcích + sledování, měkká hrana 2 px (`prebarvi.py` nově `rozmaz` po oblastech, `sila` {index: 0–1}). Skript `_skript/w6v4_vyluky.py`. Na 100 % z hotového MP4 (`v4_ridic_pas.jpg`, každý 2. snímek 19,07–20,30): obličej, brýle a vlasy v přirozené barvě, opěrka a roll-bar bez modrého nádechu |
+| 2 | W6 dveře a zadní bok 19,4–20,2 | hotovo | oblast `dvere` = celý bok ve stínu, typ `plny` + `chran_cervenou` (nápis Spyder RS zůstává červený), `--chroma-min 17 --chroma-min-l 1.1` (přebarví i nízkou chromu, L z originálu); 1A přepočteno ve 3 kusech souběžně (6985–7001 / 7002–7018 / 7019–7035: blikání laku max 2,08 / 0,80 / 0,39 %, ΔE medián 6,6 / 5,4 / 5,4). Proti vření `_skript/w6v4_median.py`: časový medián chromy (a, b v Lab) přes 3 snímky, sousedé zarovnaní homografií z optického toku boku, jen v oblasti `dvere` a jen kde jsou všechny 3 snímky přebarvené, L z aktuálního snímku. Pak 1A348 (ráfky, blikání max 3,75 / 1,91 / 1,95 %, v3 4,8 %), SPZ z originálu, graduj, `data_desky.py`. Dveře na 100 % (`v4_dvere_pas.jpg`, každý 3. snímek): jednolitá Gentian bez šedých skvrn, po snímcích bez vření. Zálohy v3: `desky/W6/_1A_v4pred`, `_1A_png_v4pred`, `_1A348_v4pred`, `_1A348_png_v4pred`; mezivýsledky `_1A_png_v4` (bez mediánu), `_1A_png_v4m` |
+| 3a | apostrof ’ v „you’re“ | hotovo | `B_veta8` U+2019 (ověřeno na 21,6 s) |
+| 3b | pilulka po „Nowhere to be.“ | hotovo | text bledne 15,27–15,33, pilulka se smrští do tečky 15,30–15,36 (prázdná jen 1 snímek 15,317), tečka drží barvu do 15,60 (karta ji překryje) |
+| 3c | logo bez stání | hotovo | `dych` lineárně od **23,30** (`B_dych`), na 27,43 = 1,035 (`B_dych_konec`). Rozdíl snímků 23,20–24,05 v hotovém MP4: každý snímek mění 470–4 700 px (> 2 úrovně), tj. pohyb běží; `freezedetect n=0,0005 d=0,2` přesto hlásí 22,92–23,58 a 23,77–24,02 (pohyb pod prahem filtru, stejně jako v v3). Skutečně stojí jen 23,03–23,18 (0,15 s, před tahem obrysu) |
+| 3d | zdvojené snímky zdroje | hotovo | W11 9104 (16,93) = mezisnímek s kompenzací pohybu (`_skript/v4_mezisnimek.py`, tok DIS). **W6 6970 (18,60)**: tentýž postup dal průhledného ducha vozu vedle vozu (tok DIS u malého vozu před rychle ujíždějícím pozadím) → nový `_skript/v4_mezisnimek2.py`: vůz = podobnostní transformace T^½ z bodů v masce (měřítko 1,123 / 2 snímky), pozadí = tok spočtený bez vozu (inpaint) s nulovou vahou vzorků na voze, vůz přes pozadí měkkou maskou. kontrola.sh: skok YDIF 10,2 na 18,633 (dvojitý krok) zmizel. Zálohy `desky/<kód>/_v4pred_mezisnimek/` |
+| 3e | rychlé úseky vzorků / pilulky `--sub-rychle 16` | hotovo | 6,60–6,90 · 9,00–9,10 · 9,24–9,30 · 11,12–11,32 · 20,18–20,30 v kusech g1–g3; 13,18–13,30 už v3 renderovala s 16 podsnímky (úsek 13,00–14,05) |
+| 4 | zvuk v4 + master | hotovo | `zvuk/zvuk_v4.wav` → `master_zvuk.sh`: **−13,8 LUFS, −1,9 dBTP** po AAC (1. pokus, log `zvuk/master_log_v4.txt`) |
+
+**Render v4 = vložení po GOP** (`_skript/v4_vloz.sh`): v3 rozděleno na klíčových snímcích 256 · 440 · 480 · 728 · 829 · 1250 · 1671 (segmentový muxer, `-c copy`), přerenderované kusy
+g1 = snímky 256–439 (4,267–7,317 s), g2 = 480–727 (8,000–12,117), g3 = 829–1249 (13,817–20,817), g4 = 1250–1670 (20,833–27,833), `--sub 4 --sub-rychle 16`, rychlé úseky `render/_v4/rychle.env`
+(výpočet g1 252 s / 1 vlákno, g2 255 s, g3 281 s, g4 159 s / 3 vlákna), spojení concat `-c copy`. **Ověřeno**: 1800 snímků, 30,000 s; framemd5 mimo vyměněné kusy = v3 (0 rozdílů);
+každý vložený kus dekódovaný uvnitř v4 = samostatný kus (184/184, 248/248, 421/421, 421/421); obraz ve `vystup/V005_v4.mp4` = `render/V005_obraz_v4.mp4`.
+Rozdíl proti v3 (480×270, > 0,6 úrovně) jen v místech oprav: 15,32–15,57 (pilulka), 16,97 (W11 9104), 18,60 (W6 6970), 19,23–20,28 (W6 bok + kokpit), 21,23–22,35 (apostrof), 25,4–26,2 (logo); jinde 0,43–0,46 = šum kódování.
+**Výstupy**: `vystup/V005_v4.mp4` (−13,8 LUFS / −1,9 dBTP), `vystup/V005_v4_bez_hudby.mp4` (`zvuk_bez_hudby_v4.wav`, AAC 256k, nenormalizovaná, C039), `vystup/V005_v4_plakat.jpg` (20,45).
+Kontrola `media/kontrola/005-porsche/v4-animator/` (kontrola_log.txt, arch.jpg, pásy; 100 %: v4_ridic_pas.jpg, v4_dvere_pas.jpg, v4_w6_6970.jpg, v4_w11_9104.jpg, v4_pilulka_1530.jpg).
+kontrola.sh proti v3: zamrzlé úseky žádné, YDIF beze změny kromě zmizelého skoku 18,633 a +0,3 na pilulce 15,32–15,52.
+**Změny časů (C045)**: pilulka věty 6 se smrští 15,30–15,36 (text 15,27–15,33; dřív zůstala roztažená do 15,58) · logo roste od 23,30 (dřív 23,60) · ostatní beze změny (žádná zvuková událost se neposouvá).
+**Známé zbytky**: přední blatník za předním kolem (před spárou dveří) zůstává tmavší šedomodrý než dveře (hranice oblasti `dvere` leží na spáře); 6984 (19,067) je ještě stav v3 (mimo zadaný rozsah 6985–7035, bok tam v hlubokém stínu); mezisnímek W6 6970 má u levého okraje mírně rozmazanou skálu a tmavou šmouhu pod levým rohem nárazníku (1 výstupní pár snímků, v pohybu).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
@@ -853,6 +876,8 @@ Pásma masteru: sub 6,5 · basy 38,5 · **středy 47,8** · horní středy 6,7 �
 - (animátor v3) **X1 přebarvení začínalo uprostřed záběru** (maska až od 44, vůz viditelný od ~15): pravidlo „< 40 px se nepřebarvuje“ vytvořilo viditelný skok barvy. **Prevence**: stav hrdiny se přebarvuje od prvního snímku, kdy je vůz vidět (i malý), jinak skok uprostřed záběru.
 - (animátor v3) **Komentář `//` uprostřed řádku znovu** (WIPE): `node --check` na skriptech scény ho chytil před renderem (prevence z v2 funguje).
 - (animátor v3) **Čekací smyčka na text v STAV_VYROBY.md** se spustila na vlastní poznámce, která hledaný text citovala. **Prevence**: čekat na soubor / exit kód, ne na volný text.
+- (animátor v4) **Mezisnímek s tokem DIS dal průhledného „ducha“ vozu** (W6 6970: malý vůz před rychle ujíždějícím pozadím, tok přes vůz rozmazaný → vzorky vozu se míchaly s pozadím vedle vozu). **Prevence**: mezisnímek, kde se vůz a pozadí hýbou různě, skládat zvlášť: vůz z masky (podobnostní T^½), pozadí z toku spočteného bez vozu s nulovou vahou vzorků na voze (`_skript/v4_mezisnimek2.py`); každý mezisnímek prohlédnout celý, ne jen výřez vozu.
+- (animátor v4) **Přerušení limitem uprostřed práce**: navazující animátor rekonstruoval hotové kroky z přepisu předchůdce (STAV_VYROBY.md nezachytil medián, 1A348, graduj, 6970 ani g1). **Prevence**: řádek do STAV_VYROBY.md hned po každém dokončeném kroku, ne po skupině.
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
