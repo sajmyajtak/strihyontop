@@ -428,6 +428,19 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Rozhodnutí režiséra ke kolu kontroly 2 (2026-11-07, závazné pro opravy v3 = poslední kolo)
+Pořadí priorit (když nestihneš všechno, dodělej shora):
+1. **Logo NESMÍ stát (C043 podruhé!)**: celou skupinu loga (erb, název, claim, WLTP) škáluj **lineárně 1,000 → 1,030 od 23,60 do 27,43**, střed (960, 540), bez ease-outu.
+   Ověř `freezedetect` (n 0,0005): nesmí hlásit nic v 23,60–27,43. Výsledek měření napiš do hlášení.
+2. **Probliknutí šedé W11 16,000–16,017** (první snímky 9075–9076 nepřebarvené): dopočítat. Stejně **X1 zdroj 44–56** (vůz ≥ 40 px): přebarvit, stav Gentian Blue musí platit souvisle.
+3. **W6 sklo a světlomety (6942–7035)**: výluky skla a obou světlometů včetně boční odrazky rozšířit a sledovat (jako W11s), hrana výluky měkká 2 px, ne diagonální řez. Kontrola 100 % na 18,3 · 18,5 · 19,8.
+4. **W4 šedá skvrna na kapotě (KŘ)**: podle návrhu KŘ (přebarvit i nízkou chromu v polygonu víka, L z originálu).
+5. **T8 17,667**: místo tvrdého střihu **LET vodorovně** (švih po směru jízdy vozu, 0,10 s, rozmazání po výstupních snímcích, ne kopiemi), aby se nečetl jako skok zpět a neopakoval typ T7.
+6. **ODOMETR a odchod karty**: rozmazání spojité (svislý / vodorovný Gauss podle rychlosti, strop 0,5 výšky číslice), **žádné diskrétní kopie** (C040). Hodnoty a časy beze změny.
+7. **T2 erb**: nájezd ukonči na 6×, ale ROZ σ 30 a jas vrcholu průchodu vyrovnej směrem k W4 (+0,3 EV), aby YDIF přes střih kleslo.
+8. Drobné: prázdná pilulka ≤ 2 snímky (9,27 · 13,17 · 20,17), linka 4 pod UI (nekreslit přes pilulku), ostrá hrana WIPE 3 px #d5001c, tečka Gentian Blue v pilulce s 1px světlým lemem, GT Silver víko −0,3 EV ve světlech, linka 4 → podtrh věty 8 a podtrh → TAH erbu bez prázdných snímků (návrhy KŘ).
+Zvuk: změny časů (T8 LET) vypiš do zmeny_casu, zvukař je posune.
+
 ## Rozhodnutí režiséra ke kolu kontroly 1 (2026-11-07, závazné pro opravy v2)
 1. **T8 / W11 průjezd (KŘ blokující)**: výstupní střih zůstává na **18,00** a všechno za ním beze změny. Rozmazaný průjezd 365,00–365,40 se **nepřebarvuje** složitěji, ale vypadne:
    okno W11 posuň o 0,40 s dřív (zdroj **362,60–365,00**, snímky 9065–9124), T8 = střih na zdroji 365,00 (vůz středně velký a ostrý). Masky 9065–9074 dopočítej
