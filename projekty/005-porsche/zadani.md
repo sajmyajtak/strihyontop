@@ -678,6 +678,32 @@ Kontrola `media/kontrola/005-porsche/v1-animator/` (zprava.txt, arch.jpg, pásy)
 „zamrzlý úsek“ 26,30–27,43 = klid loga podle partitury (jen erb + název, dýchání 1,00 → 1,02 je pod prahem detektoru); černá 27,65–27,85 = ticho podle partitury.
 **Zvuk v1 je ke starým časům partitury**: SFX posune režisér podle seznamu změn časů (C045).
 
+## Opravy v2 (animátor, 2026-11-07; nálezy kola 1 kritik + KŘ, rozhodnutí režiséra ke kolu 1)
+| nález | stav | jak |
+|---|---|---|
+| ODOMETR > 500 (blokující) | hotovo | jedna hodnota v(t) ≤ 500 (ease-out kubicky 15,62–16,32) a z ní mechanický válec: jednotky plynule, desítky / stovky jen během poslední jednotky nižšího řádu (přenos) → čtení vždy ≤ 500, přenos 4 → 5 až 16,25–16,32 spolu s ding. Poloha válců podle výstupního snímku (casDesky), rozmazání v kódu = 3 slábnoucí kopie pod číslicí, stopa ≤ 0,5 výšky číslice → obrys číslice čitelný v každém snímku (kontrola `media/kontrola/005-porsche/v2-animator/odo_v2.jpg`). |
+| W11 průjezd + přebarvení (KŘ blokující, kritik závažná) | hotovo, **odchylka od rozhodnutí režiséra 1** | 362,60–363,00 je ve zdroji jiný záběr (rozhovor, střih na snímku 9075) a leží v zakázaném úseku 360,16–363,00; X1 prodloužit nejde (ve zdroji mosaic střih na snímku 64 → detail pádla). Proto W11 = zdroj **363,00–365,00** (9075–9124) na 16,00–17,667 a **T8 = 17,667**, W6 začíná od začátku záběru 277,68 (6942, povolený úsek). Od 18,00 je obraz W6 totožný s v1 (stejné mapování snímků). Rozmazaný průjezd 365,00–365,40 vypadl. Přebarvení W11 znovu: sledované výluky W11s (čelní sklo + roll-bar, SPZ, světla, obě kola; kotvy 9095 / 9112 / 9124), `--l-baze 14 --detail 0,85` (kresba odlesků), `--cerna 20,8` (černé plasty, pneu), `--chroma-s 0,47 --hue −5` (odstín jako W7: Lab medián C 16,5, h 287°; v1 C 23,8, h 293°), ráfky Satin Neodyme 9100–9124 (kolo ≥ 40 px). SPZ z originálu (`_skript/spz_orig.py`). |
+| W6 kola, pneu, plasty, plochá Gentian, lem (KŘ) | hotovo | masky 6942–6951 dopočítány (BiRefNet, po W11), výluky W6v_lak = W6c / W6b protažené na 6942 sledováním, kola znovu ukotvena ručně (6967 / 6976 / 6985: sledování W6c se u kol posunulo), lak `--l-baze 14 --detail 0,85 --cerna 20,8 --chroma-s 0,58 --hue −4 --vnitrni 1` (bez tmavého lemu, C 18,7, h 289°), ráfky bronz 6960–7035 (W6v_rafky). |
+| CLONA 10,92 dvojexpozice | hotovo | kruh po výstupních snímcích (casDesky), neprůhledný, hrana 1,5 px + mírné rozmazání pohybem ≤ 20 % poloměru, poloměr ease-in do 1300 px, střed = střed zádě W7 nad SPZ (880, 470) |
+| F1 pilulka na laku | hotovo | výřez fotky přiblížen 1,30 → 1,35 se středem (874, 470) px fotky 2160 × 1215 (kotva na místě): pod pilulkou je boční polstr sedadla / tmavý otvor dveří, lak jen vpravo za hranou pilulky; krajina nahoře zůstává |
+| prázdná pilulka (C046) | hotovo | kompaktní 84 px do 12,17 / 14,14 / 18,17, rozvinutí 0,12 s, první slovo 2 snímky po začátku rozvinutí |
+| WIPE | hotovo | 13,68–14,01 (plná plocha 5 snímků 13,80–13,87), pohyb plynulý příjezd / rychlý odjezd, po výstupních snímcích s rozmazáním na ¼ závěrky → ostré pruhy, červená hrana 3 px |
+| logo zamrzlé 26,30–27,43 | beze změny | rozhodnutí režiséra 4 (záměrný klid) |
+| LET T1 | hotovo | rozmazání od 2,38 (vůz ještě v obraze) |
+| LET svislý | hotovo | kompozice M8 + F1 v poloze výstupního snímku, svislé rozmazání analyticky 2 průchody × 8 kopií (64 vzorků) |
+| GT Silver bloky na difuzoru | hotovo | U2 7093–7100 znovu s `--tma 18,34` (tmavé plasty se zvedají plynule méně; `--cerna` dělal skvrny ve stínu nárazníku) |
+| T2 prolnutí 4,217 | hotovo | čistý střih na výstupním snímku 4,20 mezi rozostřeným erbem a W4 σ 24 |
+| erb bloky (KŘ) | hotovo | nájezd jen do 6×, od ~4× rozostření desky σ 9 → 20 (nové desky M7 b14 / b20) + 0,2 EV |
+| MORF sklo (KŘ) | hotovo | během průjezdu 21,28–22,27 sklo σ 3 (nové desky W6 b3) a 38 % místo 72 %, pod větou eliptické ztmavení ≈ 900 × 200 px 60 % |
+| linka 1 růžový pás (KŘ) | hotovo | všechny linky po výstupních snímcích, jádro 3 px 100 %, stopa ≤ 2 × 8 px |
+| Arctic příliš bílé (KŘ) | hotovo | `f1.py`: L → 40 + L (bylo 52 + 0,75 L), medián L 61,6 (render 51: 66), plný kontrast textury |
+| ROZ 3,233 (režisér 5) | beze změny | oba hodnotitelé průchod přijali („elegantní“), proto bez −0,6 EV |
+
+**Změny časů (C045, pro zvukaře)**: T1 rozmazání od 2,38 (bylo 2,45) · T2 bez prolnutí (střih 4,20) · WIPE 13,68–14,01, plná plocha 13,80–13,87, střed švihu ≈ 13,84 (bylo 13,62–14,02) ·
+rozvinutí pilulky 12,17 / 14,14 / 18,17 (bylo 12,00 / 14,02 / 18,08; slova beze změny) · ODOMETR tiky přenosů stovek 15,670 · 15,730 · 15,804 · 15,911, přenos 4 → 5 = 16,25–16,32 splývá s ding 16,317 (žádný tik kolem 16,00) ·
+**T8 = 17,667** (bylo 18,00): střih v pohybu W11 → W6, průjezd / švih T8 o −0,333 s; vše od 18,00 beze změny.
+**Nové / upravené nástroje**: `nastroje/prebarvi.py --hue` (otočení odstínu výsledku), `_skript/spz_orig.py`, `_skript/rozostreni.py` (W6 b3, M7 b14/b20), `_skript/prebarvi_b.sh W6v2 | W11v2`, `_skript/w7_laky.sh d`, `_skript/f1.py` (Arctic), `_skript/desky_masky.py` / `desky.py` (W6 od 6942).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
@@ -701,6 +727,11 @@ Kontrola `media/kontrola/005-porsche/v1-animator/` (zprava.txt, arch.jpg, pásy)
 - (animátor C) **Spojení `concat -c copy` s `outpoint` / `inpoint` přidalo 2 snímky** (1802 místo 1800) a posunulo obraz o snímek (B-snímky na hranici GOP). Oprava: výměna úseku přes `trim` +
   `concat` filtr s jedním překódováním (CRF 14). **Prevence**: po každém spojení ověřit počet snímků a rozdíl proti původní verzi mimo vyměněný úsek.
 - (animátor C) W4 kapota: výluka „jen pixely tmavší než okolní lak“ (`tmave`) neprošla, karbon je na slunci stejně světlý jako lak → červené šmouhy. Zůstává polygon (známý nedostatek).
+
+- (animátor v2) **Rozhodnutí T8 předpokládalo zdroj 362,60–363,00, který je jiný záběr (rozhovor) a navíc zakázaný úsek**: zjištěno až po spuštění BiRefNet na 9065–9074 (zbytečně 10 masek, smazány). **Prevence**: před rozšířením úseku ověřit střihy ve zdroji (rozdíl sousedních snímků) a seznam zakázaných úseků (C044).
+- (animátor v2) **Sledované výluky kol W6c ujely** (optický tok bral karoserii, kolo se vůči ní posouvá/otáčí) → modré pneu 18,5–18,8. Oprava: kotvy kol ručně po 9 snímcích (6967 / 6976 / 6985). **Prevence**: kola kotvit hustěji než karoserii a kontrolovat výluky náhledem `prebarvi.py nahled` na každém 5.–10. snímku.
+- (animátor v2) **Výluka SPZ v režimu `tmave/obe` modrala značku** v rozmazaných snímcích W6 → SPZ vrácena z originálu polygonem (`_skript/spz_orig.py`). **Prevence**: SPZ vždy plnou výlukou (ne podle jasu).
+- (animátor v2) Komentář `//` vložený doprostřed řádku pole klíčových snímků zakomentoval zbytek řádku → stránka bez `window.seek` (timeout rendereru). **Prevence**: po úpravě scény `node --check` na skriptech scény.
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
