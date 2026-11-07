@@ -13,6 +13,15 @@ Cíl: **žádná chyba dvakrát**. Každý záznam končí prevencí, která se 
 
 ---
 
+### C053: Zpráva běžícímu agentu workflow spustila jeho druhou instanci (2026-11-07, V005 opravy v3, režisér)
+- Příznak: po `SendMessage` na agentId běžícího animátora (workflow) odpověď „Resuming agent“ a ve STAV_VYROBY.md se objevily dvě souběžné „větve“ téhož animátora.
+  Přepisovaly si sdílené soubory (`vyluky_sled.json`, `kotvy.json`: zmizel klíč W4f). Agenti to sami zjistili a rozdělili si práci (větev W6 jen desky, hlavní větev scéna + render).
+- Příčina: SendMessage agenta workflow, který právě běží, nedoručí do jeho fronty, ale obnoví ho z přepisu jako samostatnou kopii.
+- Oprava: větve se domluvily přes STAV_VYROBY.md a hlavní větev čeká na dokončení W6 před renderem.
+- Prevence: **agentům uvnitř workflow nikdy neposílat SendMessage.** Pokyny režiséra psát do `zadani.md` (oddíl „Rozhodnutí režiséra…“) a odkaz do STAV_VYROBY.md,
+  a to **před** startem dalšího agenta. Ve workflow proto mezi kontrolou a opravami nechat krok, kde režisér rozhodnutí doplní (`nastroje/workflow/README.md`).
+  Sdílené JSON soubory zapisovat atomicky a jen vlastní klíče (load → merge → zápis přes .tmp).
+
 ### C052: Kontrolní master dynamické hudby rozbil stavbu hlasitosti (2026-11-05, V005, našel a opravil zvukař)
 - Příznak: po `master_zvuk.sh` byl háček (−10,3) hlasitější než vrchol (−12,4) a boom o 3,8 LU tišší než hudba.
 - Příčina: poměr špička / hlasitost mixu 17 dB (plochy s velkými špičkami, boom s ostrým transientem) → +6 dB na −14 LUFS lineárně nešlo, loudnorm přešel do dynamického režimu.

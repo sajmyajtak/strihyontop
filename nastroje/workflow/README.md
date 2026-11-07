@@ -21,3 +21,8 @@ kritik technika + zadání je jeden agent, střih a spojení zvuku dělá animá
 **Střihový vzor (2026-11-04, `znalosti/strih-vzor.md`)**: do přípravy patří fáze **partitura** (kreativní ředitel: stavy hrdiny, věta na scénu, příchod /
 klid / odchod / spojka), oponent ji reviduje podle kontrolního seznamu střihu. Výroba: partitura → obraz → zvuk (zvukař až k hotovému obrazu, D12).
 Kontrola: kritik dostává partituru a porovnává ji po snímcích; kreativní ředitel hodnotí střih 3×. Střihač navíc skládá 9:16 prezentaci (A9).
+
+**Pokyny režiséra během běhu (C053, 2026-11-07)**: agentům uvnitř workflow **neposílat SendMessage**, protože vznikne jejich druhá souběžná instance.
+Rozhodnutí ke kolu kontroly psát do `zadani.md` („Rozhodnutí režiséra ke kolu kontroly N“) a odkaz do STAV_VYROBY.md. Opravný agent startuje hned po kontrole,
+proto ve skriptu oprav dávat do promptu výslovně „nejdřív přečti nejnovější oddíl Rozhodnutí režiséra ke kolu kontroly“; v dalším videu zvážit krátkou pauzu
+(např. agent „režisér-brána“ nebo dva workflow: kontrola → režisér rozhodne → opravy).
