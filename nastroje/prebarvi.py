@@ -30,6 +30,7 @@ Příkazy:
        --peri-k 0.5            peří = max(2, k × posun těžiště masky mezi snímky) (sledovací záběr: auto stojí v obraze → menší k)
        --peri-min 2           nejmenší peří hrany masky (px)
        --chroma-min 0          v oblastech výluk s 'plny': true nejmenší chroma výsledku (odstín z výsledku / cíle)
+       --chroma-min-l 0        s --chroma-min: nejmenší chroma nejvýš k × L výsledku (stín: tmavý lak má úměrně menší chromu)
        --min-px 300           nejmenší maska vozu (px); menší snímek se nepřebarví (vůz v dálce: 60)
        --cerna 12,6           černé díly: kde L < 12 a C < 6 v originále, beze změny (M8 sání)
        --vnitrni 0             eroze masky o (vnitrni × peří) px před rozostřením = peří uvnitř karoserie (bez barevné záře za hranou)
@@ -128,6 +129,15 @@ def kf_abs(kfs, i):
     return ks[-1][1]
 
 def oblasti(shape, bbox, regiony, i, rozmaz=3):
+    # 'sila': {index: 0–1} = síla oblasti v čase (náběh / doběh výluky nebo oblasti 'plny', V005 v4); kreslí se zvlášť a skládá maximem
+    sil = [r for r in regiony if 'sila' in r]
+    if sil:
+        zbytek = [r for r in regiony if 'sila' not in r]
+        acc = oblasti(shape, bbox, zbytek, i, rozmaz) if zbytek else np.zeros(shape, np.float32)
+        for r in sil:
+            s = float(np.clip(kf_abs(r['sila'], i)[0] if isinstance(next(iter(r['sila'].values())), list) else kf_abs({k: [v] for k, v in r['sila'].items()}, i)[0], 0, 1))
+            if s > 0: acc = np.maximum(acc, s * oblasti(shape, bbox, [{k: v for k, v in r.items() if k != 'sila'}], i, rozmaz))
+        return acc
     im = Image.new('L', (shape[1], shape[0]), 0); d = ImageDraw.Draw(im)
     x0, y0, x1, y1 = bbox; W, H = x1 - x0, y1 - y0
     for r in regiony:
@@ -222,7 +232,13 @@ def sekvence(a):
             okc = np.clip((22 - np.hypot(x[..., 1], x[..., 2])) / 8, 0, 1)                            # barevné díly (erb na víku) zůstávají
             okc = okc * (1 - np.clip(gaussian_filter(((x[..., 0] < 12) & (np.hypot(x[..., 1], x[..., 2]) < 6)).astype(np.float32), 1.0) * 1.5, 0, 1))   # černé otvory (NACA)
             w = np.maximum(w, Rp * mk * okc)
-        if reg_n: w = w * (1 - oblasti(mk.shape, bb_rel, rel(reg_n), n))
+            if any(r.get('chran_cervenou') for r in reg_p):                                        # V005 v4: červený nápis na dveřích (Spyder RS) i s okrajem 1 px zůstává
+                cs = np.hypot(x[..., 1], x[..., 2]); hs = np.degrees(np.arctan2(x[..., 2], x[..., 1]))
+                prot = gaussian_filter(np.clip((cs - 6) / 8, 0, 1) * ((hs > -40) & (hs < 70)), 0.7)        # měkce podle chromy, bez rozšíření (jinak šedá svatozář)
+                w = w * (1 - prot * np.clip(Rp * 2, 0, 1))
+        if reg_n:                                                                                 # 'rozmaz' po oblastech (V005 v4: kokpit 2 px), výchozí 3 px
+            for rz in sorted({r.get('rozmaz', 3) for r in reg_n}):
+                w = w * (1 - oblasti(mk.shape, bb_rel, rel([r for r in reg_n if r.get('rozmaz', 3) == rz]), n, rozmaz=rz))
         for r in reg_t:                                                                           # 'tmave': dL = v oblasti vyloučit jen pixely tmavší než okolní lak − dL
             R = oblasti(mk.shape, bb_rel, rel([r]), n, rozmaz=1)                               # (odhalený karbon kapoty; lakované okraje víka se přebarví)
             Rb = R > 0.5
@@ -247,7 +263,9 @@ def sekvence(a):
                     l_guided=[float(v) for v in a.l_guided.split(',')] if a.l_guided else None, l_strop=a.l_strop, l_baze=a.l_baze, hue=a.hue)
         if Rp is not None and a.chroma_min > 0:                                                       # chroma ≥ chroma_min v oblasti 'plny' (odraz nebe bude tmavě červený, ne šedý)
             C = np.hypot(y[..., 1], y[..., 2]); hcil = np.arctan2(lut['cil_median'][2], lut['cil_median'][1])
-            ha = np.where(C > 3, np.arctan2(y[..., 2], y[..., 1]), hcil); Cn = np.maximum(C, a.chroma_min)
+            ha = np.where(C > 3, np.arctan2(y[..., 2], y[..., 1]), hcil)
+            cmin = np.minimum(a.chroma_min, a.chroma_min_l * y[..., 0]) if a.chroma_min_l > 0 else a.chroma_min   # V005 v4: v hlubokém stínu menší chroma (C/L jako osvětlený lak)
+            Cn = np.maximum(C, cmin)
             k = np.clip(Rp * w, 0, 1)
             y[..., 1] = y[..., 1] + (Cn * np.cos(ha) - y[..., 1]) * k; y[..., 2] = y[..., 2] + (Cn * np.sin(ha) - y[..., 2]) * k
         out = S.copy(); out[Y0:Y1, X0:X1] = np.clip(color.lab2rgb(y) * 255 + 0.5, 0, 255).astype(np.uint8)
@@ -405,6 +423,7 @@ if __name__ == '__main__':
     p.add_argument('--l-guided', help='r,eps: guided filter L (r px, eps pro L 0–1), např. 6,0.01'); p.add_argument('--l-strop', type=float, help='měkké koleno výstupního L (např. 82)')
     p.add_argument('--l-baze', type=float, default=0.0, help='σ px: báze L jen z laku (normalizovaný Gauss), textura se sklonem --detail')
     p.add_argument('--chroma-min', type=float, default=0.0, help='nejmenší chroma výsledku v oblastech plny (V005 W4 víko: 22)')
+    p.add_argument('--chroma-min-l', type=float, default=0.0, help='strop chroma-min úměrný výstupnímu L (k × L; V005 W6 dveře ve stínu: 1,1)')
     p.add_argument('--min-px', type=int, default=300, help='nejmenší maska vozu v px (menší snímek se přeskočí; V005 X1 malý vůz v dálce: 60)')
     p.add_argument('--peri-min', type=float, default=2.0); p.add_argument('--cerna', help='L0,C0: černé díly (L < L0 a C < C0) beze změny')
     p.add_argument('--peri-k', type=float, default=0.5); p.add_argument('--vnitrni', type=float, default=0.0)
