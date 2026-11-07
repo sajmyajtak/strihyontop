@@ -1,11 +1,12 @@
 [
  {
-  "cas": 0.2,
+  "cas": 0.217,
   "typ": "sklo_pop",
   "lu": -11,
   "strop": -20,
-  "popis": "S0 pilulka vyroste z červené linky (TAH/ROST 0,20–0,32, začátek růstu) [partitura #3]",
-  "ton": 1.19
+  "popis": "S0 pilulka vyroste z červené linky (0,20–0,32); vrchol = první snímek růstu 13 (0,217) [v2: změřeno v obraze]",
+  "ton": 1.19,
+  "cas_v1": 0.2
  },
  {
   "cas": 2.58,
@@ -15,95 +16,107 @@
   "popis": "S0→S1 pilulka se smrští do kompaktní 84×84 (2,58–2,70) těsně po střihu T1 do POV [#4]"
  },
  {
-  "cas": 4.22,
+  "cas": 4.2,
   "typ": "ponor",
   "lu": -12,
   "strop": -20,
-  "popis": "T2 nájezd skrz erb na volantu (4,05–4,30), vrchol = první snímek W4 z rozostření (4,22) [#5, #7]"
+  "popis": "T2 nájezd skrz erb, v2 čistý střih: vrchol = první snímek W4 (snímek 252 = 4,200, YDIF 46)",
+  "cas_v1": 4.22
  },
  {
-  "cas": 5.86,
+  "cas": 5.867,
   "typ": "detent",
   "lu": -13,
   "strop": -19,
-  "popis": "S2 tečka barvy Vanadium se objeví v pilulce (ROZ-IN 5,86) [#9]"
+  "popis": "S2 tečka Vanadium se objeví (ROZ-IN 5,86–5,96), první viditelný snímek 352 (5,867)",
+  "cas_v1": 5.86
  },
  {
-  "cas": 6.61,
+  "cas": 6.617,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -22,
-  "popis": "S2 vzorky laku vyjíždějí z tečky (6,60–6,72), 1. ze 3 tiků rozvinutí [#11]",
-  "ton": 0.9
+  "popis": "S2 vzorky vyjíždějí z tečky (6,60–6,72), 1. tik = snímek 397 (6,617)",
+  "ton": 0.9,
+  "cas_v1": 6.61
  },
  {
-  "cas": 6.665,
+  "cas": 6.667,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -22,
-  "popis": "S2 vzorky laku vyjíždějí, 2. tik rozvinutí [#11]",
-  "ton": 1.0
+  "popis": "S2 vzorky vyjíždějí, 2. tik = snímek 400 (6,667)",
+  "ton": 1.0,
+  "cas_v1": 6.665
  },
  {
-  "cas": 6.72,
+  "cas": 6.767,
   "typ": "klik",
   "lu": -11,
   "strop": -17,
-  "popis": "S2 klik: podtrh přejede pod Guards Red (6,72–6,80; 3. „tik“ = výběr) [#11]"
+  "popis": "S2 klik: podtrh DOSEDNE pod Guards Red (pohyb 6,72–6,80, střed podtrhu ≤ 2 px od cíle na snímku 406 = 6,767)",
+  "cas_v1": 6.72
  },
  {
-  "cas": 7.08,
+  "cas": 7.085,
   "typ": "sken",
   "lu": -10,
   "strop": -18,
-  "popis": "S2 skenovací linka 1 přejede vůz šedá → Guards Red (6,96–7,21), vrchol uprostřed přejezdu [#12]"
+  "popis": "S2 skenovací linka 1 (6,96–7,21, kubIO), střed přejezdu 7,085",
+  "cas_v1": 7.08
  },
  {
-  "cas": 7.99,
+  "cas": 8.0,
   "typ": "sklo_pop",
   "lu": -10,
   "strop": -18,
-  "popis": "T3 EXPL: tečka Guards Red exploduje do plné červené plochy (7,99–8,02) [#14]",
-  "ton": 0.94
+  "popis": "T3 EXPL: první plně červený snímek 480 (8,000; podíl červené 1,00 na 480–481)",
+  "ton": 0.94,
+  "cas_v1": 7.99
  },
  {
-  "cas": 8.32,
+  "cas": 8.333,
   "typ": "klik",
   "lu": -12,
   "strop": -17,
-  "popis": "S2b scroll: podtrh skočí pod Black, vůz přepne v 1 snímku [#16]",
-  "ton": 1.0
+  "popis": "S2b scroll: vůz i tečka přepnou na Black ve snímku 500 (8,333), podtrh se tam rozjede (dosedne 8,367)",
+  "ton": 1.0,
+  "cas_v1": 8.32
  },
  {
-  "cas": 8.52,
+  "cas": 8.533,
   "typ": "klik",
   "lu": -12,
   "strop": -17,
-  "popis": "S2b scroll: podtrh pod Shark Blue [#16]",
-  "ton": 1.12
+  "popis": "S2b scroll: přepnutí na Shark Blue snímek 512 (8,533), podtrh dosedne 8,567",
+  "ton": 1.12,
+  "cas_v1": 8.52
  },
  {
-  "cas": 8.72,
+  "cas": 8.733,
   "typ": "klik",
   "lu": -12,
   "strop": -17,
-  "popis": "S2b scroll: podtrh pod Ruby Star Neo [#16]",
-  "ton": 1.26
+  "popis": "S2b scroll: přepnutí na Ruby Star Neo snímek 524 (8,733), podtrh dosedne 8,767",
+  "ton": 1.26,
+  "cas_v1": 8.72
  },
  {
-  "cas": 8.92,
+  "cas": 8.933,
   "typ": "klik",
   "lu": -12,
   "strop": -17,
-  "popis": "S2b scroll: podtrh pod GT Silver [#16]",
-  "ton": 1.335
+  "popis": "S2b scroll: přepnutí na GT Silver snímek 536 (8,933), podtrh dosedne 8,967",
+  "ton": 1.335,
+  "cas_v1": 8.92
  },
  {
-  "cas": 9.66,
+  "cas": 9.717,
   "typ": "klik",
   "lu": -11,
   "strop": -17,
-  "popis": "S2b podtrh pod Gentian Blue (vzorky 9,56–9,66) = příčina linky 2 [#19]"
+  "popis": "S2b podtrh dosedne pod Gentian Blue (pohyb 9,66–9,74 současně se smršťováním pilulky; největší výchylka pod vzorkem snímek 583 = 9,717)",
+  "cas_v1": 9.66
  },
  {
   "cas": 10.31,
@@ -113,56 +126,63 @@
   "popis": "S2b skenovací linka 2 pomalu 9,86–10,76 (stříbrná → Gentian Blue), vrchol uprostřed přejezdu [#20]"
  },
  {
-  "cas": 10.98,
+  "cas": 10.99,
   "typ": "svih_mekky_kratky",
   "lu": -13,
   "strop": -21,
-  "popis": "T4 CLONA z pravého zadního kola (10,92–11,02, 6 snímků), vrchol uprostřed otevírání [#15]"
+  "popis": "T4 CLONA (10,92–11,02, poloměr ease-in): největší změna obrazu mezi snímky 659 → 660 (YDIF 27), vrchol 10,99",
+  "cas_v1": 10.98
  },
  {
-  "cas": 11.2,
+  "cas": 11.25,
   "typ": "klik",
   "lu": -11,
   "strop": -17,
-  "popis": "S3 podtrh pod Satin Neodyme (vzorky kol 11,12–11,20) [#23]"
+  "popis": "S3 podtrh dosedne pod Satin Neodyme (pohyb 11,20–11,28, ≤ 2 px od cíle na snímku 675 = 11,250)",
+  "cas_v1": 11.2
  },
  {
-  "cas": 11.27,
+  "cas": 11.39,
   "typ": "klik_kov",
   "lu": -13,
   "strop": -21,
-  "popis": "S3 proměna ráfku z náboje (11,24–11,54); posunuto o 30 ms za klik 11,20 (rozestup ≥ 50 ms, C047) [#24]",
-  "ton": 0.85
+  "popis": "S3 proměna ráfku z náboje (11,24–11,54, kubIO): střed proměny 11,39 (bronz viditelný od ~11,35); 140 ms za klikem (C047)",
+  "ton": 0.85,
+  "cas_v1": 11.27
  },
  {
-  "cas": 12.0,
+  "cas": 12.06,
   "typ": "svih_mekky_kratky",
   "lu": -13,
   "strop": -21,
-  "popis": "T5 LET svisle: M8 odletí nahoru, fotka přijede zdola (11,95–12,05), vrchol uprostřed [#22, #26]",
-  "ton": 1.1
+  "popis": "T5 LET svisle (pohyb 11,97–12,15): největší rychlost snímky 723–724 (YDIF 47), vrchol 12,06",
+  "ton": 1.1,
+  "cas_v1": 12.0
  },
  {
-  "cas": 13.02,
+  "cas": 13.05,
   "typ": "klik",
   "lu": -11,
   "strop": -17,
-  "popis": "S4 podtrh pod Arctic (vzorky interiéru 12,90–13,02) [#28]"
+  "popis": "S4 podtrh pod Arctic: v obraze pod vzorkem Arctic na snímku 783 (13,05), pak ho převezme linka 3",
+  "cas_v1": 13.02
  },
  {
-  "cas": 13.3,
+  "cas": 13.295,
   "typ": "sken_svisly",
   "lu": -10,
   "strop": -18,
-  "popis": "S4 skenovací linka 3 shora dolů přes sedadla 13,12–13,47 (karmín → Arctic), vrchol uprostřed [#29]"
+  "popis": "S4 skenovací linka 3 shora dolů 13,12–13,47, střed 13,295",
+  "cas_v1": 13.3
  },
  {
-  "cas": 13.77,
+  "cas": 13.84,
   "typ": "svih_mekky",
   "lu": -11,
   "strop": -19,
-  "popis": "T6 WIPE pruhy v šedých porsche.cz (13,62–14,02), vrchol = plné krytí #191f22 (13,77–13,87); hudba v nádechu [#26]",
-  "ton": 0.9
+  "popis": "T6 WIPE 13,68–14,01 (v2): plná plocha snímky 828–832 (13,80–13,87), střed švihu 13,84; hudba v nádechu",
+  "ton": 0.9,
+  "cas_v1": 13.77
  },
  {
   "cas": 15.5,
@@ -173,61 +193,68 @@
   "ton": 0.84
  },
  {
-  "cas": 15.67,
+  "cas": 15.683,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 0→1 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
-  "ton": 0.9
+  "popis": "S5 odometr: přenos stovek 0→1, první snímek s „1“ ve stovkách = 941 (15,683); z funkce v(t) = 500·(1−(1−u)³) přenos 15,670",
+  "ton": 0.9,
+  "cas_v1": 15.67
  },
  {
-  "cas": 15.73,
+  "cas": 15.733,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 1→2 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
-  "ton": 0.9400000000000001
+  "popis": "S5 odometr: přenos 1→2, první snímek s „2“ = 944 (15,733); z funkce 15,730",
+  "ton": 0.9400000000000001,
+  "cas_v1": 15.73
  },
  {
-  "cas": 15.804,
+  "cas": 15.817,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 2→3 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
-  "ton": 0.98
+  "popis": "S5 odometr: přenos 2→3, první snímek s „3“ = 949 (15,817); z funkce 15,804",
+  "ton": 0.98,
+  "cas_v1": 15.804
  },
  {
-  "cas": 15.911,
+  "cas": 15.917,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr 000 → 500 (15,62–16,32): přenos stovek 3→4 (ODHAD ease-out cubic; přepočítat z funkce rolování ve scéně, C045)",
-  "ton": 1.02
+  "popis": "S5 odometr: přenos 3→4, první snímek s „4“ = 955 (15,917); z funkce 15,911",
+  "ton": 1.02,
+  "cas_v1": 15.911
  },
  {
-  "cas": 16.32,
+  "cas": 16.317,
   "typ": "ding",
   "lu": -10,
   "strop": -18,
-  "popis": "S5 číslo 500 dosedne: první ustálený snímek hotové hodnoty (C047, ding se neposouvá) [#36]",
-  "ton": 0.794
+  "popis": "S5 číslo 500 dosedne: první ustálený snímek 979 (16,317; rozdíl proti 984 = 2,6 / pozadí 1,7). Přenos 4→5 (16,25–16,30) splývá s ding, bez tiku",
+  "ton": 0.794,
+  "cas_v1": 16.32
  },
  {
-  "cas": 17.97,
+  "cas": 17.667,
   "typ": "prujezd_mekky",
-  "lu": -9,
+  "lu": -11,
   "strop": -16,
-  "popis": "T8 W11 vůz projíždí vlevo kolem kamery (zdroj 365,00–365,40 → 17,67–18,00), nejbližší bod těsně před střihem v pohybu 18,00 (W6)",
-  "pan": 0.3,
-  "pan_do": -0.8,
-  "pan_tau": 0.15
+  "popis": "T8 střih v pohybu W11 → W6 (snímek 1060 = 17,667): vůz W11 se blíží vlevo od středu, nejblíž na posledním snímku před střihem; po střihu je vůz W6 daleko → zvuk dozní",
+  "pan": 0.0,
+  "pan_do": -0.4,
+  "pan_tau": 0.3,
+  "cas_v1": 17.97
  },
  {
-  "cas": 19.8,
+  "cas": 19.867,
   "typ": "klik",
   "lu": -11,
   "strop": -17,
-  "popis": "S6 podtrh pod Vanadium (vzorky 19,66–19,78) = příčina návratu [#40]"
+  "popis": "S6 podtrh pod Vanadium (pohyb od 19,80, od 19,84 ho stahuje smrštění řady): největší výchylka pod vzorkem snímek 1192 = 19,867",
+  "cas_v1": 19.8
  },
  {
   "cas": 20.46,
@@ -245,14 +272,15 @@
   "ton": 0.85
  },
  {
-  "cas": 21.83,
+  "cas": 21.77,
   "typ": "prujezd_za_sklem",
   "lu": -8,
   "strop": -16,
-  "popis": "T9 skutečný šedý vůz projede za sklem (21,40–22,25, zdroj 282,16–283,20), nejbližší bod ≈ střed; tlumeně jako hudba [#43]",
+  "popis": "T9 skutečný šedý vůz projede za sklem (21,40–22,25): bok kolmo ke kameře (nejblíž) ≈ snímek 1306 = 21,77",
   "pan": 0.5,
   "pan_do": -0.8,
-  "pan_tau": 0.2
+  "pan_tau": 0.2,
+  "cas_v1": 21.83
  },
  {
   "cas": 23.58,
