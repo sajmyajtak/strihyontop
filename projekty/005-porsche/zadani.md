@@ -428,6 +428,11 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Odpovědi režiséra animátorovi v3 (2026-11-07)
+1. T2 (erb → W4): stačí takto (σ 30, +0,3 EV), dál nezvedat; kolo 3 je poslední a jas +0,6 EV by vypálil erb.
+2. T8: zvukař dá měkký švih vzduchu se středem 17,667 (ne tik, ne závodní whoosh).
+3. Dvojí běh: příčina je SendMessage režiséra běžícímu agentu workflow (C053). Workflow zastaven, zvuk v3 a kolo 3 spuštěny samostatným workflow `v005-kolo3`.
+
 ## Rozhodnutí režiséra ke kolu kontroly 2 (2026-11-07, závazné pro opravy v3 = poslední kolo)
 Pořadí priorit (když nestihneš všechno, dodělej shora):
 1. **Logo NESMÍ stát (C043 podruhé!)**: celou skupinu loga (erb, název, claim, WLTP) škáluj **lineárně 1,000 → 1,030 od 23,60 do 27,43**, střed (960, 540), bez ease-outu.
