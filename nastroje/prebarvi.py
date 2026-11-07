@@ -217,7 +217,10 @@ def sekvence(a):
             okoli = np.asarray(Image.fromarray((Rb * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(51)), dtype=bool) & ~Rb & (w > 0.5)
             if okoli.sum() < 50: w = w * (1 - R); continue
             Lref = float(np.median(x[..., 0][okoli]))
-            cond = gaussian_filter(np.clip((Lref - r['tmave'] - x[..., 0]) / 6 + 0.5, 0, 1), 1.5)
+            if r.get('obe'):                                                                    # 'obe': vyloučit i světlejší než okolí + dL (světlomet: tmavé sklo i LED; lak v polygonu se přebarví)
+                cond = gaussian_filter(np.clip((np.abs(x[..., 0] - Lref) - r['tmave']) / 6 + 0.5, 0, 1), 1.5)
+            else:
+                cond = gaussian_filter(np.clip((Lref - r['tmave'] - x[..., 0]) / 6 + 0.5, 0, 1), 1.5)
             w = w * (1 - R * cond)
         if jen: w = w * oblasti(mk.shape, bb_rel, [dict(r, kf={k: posun_kf(v, X0, Y0, r['typ']) for k, v in r['kf'].items()}) if 'kf' in r else r for r in jen], n, rozmaz=a.jen_rozmaz)
         spz = None

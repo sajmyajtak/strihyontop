@@ -617,6 +617,42 @@ Plný render: `--sub 4 --sub-rychle 16 --rychle 2.40-2.75,4.00-4.40,6.88-7.31,7.
 6952–7010 bez výluk, vůz malý), `scena.html` s kontrolou kolize klíčů `B_`. **X1: vůz je vidět už od snímku ≈ 10 (tečka ~10–30 px), masky jsou jen 37–63** → rozšířit.
 Kola bronz ve W11 / W6 zatím nejsou (vyžádá si kotvy kol jako W4; vůz většinou < 40 px).
 
+## Výroba: blok B a render v1 (animátor C = pokračování animátora B po restartu, 2026-11-07)
+**Opravy bloku A (verdikt KŘ, C043)**
+| # | oprava | stav | jak |
+|---|---|---|---|
+| 1 | W7 U2 GT Silver skvrnitý | **Black místo GT Silver** (podle KŘ a režiséra) | U2 v2 (`--l-baze 14 --detail 0.7 --l-strop 82`) měla na nárazníku pořád skvrny (`desky/W7/_U2_v2`). Scroll **GT Silver · Ruby Star Neo · Shark Blue · Black** (8,32 · 8,52 · 8,72 · 8,92), Black drží 8,92–9,86, linka 2 Black → Gentian, popisek „Black“, řada vzorků [Black, Shark, Ruby, GT Silver \| ● Guards Red]. Přepočteno U2 7093–7100, N2 7098–7105, D7 7103–7110 (uzavření 9 = oprava 10 KŘ), A1 7093–7168 (`_skript/w7_laky.sh c`). |
+| 2 | M8 sklo / sání | hotovo (animátor B) | klíč M8b, `--cerna 12,6`, peří 3 |
+| 3 | W4 G1 kapota / rám skla | částečně | W4b (zúžená kapota, rám skla, křidélko) + W4d: polygon předního kola zúžený (byl šedý pás za kolem). Zkouška výluky jen tmavších pixelů v kapotě (`tmave`, nová volba `obe` v `prebarvi.py`) **neprošla** (karbon je na slunci stejně světlý jako lak → červené šmouhy), proto zůstává polygon. Šedý pás lakovaného okraje víka vlevo vedle karbonu zůstává (známý nedostatek). |
+| 4 | kotva v POV na ruce | hotovo | 2,52–2,66 pilulka → kompaktní, 3,07–3,15 se smrští do semínka (84 × 3 px), 3,15–3,23 ROZ-OUT, POV 3,23–4,22 bez UI, 4,22–4,30 semínko znovu TAH (0 → šířka věty 2), 4,30–4,42 z něj vyroste pilulka, 4,42–4,54 podtrh se stáhne pod začátek věty |
+| 5 | střih kaňon → POV 3,233 | hotovo | ROZ: σ 0 → 16 px (kvadraticky) 3,15–3,2333 \| 16 → 0 do 3,31, +0,15 expozice ve vrcholu, hranice = výstupní snímek 194 (C050), desky `M7/roz/*_b4|b8|b16` |
+| 6 | EXPL závoj + záře | hotovo | plný kruh z tečky pilulky, poloměr ease-in (kubicky) do 2200 px 7,975–7,995, plná plocha 7,995–8,025 (celé závěrky snímků 8,000 a 8,017), smrštění do tečky 8,025–8,05; měkká jen hrana (1 px + rozmazání pohybem, max 20 % poloměru) |
+| 7 | erb na 4,20 mimo střed | hotovo | střed erbu na desce 212 změřen (1070, 973), výška 173 px; nájezd 1 → 8×, kotva dojede na (960, 540), erb ≈ 1,28 × výška obrazu |
+| 8 | F1 skvrny karmínu | hotovo (animátor B) | `f1.py` |
+| 9 | prázdná pilulka | hotovo | šířka se smršťuje se zblednutím textu (2,52 · 7,92 · 9,22 · 9,64 · 10,88 · 11,94) |
+| 10 | D7 / N2 víko | hotovo v rámci 1 | uzavření masky 9 px (peří D7 beze změny) |
+
+**Blok B (scéna `scena/scena.html`, prefix `B_`, kontrola kolize klíčů)**
+- X1 13,87–16,00 (Gentian jen 44–63, menší vůz se nepřebarvuje), nádech 13,87–14,15, věta 6 „Nowhere to be.“ 14,17 · 14,37 · 14,52, ven 15,27.
+- Karta 500 PS: pilulka roste 15,40–15,60 na 420 × 200 (pravá hrana 1824, y 784–984), „PS“ 15,52, ODOMETR 15,62–16,32 (000 → 500 jen zdola, ease-out kubicky,
+  přenosy stovek **15,670 · 15,730 · 15,804 · 15,911**, první ustálený snímek **16,32**), klid 16,32–17,42, číslo ven 17,42–17,52, karta zpět 17,45–17,60. Rozmazání
+  číslic v kódu (vzorky přes závěrku sečtené `lighter`, u velmi rychlého válce souvislá šmouha), žádné kopie podsnímků. Karta přežívá střih 16,00 beze změny.
+- W11 16,00–18,00 (zdroj 363,00–365,40; Gentian 9075–9134, ráfky Satin Neodyme 9120–9134), **T8 = střih v pohybu 18,00** (W6 od 278,08).
+- W6 18,00–22,44: věta 7 „Tried every colour.“ 18,20 · 18,40 · 18,60 (ven 19,60), vzorky [Vanadium, Guards Red, Shark, Black \| ● Gentian] 19,66, klik pod Vanadium 19,80,
+  smrštění 19,84, tečka Vanadium 19,92, linka 4 19,90 → 19,98–20,78 zprava doleva mezi hranami masky vozu (vlevo Gentian + bronz, vpravo originál), zpět do podtrhu 20,78–20,88;
+  popisek „Vanadium Grey Metallic“ 20,22, ven 20,62–20,69. Od 20,78 originál 1:1.
+- MORF rámce 20,72–21,02: pilulka se 20,62–20,72 roztáhne na šířku věty 8, pak roste na celý obraz, sklo = předpočítaná deska W6 σ 6 (12 px) + 72 %, věta 8 po slovech
+  20,72 · 20,87 · 21,02 · 21,17 · 21,32 (600, 48 → 72 px, rozmazání podle rychlosti), podtrh pod střed (960, 600); skutečný šedý vůz projede za sklem 21,40–22,27;
+  sklo → #010205 22,27–22,44, věta 8 ven 22,62–22,70.
+- Logo 22,44–27,65 (canvas bez zrna): název „718“ (PDS SVG, bílý) + „Spyder RS“ (Barlow 600 72 px), PIS maskou 22,78–23,08; TAH 23,18–23,30 podtrh se stáhne
+  a vyjede ke špičce štítu, 23,30–23,58 kreslí obrys erbu (z SVG porsche.cz, `scena/erb.js`) oběma směry nahoru, 23,58–23,78 výplň barevným erbem, obrys zbledne;
+  název 24,08–24,28 o 60 px dolů; claim „Configured on the road.“ 24,32 · 24,52 · 24,67 · 24,87 (ven 26,22); WLTP doslova 24,62 (18 px, y 980); dýchání 1,00 → 1,02
+  24,00–27,40; ROZ-OUT 27,40–27,65; ticho 27,65–27,842; **záblesk 27,842–27,875** (plná bílá přes celé závěrky snímků 27,85 a 27,867), doznění do 28,03;
+  podpis „strihyontop“ 27,90–28,05 z bílé, disclaimer 28,15, dotlačení 1,00 → 1,02 až do posledního snímku.
+- **W6 přebarvení** (`_skript/prebarvi_b.sh W6c` + doběh 7011–7035 s W6b): v1 předchůdce (bez výluk v 6952–7010) měla modrou SPZ, světlomety, čelní sklo i ráfky a moc sytý lak →
+  výluky sledované optickým tokem (klíč W6s: SPZ, oba světlomety zúžené 0,9, čelní sklo; kotvy 6985 / 6997 / 7011), kola W6k, sytost 0,7; ráfky Satin Neodyme (W6r) 6985–7035.
+  Měření: 6952–7010 blikání max 3,2 % (vůz malý), 7011–7035 max 0,9 %, ΔE 6,7–7,0; ráfky ΔE 3,0.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
