@@ -428,6 +428,18 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Rozhodnutí režiséra po kole 3 (2026-11-07): závěrečná lokální oprava v4
+KŘ kolo 3 SCHVÁLIL (wow 8 · střih 8 · realismus 8 · pohoda 8,5). Kritik má 2 závažné nálezy na W6 (od v2, lokální) → jedna cílená oprava mimo kola + ověření jen opravených míst (kritik).
+1. **W6 řidič a kokpit 19,07–20,30** (zdroj 6985–7035): výluka kokpitu za čelním sklem (hlava řidiče, opěrky, roll-bar) a ramene zrcátka, měkká hrana 2 px, kotvy po 4–6 snímcích, sledování.
+2. **W6 dveře a zadní bok 19,4–20,2** (6990–7035): oblast `plny` + `--chroma-min` jako W4 v3 (přebarvit i nízkou chromu, L z originálu), proti vření časový medián chromy přes 3 snímky.
+   Přepočítat jen W6 1A + 1A348 6985–7035 (+ SPZ z originálu, graduj, data_desky.py), přerenderovat jen 19,0–20,8 s a vložit po snímcích (trim + concat, C050 hlídat).
+3. Drobné (jen když nic nerozbijí): apostrof ’ (U+2019) v „you’re“; pilulka po „Nowhere to be.“ 15,33 se smrští se zblednutím textu (≤ 2 snímky prázdná), tečka bez změny barvy;
+   logo: lineární růst začít už na 23,30 se sklonem tak, aby na 27,43 bylo 1,035 (žádné stání nad d 0,2); zdvojené snímky zdroje 16,93 (W11 9103/9104) a 18,57 (W6 6969/6970) nahradit průměrem sousedů;
+   rychlé úseky vzorků/pilulky (6,60–6,90 · 9,00–9,10 · 9,24–9,30 · 11,12–11,32 · 13,18–13,30 · 20,18–20,30) přerenderovat se `--sub-rychle 16`.
+   Nechat: W4 víko (přijatelné jako odraz), T2, podtrh → TAH erbu.
+4. **Zvuk v4 je hotový** (režisér): + `prujezd_mekky` 2,30 (průjezd W1 kolem kamery, nález KŘ), jinak totožný s v3 → `media/projekty/005-porsche/zvuk/zvuk_v4.wav` a `zvuk_bez_hudby_v4.wav`.
+   Změny obrazu ve v4 nemění časy událostí (kromě případného začátku růstu loga, který zvukovou událost nemá). Spojit přes `master_zvuk.sh` → `vystup/V005_v4.mp4` (+ _bez_hudby, plakát).
+
 ## Odpovědi režiséra animátorovi v3 (2026-11-07)
 1. T2 (erb → W4): stačí takto (σ 30, +0,3 EV), dál nezvedat; kolo 3 je poslední a jas +0,6 EV by vypálil erb.
 2. T8: zvukař dá měkký švih vzduchu se středem 17,667 (ne tik, ne závodní whoosh).
