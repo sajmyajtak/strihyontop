@@ -428,6 +428,18 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
   (název = index snímku zdroje při 25 fps) a `desky/<kód>/maska/NNNNN.png`; úseky W4 5225–5270, W7 7085–7174, M8 216–246, X1 37–63, W11 9075–9135, W6 6952–7035;
   57 masek převzato z testu (pixelově ověřené mapování). Pořadí výpočtu W4 → W7 → M8 → X1 → W11 → W6, ~28 s na snímek.
 
+## Rozhodnutí režiséra ke kolu kontroly 1 (2026-11-07, závazné pro opravy v2)
+1. **T8 / W11 průjezd (KŘ blokující)**: výstupní střih zůstává na **18,00** a všechno za ním beze změny. Rozmazaný průjezd 365,00–365,40 se **nepřebarvuje** složitěji, ale vypadne:
+   okno W11 posuň o 0,40 s dřív (zdroj **362,60–365,00**, snímky 9065–9124), T8 = střih na zdroji 365,00 (vůz středně velký a ostrý). Masky 9065–9074 dopočítej
+   `_skript/desky_masky.py` (rozšiř USEKY W11; nikdy dva BiRefNet najednou, C051). Když by 362,60–365,00 obsahem nesedělo (vůz mimo záběr, jiný záběr), zkrať W11 zepředu a
+   prodluž předchozí úsek; střih v pohybu na 18,00 zachovej v pohybu vozu, ne v rozmazání.
+2. **W6 kola, pneu, černé plasty, Gentian Blue (KŘ závažné)**: podle návrhu KŘ (výluka kol + bronz na celý úsek 6952–7035, L < 20 ve spodní třetině vyloučit, `--detail 0.85`,
+   bez tmavého lemu, odstín porovnat s W7 10,5). Stav hrdiny platí: ráfky Satin Neodyme od 11,24 všude, kde je kolo ≥ 40 px.
+3. **CLONA 10,92, ODOMETR, MORF sklo, WIPE, erb, LET, linka 1, Arctic**: oprav podle návrhů KŘ. U MORF platí: vůz za větou musí být čitelný (sklo 35–40 %, rozostření 4–6 px, místní ztmavení pod textem).
+4. **Klid loga 26,30–27,43**: je to záměrný klid z partitury (luxusní konec, „sedíš na hoře“). Není to vada. Dýchání nech, nic nepřidávej.
+5. **Průchod ROZ 3,233 (kaňon → interiér)**: když zůstává „rozmazaným střihem“, ztmav vrchol průchodu o −0,6 EV na 2 snímky (jako mrknutí). Jiný typ přechodu nezaváděj.
+6. Zvuk: posun SFX na skutečné časy dělá v tomto kole zvukař (workflow ho spustí po tvé opravě), proto **vypiš všechny časy změn** do zmeny_casu.
+
 ## Odpovědi režiséra animátorovi A (2026-11-05, platí pro animátora B a opravy)
 1. **M7**: kaňon 2,60–3,23 + POV od zdroje 7,44 (3,23–4,20) se střihem ve stopáži a přežívající kompaktní pilulkou = přijato (D3: střih ve skutečné stopáži s přežívajícím
    spojovacím prvkem je povolen). Partituru nepřepisovat, jen zapsat jako T1b; zvuk na střih nic.
