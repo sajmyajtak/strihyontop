@@ -15,6 +15,19 @@ Nejnovější záznam nahoře. Každé poučení, které platí obecně, přené
 
 ---
 
+### V005 – Porsche 718 Spyder RS: konfigurace za jízdy (2026-11-07)
+- Zadání: projekty/005-porsche/zadani.md
+- Fungovalo: první video podle `strih-vzor.md` (1 hrdina = vůz + pilulka, 0 střihů v grafice, proměny místo střihů, věty po slovech, semínko → erb, podpis tvůrce).
+  Přebarvení skutečné jedoucí stopáže (BiRefNet + Lab LUT z rendrů konfigurátoru + sledované výluky) prošlo u KŘ na realismus 8. Pointa „linka zprava odkryje originál →
+  Kept the one you're driving.“ byla podle KŘ nejsilnější moment. Nálada `hora` (klid, ticho před boomem) sedla na „pohodu“ (8,5).
+- Nefungovalo / opravy: přebarvení v rozmazaném průjezdu a ve stínech (nízká chroma: odrazy nebe a silnice zůstaly šedé) → oblast `plny` + `--chroma-min`, časový medián chromy;
+  výluky musí pokrýt i **řidiče a kokpit**, sklo, světla včetně odrazek, SPZ, pneu (W6 se opravoval ve 3 kolech). Rozmazání čísel a pilulky kopiemi (C040) se vracelo, dokud se nekreslilo
+  spojitým Gaussem po výstupních snímcích. Animátor dvakrát nesplnil výslovný pokyn (logo dýchání, C043). Mezisnímek s kompenzací pohybu vyrobil AI-artefakty → u zdvojených snímků
+  zdroje raději ponechat zdvojení. SendMessage běžícímu agentu workflow spustil druhou instanci (C053). Dvakrát limit využití 5 h (navázání přes STAV_VYROBY.md fungovalo).
+- Kola: 3 + závěrečná lokální oprava; KŘ schválil v kole 3 (8 / 8 / 8 / 8,5). ≈ 5,35 mil. tokenů (+ neměřená příprava), ~26 agentů – stále nad cílem 10–12 (přebarvení stopáže je drahé).
+- Zpětná vazba uživatele (doslova): (čeká)
+- Změny v pravidlech: C053 + `nastroje/workflow/README.md` (pokyny režiséra jen přes zadani.md); `prebarvi.py` (oblast plny, --chroma-min, --min-px, sila, rozmaz).
+
 ### 2026-11-04: Zpětná vazba k V004 a střihový vzor uživatele (R6, R7, R4 znovu)
 - **Zpětná vazba (doslova)**: „noooo hele takhle není to špatný ale zkus se zaměřít víc na ten střih a editaci videa pošlu ti další reels jak bych si
   představoval moje videa a celkově jejich prezentaci. Nic negeneruj jen si je přečti a adaptuj se n atokýhle střihy.“ → „okey tak to jsem rád. nauč agenty ať to umí“.

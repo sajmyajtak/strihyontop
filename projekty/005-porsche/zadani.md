@@ -845,6 +845,11 @@ kontrola.sh proti v3: zamrzlé úseky žádné, YDIF beze změny kromě zmizelé
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
+| výroba | zvukař ∥ animátor A → KŘ blok A → animátor B | desky, přebarvení, blok A, blok B, render v1 | – | KŘ blok A neschválil (10 oprav, zapracováno v bloku B) |
+| 1 | kritik ∥ KŘ | v1 | BLOKUJÍCÍ · KŘ 7 / 7,5 / 5,5 / 8 | odometr > 500, W11 přebarvení v rozmazání (nebe, pneu), W6 kola/sklo, CLONA, MORF sklo utápí vůz |
+| 2 | kritik ∥ KŘ | v2 (T8 → 17,667, okno W11 362,6 nešlo) | BLOKUJÍCÍ · KŘ 8 / 8 / 7,5 / 8,5 | probliknutí šedé 16,00, W6 sklo a světla, W4 šedá skvrna, logo stojí (C043 podruhé), odometr kopie |
+| 3 | kritik ∥ KŘ | v3 (T8 = LET, Gauss odometr, logo dýchá) | OPRAVIT · **KŘ SCHVÁLENO 8 / 8 / 8 / 8,5** | W6 řidič a dveře (od v2) |
+| závěr | animátor (+ limit 5 h, pokračování) → kritik ověření | v4: W6 kokpit + dveře, apostrof ’, pilulka 15,33, logo od 23,30, mezisnímky | OPRAVIT (jen mezisnímek 18,60 nový artefakt) | režisér: 18,60 vráceny snímky v3, panorama průjezdu 2,30 → **v5** |
 
 ## Chyby během výroby
 - (zvukař, zvuk v1) **Kontrolní master přepnul loudnorm do dynamického režimu a srovnal stavbu**: první mix měl poměr špička / hlasitost 17 dB (pily ploch −5,8 dBFS
@@ -898,13 +903,21 @@ kontrola.sh proti v3: zamrzlé úseky žádné, YDIF beze změny kromě zmizelé
 | opravy v3: animátor, druhá instance po SendMessage (C053; scéna, render, master) | 327 861 | 154 | 52,3 min |
 | zvuk v3, 1. pokus (zastaven s workflow) | ≈ 57 500* | 7 | 1 min |
 | kolo 3 (workflow v005-kolo3: zvukař v3, kritik, kreativní ředitel) | 453 168 | 205 | 28,8 min |
-| režisér: zvuk v4 (průjezd W1), rozhodnutí, zápisy | neměřeno (hlavní chat) | – | – |
+| závěrečná oprava v4, 1. animátor (přerušen limitem 5 h) | 254 521 | 117 | 42 min |
+| závěrečná oprava v4: animátor (pokračování) + kritik ověření | 301 895 (160 774 + 141 121) | 152 | 40 min |
+| režisér: zvuk v4/v5, snímky v5, kontrola, rozhodnutí, zápisy | neměřeno (hlavní chat) | – | – |
+| **součet změřeného a odhadnutého** (bez 4 řádků „neměřeno“ z přípravy a hlavního chatu) | **≈ 5 352 292** | – | – |
 
 \* zastavené workflow nevykázalo souhrn; odhad z přepisu agenta = kontext poslední odpovědi + součet výstupních tokenů (stejná metoda pro všechny řádky s *).
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
 |---|---|---|---|
+| v1 | 2026-11-07 13:01 | media/…/vystup/V005_v1.mp4 (interní) | první úplný render |
+| v2 | 2026-11-07 14:38 | V005_v2.mp4 (interní) | opravy kola 1, zvuk v2 (SFX na časy obrazu) |
+| v3 | 2026-11-07 15:51 | V005_v3.mp4 (interní) | opravy kola 2, zvuk v3 |
+| v4 | 2026-11-07 17:37 | V005_v4.mp4 (interní) | W6 kokpit/dveře, drobné, zvuk v4 (+ průjezd 2,30) |
+| **v5** | 2026-11-07 18:03 | **V005_v5.mp4 → uživateli (SendUserFile)**, + _bez_hudby, plakát | režisér: snímky 1116–1117 z v3 (g3 překódováno CRF 14, zbytek kopie), zvuk v5 (panorama průjezdu zprava doleva); kontrola.sh OK (−13,8 LUFS / −1,9 dBTP, 1800 snímků, bez zamrznutí) |
 
 ## Zpětná vazba (doslova)
 
