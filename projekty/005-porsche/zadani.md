@@ -653,6 +653,18 @@ Kola bronz ve W11 / W6 zatím nejsou (vyžádá si kotvy kol jako W4; vůz vět�
   výluky sledované optickým tokem (klíč W6s: SPZ, oba světlomety zúžené 0,9, čelní sklo; kotvy 6985 / 6997 / 7011), kola W6k, sytost 0,7; ráfky Satin Neodyme (W6r) 6985–7035.
   Měření: 6952–7010 blikání max 3,2 % (vůz malý), 7011–7035 max 0,9 %, ΔE 6,7–7,0; ráfky ΔE 3,0.
 
+
+**Render v1**: `media/projekty/005-porsche/render/V005_obraz_v1.mp4` (1920 × 1080, 60 fps, 1800 snímků, 30,00 s; části `_cast_A.mp4` 0–18 s, `_cast_B.mp4` 18–30 s,
+`--sub 4 --sub-rychle 16`, rychlé úseky 2,40–2,75 · 3,10–3,35 · 4,00–4,40 · 6,88–7,31 · 7,95–8,10 · 9,78–9,90 · 10,70–11,06 · 11,20–11,56 · 11,90–12,20 · 13,00–14,05 ·
+19,88–20,00 · 20,60–21,10 · 23,15–23,62 · 27,80–28,08). Výkon: blok A ≈ 54 s výpočtu na 1 s (3 prohlížeče, CPU sdílené s přebarvením W6), blok B ≈ 48 s na 1 s (2 prohlížeče).
+EXPL po kontrole snímků přepracován (kruh po výstupních snímcích) a úsek 6–11 s přerenderován (`_cast_A2.mp4`), vložen přesně po snímcích 360–659 jedním překódováním
+(CRF 14, stejné parametry jako renderer; rozdíl mimo úsek ≈ 0,2 úrovně jasu).
+**Výstupy**: `media/projekty/005-porsche/vystup/V005_v1.mp4` (zvuk `zvuk/zvuk_v1.wav` → `master_zvuk.sh`: −13,8 LUFS, −1,9 dBTP po AAC), `V005_v1_bez_hudby.mp4`
+(`zvuk/zvuk_bez_hudby_v1.wav`, nenormalizovaná, C039), plakát `V005_v1_plakat.jpg` (20,45: linka 4 vrací Gentian → Vanadium, půl vozu modrá, půl šedá).
+Kontrola `media/kontrola/005-porsche/v1-animator/` (zprava.txt, arch.jpg, pásy): skoky jen na plánovaných přechodech (2,60 LET, 3,233 ROZ, 8,00 EXPL, 12,05 LET, 13,87 WIPE, 16,00, 18,00, logo, záblesk);
+„zamrzlý úsek“ 26,30–27,43 = klid loga podle partitury (jen erb + název, dýchání 1,00 → 1,02 je pod prahem detektoru); černá 27,65–27,85 = ticho podle partitury.
+**Zvuk v1 je ke starým časům partitury**: SFX posune režisér podle seznamu změn časů (C045).
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
@@ -665,6 +677,17 @@ Kola bronz ve W11 / W6 zatím nejsou (vyžádá si kotvy kol jako W4; vůz vět�
   `TP_mixu + (−14 − I_mixu) ≤ −1,5`, jinak master nejde lineárně; stavbu RMS měřit i na dekódovaném masteru, ne jen na mixu.
 - (zvukař) `master_zvuk.sh` na samotných efektech (`zvuk_bez_hudby_v1.wav`, −28 LUFS, jediný boom) nezkonvergoval (4 pokusy −17,9 → −18,4 LUFS, TP −0,9 dBTP): smyčka snižuje jen
   cíl I, loudnorm v dynamickém režimu ale drží TP na −1 před AAC. Verze bez hudby zůstává podle V004 nenormalizovaná v úrovni mixu (odvozený m4a smazán, C039).
+
+- (animátor C) **W6 přebarvení v1 bez výluk v 6952–7010**: modrá SPZ, světlomety, čelní sklo i ráfky a moc sytý lak (výluky z testu platily jen pro 7011–7034, sekvence je mimo rozsah
+  „přidržela“ nepoužité). Oprava: výluky sledované optickým tokem pro celý rozsah (W6s, kotvy 6985 / 6997 / 7011), kola W6k, sytost 0,7. **Prevence**: každý přebarvený úsek
+  před vložením do scény projít na 100 % (SPZ, světla, sklo, kola) v celém rozsahu, ne jen v testovaném výřezu.
+- (animátor C) **Partitura měřila W6 špatně**: „pravá hrana vozu 280,5 ≈ 1080“, na deskách je vůz velký už od 279,9 (pravá hrana 1490–1700). Pilulka na laku neleží jen proto, že spodek
+  vozu je nad y 900 (bbox masek ≤ 898). **Prevence**: polohu vozu v partituře brát z bboxu masek / desek po snímcích, ne z odhadu ze zdrojového videa.
+- (animátor C) **EXPL rozmazaný závěrkou se četl jako záře**: kruh roste ~400 px za snímek, 16 podsnímků z něj udělalo měkký radiální přechod (7,983 / 8,033). Oprava: poloměr podle výstupního
+  snímku (`casDesky`), hrana 1 px. **Prevence (doplnit C028)**: plošné grafické proměny rychlejší než ~100 px za snímek kreslit po snímcích, ne rozmazávat závěrkou.
+- (animátor C) **Spojení `concat -c copy` s `outpoint` / `inpoint` přidalo 2 snímky** (1802 místo 1800) a posunulo obraz o snímek (B-snímky na hranici GOP). Oprava: výměna úseku přes `trim` +
+  `concat` filtr s jedním překódováním (CRF 14). **Prevence**: po každém spojení ověřit počet snímků a rozdíl proti původní verzi mimo vyměněný úsek.
+- (animátor C) W4 kapota: výluka „jen pixely tmavší než okolní lak“ (`tmave`) neprošla, karbon je na slunci stejně světlý jako lak → červené šmouhy. Zůstává polygon (známý nedostatek).
 
 ## Spotřeba tokenů
 | agent / úkol | tokeny | akce nástrojů | čas |
