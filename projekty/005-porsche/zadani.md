@@ -920,5 +920,6 @@ kontrola.sh proti v3: zamrzlé úseky žádné, YDIF beze změny kromě zmizelé
 | **v5** | 2026-11-07 18:03 | **V005_v5.mp4 → uživateli (SendUserFile)**, + _bez_hudby, plakát | režisér: snímky 1116–1117 z v3 (g3 překódováno CRF 14, zbytek kopie), zvuk v5 (panorama průjezdu zprava doleva); kontrola.sh OK (−13,8 LUFS / −1,9 dBTP, 1800 snímků, bez zamrznutí) |
 
 ## Zpětná vazba (doslova)
+- 2026-11-07: „prosím bez zvuku to video“ → doručeno `vystup/V005_v5_bez_zvuku.mp4` (obraz v5 zkopírovaný beze změny, bez zvukové stopy).
 
 ## Poučení
