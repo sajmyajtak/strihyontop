@@ -704,6 +704,42 @@ rozvinutí pilulky 12,17 / 14,14 / 18,17 (bylo 12,00 / 14,02 / 18,08; slova beze
 **T8 = 17,667** (bylo 18,00): střih v pohybu W11 → W6, průjezd / švih T8 o −0,333 s; vše od 18,00 beze změny.
 **Nové / upravené nástroje**: `nastroje/prebarvi.py --hue` (otočení odstínu výsledku), `_skript/spz_orig.py`, `_skript/rozostreni.py` (W6 b3, M7 b14/b20), `_skript/prebarvi_b.sh W6v2 | W11v2`, `_skript/w7_laky.sh d`, `_skript/f1.py` (Arctic), `_skript/desky_masky.py` / `desky.py` (W6 od 6942).
 
+## Zvuk v2 (zvukař, 2026-11-07; posun SFX na skutečné časy obrazu `render/V005_obraz_v2.mp4`, C045)
+**Výstupy** (`media/projekty/005-porsche/`): `zvuk/sfx_v2.wav|json`, **`zvuk/zvuk_v2.wav`** (48 kHz stereo, −19,8 LUFS, špička −8,0 dBFS), **`zvuk/zvuk_bez_hudby_v2.wav`** (C039, nenormalizovaná),
+**`vystup/V005_v2.mp4`** (přepsáno: obraz v2 + zvuk v2 → `master_zvuk.sh`), **`vystup/V005_v2_bez_hudby.mp4`** (přepsáno, efekty v úrovni mixu, −30,8 LUFS), logy `zvuk/sfx_log_v2.txt`,
+`zvuk/master_log_v2.txt`, stavba `zvuk/stavba_v2_master.txt`, `zvuk/spektrogram_v2.png`. Seznam událostí `projekty/005-porsche/sfx_udalosti.json` (v gitu; u každé `cas_v1` a v `popis` snímek, na který sedí), v1 záloha `zvuk/sfx_udalosti_v1.json`.
+**Hudba beze změny** (`hudba.wav` hora: vrchol 13,87, kadence 20,78, ticho 27,65–27,85; žádná změna obrazu se netýká časů hudby).
+**Metoda**: metriky po snímcích z obrazu v2 (poloha červeného podtrhu, YDIF, podíl červené, rozdíl okénka čísla) + pásy snímků kolem každé události; podtrh „dosedl“ = střed ≤ 2 px od cíle.
+
+| událost | v1 | **v2** | důkaz v obraze |
+|---|---|---|---|
+| pilulka z linky (sklo_pop) | 0,20 | **0,217** | první snímek růstu (13) |
+| T2 ponor skrz erb | 4,22 | **4,20** | čistý střih, první snímek W4 (252, YDIF 46) |
+| tečka Vanadium (detent) | 5,86 | **5,867** | první viditelný snímek (352) |
+| tiky rozvinutí vzorků | 6,61 · 6,665 | **6,617 · 6,667** | snímky 397 / 400 |
+| klik Guards Red | 6,72 | **6,767** | podtrh dosedne (406) |
+| linka 1 (sken) | 7,08 | **7,085** | střed přejezdu 6,96–7,21 |
+| EXPL (sklo_pop) | 7,99 | **8,000** | první plně červený snímek (480) |
+| scroll 4 laků (kliky) | 8,32 · 8,52 · 8,72 · 8,92 | **8,333 · 8,533 · 8,733 · 8,933** | vůz i tečka přepnou (500 / 512 / 524 / 536); podtrh dosedá o 2 snímky později |
+| klik Gentian | 9,66 | **9,717** | podtrh pod vzorkem (583), pak ho stáhne smrštění řady |
+| CLONA (švih) | 10,98 | **10,99** | největší změna 659 → 660 (YDIF 27) |
+| klik Satin Neodyme | 11,20 | **11,25** | podtrh dosedne (675) |
+| proměna ráfku (klik_kov) | 11,27 | **11,39** | střed proměny 11,24–11,54 (bronz viditelný od ~11,35); 140 ms za klikem (C047) |
+| LET svisle (švih) | 12,00 | **12,06** | největší rychlost 723–724 (YDIF 47) |
+| klik Arctic | 13,02 | **13,05** | podtrh pod Arctic (783), pak linka 3 |
+| linka 3 (sken_svisly) | 13,30 | **13,295** | střed 13,12–13,47 |
+| WIPE (švih) | 13,77 | **13,84** | plná plocha 828–832 (13,80–13,87) |
+| tiky přenosů stovek | 15,670 · 15,730 · 15,804 · 15,911 | **15,683 · 15,733 · 15,817 · 15,917** | první snímek s novou číslicí stovek (941 / 944 / 949 / 955); z funkce v(t) přenosy 15,670 · 15,730 · 15,804 · 15,911, rozestup ≥ 50 ms |
+| ding 500 | 16,32 | **16,317** | první ustálený snímek 979 (rozdíl proti 984 = 2,6, pozadí 1,7); přenos 4 → 5 (975–978) splývá s ding, bez tiku, kolem 16,00 žádný tik |
+| T8 (prujezd_mekky) | 17,97 | **17,667** | střih v pohybu (1060); vůz W11 se blíží vlevo od středu, nejblíž na posledním snímku před střihem → pan 0 → −0,4, o 2 LU tišší (−11 LU), už to není průjezd kolem kamery |
+| klik Vanadium | 19,80 | **19,867** | největší výchylka podtrhu pod vzorkem (1192) |
+| průjezd za sklem | 21,83 | **21,77** | bok vozu kolmo ke kameře (≈ 1306) |
+| beze změny | | 2,58 hover · 10,31 linka 2 · 15,50 karta · 20,46 linka 4 · 20,82 MORF (max. pohyb 1248–1250) · 23,58 erb · **27,85 boom** (bílá 1671–1672) | |
+
+**Naměřeno**: vrcholy všech 35 efektů na čase události **0,0 ms** (samostatně i ve stopě, `sfx.py`); v tichu 27,65–27,84 efekty −240 dBFS; efekty proti hudbě (100 ms) −23,9 až −8,0 LU, výjimka je jen boom (záměr, I9).
+Mix −19,8 LUFS / −8,0 dBFS → C052: −8,0 + (−14 + 19,8) = **−2,2 ≤ −1,5** → master lineárně +6,05 dB: **−13,8 LUFS, −1,9 dBTP po AAC** (1. pokus), posun zvuku proti mixu 0 vzorků, boom v masteru vrchol 27,851 (bílá 27,85).
+Pásma masteru: sub 6,3 · basy 38,7 · **středy 47,8** · horní středy 6,7 · výšky 0,5 %. Stavba (RMS 50 ms max, dekódovaný master): háček −14,9 · jízda −16,4 · **vrchol −12,1** · návrat −13,3 · logo −14,5 · ticho −72 · **boom −8,4 (+3,7 dB nad vrcholem)** · podpis −13,8; stoupání 9,5 → 13,5 s z −18 na −14 dB, stavba stejná jako v1.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
