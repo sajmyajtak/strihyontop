@@ -436,9 +436,10 @@ používat jen v3 (záď, pruh není vidět). Pointa „Kept the one you're driv
 2. **W6 kola, pneu, černé plasty, Gentian Blue (KŘ závažné)**: podle návrhu KŘ (výluka kol + bronz na celý úsek 6952–7035, L < 20 ve spodní třetině vyloučit, `--detail 0.85`,
    bez tmavého lemu, odstín porovnat s W7 10,5). Stav hrdiny platí: ráfky Satin Neodyme od 11,24 všude, kde je kolo ≥ 40 px.
 3. **CLONA 10,92, ODOMETR, MORF sklo, WIPE, erb, LET, linka 1, Arctic**: oprav podle návrhů KŘ. U MORF platí: vůz za větou musí být čitelný (sklo 35–40 %, rozostření 4–6 px, místní ztmavení pod textem).
-4. **Klid loga 26,30–27,43**: je to záměrný klid z partitury (luxusní konec, „sedíš na hoře“). Není to vada. Dýchání nech, nic nepřidávej.
+4. **Klid loga 26,30–27,43**: je to záměrný klid z partitury (luxusní konec, „sedíš na hoře“), žádné nové prvky. Jen dýchání ať se **nezastaví**: plynulé 1,00 → 1,03 lineárně až do ROZ-OUT (bez ease-outu), aby obraz nikdy nestál (nález kritika).
 5. **Průchod ROZ 3,233 (kaňon → interiér)**: když zůstává „rozmazaným střihem“, ztmav vrchol průchodu o −0,6 EV na 2 snímky (jako mrknutí). Jiný typ přechodu nezaváděj.
-6. Zvuk: posun SFX na skutečné časy dělá v tomto kole zvukař (workflow ho spustí po tvé opravě), proto **vypiš všechny časy změn** do zmeny_casu.
+6. **W11 přebarvení (kritik)**: v novém okně 362,60–365,00 platí výluky SPZ, sklo, roll-bary, světla (sledované jako W6s) a odstín/kresba jako u W6 (bod 2).
+7. Zvuk: posun SFX na skutečné časy dělá v tomto kole zvukař (workflow ho spustí po tvé opravě), proto **vypiš všechny časy změn** do zmeny_casu.
 
 ## Odpovědi režiséra animátorovi A (2026-11-05, platí pro animátora B a opravy)
 1. **M7**: kaňon 2,60–3,23 + POV od zdroje 7,44 (3,23–4,20) se střihem ve stopáži a přežívající kompaktní pilulkou = přijato (D3: střih ve skutečné stopáži s přežívajícím
