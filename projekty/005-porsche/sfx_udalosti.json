@@ -193,40 +193,44 @@
   "ton": 0.84
  },
  {
-  "cas": 15.683,
+  "cas": 15.67,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr: přenos stovek 0→1, první snímek s „1“ ve stovkách = 941 (15,683); z funkce v(t) = 500·(1−(1−u)³) přenos 15,670",
+  "popis": "S5 odometr: přenos stovek 0→1; v3: tik na přenos z funkce v(t) = 500·(1−(1−u)³) (15.670), v obraze v3 (svislý Gauss válce) je stovka uprostřed převalu na snímku 940, další snímek už ostrá nová číslice",
   "ton": 0.9,
-  "cas_v1": 15.67
+  "cas_v1": 15.67,
+  "cas_v2": 15.683
  },
  {
-  "cas": 15.733,
+  "cas": 15.73,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr: přenos 1→2, první snímek s „2“ = 944 (15,733); z funkce 15,730",
+  "popis": "S5 odometr: přenos 1→2; v3: tik na přenos z funkce v(t) = 500·(1−(1−u)³) (15.730), v obraze v3 (svislý Gauss válce) je stovka uprostřed převalu na snímku 944, další snímek už ostrá nová číslice",
   "ton": 0.9400000000000001,
-  "cas_v1": 15.73
+  "cas_v1": 15.73,
+  "cas_v2": 15.733
  },
  {
-  "cas": 15.817,
+  "cas": 15.804,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr: přenos 2→3, první snímek s „3“ = 949 (15,817); z funkce 15,804",
+  "popis": "S5 odometr: přenos 2→3; v3: tik na přenos z funkce v(t) = 500·(1−(1−u)³) (15.804), v obraze v3 (svislý Gauss válce) je stovka uprostřed převalu na snímku 948, další snímek už ostrá nová číslice",
   "ton": 0.98,
-  "cas_v1": 15.804
+  "cas_v1": 15.804,
+  "cas_v2": 15.817
  },
  {
-  "cas": 15.917,
+  "cas": 15.911,
   "typ": "tik_cislo",
   "lu": -16,
   "strop": -21,
-  "popis": "S5 odometr: přenos 3→4, první snímek s „4“ = 955 (15,917); z funkce 15,911",
+  "popis": "S5 odometr: přenos 3→4; v3: tik na přenos z funkce v(t) = 500·(1−(1−u)³) (15.911), v obraze v3 (svislý Gauss válce) je stovka uprostřed převalu na snímku 955, další snímek už ostrá nová číslice",
   "ton": 1.02,
-  "cas_v1": 15.911
+  "cas_v1": 15.911,
+  "cas_v2": 15.917
  },
  {
   "cas": 16.317,
@@ -239,14 +243,16 @@
  },
  {
   "cas": 17.667,
-  "typ": "prujezd_mekky",
-  "lu": -11,
-  "strop": -16,
-  "popis": "T8 střih v pohybu W11 → W6 (snímek 1060 = 17,667): vůz W11 se blíží vlevo od středu, nejblíž na posledním snímku před střihem; po střihu je vůz W6 daleko → zvuk dozní",
-  "pan": 0.0,
-  "pan_do": -0.4,
-  "pan_tau": 0.3,
-  "cas_v1": 17.97
+  "typ": "svih_mekky_kratky",
+  "lu": -14,
+  "strop": -22,
+  "ton": 0.95,
+  "pan": 0.3,
+  "pan_do": -0.3,
+  "pan_tau": 0.05,
+  "popis": "T8 LET vodorovně 17,617–17,717 (v3, kubIO): obraz odjede doleva, největší rychlost snímky 1059–1061 (YDIF 17,6 · 19,9 · 18,0), střed 1060 = 17,667; měkký švih vzduchu (rozhodnutí režiséra), panorama zprava doleva po směru pohybu",
+  "cas_v2": 17.667,
+  "typ_v2": "prujezd_mekky"
  },
  {
   "cas": 19.867,

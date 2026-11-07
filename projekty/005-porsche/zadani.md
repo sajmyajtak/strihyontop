@@ -788,6 +788,25 @@ popisek „Black“ 9,285 (bylo 9,32) · rozvinutí pilulky 13,187 a 20,187 (byl
 **Výstupy**: `vystup/V005_v3.mp4` (zvuk `zvuk/zvuk_v2.wav`, zvuk v3 zatím není → `master_zvuk.sh`: −13,8 LUFS / −1,9 dBTP), `V005_v3_bez_hudby.mp4` (`zvuk_bez_hudby_v2.wav`, nenormalizovaná), plakát `V005_v3_plakat.jpg` (20,45).
 Kontrola `media/kontrola/005-porsche/v3-animator/` (kontrola_log.txt, arch.jpg, ks_nahled/, odo/ pásy: odometr, T8, T2, wipe; 100% výřezy v3_*.png). YDIF přes T2 39,5 (v2 40,8), T8 rozložené do 6 snímků (max 17,2; v2 holý střih 29,2).
 
+## Zvuk v3 (zvukař, 2026-11-07; SFX k obrazu `render/V005_obraz_v3.mp4` podle změn časů animátora v3, C045)
+**Výstupy** (`media/projekty/005-porsche/`): `zvuk/sfx_v3.wav|json`, **`zvuk/zvuk_v3.wav`** (48 kHz stereo, −20,1 LUFS, TP −8,0 dBTP), **`zvuk/zvuk_bez_hudby_v3.wav`** (C039, nenormalizovaná),
+**`vystup/V005_v3.mp4`** (přepsáno: obraz v3 + zvuk v3 → `master_zvuk.sh`), **`vystup/V005_v3_bez_hudby.mp4`** (přepsáno, efekty v úrovni mixu, AAC 256k, −30,8 LUFS), logy `zvuk/sfx_log_v3.txt`,
+`zvuk/master_log_v3.txt`, stavba `zvuk/stavba_v3_master.txt`, `zvuk/spektrogram_v3.png`. Seznam událostí `projekty/005-porsche/sfx_udalosti.json` (u změněných `cas_v2`), záloha v2 `zvuk/sfx_udalosti_v2.json`.
+**Hudba beze změny** (`hudba.wav` hora; žádná změna obrazu v3 se netýká vrcholu 13,87, kadence 20,78 ani ticha 27,65–27,85).
+**Metoda**: rozdíl obrazu v2 / v3 po snímcích (480×270) v okně ±6 snímků kolem každé z 35 událostí + YDIF v3; kde se obraz změnil, pásy snímků a měření oblasti (odometr, podtrh, T8).
+Mimo T8 a odometr je rozdíl v2 / v3 u všech událostí ≤ 2,9 úrovně a YDIF beze změny → časy platí (T2 252 YDIF 46,0 · EXPL 480 · CLONA 659→660 · LET 723–724 · WIPE plná 828–832 · MORF 1248–1250 · boom bílá 1671).
+Podtrh pod Vanadium 19,867: poloha změřena v v3, nejvíc pod vzorkem 1191–1192 (x 1702), stejně jako v2. Ding 500: první ustálený snímek v3 = **979 (16,317)** (rozdíl okénka čísla proti předchozímu 4,4, proti hotovému 2,8 = úroveň pozadí; 978 ještě 6,9).
+
+| událost | v2 | **v3** | důkaz v obraze v3 |
+|---|---|---|---|
+| T8 | 17,667 `prujezd_mekky` (−11 LU) | **17,667 `svih_mekky_kratky`** (měkký švih vzduchu, −14 LU, ton 0,95, pan +0,3 → −0,3) | LET vodorovně 17,617–17,717 doleva, YDIF 1058–1062: 8,4 · 17,6 · **19,9 (1060)** · 18,0 · 14,4; rozhodnutí režiséra (ne tik, ne závodní whoosh) |
+| tiky přenosů stovek | 15,683 · 15,733 · 15,817 · 15,917 | **15,670 · 15,730 · 15,804 · 15,911** | z funkce `B_hodnota` (C045); ve v3 je stovka rozmazaná svislým Gaussem právě uprostřed převalu na snímcích 940 · 944 · 948 · 954/955, další snímek ostrá nová číslice; rozestup 60 · 74 · 107 ms |
+| beze změny | | ostatních 29 | popisek Black 9,285, rozvinutí pilulky 13,187 / 20,187, odchod čísla 17,40–17,47 a karty 17,47–17,60, tah erbu od 23,30 a růst loga = bez zvukové události |
+
+**Naměřeno**: vrcholy všech 35 efektů na čase události **0,0 ms** (samostatně i ve stopě, `sfx.py`); obálka švihu T8 ve stopě 17,6655 s (−1,5 ms); efekty proti hudbě (100 ms) −22,9 až −10,0 LU, výjimka jen boom (I9, záměr).
+C052: −8,0 + (−14 + 20,1) = **−1,9 ≤ −1,5** → master lineárně +6,04 dB: **−13,8 LUFS, −1,9 dBTP po AAC** (1. pokus, měřeno na `V005_v3.mp4`), posun zvuku proti mixu 0 vzorků, boom v masteru 27,851, ticho 27,66–27,84 v masteru špička −99,7 dBFS.
+Pásma masteru: sub 6,5 · basy 38,5 · **středy 47,8** · horní středy 6,7 · výšky 0,4 %. Stavba (RMS 50 ms max, dekódovaný master): háček −14,9 · jízda −16,4 · **vrchol −12,2** · návrat −13,5 · logo −14,6 · ticho −123 · **boom −8,3 (+3,9 dB nad vrcholem, nejhlasitější místo)** · podpis −13,9.
+
 ## Průběh výroby
 | kolo | kdo | co se dělalo | verdikt kritika | hlavní nálezy |
 |---|---|---|---|---|
