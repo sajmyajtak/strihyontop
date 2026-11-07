@@ -864,6 +864,18 @@ Pásma masteru: sub 6,5 · basy 38,5 · **středy 47,8** · horní středy 6,7 �
 | příprava: animátor test, pokračování po restartu | 203 477 | 87 | 23,5 min |
 | režisér: masky BiRefNet na pozadí (skript, ne agent) | 0 | – | ~2,2 h CPU |
 | výroba běh 1 (zvukař, animátor A, KŘ blok A, animátor B přerušen limitem využití 5 h) | 1 157 970 | 476 | 97,8 min |
+| výroba běh 2 (2026-11-05 10:32, „Try again“, animátor B hned narazil na limit) | ≈ 96 700* | 11 | 1 min |
+| výroba pokračování 2026-11-07: animátor B (blok B, render v1) | ≈ 472 200* | 133 | 56 min |
+| kolo 1: kreativní ředitel / kritik | ≈ 167 900* / ≈ 309 200* | 48 / 95 | 7 / 18 min |
+| opravy v2: animátor / zvukař | ≈ 477 600* / ≈ 215 600* | 190 / 45 | 69 / 10 min |
+| kolo 2: kreativní ředitel / kritik | ≈ 141 000* / ≈ 279 000* | 51 / 91 | 6 / 11 min |
+| opravy v3: animátor, větev ve workflow (jen W6) | ≈ 436 700* | 232 | 30 min |
+| opravy v3: animátor, druhá instance po SendMessage (C053; scéna, render, master) | 327 861 | 154 | 52,3 min |
+| zvuk v3, 1. pokus (zastaven s workflow) | ≈ 57 500* | 7 | 1 min |
+| kolo 3 (workflow v005-kolo3: zvukař v3, kritik, kreativní ředitel) | 453 168 | 205 | 28,8 min |
+| režisér: zvuk v4 (průjezd W1), rozhodnutí, zápisy | neměřeno (hlavní chat) | – | – |
+
+\* zastavené workflow nevykázalo souhrn; odhad z přepisu agenta = kontext poslední odpovědi + součet výstupních tokenů (stejná metoda pro všechny řádky s *).
 
 ## Verze
 | verze | datum | soubor / kam doručeno | změny |
