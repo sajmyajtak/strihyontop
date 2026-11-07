@@ -13,9 +13,9 @@
   "typ": "prujezd_mekky",
   "lu": -12,
   "strop": -20,
-  "popis": "W1 háček: vůz projede těsně kolem kamery zleva doprava (2,05–2,45), střed 2,30 [v4: režisér podle KŘ kolo 3]",
-  "pan": -0.4,
-  "pan_do": 0.4,
+  "popis": "W1 háček: vůz projede těsně kolem kamery zprava doleva (2,05–2,45), střed 2,30 [v5: panorama podle směru vozu (kritik v4); režisér podle KŘ kolo 3]",
+  "pan": 0.4,
+  "pan_do": -0.4,
   "pan_tau": 0.2
  },
  {
