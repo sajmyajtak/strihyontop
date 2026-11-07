@@ -17,6 +17,7 @@ Příkazy:
        → OUT/NNNNN.png (kompozit, mimo masku bitově shodný se src) + OUT/_log.json + souhrn měření na stdout.
        --od N --do N           rozsah indexů snímků (včetně); medián masky bere i sousedy mimo rozsah
        --chroma-s 0.8          sytost výsledku × (0,65 rozmazaný průjezd … 0,8 ostrý vůz; dorovnání na medián rendru)
+       --hue 0                 otočení odstínu výsledku v Lab (°; −5 = méně fialová), sladění odstínu mezi záběry
        --chroma-k 0.6          kolik původní odchylky chromy (odlesky krajiny) zůstane
        --lmax 93               horní mez L laku (80 u průjezdů přes nebe: směs s nebem v rozmazu se nemění)
        --l-hladke 0           σ px: posun jasu z rozostřeného L (světlé laky se strmou LUT nezesílí šum zdroje; GT Silver 3)
@@ -92,7 +93,7 @@ def koleno(L, strop, sirka=8.0):
     k0 = strop - sirka
     return np.where(L <= k0, L, k0 + sirka * (1 - np.exp(-(L - k0) / sirka)))
 
-def aplikuj(x, tab, c, w, chroma_k=0.6, chroma_blur=2.5, chroma_s=1.0, l_hladke=0.0, detail=1.0, l_guided=None, l_strop=None, l_baze=0.0):
+def aplikuj(x, tab, c, w, chroma_k=0.6, chroma_blur=2.5, chroma_s=1.0, l_hladke=0.0, detail=1.0, l_guided=None, l_strop=None, l_baze=0.0, hue=0.0):
     L, A, B = x[..., 0], x[..., 1], x[..., 2]
     # l_hladke > 0: posun L i barva se čtou z rozostřeného L (σ px), jemná textura projde se sklonem 1 → LUT se strmou křivkou (světlé laky)
     # nezesílí šum a kompresní bloky zdroje (V005: GT Silver vypadal „špinavě“)
@@ -110,6 +111,8 @@ def aplikuj(x, tab, c, w, chroma_k=0.6, chroma_blur=2.5, chroma_s=1.0, l_hladke=
     if chroma_blur > 0:
         outA = gaussian_filter(outA, chroma_blur); outB = gaussian_filter(outB, chroma_blur)
     outA = outA * chroma_s; outB = outB * chroma_s
+    if hue:                                                                                 # otočení odstínu výsledku (°): sladění se schváleným záběrem (V005 W11/W6 ↔ W7)
+        ch, sh = np.cos(np.radians(hue)), np.sin(np.radians(hue)); outA, outB = outA * ch - outB * sh, outA * sh + outB * ch
     y = np.stack([L + (outL - L) * w, A + (outA - A) * w, B + (outB - B) * w], axis=2)
     return y
 
@@ -232,7 +235,7 @@ def sekvence(a):
                 d = 4; z = np.zeros_like(w); z[max(0, spz[1] - d):spz[3] + d, max(0, spz[0] - d):spz[2] + d] = 1
                 w = w * (1 - gaussian_filter(z, 1.5))
         y = aplikuj(x, tab, cen, w, a.chroma_k, chroma_s=a.chroma_s, l_hladke=a.l_hladke, detail=a.detail,
-                    l_guided=[float(v) for v in a.l_guided.split(',')] if a.l_guided else None, l_strop=a.l_strop, l_baze=a.l_baze)
+                    l_guided=[float(v) for v in a.l_guided.split(',')] if a.l_guided else None, l_strop=a.l_strop, l_baze=a.l_baze, hue=a.hue)
         out = S.copy(); out[Y0:Y1, X0:X1] = np.clip(color.lab2rgb(y) * 255 + 0.5, 0, 255).astype(np.uint8)
         Image.fromarray(out).save(os.path.join(a.out, f'{n:05d}.png'))
         sel = w > 0.5
@@ -381,6 +384,7 @@ if __name__ == '__main__':
     p.add_argument('cmd', choices=['sekvence'])
     p.add_argument('--deska', required=True); p.add_argument('--lut', required=True); p.add_argument('--out', required=True)
     p.add_argument('--od', type=int); p.add_argument('--do', type=int)
+    p.add_argument('--hue', type=float, default=0.0, help='otočení odstínu výsledku v Lab (°), např. −5 = méně fialová')
     p.add_argument('--chroma-s', type=float, default=0.8); p.add_argument('--chroma-k', type=float, default=0.6)
     p.add_argument('--lmax', type=float, default=93); p.add_argument('--tma', default='12,26')
     p.add_argument('--l-hladke', type=float, default=0.0); p.add_argument('--detail', type=float, default=1.0)
